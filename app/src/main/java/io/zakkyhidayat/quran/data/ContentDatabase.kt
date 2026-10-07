@@ -14,10 +14,10 @@ object ContentDatabase {
         db ?: open(context.applicationContext).also { db = it }
     }
 
-    // Nama file memuat ukuran asset supaya data baru otomatis disalin ulang.
+    // Nama file memuat waktu pembaruan aplikasi, jadi database baru otomatis disalin ulang setelah update.
     private fun open(context: Context): SQLiteDatabase {
-        val size = context.assets.openFd(ASSET).use { it.declaredLength }
-        val file = File(context.noBackupFilesDir, "quran-$size.db")
+        val stamp = context.packageManager.getPackageInfo(context.packageName, 0).lastUpdateTime
+        val file = File(context.noBackupFilesDir, "quran-$stamp.db")
         if (!file.exists()) {
             val tmp = File(file.parentFile, "${file.name}.tmp")
             context.assets.open(ASSET).use { input -> tmp.outputStream().use { input.copyTo(it) } }
