@@ -1,0 +1,15 @@
+.gradle/
+build/
+local.properties
+.idea/
+*.iml
+.kotlin/
+captures/
+*.jks
+*.keystore
+keystore.properties
+data-src/
+.claude/settings.local.json
+
+# Font halaman V4 (150 MB) belum dibundel di git; salin dari data-src/ttf ke sini untuk build lokal
+app/src/main/assets/fonts/p*.ttf

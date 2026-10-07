@@ -1,0 +1,183 @@
+package io.zakkyhidayat.quran.data
+
+import android.content.Context
+import android.database.Cursor
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
+class MushafRepository(context: Context) {
+    private val db = ContentDatabase.get(context)
+
+    @Volatile private var surahCache: Map<Int, Surah>? = null
+    @Volatile private var juzCache: List<Juz>? = null
+    @Volatile private var pageMetaCache: List<PageMeta>? = null
+    @Volatile private var translationCache: List<TranslationInfo>? = null
+
+    suspend fun page(page: Int): List<PageLine> = withContext(Dispatchers.IO) {
+        val lines = mutableListOf<PageLine>()
+        db.rawQuery(
+            "SELECT line, type, centered, first_word, last_word, surah FROM page_lines WHERE page = ? ORDER BY line",
+            arrayOf(page.toString()),
+        ).use { c ->
+            while (c.moveToNext()) {
+                val type = when (c.getString(1)) {
+                    "surah_name" -> LineType.SurahName
+                    "basmallah" -> LineType.Basmallah
+                    else -> LineType.Ayah
+                }
+                lines += PageLine(
+                    number = c.getInt(0),
+                    type = type,
+                    centered = c.getInt(2) == 1,
+                    words = if (!c.isNull(3)) words(c.getInt(3), c.getInt(4)) else emptyList(),
+                    surah = if (c.isNull(5)) null else c.getInt(5),
+                )
+            }
+        }
+        lines
+    }
+
+    private fun words(first: Int, last: Int): List<Word> {
+        val words = ArrayList<Word>(last - first + 1)
+        db.rawQuery(
+            "SELECT text, surah, ayah FROM words WHERE id BETWEEN ? AND ? ORDER BY id",
+            arrayOf(first.toString(), last.toString()),
+        ).use { c -> while (c.moveToNext()) words += Word(c.getString(0), c.getInt(1), c.getInt(2)) }
+        return words
+    }
+
+    suspend fun surahs(): Map<Int, Surah> = surahCache ?: withContext(Dispatchers.IO) {
+        val map = LinkedHashMap<Int, Surah>()
+        db.rawQuery("SELECT id, name_ar, name_latin, ayah_count, first_page, name_glyph FROM surahs ORDER BY id", null).use { c ->
+            while (c.moveToNext()) {
+                map[c.getInt(0)] = Surah(c.getInt(0), c.getString(1), c.getString(2), c.getInt(3), c.getInt(4), c.getInt(5).toChar())
+            }
+        }
+        map.also { surahCache = it }
+    }
+
+    suspend fun juz(): List<Juz> = juzCache ?: withContext(Dispatchers.IO) {
+        val list = mutableListOf<Juz>()
+        db.rawQuery("SELECT id, surah, ayah, page FROM juz ORDER BY id", null).use { c ->
+            while (c.moveToNext()) list += Juz(c.getInt(0), c.getInt(1), c.getInt(2), c.getInt(3))
+        }
+        list.also { juzCache = it }
+    }
+
+    // Indeks 0 = halaman 1. Surah = surah kata pertama di halaman itu.
+    suspend fun pageMeta(): List<PageMeta> = pageMetaCache ?: withContext(Dispatchers.IO) {
+        val juzStarts = juz().map { it.page }
+        val surahByPage = IntArray(605)
+        db.rawQuery("SELECT page, surah FROM words WHERE id IN (SELECT MIN(id) FROM words GROUP BY page)", null).use { c ->
+            while (c.moveToNext()) surahByPage[c.getInt(0)] = c.getInt(1)
+        }
+        List(604) { i ->
+            val page = i + 1
+            PageMeta(surahByPage[page], juzStarts.indexOfLast { it <= page } + 1)
+        }.also { pageMetaCache = it }
+    }
+
+    suspend fun translations(): List<TranslationInfo> = translationCache ?: withContext(Dispatchers.IO) {
+        val list = mutableListOf<TranslationInfo>()
+        db.rawQuery("SELECT id, lang, name FROM translations ORDER BY rowid", null).use { c ->
+            while (c.moveToNext()) list += TranslationInfo(c.getString(0), c.getString(1), c.getString(2))
+        }
+        list.also { translationCache = it }
+    }
+
+    suspend fun ayahPage(surah: Int, ayah: Int): Int = withContext(Dispatchers.IO) {
+        db.rawQuery("SELECT page FROM ayahs WHERE surah = ? AND ayah = ?", arrayOf(surah.toString(), ayah.toString())).use {
+            if (it.moveToFirst()) it.getInt(0) else 1
+        }
+    }
+
+    suspend fun ayahDetail(surah: Int, ayah: Int, translationIds: List<String>): AyahDetail = withContext(Dispatchers.IO) {
+        val key = arrayOf(surah.toString(), ayah.toString())
+        var arabic = ""
+        var page = 1
+        db.rawQuery("SELECT text_ar, page FROM ayahs WHERE surah = ? AND ayah = ?", key).use {
+            if (it.moveToFirst()) { arabic = it.getString(0); page = it.getInt(1) }
+        }
+        val infos = translations().associateBy { it.id }
+        val texts = translationIds.mapNotNull { id ->
+            val info = infos[id] ?: return@mapNotNull null
+            val text = db.rawQuery(
+                "SELECT text FROM translation_texts WHERE tr = ? AND surah = ? AND ayah = ?",
+                arrayOf(id, key[0], key[1]),
+            ).use { if (it.moveToFirst()) it.getString(0) else "" }
+            val notes = mutableListOf<Footnote>()
+            db.rawQuery(
+                "SELECT label, text FROM footnotes WHERE tr = ? AND surah = ? AND ayah = ? ORDER BY idx",
+                arrayOf(id, key[0], key[1]),
+            ).use { c -> while (c.moveToNext()) notes += Footnote(if (c.isNull(0)) null else c.getInt(0), c.getString(1)) }
+            TranslationText(info, text, notes)
+        }
+        AyahDetail(surah, ayah, page, arabic, texts)
+    }
+
+    suspend fun neighbour(ref: AyahRef, step: Int): AyahRef? {
+        val surahs = surahs()
+        var s = ref.surah
+        var a = ref.ayah + step
+        if (a < 1) {
+            s -= 1
+            if (s < 1) return null
+            a = surahs.getValue(s).ayahCount
+        } else if (a > surahs.getValue(s).ayahCount) {
+            s += 1
+            if (s > 114) return null
+            a = 1
+        }
+        return AyahRef(s, a)
+    }
+
+    suspend fun searchArabic(query: String, limit: Int = 100): List<SearchResult> = withContext(Dispatchers.IO) {
+        val needle = ArabicText.normalize(query).trim()
+        if (needle.isEmpty()) return@withContext emptyList()
+        val results = mutableListOf<SearchResult>()
+        db.rawQuery("SELECT surah, ayah, page, text_ar FROM ayahs ORDER BY surah, ayah", null).use { c ->
+            while (c.moveToNext() && results.size < limit) {
+                val arabic = c.getString(3)
+                val normalized = ArabicText.normalize(arabic)
+                val at = normalized.indexOf(needle)
+                if (at >= 0) results += SearchResult(c.getInt(0), c.getInt(1), c.getInt(2), "Arab", arabic, -1, -1)
+            }
+        }
+        results
+    }
+
+    suspend fun searchTranslations(query: String, translationIds: List<String>, limit: Int = 100): List<SearchResult> =
+        withContext(Dispatchers.IO) {
+            val needle = query.trim().lowercase()
+            if (needle.length < 2) return@withContext emptyList()
+            val names = translations().associate { it.id to it.name }
+            val results = mutableListOf<SearchResult>()
+            for (id in translationIds) {
+                db.rawQuery(
+                    "SELECT t.surah, t.ayah, a.page, t.text FROM translation_texts t JOIN ayahs a ON a.surah = t.surah AND a.ayah = t.ayah " +
+                        "WHERE t.tr = ? ORDER BY t.surah, t.ayah",
+                    arrayOf(id),
+                ).use { c -> collect(c, needle, names[id] ?: id, results, limit) }
+                if (results.size >= limit) break
+            }
+            results
+        }
+
+    private fun collect(c: Cursor, needle: String, source: String, out: MutableList<SearchResult>, limit: Int) {
+        while (c.moveToNext() && out.size < limit) {
+            val plain = SUP.replace(c.getString(3), "")
+            val at = plain.lowercase().indexOf(needle)
+            if (at < 0) continue
+            val start = (at - 50).coerceAtLeast(0)
+            val end = (at + needle.length + 70).coerceAtMost(plain.length)
+            val prefix = if (start > 0) "…" else ""
+            val snippet = prefix + plain.substring(start, end) + if (end < plain.length) "…" else ""
+            val hs = prefix.length + (at - start)
+            out += SearchResult(c.getInt(0), c.getInt(1), c.getInt(2), source, snippet, hs, hs + needle.length)
+        }
+    }
+
+    private companion object {
+        val SUP = Regex("<sup>\\d+</sup>")
+    }
+}

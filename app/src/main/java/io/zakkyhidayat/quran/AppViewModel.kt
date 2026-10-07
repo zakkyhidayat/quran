@@ -1,0 +1,109 @@
+package io.zakkyhidayat.quran
+
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import io.zakkyhidayat.quran.data.AyahDetail
+import io.zakkyhidayat.quran.data.AyahRef
+import io.zakkyhidayat.quran.data.Juz
+import io.zakkyhidayat.quran.data.PageMeta
+import io.zakkyhidayat.quran.data.Surah
+import io.zakkyhidayat.quran.data.TranslationInfo
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+
+@OptIn(ExperimentalCoroutinesApi::class)
+class AppViewModel(application: Application) : AndroidViewModel(application) {
+    private val app = application as QuranApp
+    val mushaf = app.mushaf
+    val settingsRepository = app.settings
+    val bookmarkStore = app.bookmarks
+
+    val surahs = MutableStateFlow<Map<Int, Surah>>(emptyMap())
+    val juz = MutableStateFlow<List<Juz>>(emptyList())
+    val pageMeta = MutableStateFlow<List<PageMeta>>(emptyList())
+    val translations = MutableStateFlow<List<TranslationInfo>>(emptyList())
+
+    val currentPage = MutableStateFlow(1)
+    val pendingPage = MutableStateFlow<Int?>(null)
+
+    // Ayat yang disorot di halaman; sheet hanya terbuka bila sheetVisible.
+    val selected = MutableStateFlow<AyahRef?>(null)
+    val sheetVisible = MutableStateFlow(false)
+
+    val detail: StateFlow<AyahDetail?> = combine(
+        selected,
+        settingsRepository.settings.map { it.translationIds }.distinctUntilChanged(),
+    ) { sel, ids -> sel to ids }
+        .mapLatest { (sel, ids) -> sel?.let { mushaf.ayahDetail(it.surah, it.ayah, ids) } }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    init {
+        viewModelScope.launch {
+            bookmarkStore.load()
+            surahs.value = mushaf.surahs()
+            juz.value = mushaf.juz()
+            pageMeta.value = mushaf.pageMeta()
+            translations.value = mushaf.translations()
+        }
+    }
+
+    fun goToPage(page: Int) {
+        pendingPage.value = page.coerceIn(1, 604)
+    }
+
+    fun goToAyah(surah: Int, ayah: Int, openSheet: Boolean = false) {
+        viewModelScope.launch {
+            selected.value = AyahRef(surah, ayah)
+            sheetVisible.value = openSheet
+            goToPage(mushaf.ayahPage(surah, ayah))
+        }
+    }
+
+    fun randomAyah() {
+        val all = surahs.value.values
+        if (all.isEmpty()) return
+        var n = (1..all.sumOf { it.ayahCount }).random()
+        for (surah in all) {
+            if (n <= surah.ayahCount) { goToAyah(surah.id, n, openSheet = true); return }
+            n -= surah.ayahCount
+        }
+    }
+
+    fun selectAyah(ref: AyahRef) {
+        selected.value = ref
+        sheetVisible.value = true
+    }
+
+    fun moveSelection(step: Int) {
+        val current = selected.value ?: return
+        viewModelScope.launch {
+            val next = mushaf.neighbour(current, step) ?: return@launch
+            selected.value = next
+            goToPage(mushaf.ayahPage(next.surah, next.ayah))
+        }
+    }
+
+    fun clearSelection() {
+        selected.value = null
+        sheetVisible.value = false
+    }
+
+    fun dismissSheet() {
+        sheetVisible.value = false
+    }
+
+    fun togglePageBookmark(page: Int) = viewModelScope.launch { bookmarkStore.togglePage(page) }
+
+    fun toggleAyahBookmark(ref: AyahRef, page: Int) = viewModelScope.launch { bookmarkStore.toggleAyah(page, ref.surah, ref.ayah) }
+
+    fun deleteBookmark(id: Long) = viewModelScope.launch { bookmarkStore.delete(id) }
+}
