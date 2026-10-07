@@ -5,7 +5,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -30,6 +30,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -57,6 +58,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
 private const val PAGE_COUNT = 604
+private val PageMaxWidth = 640.dp
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -99,10 +101,14 @@ fun ReaderScreen(
     val currentSurah = meta?.let { surahs[it.surah] }
     val pageBookmarked = bookmarks.any { it.kind == BookmarkKind.Page && it.page == currentPage }
 
-    Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
-        Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.systemBars)) {
+    Scaffold(containerColor = MaterialTheme.colorScheme.background, contentWindowInsets = WindowInsets(0, 0, 0, 0)) { _ ->
+      Box(Modifier.fillMaxSize()) {
+        Column(
+            Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.systemBars),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
             Row(
-                Modifier.fillMaxWidth().height(28.dp).pointerInput(Unit) { detectTapGestures { barsVisible = !barsVisible } }.padding(horizontal = 16.dp),
+                Modifier.widthIn(max = PageMaxWidth).fillMaxWidth().height(28.dp).pointerInput(Unit) { detectTapGestures { barsVisible = !barsVisible } }.padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(currentSurah?.nameLatin.orEmpty(), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -113,7 +119,7 @@ fun ReaderScreen(
                 state = pagerState,
                 reverseLayout = true,
                 beyondViewportPageCount = 1,
-                modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
+                modifier = Modifier.weight(1f).widthIn(max = PageMaxWidth).padding(horizontal = 8.dp),
             ) { index ->
                 val page = index + 1
                 val lines by produceState<List<PageLine>?>(null, page) { value = vm.mushaf.page(page) }
@@ -139,7 +145,7 @@ fun ReaderScreen(
                 }
             }
             Box(
-                Modifier.fillMaxWidth().height(24.dp).pointerInput(Unit) { detectTapGestures { barsVisible = !barsVisible } },
+                Modifier.widthIn(max = PageMaxWidth).fillMaxWidth().height(24.dp).pointerInput(Unit) { detectTapGestures { barsVisible = !barsVisible } },
                 contentAlignment = Alignment.Center,
             ) {
                 Text("$currentPage", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -172,6 +178,7 @@ fun ReaderScreen(
                 },
             )
         }
+      }
     }
 
     val shown = detail

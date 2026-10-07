@@ -1,8 +1,8 @@
 package io.zakkyhidayat.quran.reader
 
 import android.content.Context
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -133,7 +134,7 @@ private fun AyahLine(
                 val isSelected = selected != null && word.surah == selected.surah && word.ayah == selected.ayah
                 Box(
                     Modifier
-                        .then(if (isSelected) Modifier.clip(RoundedCornerShape(6.dp)).background(highlight) else Modifier)
+                        .then(if (isSelected) Modifier.clip(MaterialTheme.shapes.small).background(highlight) else Modifier)
                         .pointerInput(word) { detectTapGestures(onTap = { onWordClick(word) }) },
                 ) {
                     Text(
@@ -155,28 +156,26 @@ private fun AyahLine(
 @Composable
 private fun SurahHeader(surah: Surah?, font: FontFamily, glyphSize: TextUnit, lineHeight: Dp) {
     if (surah == null) return
-    val shape = RoundedCornerShape(14.dp)
-    Box(
-        Modifier
-            .fillMaxWidth()
-            .height(lineHeight * 0.86f)
-            .clip(shape)
-            .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.45f))
-            .border(1.5.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.7f), shape),
-        contentAlignment = Alignment.Center,
+    Surface(
+        modifier = Modifier.fillMaxWidth().height(lineHeight * 0.86f),
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.primaryContainer,
+        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        border = BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary),
     ) {
-        Text(
-            text = surah.nameGlyph.toString(),
-            style = TextStyle(
-                fontFamily = font,
-                fontSize = glyphSize * 1.05f,
-                lineHeight = glyphSize * 1.05f,
-                lineHeightStyle = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.Both),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-            ),
-            maxLines = 1,
-            softWrap = false,
-        )
+        Box(contentAlignment = Alignment.Center) {
+            Text(
+                text = surah.nameGlyph.toString(),
+                style = TextStyle(
+                    fontFamily = font,
+                    fontSize = glyphSize * 1.05f,
+                    lineHeight = glyphSize * 1.05f,
+                    lineHeightStyle = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.Both),
+                ),
+                maxLines = 1,
+                softWrap = false,
+            )
+        }
     }
 }
 

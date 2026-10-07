@@ -1,15 +1,14 @@
 package io.zakkyhidayat.quran.search
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
@@ -17,12 +16,13 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBarDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,18 +39,17 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.zakkyhidayat.quran.AppViewModel
 import io.zakkyhidayat.quran.data.ArabicText
 import io.zakkyhidayat.quran.data.SearchResult
 import io.zakkyhidayat.quran.settings.AppSettings
+import io.zakkyhidayat.quran.ui.CenteredContent
 import kotlinx.coroutines.delay
 
 private sealed interface Hit {
@@ -63,7 +62,7 @@ private sealed interface Hit {
 private val AYAH_REF = Regex("^(\\d{1,3})\\s*[:.\\s]\\s*(\\d{1,3})$")
 private val NUMBER = Regex("^\\d{1,3}$")
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SearchScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) {
     var query by rememberSaveable { mutableStateOf("") }
@@ -98,33 +97,36 @@ fun SearchScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    OutlinedTextField(
-                        value = query,
-                        onValueChange = { query = it },
-                        placeholder = { Text("Cari ayat, surah, atau 2:255") },
-                        singleLine = true,
-                        leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                        trailingIcon = {
-                            if (query.isNotEmpty()) IconButton(onClick = { query = "" }) { Icon(Icons.Default.Close, contentDescription = "Bersihkan") }
-                        },
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                        keyboardActions = KeyboardActions(onSearch = {}),
-                        modifier = Modifier.fillMaxWidth().focusRequester(focus),
-                    )
-                },
-                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali") } },
-            )
+            Surface(
+                shape = SearchBarDefaults.inputFieldShape,
+                color = SearchBarDefaults.colors().containerColor,
+                tonalElevation = SearchBarDefaults.TonalElevation,
+                modifier = Modifier.statusBarsPadding().padding(horizontal = 16.dp, vertical = 8.dp).fillMaxWidth(),
+            ) {
+                SearchBarDefaults.InputField(
+                    query = query,
+                    onQueryChange = { query = it },
+                    onSearch = {},
+                    expanded = false,
+                    onExpandedChange = {},
+                    placeholder = { Text("Cari ayat, surah, atau 2:255") },
+                    leadingIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali") } },
+                    trailingIcon = {
+                        if (query.isNotEmpty()) IconButton(onClick = { query = "" }) { Icon(Icons.Default.Close, contentDescription = "Bersihkan") }
+                    },
+                    modifier = Modifier.focusRequester(focus),
+                )
+            }
         },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
     ) { padding ->
-        Column(Modifier.padding(padding).fillMaxSize()) {
+        CenteredContent(Modifier.padding(padding)) {
             if (query.isBlank()) {
                 Hint("Ketik kata dalam bahasa Indonesia atau Inggris, teks Arab, nama surah, atau rujukan ayat seperti 2:255.")
             } else if (hits.isEmpty()) {
                 Hint("Tidak ada hasil.")
             } else {
-                LazyColumn(Modifier.fillMaxSize()) {
+                LazyColumn(Modifier.fillMaxSize().imePadding()) {
                     items(hits) { hit -> HitRow(hit, vm, onBack) }
                 }
             }
@@ -139,6 +141,7 @@ private fun Hint(text: String) {
     }
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun HitRow(hit: Hit, vm: AppViewModel, onBack: () -> Unit) {
     val surahs by vm.surahs.collectAsStateWithLifecycle()
@@ -146,26 +149,21 @@ private fun HitRow(hit: Hit, vm: AppViewModel, onBack: () -> Unit) {
         is Hit.SurahHit -> {
             val s = surahs[hit.surah] ?: return
             ListItem(
-                modifier = Modifier.clickable { vm.clearSelection(); vm.goToPage(s.firstPage); onBack() },
-                headlineContent = { Text("Surah ${s.nameLatin}") },
+                onClick = { vm.clearSelection(); vm.goToPage(s.firstPage); onBack() },
                 supportingContent = { Text("${s.id} • ${s.ayahCount} ayat • Hal. ${s.firstPage}") },
-            )
+            ) { Text("Surah ${s.nameLatin}") }
         }
-        is Hit.PageHit -> ListItem(
-            modifier = Modifier.clickable { vm.clearSelection(); vm.goToPage(hit.page); onBack() },
-            headlineContent = { Text("Halaman ${hit.page}") },
-        )
+        is Hit.PageHit -> ListItem(onClick = { vm.clearSelection(); vm.goToPage(hit.page); onBack() }) { Text("Halaman ${hit.page}") }
         is Hit.AyahHit -> ListItem(
-            modifier = Modifier.clickable { vm.goToAyah(hit.surah, hit.ayah, openSheet = true); onBack() },
-            headlineContent = { Text("${surahs[hit.surah]?.nameLatin.orEmpty()} ${hit.surah}:${hit.ayah}") },
+            onClick = { vm.goToAyah(hit.surah, hit.ayah, openSheet = true); onBack() },
             supportingContent = { Text("Buka ayat") },
-        )
+        ) { Text("${surahs[hit.surah]?.nameLatin.orEmpty()} ${hit.surah}:${hit.ayah}") }
         is Hit.Result -> {
             val r = hit.value
             ListItem(
-                modifier = Modifier.clickable { vm.goToAyah(r.surah, r.ayah, openSheet = true); onBack() },
+                onClick = { vm.goToAyah(r.surah, r.ayah, openSheet = true); onBack() },
                 overlineContent = { Text("${surahs[r.surah]?.nameLatin.orEmpty()} ${r.surah}:${r.ayah} • ${r.source}") },
-                headlineContent = {
+            ) {
                     if (r.highlightStart >= 0) {
                         Text(
                             buildAnnotatedString {
@@ -180,11 +178,11 @@ private fun HitRow(hit: Hit, vm: AppViewModel, onBack: () -> Unit) {
                         )
                     } else {
                         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                            Text(r.snippet, fontSize = 20.sp, lineHeight = 34.sp, maxLines = 3, overflow = TextOverflow.Ellipsis, modifier = Modifier.fillMaxWidth())
+                            val style = MaterialTheme.typography.titleLarge
+                            Text(r.snippet, style = style.copy(lineHeight = style.fontSize * 1.7f), maxLines = 3, overflow = TextOverflow.Ellipsis, modifier = Modifier.fillMaxWidth())
                         }
                     }
-                },
-            )
+            }
         }
     }
 }
