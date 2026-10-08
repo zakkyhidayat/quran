@@ -1,5 +1,7 @@
 package io.zakkyhidayat.quran.settings
 
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.ui.res.stringResource
 import io.zakkyhidayat.quran.R
 import android.os.Build
@@ -30,6 +32,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ColorScheme
@@ -38,6 +41,9 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItemDefaults
+import androidx.compose.ui.draw.clip
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButton
@@ -96,7 +102,9 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
     }
     val dynamicSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
+    val snackbar = remember { SnackbarHostState() }
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbar) },
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.settings)) },
@@ -146,7 +154,7 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
                 }
 
                 SectionTitle(AppIcons.Backup, stringResource(R.string.backup))
-                BackupControls(vm, settings)
+                BackupControls(vm, settings, snackbar)
 
                 SectionTitle(AppIcons.Shield, stringResource(R.string.permissions))
                 PermissionControls()
@@ -162,13 +170,13 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
                             onClick = {
                                 vm.checkForUpdate(manual = true) { found ->
                                     when (found) {
-                                        false -> android.widget.Toast.makeText(context, latest, android.widget.Toast.LENGTH_SHORT).show()
-                                        null -> android.widget.Toast.makeText(context, failedCheck, android.widget.Toast.LENGTH_LONG).show()
+                                        false -> scope.launch { snackbar.showSnackbar(latest) }
+                                        null -> scope.launch { snackbar.showSnackbar(failedCheck) }
                                         true -> Unit // dialog pembaruan tampil
                                     }
                                 }
                             },
-                            trailing = { Icon(AppIcons.Download, contentDescription = null) },
+                            trailing = { Icon(Icons.Default.Refresh, contentDescription = null) },
                         )
                     } else {
                         item(title = stringResource(R.string.version), subtitle = version)
@@ -247,7 +255,8 @@ private fun PaletteCard(
             } else {
                 Spacer(Modifier.height(32.dp))
             }
-            Text(caption, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            // Warna isi kartu (onSecondaryContainer saat terpilih) agar kontras keterangan tetap cukup.
+            Text(caption, style = MaterialTheme.typography.bodySmall, color = androidx.compose.material3.LocalContentColor.current.copy(alpha = 0.8f))
         }
     }
 }
@@ -271,7 +280,7 @@ private fun PaletteSwatches(scheme: ColorScheme) {
 private class GroupItem(
     val title: String,
     val subtitle: String?,
-    val onClick: () -> Unit,
+    val onClick: (() -> Unit)?,
     val leading: (@Composable () -> Unit)?,
     val trailing: (@Composable () -> Unit)?,
 )
@@ -282,7 +291,7 @@ private class GroupScope {
     fun item(
         title: String,
         subtitle: String? = null,
-        onClick: () -> Unit = {},
+        onClick: (() -> Unit)? = null,
         leading: (@Composable () -> Unit)? = null,
         trailing: (@Composable () -> Unit)? = null,
     ) {
@@ -296,14 +305,29 @@ private fun Group(content: @Composable GroupScope.() -> Unit) {
     val scope = GroupScope().apply { content() }
     Column(verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
         scope.items.forEachIndexed { index, item ->
-            SegmentedListItem(
-                onClick = item.onClick,
-                shapes = ListItemDefaults.segmentedShapes(index, scope.items.size),
-                colors = segmentedItemColors(),
-                leadingContent = item.leading,
-                trailingContent = item.trailing,
-                supportingContent = item.subtitle?.let { sub -> { Text(sub) } },
-            ) { Text(item.title) }
+            val shapes = ListItemDefaults.segmentedShapes(index, scope.items.size)
+            val supporting: (@Composable () -> Unit)? = item.subtitle?.let { sub -> { Text(sub) } }
+            val onClick = item.onClick
+            if (onClick != null) {
+                SegmentedListItem(
+                    onClick = onClick,
+                    shapes = shapes,
+                    colors = segmentedItemColors(),
+                    leadingContent = item.leading,
+                    trailingContent = item.trailing,
+                    supportingContent = supporting,
+                ) { Text(item.title) }
+            } else {
+                // Baris informasi saja: bentuk dan warna sama, tetapi tidak bisa diketuk.
+                ListItem(
+                    headlineContent = { Text(item.title) },
+                    supportingContent = supporting,
+                    leadingContent = item.leading,
+                    trailingContent = item.trailing,
+                    colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+                    modifier = Modifier.clip(shapes.shape),
+                )
+            }
         }
     }
 }
@@ -498,8 +522,9 @@ internal fun TranslationControls(vm: AppViewModel, settings: AppSettings) {
             }
         }
         FilledTonalButton(onClick = { showAddTranslation = true }, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
-            Icon(Icons.Default.Add, contentDescription = null)
-            Text("  " + stringResource(R.string.add_translation))
+            Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(ButtonDefaults.IconSize))
+            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+            Text(stringResource(R.string.add_translation))
         }
         if (showAddTranslation) {
             AddTranslationDialog(
@@ -534,10 +559,10 @@ internal fun TajweedToggle(vm: AppViewModel, settings: AppSettings) {
 
 /** Cadangan lokal: ekspor dan pulihkan bookmark serta pengaturan lewat pemilih berkas sistem. */
 @Composable
-private fun BackupControls(vm: AppViewModel, settings: AppSettings) {
+private fun BackupControls(vm: AppViewModel, settings: AppSettings, snackbar: SnackbarHostState) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    fun toast(text: String) = android.widget.Toast.makeText(context, text, android.widget.Toast.LENGTH_LONG).show()
+    fun toast(text: String) { scope.launch { snackbar.showSnackbar(text) } }
     val exportDone = stringResource(R.string.backup_export_done)
     val importDone = stringResource(R.string.backup_import_done)
     val failed = stringResource(R.string.backup_failed)

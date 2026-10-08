@@ -1,5 +1,6 @@
 package io.zakkyhidayat.quran.reader
 
+import io.zakkyhidayat.quran.ui.InfoLabel
 import androidx.compose.ui.res.stringResource
 import io.zakkyhidayat.quran.R
 import android.content.ClipData
@@ -20,8 +21,6 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilledTonalIconButton
@@ -113,11 +112,7 @@ fun AyahSheetContent(
 
         detail.info.sajda?.let { type ->
             Spacer(Modifier.height(4.dp))
-            AssistChip(
-                onClick = {},
-                label = { Text(stringResource(if (type == "required") R.string.sajda_ayah_required else R.string.sajda_ayah_recommended)) },
-                leadingIcon = { Icon(Icons.Default.KeyboardArrowDown, contentDescription = null, modifier = Modifier.size(AssistChipDefaults.IconSize)) },
-            )
+            InfoLabel(stringResource(if (type == "required") R.string.sajda_ayah_required else R.string.sajda_ayah_recommended))
         }
         Spacer(Modifier.height(8.dp))
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {

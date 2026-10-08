@@ -1,5 +1,8 @@
 package io.zakkyhidayat.quran.ui
 
+import androidx.compose.material3.Icon
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -53,3 +56,28 @@ fun NumberBadge(number: Int, modifier: Modifier = Modifier) {
 @Composable
 fun segmentedItemColors(): ListItemColors =
     ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
+
+/**
+ * Label informasi kecil (misalnya "7 ayat", "Makkiyah"). Chip M3 selalu interaktif; untuk keterangan yang tidak bisa
+ * diketuk dipakai permukaan tonal dengan bentuk dan tipografi chip, tanpa riak dan tanpa peran tombol.
+ */
+@Composable
+fun InfoLabel(text: String, modifier: Modifier = Modifier, leadingIcon: androidx.compose.ui.graphics.vector.ImageVector? = null) {
+    Surface(
+        shape = MaterialTheme.shapes.small,
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = modifier,
+    ) {
+        androidx.compose.foundation.layout.Row(
+            Modifier.heightIn(min = 32.dp).padding(horizontal = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            if (leadingIcon != null) {
+                Icon(leadingIcon, contentDescription = null, modifier = Modifier.size(18.dp))
+                androidx.compose.foundation.layout.Spacer(Modifier.size(8.dp))
+            }
+            Text(text, style = MaterialTheme.typography.labelLarge)
+        }
+    }
+}

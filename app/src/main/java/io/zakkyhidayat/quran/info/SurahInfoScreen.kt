@@ -1,5 +1,6 @@
 package io.zakkyhidayat.quran.info
 
+import io.zakkyhidayat.quran.ui.InfoLabel
 import androidx.compose.ui.res.stringResource
 import io.zakkyhidayat.quran.R
 import androidx.compose.foundation.layout.Arrangement
@@ -13,9 +14,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.AssistChip
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -76,20 +79,21 @@ fun SurahInfoScreen(vm: AppViewModel, surahId: Int, onBack: () -> Unit, onOpenAy
                     )
                 }
                 details?.let { d ->
-                    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(0.dp)) {
-                        d.place?.let { AssistChip(onClick = {}, label = { Text(stringResource(if (it == "makki") R.string.place_makki else R.string.place_madani)) }) }
-                        AssistChip(onClick = {}, label = { Text(stringResource(R.string.ayah_count, d.ayahCount)) })
-                        AssistChip(onClick = {}, label = { Text(if (d.firstPage == d.lastPage) stringResource(R.string.page_short, d.firstPage) else stringResource(R.string.pages_range, d.firstPage, d.lastPage)) })
-                        AssistChip(onClick = {}, label = { Text(if (d.juzFrom == d.juzTo) stringResource(R.string.juz_n, d.juzFrom) else stringResource(R.string.juz_range, d.juzFrom, d.juzTo)) })
-                        AssistChip(onClick = {}, label = { Text(stringResource(R.string.ruku_count, d.rukuCount)) })
-                        d.revelationOrder?.let { AssistChip(onClick = {}, label = { Text(stringResource(R.string.revelation_order, it)) }) }
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        d.place?.let { InfoLabel(stringResource(if (it == "makki") R.string.place_makki else R.string.place_madani)) }
+                        InfoLabel(stringResource(R.string.ayah_count, d.ayahCount))
+                        InfoLabel(if (d.firstPage == d.lastPage) stringResource(R.string.page_short, d.firstPage) else stringResource(R.string.pages_range, d.firstPage, d.lastPage))
+                        InfoLabel(if (d.juzFrom == d.juzTo) stringResource(R.string.juz_n, d.juzFrom) else stringResource(R.string.juz_range, d.juzFrom, d.juzTo))
+                        InfoLabel(stringResource(R.string.ruku_count, d.rukuCount))
+                        d.revelationOrder?.let { InfoLabel(stringResource(R.string.revelation_order, it)) }
                     }
                     FilledTonalButton(
                         onClick = { onOpenPage(d.firstPage) },
                         modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
                     ) {
-                        Icon(AppIcons.MenuBook, contentDescription = null)
-                        Text("  " + stringResource(R.string.read_surah))
+                        Icon(AppIcons.MenuBook, contentDescription = null, modifier = Modifier.size(ButtonDefaults.IconSize))
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text(stringResource(R.string.read_surah))
                     }
                 }
                 SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth().padding(vertical = 12.dp)) {
@@ -98,7 +102,6 @@ fun SurahInfoScreen(vm: AppViewModel, surahId: Int, onBack: () -> Unit, onOpenAy
                             selected = lang == code,
                             onClick = { lang = code },
                             shape = SegmentedButtonDefaults.itemShape(i, 2),
-                            icon = { Icon(AppIcons.Translate, contentDescription = null, modifier = Modifier.padding(0.dp)) },
                         ) { Text(label) }
                     }
                 }

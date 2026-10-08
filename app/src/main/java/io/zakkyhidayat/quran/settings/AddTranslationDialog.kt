@@ -1,5 +1,8 @@
 package io.zakkyhidayat.quran.settings
 
+import androidx.compose.foundation.clickable
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.ListItem
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -92,16 +95,20 @@ internal fun AddTranslationDialog(
         text = {
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 inactive.forEach { tr ->
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        TextButton(onClick = { onActivate(tr.id) }, modifier = Modifier.weight(1f)) {
-                            Text(translationLabel(tr), modifier = Modifier.fillMaxWidth())
-                        }
-                        if (tr.downloaded) {
-                            IconButton(onClick = { vm.deletePack(tr.id) }) {
-                                Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete_downloaded_translation_cd, translationLabel(tr)))
+                    ListItem(
+                        headlineContent = { Text(translationLabel(tr)) },
+                        trailingContent = if (tr.downloaded) {
+                            {
+                                IconButton(onClick = { vm.deletePack(tr.id) }) {
+                                    Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete_downloaded_translation_cd, translationLabel(tr)))
+                                }
                             }
-                        }
-                    }
+                        } else {
+                            null
+                        },
+                        colors = dialogItemColors(),
+                        modifier = Modifier.clickable { onActivate(tr.id) },
+                    )
                 }
 
                 when (state) {
@@ -122,7 +129,7 @@ internal fun AddTranslationDialog(
                                 stringResource(R.string.translations_downloadable),
                                 style = MaterialTheme.typography.titleSmall,
                                 color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.padding(start = 12.dp, top = 12.dp, bottom = 4.dp),
+                                modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 4.dp),
                             )
                         } else if (inactive.isEmpty()) {
                             Text(stringResource(R.string.translations_all_added), style = MaterialTheme.typography.bodyMedium)
@@ -130,44 +137,43 @@ internal fun AddTranslationDialog(
                         downloadable.forEach { pack ->
                             val label = translationLabel(pack.info)
                             val busy = downloading == pack.id
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                TextButton(
-                                    enabled = downloading == null,
-                                    onClick = {
-                                        scope.launch {
-                                            downloading = pack.id
-                                            progress = 0f
-                                            failedLabel = null
-                                            try {
-                                                vm.installPack(pack) { done, total -> progress = if (total > 0) done.toFloat() / total else 0f }
-                                                onActivate(pack.id)
-                                            } catch (e: CancellationException) {
-                                                throw e
-                                            } catch (e: Exception) {
-                                                android.util.Log.w("TranslationPacks", "Gagal mengunduh ${pack.id}", e)
-                                                failedLabel = label
-                                            } finally {
-                                                downloading = null
-                                            }
+                            ListItem(
+                                headlineContent = { Text(label) },
+                                trailingContent = {
+                                    if (busy) {
+                                        val cd = stringResource(R.string.translation_downloading_cd, label)
+                                        CircularProgressIndicator(
+                                            progress = { progress },
+                                            modifier = Modifier.size(24.dp).semantics { contentDescription = cd },
+                                        )
+                                    } else if (pack.bytes > 0) {
+                                        Text(
+                                            stringResource(R.string.translation_size_mb, String.format(Locale.getDefault(), "%.1f", pack.bytes / 1_000_000.0)),
+                                            style = MaterialTheme.typography.labelMedium,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        )
+                                    }
+                                },
+                                colors = dialogItemColors(),
+                                modifier = Modifier.clickable(enabled = downloading == null) {
+                                    scope.launch {
+                                        downloading = pack.id
+                                        progress = 0f
+                                        failedLabel = null
+                                        try {
+                                            vm.installPack(pack) { done, total -> progress = if (total > 0) done.toFloat() / total else 0f }
+                                            onActivate(pack.id)
+                                        } catch (e: CancellationException) {
+                                            throw e
+                                        } catch (e: Exception) {
+                                            android.util.Log.w("TranslationPacks", "Gagal mengunduh ${pack.id}", e)
+                                            failedLabel = label
+                                        } finally {
+                                            downloading = null
                                         }
-                                    },
-                                    modifier = Modifier.weight(1f),
-                                ) { Text(label, modifier = Modifier.fillMaxWidth()) }
-                                if (busy) {
-                                    val cd = stringResource(R.string.translation_downloading_cd, label)
-                                    CircularProgressIndicator(
-                                        progress = { progress },
-                                        modifier = Modifier.padding(horizontal = 12.dp).size(24.dp).semantics { contentDescription = cd },
-                                    )
-                                } else if (pack.bytes > 0) {
-                                    Text(
-                                        stringResource(R.string.translation_size_mb, String.format(Locale.getDefault(), "%.1f", pack.bytes / 1_000_000.0)),
-                                        style = MaterialTheme.typography.labelMedium,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        modifier = Modifier.padding(horizontal = 12.dp),
-                                    )
-                                }
-                            }
+                                    }
+                                },
+                            )
                         }
                     }
                 }
@@ -185,3 +191,7 @@ internal fun AddTranslationDialog(
         confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.close)) } },
     )
 }
+
+// Baris daftar di dalam dialog: latar mengikuti dialog, bukan permukaan daftar.
+@Composable
+private fun dialogItemColors() = ListItemDefaults.colors(containerColor = androidx.compose.ui.graphics.Color.Transparent)
