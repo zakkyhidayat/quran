@@ -82,6 +82,9 @@ import io.zakkyhidayat.quran.ui.theme.originalColorScheme
 import io.zakkyhidayat.quran.ui.segmentedItemColors
 import kotlinx.coroutines.launch
 
+// Pengingat membaca disembunyikan sementara sampai fiturnya dimatangkan; kodenya tetap ada (reminder/Reminder.kt).
+private const val REMINDER_VISIBLE = false
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) {
@@ -137,8 +140,10 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
                 SectionTitle(AppIcons.Translate, stringResource(R.string.translations))
                 TranslationControls(vm, settings)
 
-                SectionTitle(AppIcons.Alarm, stringResource(R.string.reminder))
-                ReminderControls(vm, settings)
+                if (REMINDER_VISIBLE) {
+                    SectionTitle(AppIcons.Alarm, stringResource(R.string.reminder))
+                    ReminderControls(vm, settings)
+                }
 
                 SectionTitle(AppIcons.Backup, stringResource(R.string.backup))
                 BackupControls(vm, settings)
@@ -722,7 +727,7 @@ private fun PermissionControls() {
         onPauseOrDispose { }
     }
     Group {
-        item(
+        if (REMINDER_VISIBLE) item(
             title = stringResource(R.string.perm_notifications),
             subtitle = stringResource(R.string.perm_notifications_sub),
             onClick = {
