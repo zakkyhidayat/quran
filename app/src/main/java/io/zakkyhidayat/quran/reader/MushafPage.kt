@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -46,7 +47,6 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import io.zakkyhidayat.quran.data.AyahRef
@@ -78,6 +78,13 @@ internal fun pageFontFamily(context: Context, page: Int): FontFamily =
 internal fun surahNameFontFamily(context: Context): FontFamily =
     FontFamily(Font("fonts/surah_names.ttf", context.assets))
 
+internal fun surahHeaderFontFamily(context: Context): FontFamily =
+    FontFamily(Font("fonts/QCF_SurahHeader_COLOR-Regular.ttf", context.assets))
+
+// KFGQPC Hafs Uthmanic Script: font teks Arab Unicode (sheet ayat, basmalah, hasil pencarian).
+internal fun arabicFontFamily(context: Context): FontFamily =
+    FontFamily(Font("fonts/UthmanicHafs_V22.ttf", context.assets))
+
 @Composable
 fun MushafPage(
     page: Int,
@@ -91,11 +98,13 @@ fun MushafPage(
 ) {
     val context = LocalContext.current
     val pageFont = remember(page) { pageFontFamily(context, page) }
-    val surahFont = remember { surahNameFontFamily(context) }
+    val headerFont = remember { surahHeaderFontFamily(context) }
+    val hafsFont = remember { arabicFontFamily(context) }
     val measurer = rememberTextMeasurer()
     val density = LocalDensity.current
     val dark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val glyphFilter = remember(tajweed, dark) { GlyphColors.filter(tajweed, dark) }
+    val headerFilter = remember(dark) { GlyphColors.filter(true, dark) }
 
     BoxWithConstraints(modifier.fillMaxSize()) {
         val widthPx = constraints.maxWidth
@@ -112,10 +121,10 @@ fun MushafPage(
                 Box(Modifier.fillMaxWidth().height(lineHeight), contentAlignment = Alignment.Center) {
                     when (line.type) {
                         LineType.Ayah -> AyahLine(line, pageFont, glyphSize, glyphFilter, selected, onAyahClick)
-                        LineType.SurahName -> SurahHeader(surahs[line.surah], surahFont, glyphSize, lineHeight)
+                        LineType.SurahName -> SurahHeader(surahs[line.surah], headerFont, headerFilter)
                         LineType.Basmallah -> Text(
                             text = BASMALLAH,
-                            style = TextStyle(fontSize = glyphSize, color = MaterialTheme.colorScheme.onSurface),
+                            style = TextStyle(fontFamily = hafsFont, fontSize = glyphSize, color = MaterialTheme.colorScheme.onSurface),
                             maxLines = 1,
                             softWrap = false,
                         )
@@ -261,43 +270,45 @@ private fun JustifiedRow(
     }
 }
 
+// Bingkai header berwarna (font QCF_SurahHeader): lebar 3,267 em dan tinggi 0,41 em, simetris terhadap baseline.
+private const val HEADER_UPEM = 2500f
+private const val HEADER_FRAME_EM = 8167f / HEADER_UPEM
+private const val HEADER_FRAME_LEFT_EM = 41f / HEADER_UPEM
+private const val HEADER_FRAME_HEIGHT_EM = 1026f / HEADER_UPEM
+
 @Composable
-private fun SurahHeader(surah: Surah?, font: FontFamily, glyphSize: TextUnit, lineHeight: Dp) {
+private fun SurahHeader(surah: Surah?, font: FontFamily, filter: ColorFilter?) {
     if (surah == null) return
-    Surface(
-        modifier = Modifier.fillMaxWidth().height(lineHeight * 0.86f),
-        shape = MaterialTheme.shapes.large,
-        color = MaterialTheme.colorScheme.primaryContainer,
-        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-        border = BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary),
-    ) {
-        SurahNameGlyph(surah, font, glyphSize * 1.05f, MaterialTheme.colorScheme.onPrimaryContainer, Modifier.fillMaxSize())
-    }
-}
-
-// Metrik vertikal font nama surah sangat besar dan dihitung beda antar versi Android, jadi baseline ditentukan sendiri
-// dari titik tengah tinta glyph (disimpan per surah) lalu digambar langsung.
-private const val SURAH_FONT_UPEM = 2500f
-
-@Composable
-private fun SurahNameGlyph(surah: Surah, font: FontFamily, fontSize: TextUnit, color: Color, modifier: Modifier) {
     val measurer = rememberTextMeasurer()
-    val layout = remember(surah.id, font, fontSize) {
-        measurer.measure(
-            text = surah.nameGlyph.toString(),
-            style = TextStyle(fontFamily = font, fontSize = fontSize, color = color),
-            softWrap = false,
-            maxLines = 1,
-            constraints = Constraints(),
+    val density = LocalDensity.current
+    BoxWithConstraints(Modifier.fillMaxWidth()) {
+        val fontPx = constraints.maxWidth * 0.99f / HEADER_FRAME_EM
+        val fontSize = with(density) { fontPx.toSp() }
+        val layout = remember(surah.id, font, fontSize) {
+            measurer.measure(
+                text = surah.nameGlyph.toString(),
+                style = TextStyle(fontFamily = font, fontSize = fontSize),
+                softWrap = false,
+                maxLines = 1,
+                constraints = Constraints(),
+            )
+        }
+        // Tinggi bingkai bisa melebihi satu baris; requiredHeight membiarkannya meluap ke baris di sekitarnya.
+        Spacer(
+            Modifier
+                .fillMaxWidth()
+                .requiredHeight(with(density) { (fontPx * HEADER_FRAME_HEIGHT_EM).toDp() })
+                .graphicsLayer {
+                    colorFilter = filter
+                    compositingStrategy = CompositingStrategy.Offscreen
+                }
+                .drawBehind {
+                    val frameWidth = HEADER_FRAME_EM * fontPx
+                    val x = (size.width - frameWidth) / 2f - HEADER_FRAME_LEFT_EM * fontPx
+                    drawText(layout, topLeft = Offset(x, size.height / 2f - layout.firstBaseline))
+                },
         )
     }
-    Spacer(
-        modifier.drawBehind {
-            val inkCenterAboveBaseline = surah.nameInkMid / SURAH_FONT_UPEM * fontSize.toPx()
-            val baselineY = this.size.height / 2f + inkCenterAboveBaseline
-            drawText(layout, topLeft = Offset((this.size.width - layout.size.width) / 2f, baselineY - layout.firstBaseline))
-        },
-    )
 }
 
 private fun fitFontSize(

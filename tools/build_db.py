@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "data-src"
 OUT = Path(sys.argv[2]) if len(sys.argv) > 2 else ROOT / "app/src/main/assets/quran.db"
 
-DATA_VERSION = 3
+DATA_VERSION = 4
 
 TRANSLATIONS = [
     # id, lang, nama tampil, sumber, folder
@@ -167,8 +167,7 @@ JUZ_STARTS = [
 SCHEMA = """
 CREATE TABLE surahs (
     id INTEGER PRIMARY KEY, name_ar TEXT NOT NULL, name_latin TEXT NOT NULL,
-    ayah_count INTEGER NOT NULL, first_page INTEGER NOT NULL, name_glyph INTEGER NOT NULL,
-    name_ink_mid INTEGER NOT NULL
+    ayah_count INTEGER NOT NULL, first_page INTEGER NOT NULL, name_glyph INTEGER NOT NULL
 );
 CREATE TABLE juz (id INTEGER PRIMARY KEY, surah INTEGER NOT NULL, ayah INTEGER NOT NULL, page INTEGER NOT NULL);
 CREATE TABLE page_lines (
@@ -202,21 +201,13 @@ SUP = re.compile(r'<sup foot_note="(\d+)">(\d+)</sup>')
 
 
 def surah_name_glyphs():
-    """Glyph 'سورة X' di font nama surah berurutan kode, dimulai dari surah 22 (Al-Hajj) lalu berputar.
+    """Glyph 'سورة X' berurutan kode, dimulai dari surah 22 (Al-Hajj) lalu berputar.
 
-    Mengembalikan {surah: (kode, titik tengah tinta vertikal dalam unit font di atas baseline)}.
+    Kode sama untuk font nama surah (daftar) dan font header berwarna (bingkai di halaman).
     """
-    font = TTFont(next((SRC / "surah-names").glob("*.ttf")))
-    cmap = font.getBestCmap()
-    glyf = font["glyf"]
+    cmap = TTFont(next((SRC / "surah-names").glob("*.ttf"))).getBestCmap()
     codes = sorted(c for c in cmap if c >= 0xE000)[:114]
-    out = {}
-    for sid in range(1, 115):
-        code = codes[(sid - 22) % 114]
-        glyph = glyf[cmap[code]]
-        glyph.recalcBounds(glyf)
-        out[sid] = (code, round((glyph.yMin + glyph.yMax) / 2))
-    return out
+    return {sid: codes[(sid - 22) % 114] for sid in range(1, 115)}
 
 
 def clean_note(text: str) -> str:
@@ -301,7 +292,7 @@ def main():
         count, first_page = db.execute(
             "SELECT COUNT(*), MIN(page) FROM ayahs WHERE surah=?", (sid,)
         ).fetchone()
-        db.execute("INSERT INTO surahs VALUES (?,?,?,?,?,?,?)", (sid, name_ar, latin, count, first_page, glyphs[sid][0], glyphs[sid][1]))
+        db.execute("INSERT INTO surahs VALUES (?,?,?,?,?,?)", (sid, name_ar, latin, count, first_page, glyphs[sid]))
 
     for n, (surah, ayah) in enumerate(JUZ_STARTS, 1):
         page = db.execute("SELECT page FROM ayahs WHERE surah=? AND ayah=?", (surah, ayah)).fetchone()[0]

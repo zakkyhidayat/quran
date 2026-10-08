@@ -104,7 +104,7 @@ fun AyahSheetContent(
             val arabicStyle = MaterialTheme.typography.headlineMedium
             Text(
                 text = detail.arabic,
-                style = arabicStyle.copy(lineHeight = arabicStyle.fontSize * 1.75f),
+                style = arabicStyle.copy(fontFamily = remember { arabicFontFamily(context) }, lineHeight = arabicStyle.fontSize * 1.9f),
                 textAlign = TextAlign.Start,
                 modifier = Modifier.fillMaxWidth(),
             )

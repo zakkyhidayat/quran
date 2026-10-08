@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -48,6 +49,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.zakkyhidayat.quran.AppViewModel
 import io.zakkyhidayat.quran.data.ArabicText
 import io.zakkyhidayat.quran.data.SearchResult
+import io.zakkyhidayat.quran.reader.arabicFontFamily
 import io.zakkyhidayat.quran.settings.AppSettings
 import io.zakkyhidayat.quran.ui.CenteredContent
 import kotlinx.coroutines.delay
@@ -144,6 +146,7 @@ private fun Hint(text: String) {
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun HitRow(hit: Hit, vm: AppViewModel, onBack: () -> Unit) {
+    val context = LocalContext.current
     val surahs by vm.surahs.collectAsStateWithLifecycle()
     when (hit) {
         is Hit.SurahHit -> {
@@ -179,7 +182,8 @@ private fun HitRow(hit: Hit, vm: AppViewModel, onBack: () -> Unit) {
                     } else {
                         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                             val style = MaterialTheme.typography.titleLarge
-                            Text(r.snippet, style = style.copy(lineHeight = style.fontSize * 1.7f), maxLines = 3, overflow = TextOverflow.Ellipsis, modifier = Modifier.fillMaxWidth())
+                            val hafs = remember { arabicFontFamily(context) }
+                            Text(r.snippet, style = style.copy(fontFamily = hafs, lineHeight = style.fontSize * 1.9f), maxLines = 3, overflow = TextOverflow.Ellipsis, modifier = Modifier.fillMaxWidth())
                         }
                     }
             }
