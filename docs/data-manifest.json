@@ -1,0 +1,91 @@
+{
+  "layout/qpc-v4-tajweed-15-lines.db": {
+    "sha256": "4b3fb1cbe8dff749ab0173c4b86cb40fe3c48dd072f41d3c7e715654a9f843cd",
+    "bytes": 241664
+  },
+  "qpc-v4/db/qpc-v4.db": {
+    "sha256": "4bf9549dfcfd367d4d4b151bd58b51af63b677d1c980cf5e52541c2f981d7e6d",
+    "bytes": 2437120
+  },
+  "qpc-hafs/qpc-hafs.db": {
+    "sha256": "bde64c73ec174bd163d21af2f973bf81a85eef50fd279ebde637f8d7c012fc36",
+    "bytes": 1581056
+  },
+  "quran-id-with-footnote-tags/quran-id-with-footnote-tags.db": {
+    "sha256": "a64e8df3cd21147d8612fa16a820f1b32dc833e1a975c17c76859870861486e9",
+    "bytes": 1486848
+  },
+  "the-sabiq-company-with-footnote-tags/the-sabiq-company-with-footnote-tags.db": {
+    "sha256": "3fbca171c1e27cf716ac6ef196711fdb02381952fb0148c401d9f8baacaf5ddd",
+    "bytes": 1568768
+  },
+  "king-fahad-quran-complex-with-footnote-tags/king-fahad-quran-complex-with-footnote-tags.db": {
+    "sha256": "03b94c3f93c2df6dda7eae7706fa745d991e0ef26d9c25710a6bc09de7ee97c2",
+    "bytes": 1691648
+  },
+  "en-sahih-international-with-footnote-tags/en-sahih-international-with-footnote-tags.db": {
+    "sha256": "71a9d268fc974c8039bd6f1fedf532e581517946931ae0fa090119f8d1d1b0c9",
+    "bytes": 1306624
+  },
+  "surah-info-id/surah-info-id.db": {
+    "sha256": "cc20150bf3aa30c63417221b11024e5ced2fa1f3dbbfee2866ce861eaefdd2a5",
+    "bytes": 331776
+  },
+  "surah-info-en/surah-info-en.db": {
+    "sha256": "7bacde4bc3daeeaf3f8750d911ca7f1fd8737dc65639859e0b2556ec3fa916fb",
+    "bytes": 1024000
+  },
+  "translit-tajweed-simple/english-transliteration-tajweed-simple.db": {
+    "sha256": "c370dbc0a064866d6f69a232f985a813e4135ae2dae3e6cd027ba98b1f9aa7fd",
+    "bytes": 1511424
+  },
+  "meta/quran-metadata-juz.sqlite": {
+    "sha256": "c257b669a0d762db86fda6e1458852ee565dee8bd243222d6802c290e6713703",
+    "bytes": 8192
+  },
+  "meta/quran-metadata-hizb.sqlite": {
+    "sha256": "5ea2bdf5f8867b0056d77c5fdf0d377eaa0858251be4b1de30667be3e7ccf3e3",
+    "bytes": 8192
+  },
+  "meta/quran-metadata-rub.sqlite": {
+    "sha256": "1fb08324679110de2a19da9ce757b273ce5b6c6a25228e420a747fc95999a047",
+    "bytes": 20480
+  },
+  "meta/quran-metadata-manzil.sqlite": {
+    "sha256": "94a0304cc8520da92ff6cc43988c48dfa8dde73c9878c57d062b529eaf9a54a6",
+    "bytes": 8192
+  },
+  "meta/quran-metadata-ruku.sqlite": {
+    "sha256": "697fb8be26c89c8804f035fe6524774dd135cb3b988da6111ffc7dd0a118b6ac",
+    "bytes": 32768
+  },
+  "meta/quran-metadata-sajda.sqlite": {
+    "sha256": "90f479bc1e55fa643c331fead165863cdf9c04c9785382da58c126b86e8bff02",
+    "bytes": 8192
+  },
+  "meta/quran-metadata-surah-name.sqlite": {
+    "sha256": "4dc2137c705752b08ecc9738d0c95441e973699ee997fddc48c53d804e785fcc",
+    "bytes": 16384
+  },
+  "surah-names/surah_names.ttf": {
+    "sha256": "b96bca0a4cef6ca142071802d087e8ebed5b41c6745827810ef2c6f418c909d2",
+    "bytes": 1125252
+  },
+  "fonts-extra/QCF_SurahHeader_COLOR-Regular.ttf": {
+    "sha256": "731cdc14a3e50669ffd44c06335ce269665e22cb75db39ca137527e29c516308",
+    "bytes": 386456
+  },
+  "fonts-extra/UthmanicHafs_V22.ttf": {
+    "sha256": "aa68bffce289b4c0ebac68e90502eb69e42356abcd1603cb2b8e99c2c723f145",
+    "bytes": 297700
+  },
+  "fonts-extra/quran-common.ttf": {
+    "sha256": "63675d54764c3e0acd3875e191dc6f0af1339ddbd53a1df7fcebbaabebc918fa",
+    "bytes": 125444
+  },
+  "ttf/p1..p604.ttf": {
+    "sha256": "fa840c5a5d0bceeadac1af2183392a5fc9aa0e99148e73a43b72803e7a882cdc",
+    "bytes": 166986908,
+    "files": 604
+  }
+}

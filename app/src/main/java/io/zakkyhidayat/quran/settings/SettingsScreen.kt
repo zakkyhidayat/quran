@@ -23,7 +23,6 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -43,6 +42,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -76,6 +83,7 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
         runCatching { context.packageManager.getPackageInfo(context.packageName, 0).versionName }.getOrNull().orEmpty()
     }
     val dynamicSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    var showAddTranslation by rememberSaveable { mutableStateOf(false) }
     val dark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val dynamicPreview = if (dynamicSupported) (if (dark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)) else null
     val originalPreview = originalColorScheme(dark, settings.contrast)
@@ -184,20 +192,47 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
                 }
 
                 SectionTitle(AppIcons.Translate, "Terjemahan")
-                listOf("id" to "Bahasa Indonesia", "en" to "English").forEach { (lang, title) ->
-                    val group = translations.filter { it.lang == lang }
-                    if (group.isEmpty()) return@forEach
-                    Text(title, style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(start = 4.dp, top = 8.dp, bottom = 8.dp))
-                    Group {
-                        group.forEach { tr ->
-                            val checked = tr.id in settings.translationIds
-                            item(
-                                title = tr.name,
-                                onClick = { scope.launch { repo.setTranslations(toggled(translations.map { it.id }, settings.translationIds, tr.id)) } },
-                                leading = { Checkbox(checked = checked, onCheckedChange = null) },
-                            )
-                        }
+                val ordered = translations.map { it.id }
+                val active = translations.filter { it.id in settings.translationIds }
+                val inactive = translations.filter { it.id !in settings.translationIds }
+                Group {
+                    active.forEach { tr ->
+                        item(
+                            title = translationLabel(tr),
+                            trailing = {
+                                IconButton(
+                                    enabled = active.size > 1,
+                                    onClick = { scope.launch { repo.setTranslations(ordered.filter { it in settings.translationIds && it != tr.id }) } },
+                                ) { Icon(Icons.Default.Delete, contentDescription = "Hapus terjemahan ${translationLabel(tr)}") }
+                            },
+                        )
                     }
+                }
+                if (inactive.isNotEmpty()) {
+                    FilledTonalButton(onClick = { showAddTranslation = true }, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
+                        Icon(Icons.Default.Add, contentDescription = null)
+                        Text("  Tambah terjemahan")
+                    }
+                }
+                if (showAddTranslation) {
+                    AlertDialog(
+                        onDismissRequest = { showAddTranslation = false },
+                        title = { Text("Tambah terjemahan") },
+                        text = {
+                            Column {
+                                inactive.forEach { tr ->
+                                    TextButton(
+                                        onClick = {
+                                            scope.launch { repo.setTranslations(ordered.filter { it in settings.translationIds || it == tr.id }) }
+                                            showAddTranslation = false
+                                        },
+                                        modifier = Modifier.fillMaxWidth(),
+                                    ) { Text(translationLabel(tr), modifier = Modifier.fillMaxWidth()) }
+                                }
+                            }
+                        },
+                        confirmButton = { TextButton(onClick = { showAddTranslation = false }) { Text("Tutup") } },
+                    )
                 }
 
                 SectionTitle(Icons.Default.Info, "Tentang")
@@ -325,11 +360,6 @@ private fun Group(content: GroupScope.() -> Unit) {
     }
 }
 
-private fun toggled(order: List<String>, current: List<String>, id: String): List<String> {
-    val next = if (id in current) current - id else current + id
-    return order.filter { it in next }
-}
-
 @Composable
 private fun SectionTitle(icon: ImageVector, text: String) {
     Row(Modifier.padding(start = 4.dp, top = 24.dp, bottom = 8.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -345,4 +375,13 @@ private fun Labeled(label: String, content: @Composable () -> Unit) {
         Text(label, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(start = 4.dp, bottom = 6.dp))
         content()
     }
+}
+
+private fun translationLabel(tr: io.zakkyhidayat.quran.data.TranslationInfo): String {
+    val language = when (tr.lang) {
+        "id" -> "Indonesia"
+        "en" -> "Inggris"
+        else -> tr.lang
+    }
+    return "$language - ${tr.name}"
 }
