@@ -1,0 +1,36 @@
+# Setiap push dan pull request: integritas teks Qur'an, teks antarmuka, unit test, dan build debug.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  content:
+    name: Qur'an content and strings
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Integritas teks Qur'an (jumlah, halaman, sidik jari SHA-256)
+        run: python tools/verify_quran.py
+      - name: Teks antarmuka (kunci, placeholder, apostrof)
+        run: python tools/check_strings.py
+
+  android:
+    name: Unit tests and debug build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: gradle/actions/setup-gradle@v5
+      # Font halaman tidak ada di git; build debug tetap berjalan (halaman memakai font bawaan), cukup untuk tes.
+      - run: ./gradlew --no-daemon :app:testGithubDebugUnitTest :app:assembleGithubDebug

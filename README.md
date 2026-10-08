@@ -99,12 +99,30 @@ Minimum Android version: 8.0 (API 26).
 Versions follow semantic versioning from git tags `vX.Y.Z`, with `versionCode = X*10000 + Y*100 + Z`. Releases are
 built and signed by GitHub Actions; see [docs/RELEASING.md](docs/RELEASING.md).
 
+## Checks
+
+Run these before every release; CI runs the first three on every push.
+
+```bash
+python tools/verify_quran.py            # Qur'an: 114 surahs, 6,236 ayahs, pages, SHA-256 content fingerprints
+python tools/check_strings.py           # interface translations
+./gradlew :app:testGithubDebugUnitTest  # unit tests
+python tools/verify_quran.py --source   # compare every ayah with the original QUL file (needs data-src/)
+```
+
+If an error in the Qur'an text is ever found, follow [docs/CONTENT_ERRORS.md](docs/CONTENT_ERRORS.md).
+
 ## Translating the interface
 
 Interface text lives in standard Android string resources, one file per language. See
 [docs/TRANSLATING.md](docs/TRANSLATING.md) for how to add a language or fix a translation.
 
 ## More documentation
+
+- [ARCHITECTURE.md](ARCHITECTURE.md): layers, database, and how the text reaches the screen.
+- [CHANGELOG.md](CHANGELOG.md), [PRIVACY.md](PRIVACY.md), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+- [docs/AUDIT.md](docs/AUDIT.md): release audit checklist and open findings (in Indonesian).
+- [docs/RELEASING.md](docs/RELEASING.md): signing, CI, and making a release.
 
 - [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md): QUL sources, how to update the data, and downloadable translation packs
   (written in Indonesian).
