@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
@@ -41,8 +42,8 @@ import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
@@ -270,22 +271,33 @@ private fun SurahHeader(surah: Surah?, font: FontFamily, glyphSize: TextUnit, li
         contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
         border = BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary),
     ) {
-        Box(contentAlignment = Alignment.Center) {
-            Text(
-                text = surah.nameGlyph.toString(),
-                style = TextStyle(
-                    fontFamily = font,
-                    fontSize = glyphSize * 1.05f,
-                    lineHeight = glyphSize * 1.05f,
-                    lineHeightStyle = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.Both),
-                ),
-                maxLines = 1,
-                softWrap = false,
-                // Glyph nama surah punya ascent besar; geser ke atas supaya terlihat di tengah bingkai.
-                modifier = Modifier.offset(y = with(LocalDensity.current) { (-glyphSize.toPx() * 0.16f).toDp() }),
-            )
-        }
+        SurahNameGlyph(surah, font, glyphSize * 1.05f, MaterialTheme.colorScheme.onPrimaryContainer, Modifier.fillMaxSize())
     }
+}
+
+// Metrik vertikal font nama surah sangat besar dan dihitung beda antar versi Android, jadi baseline ditentukan sendiri
+// dari titik tengah tinta glyph (disimpan per surah) lalu digambar langsung.
+private const val SURAH_FONT_UPEM = 2500f
+
+@Composable
+private fun SurahNameGlyph(surah: Surah, font: FontFamily, fontSize: TextUnit, color: Color, modifier: Modifier) {
+    val measurer = rememberTextMeasurer()
+    val layout = remember(surah.id, font, fontSize) {
+        measurer.measure(
+            text = surah.nameGlyph.toString(),
+            style = TextStyle(fontFamily = font, fontSize = fontSize, color = color),
+            softWrap = false,
+            maxLines = 1,
+            constraints = Constraints(),
+        )
+    }
+    Spacer(
+        modifier.drawBehind {
+            val inkCenterAboveBaseline = surah.nameInkMid / SURAH_FONT_UPEM * fontSize.toPx()
+            val baselineY = this.size.height / 2f + inkCenterAboveBaseline
+            drawText(layout, topLeft = Offset((this.size.width - layout.size.width) / 2f, baselineY - layout.firstBaseline))
+        },
+    )
 }
 
 private fun fitFontSize(

@@ -3,10 +3,11 @@ package io.zakkyhidayat.quran.reader
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -14,7 +15,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -54,11 +57,18 @@ import io.zakkyhidayat.quran.data.AyahText
 import io.zakkyhidayat.quran.data.BookmarkKind
 import io.zakkyhidayat.quran.data.PageLine
 import io.zakkyhidayat.quran.settings.AppSettings
+import io.zakkyhidayat.quran.ui.AppIcons
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
 private const val PAGE_COUNT = 604
 private val PageMaxWidth = 640.dp
+private val PagePadding = 8.dp
+private val HeaderHeight = 28.dp
+private val FooterHeight = 24.dp
+private val PageChromeHeight = HeaderHeight + FooterHeight
+// Kertas B5: 176 x 250 mm.
+private const val PageHeightOverWidth = 250f / 176f
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -102,89 +112,86 @@ fun ReaderScreen(
     val pageBookmarked = bookmarks.any { it.kind == BookmarkKind.Page && it.page == currentPage }
 
     Scaffold(containerColor = MaterialTheme.colorScheme.background, contentWindowInsets = WindowInsets(0, 0, 0, 0)) { _ ->
-      Box(Modifier.fillMaxSize()) {
-        Column(
-            Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.systemBars),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Row(
-                Modifier.widthIn(max = PageMaxWidth).fillMaxWidth().height(28.dp).pointerInput(Unit) { detectTapGestures { barsVisible = !barsVisible } }.padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
+        Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.systemBars)) {
+            // Bilah atas mendorong halaman ke bawah, tidak menimpanya.
+            AnimatedVisibility(
+                visible = barsVisible,
+                enter = fadeIn(MaterialTheme.motionScheme.defaultEffectsSpec()) + expandVertically(MaterialTheme.motionScheme.defaultSpatialSpec()),
+                exit = fadeOut(MaterialTheme.motionScheme.defaultEffectsSpec()) + shrinkVertically(MaterialTheme.motionScheme.defaultSpatialSpec()),
             ) {
-                Text(currentSurah?.nameLatin.orEmpty(), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Box(Modifier.weight(1f))
-                Text("Juz ${meta?.juz ?: ""}", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                TopAppBar(
+                    windowInsets = WindowInsets(0, 0, 0, 0),
+                    title = {
+                        Column {
+                            Text(currentSurah?.nameLatin.orEmpty(), style = MaterialTheme.typography.titleMedium)
+                            Text("Juz ${meta?.juz ?: ""} • Hal. $currentPage", style = MaterialTheme.typography.bodySmall)
+                        }
+                    },
+                    navigationIcon = {
+                        if (onOpenIndex != null) {
+                            IconButton(onClick = onOpenIndex) { Icon(Icons.Default.Menu, contentDescription = "Daftar surah dan juz") }
+                        }
+                    },
+                    actions = {
+                        IconButton(onClick = onOpenSearch) { Icon(Icons.Default.Search, contentDescription = "Cari") }
+                        IconButton(onClick = { vm.togglePageBookmark(currentPage) }) {
+                            Icon(
+                                if (pageBookmarked) AppIcons.Bookmark else AppIcons.BookmarkBorder,
+                                contentDescription = if (pageBookmarked) "Hapus bookmark halaman" else "Bookmark halaman",
+                            )
+                        }
+                        IconButton(onClick = onOpenSettings) { Icon(Icons.Default.Settings, contentDescription = "Pengaturan") }
+                    },
+                )
             }
             HorizontalPager(
                 state = pagerState,
                 reverseLayout = true,
                 beyondViewportPageCount = 1,
-                modifier = Modifier.weight(1f).widthIn(max = PageMaxWidth).padding(horizontal = 8.dp),
+                modifier = Modifier.weight(1f).fillMaxWidth(),
             ) { index ->
                 val page = index + 1
                 val lines by produceState<List<PageLine>?>(null, page) { value = vm.mushaf.page(page) }
                 val ayahTexts by produceState<List<AyahText>>(emptyList(), page) { value = vm.mushaf.pageAyahs(page) }
-                Box(
+                val pageInfo = pageMeta.getOrNull(index)
+                BoxWithConstraints(
                     Modifier.fillMaxSize().pointerInput(selected) {
                         detectTapGestures(onTap = { if (selected != null) vm.clearSelection() else barsVisible = !barsVisible })
                     },
-                    contentAlignment = Alignment.Center,
                 ) {
-                    val loaded = lines
-                    if (loaded == null) {
-                        LoadingIndicator()
-                    } else {
-                        MushafPage(
-                            page = page,
-                            lines = loaded,
-                            surahs = surahs,
-                            ayahTexts = ayahTexts,
-                            selected = selected,
-                            onAyahClick = { vm.selectAyah(it) },
-                            tajweed = settings.tajweed,
-                        )
+                    // Blok halaman berproporsi kertas B5 (176 x 250 mm), seperti mushaf cetak; header dan nomor menempel di sekelilingnya.
+                    val available = minOf(maxWidth - PagePadding * 2, PageMaxWidth)
+                    val blockWidth = minOf(available, (maxHeight - PageChromeHeight) / PageHeightOverWidth)
+                    val blockHeight = blockWidth * PageHeightOverWidth
+                    Column(Modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
+                        Row(Modifier.width(blockWidth).height(HeaderHeight).padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Text(pageInfo?.let { surahs[it.surah]?.nameLatin }.orEmpty(), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Box(Modifier.weight(1f))
+                            Text("Juz ${pageInfo?.juz ?: ""}", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        Box(Modifier.size(blockWidth, blockHeight), contentAlignment = Alignment.Center) {
+                            val loaded = lines
+                            if (loaded == null) {
+                                LoadingIndicator()
+                            } else {
+                                MushafPage(
+                                    page = page,
+                                    lines = loaded,
+                                    ayahTexts = ayahTexts,
+                                    surahs = surahs,
+                                    selected = selected,
+                                    onAyahClick = { vm.selectAyah(it) },
+                                    tajweed = settings.tajweed,
+                                )
+                            }
+                        }
+                        Box(Modifier.width(blockWidth).height(FooterHeight), contentAlignment = Alignment.Center) {
+                            Text("$page", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
                     }
                 }
             }
-            Box(
-                Modifier.widthIn(max = PageMaxWidth).fillMaxWidth().height(24.dp).pointerInput(Unit) { detectTapGestures { barsVisible = !barsVisible } },
-                contentAlignment = Alignment.Center,
-            ) {
-                Text("$currentPage", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
         }
-
-        AnimatedVisibility(
-            visible = barsVisible,
-            modifier = Modifier.align(Alignment.TopCenter),
-            enter = fadeIn(MaterialTheme.motionScheme.defaultEffectsSpec()) + slideInVertically(MaterialTheme.motionScheme.defaultSpatialSpec()) { -it },
-            exit = fadeOut(MaterialTheme.motionScheme.defaultEffectsSpec()) + slideOutVertically(MaterialTheme.motionScheme.defaultSpatialSpec()) { -it },
-        ) {
-            TopAppBar(
-                title = {
-                    Column {
-                        Text(currentSurah?.nameLatin.orEmpty(), style = MaterialTheme.typography.titleMedium)
-                        Text("Juz ${meta?.juz ?: ""} • Hal. $currentPage", style = MaterialTheme.typography.bodySmall)
-                    }
-                },
-                navigationIcon = {
-                    if (onOpenIndex != null) {
-                        IconButton(onClick = onOpenIndex) { Icon(Icons.Default.Menu, contentDescription = "Daftar surah dan juz") }
-                    }
-                },
-                actions = {
-                    IconButton(onClick = onOpenSearch) { Icon(Icons.Default.Search, contentDescription = "Cari") }
-                    IconButton(onClick = { vm.togglePageBookmark(currentPage) }) {
-                        Icon(
-                            if (pageBookmarked) io.zakkyhidayat.quran.ui.AppIcons.Bookmark else io.zakkyhidayat.quran.ui.AppIcons.BookmarkBorder,
-                            contentDescription = if (pageBookmarked) "Hapus bookmark halaman" else "Bookmark halaman",
-                        )
-                    }
-                    IconButton(onClick = onOpenSettings) { Icon(Icons.Default.Settings, contentDescription = "Pengaturan") }
-                },
-            )
-        }
-      }
     }
 
     val shown = detail

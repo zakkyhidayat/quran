@@ -19,6 +19,7 @@ data class Surah(
     val ayahCount: Int,
     val firstPage: Int,
     val nameGlyph: Char,
+    val nameInkMid: Int,
 )
 
 data class Juz(val id: Int, val surah: Int, val ayah: Int, val page: Int)

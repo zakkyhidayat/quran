@@ -48,9 +48,9 @@ class MushafRepository(context: Context) {
 
     suspend fun surahs(): Map<Int, Surah> = surahCache ?: withContext(Dispatchers.IO) {
         val map = LinkedHashMap<Int, Surah>()
-        db.rawQuery("SELECT id, name_ar, name_latin, ayah_count, first_page, name_glyph FROM surahs ORDER BY id", null).use { c ->
+        db.rawQuery("SELECT id, name_ar, name_latin, ayah_count, first_page, name_glyph, name_ink_mid FROM surahs ORDER BY id", null).use { c ->
             while (c.moveToNext()) {
-                map[c.getInt(0)] = Surah(c.getInt(0), c.getString(1), c.getString(2), c.getInt(3), c.getInt(4), c.getInt(5).toChar())
+                map[c.getInt(0)] = Surah(c.getInt(0), c.getString(1), c.getString(2), c.getInt(3), c.getInt(4), c.getInt(5).toChar(), c.getInt(6))
             }
         }
         map.also { surahCache = it }
