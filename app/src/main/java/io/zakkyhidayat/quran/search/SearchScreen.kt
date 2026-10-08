@@ -66,6 +66,10 @@ private sealed interface Hit {
 private val AYAH_REF = Regex("^(\\d{1,3})\\s*[:.\\s]\\s*(\\d{1,3})$")
 private val NUMBER = Regex("^\\d{1,3}$")
 
+/** Rujukan ayat seperti "2:255", "2.255", atau "2 255" -> (surah, ayat); null bila bukan rujukan. Batas surah/ayat dicek pemanggil. */
+internal fun parseAyahReference(query: String): Pair<Int, Int>? =
+    AYAH_REF.find(query.trim())?.let { it.groupValues[1].toInt() to it.groupValues[2].toInt() }
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SearchScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) {
@@ -81,9 +85,7 @@ fun SearchScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) {
         if (q.isEmpty()) { value = emptyList(); return@produceState }
         delay(250)
         val quick = mutableListOf<Hit>()
-        AYAH_REF.find(q)?.let { m ->
-            val s = m.groupValues[1].toInt()
-            val a = m.groupValues[2].toInt()
+        parseAyahReference(q)?.let { (s, a) ->
             if (surahs[s]?.let { a in 1..it.ayahCount } == true) quick += Hit.AyahHit(s, a)
         }
         if (NUMBER.matches(q)) {
