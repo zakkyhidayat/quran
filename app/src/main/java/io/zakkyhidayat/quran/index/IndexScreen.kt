@@ -1,5 +1,6 @@
 package io.zakkyhidayat.quran.index
 
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.animation.togetherWith
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.fadeIn
@@ -76,7 +77,8 @@ private val TABS = listOf(
     R.string.tab_ruku to AppIcons.FormatListNumbered,
 )
 // Tab Sajdah disembunyikan sementara; tempatnya mungkin dipakai fitur surah/ayat lain dari QUL. SajdaList tetap ada.
-private val ListPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+// Ruang bawah 96dp agar item terakhir tidak tertutup FAB "Lanjutkan membaca".
+private val ListPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 96.dp)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -86,7 +88,24 @@ fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -
     var tab by rememberSaveable { mutableIntStateOf(1) }
     var showJump by remember { mutableStateOf(false) }
     val surahsForJump by vm.surahs.collectAsStateWithLifecycle()
+    val settings by vm.settingsRepository.settings.collectAsStateWithLifecycle(AppSettings())
+    val lastSurah = surahsForJump[settings.lastSurah]
     Scaffold(
+        // Lanjutkan membaca: FAB diperluas di kanan bawah, tampil di semua tab.
+        floatingActionButton = {
+            if (lastSurah != null && settings.lastAyah > 0) {
+                ExtendedFloatingActionButton(
+                    onClick = { vm.goToAyah(lastSurah.id, settings.lastAyah); onBack() },
+                    icon = { Icon(AppIcons.MenuBook, contentDescription = null) },
+                    text = {
+                        Column {
+                            Text(stringResource(R.string.continue_reading), style = MaterialTheme.typography.labelLarge)
+                            Text("${lastSurah.nameLatin} ${lastSurah.id}:${settings.lastAyah}", style = MaterialTheme.typography.labelMedium)
+                        }
+                    },
+                )
+            }
+        },
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.index_title)) },
@@ -159,30 +178,10 @@ private fun SurahList(vm: AppViewModel, onBack: () -> Unit, onOpenSurahInfo: (In
     val surahs by vm.surahs.collectAsStateWithLifecycle()
     val font = remember { surahNameFontFamily(vm.getApplication()) }
     val items = remember(surahs) { surahs.values.toList() }
-    val settings by vm.settingsRepository.settings.collectAsStateWithLifecycle(AppSettings())
-    val lastSurah = surahs[settings.lastSurah]
     val glyphSize = MaterialTheme.typography.headlineSmall.fontSize
     // Di layar sempit (< 360dp) kaligrafi nama surah menyempitkan judul sampai terpotong di tengah kata.
     val showGlyph = androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp >= 360
     Column(Modifier.fillMaxSize()) {
-        // Di luar LazyColumn supaya tidak tergulir keluar saat muncul setelah data dimuat.
-        if (lastSurah != null && settings.lastAyah > 0) {
-            Box(Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp)) {
-            Card(
-                onClick = { vm.goToAyah(lastSurah.id, settings.lastAyah); onBack() },
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer, contentColor = MaterialTheme.colorScheme.onPrimaryContainer),
-                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
-            ) {
-                Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Icon(AppIcons.MenuBook, contentDescription = null)
-                    Column(Modifier.padding(start = 16.dp)) {
-                        Text(stringResource(R.string.continue_reading), style = MaterialTheme.typography.titleMedium)
-                        Text("${lastSurah.nameLatin} ${lastSurah.id}:${settings.lastAyah}", style = MaterialTheme.typography.bodyMedium)
-                    }
-                }
-            }
-            }
-        }
     LazyColumn(Modifier.weight(1f), contentPadding = ListPadding, verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
         itemsIndexed(items, key = { _, s -> s.id }) { index, s ->
             SegmentedListItem(
