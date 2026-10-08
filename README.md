@@ -55,6 +55,17 @@ Choices made on purpose:
 - [ ] Reading reminders to keep a daily portion by juz, hizb, or manzil (in progress, hidden for now)
 - [ ] Word-by-word meaning (tap a word to see its translation)
 - [ ] Audio recitation
+- [ ] Ayah actions in the ayah + translation and translation-only modes: tap an ayah to show bookmark, copy, and share
+      buttons; tap again to hide them
+- [ ] Animated transitions between the three reading modes
+- [ ] A counter in the reader's top bar, between search and bookmark: ayah count within the surah, or progress through
+      the current juz, hizb, rub', manzil, or ruku (tap to switch)
+- [ ] Remove the page number below the page in the mushaf view
+
+### Known issues
+
+- Page turns sometimes lose their animation: the page shrinks slightly and then disappears instead of sliding. Likely
+  caused by one of the rendering optimisations.
 
 ## Data, credits, and licence
 
