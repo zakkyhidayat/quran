@@ -144,6 +144,12 @@ class MushafRepository(context: Context) {
         )
     }
 
+    suspend fun firstAyahOnPage(page: Int): AyahRef = withContext(Dispatchers.IO) {
+        db.rawQuery("SELECT surah, ayah FROM words WHERE page = ? ORDER BY id LIMIT 1", arrayOf(page.toString())).use {
+            if (it.moveToFirst()) AyahRef(it.getInt(0), it.getInt(1)) else AyahRef(1, 1)
+        }
+    }
+
     suspend fun ayahPage(surah: Int, ayah: Int): Int = withContext(Dispatchers.IO) {
         db.rawQuery("SELECT page FROM ayahs WHERE surah = ? AND ayah = ?", arrayOf(surah.toString(), ayah.toString())).use {
             if (it.moveToFirst()) it.getInt(0) else 1

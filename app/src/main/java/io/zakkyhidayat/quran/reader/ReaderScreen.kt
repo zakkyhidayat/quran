@@ -32,6 +32,17 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.foundation.clickable
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.sp
+import io.zakkyhidayat.quran.ui.JumpToAyahDialog
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -62,7 +73,7 @@ private val PageEndPadding = 4.dp
 // Blok halaman digeser ke luar tepi kiri layar sebesar ini (dan dilebarkan sama besar) supaya margin kiri lebih sempit.
 private val PageStartBleed = 3.dp
 private val HeaderHeight = 28.dp
-private val FooterHeight = 24.dp
+private val FooterHeight = 32.dp
 private val PageChromeHeight = HeaderHeight + FooterHeight
 // Kertas B5: 176 x 250 mm.
 private const val PageHeightOverWidth = 250f / 176f
@@ -100,10 +111,18 @@ fun ReaderScreen(
         snapshotFlow { pagerState.currentPage }.collectLatest { index ->
             vm.currentPage.value = index + 1
             delay(600)
-            vm.settingsRepository.setLastPage(index + 1)
+            val page = index + 1
+            // Baca terakhir per ayat: ayat yang sedang dipilih bila ada di halaman ini, kalau tidak ayat pertama halaman.
+            val chosen = vm.selected.value
+            val ayah = if (chosen != null && vm.mushaf.ayahPage(chosen.surah, chosen.ayah) == page) chosen else vm.mushaf.firstAyahOnPage(page)
+            vm.settingsRepository.setLastPage(page)
+            vm.settingsRepository.setLastAyah(ayah.surah, ayah.ayah)
         }
     }
 
+    var showJump by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val commonFont = remember { commonFontFamily(context) }
     val meta = pageMeta.getOrNull(currentPage - 1)
     val currentSurah = meta?.let { surahs[it.surah] }
     val pageBookmarked = bookmarks.any { it.kind == BookmarkKind.Page && it.page == currentPage }
@@ -114,7 +133,7 @@ fun ReaderScreen(
             TopAppBar(
                 windowInsets = WindowInsets(0, 0, 0, 0),
                 title = {
-                    Column {
+                    Column(Modifier.clickable(onClickLabel = "Lompat ke ayat") { showJump = true }) {
                         Text(currentSurah?.nameLatin.orEmpty(), style = MaterialTheme.typography.titleMedium)
                         Text("Juz ${meta?.juz ?: ""} • Hal. $currentPage", style = MaterialTheme.typography.bodySmall)
                     }
@@ -161,7 +180,13 @@ fun ReaderScreen(
                         Row(Modifier.width(blockWidth).height(HeaderHeight).padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                             Text(pageInfo?.let { surahs[it.surah]?.nameLatin }.orEmpty(), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             Box(Modifier.weight(1f))
-                            Text("Juz ${pageInfo?.juz ?: ""}", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            pageInfo?.let { info ->
+                                Text(
+                                    text = juzTitleGlyph(info.juz),
+                                    style = TextStyle(fontFamily = commonFont, fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurfaceVariant),
+                                    modifier = Modifier.semantics { contentDescription = "Juz ${info.juz}" },
+                                )
+                            }
                         }
                         Box(Modifier.size(blockWidth, blockHeight), contentAlignment = Alignment.Center) {
                             val loaded = lines
@@ -180,13 +205,38 @@ fun ReaderScreen(
                                 )
                             }
                         }
-                        Box(Modifier.width(blockWidth).height(FooterHeight), contentAlignment = Alignment.Center) {
-                            Text("$page", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        val pageSurah = pageInfo?.surah
+                        val previous = pageSurah?.let { surahs[it - 1] }
+                        val next = pageSurah?.let { surahs[it + 1] }
+                        // Mushaf dibaca kanan ke kiri: surah berikutnya di kiri, sebelumnya di kanan.
+                        Row(Modifier.width(blockWidth).height(FooterHeight), verticalAlignment = Alignment.CenterVertically) {
+                            IconButton(
+                                onClick = { next?.let { vm.clearSelection(); vm.goToPage(it.firstPage) } },
+                                enabled = next != null,
+                                modifier = Modifier.size(32.dp),
+                            ) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = "Surah berikutnya: ${next?.nameLatin.orEmpty()}", modifier = Modifier.size(20.dp)) }
+                            Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                                Text("$page", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                            IconButton(
+                                onClick = { previous?.let { vm.clearSelection(); vm.goToPage(it.firstPage) } },
+                                enabled = previous != null,
+                                modifier = Modifier.size(32.dp),
+                            ) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = "Surah sebelumnya: ${previous?.nameLatin.orEmpty()}", modifier = Modifier.size(20.dp)) }
                         }
                     }
                 }
             }
         }
+    }
+
+    if (showJump) {
+        JumpToAyahDialog(
+            surahs = surahs,
+            initial = selected ?: meta?.let { AyahRef(it.surah, 1) },
+            onDismiss = { showJump = false },
+            onJump = { surah, ayah -> showJump = false; vm.goToAyah(surah, ayah) },
+        )
     }
 
     val shown = detail

@@ -73,6 +73,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             selected.value = AyahRef(surah, ayah)
             sheetVisible.value = openSheet
+            settingsRepository.setLastAyah(surah, ayah)
             goToPage(mushaf.ayahPage(surah, ayah))
         }
     }
@@ -90,6 +91,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     fun selectAyah(ref: AyahRef) {
         selected.value = ref
         sheetVisible.value = true
+        viewModelScope.launch { settingsRepository.setLastAyah(ref.surah, ref.ayah) }
     }
 
     fun moveSelection(step: Int) {

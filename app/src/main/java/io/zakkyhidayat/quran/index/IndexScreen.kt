@@ -28,6 +28,14 @@ import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.LeadingIconTab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.runtime.mutableStateOf
+import io.zakkyhidayat.quran.reader.commonFontFamily
+import io.zakkyhidayat.quran.reader.juzOpeningGlyph
+import io.zakkyhidayat.quran.settings.AppSettings
+import io.zakkyhidayat.quran.ui.JumpToAyahDialog
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -38,6 +46,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.zakkyhidayat.quran.AppViewModel
 import io.zakkyhidayat.quran.data.Bookmark
@@ -62,6 +71,8 @@ private val ListPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
 @Composable
 fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit, onOpenSurahInfo: (Int) -> Unit, embedded: Boolean = false) {
     var tab by rememberSaveable { mutableIntStateOf(0) }
+    var showJump by remember { mutableStateOf(false) }
+    val surahsForJump by vm.surahs.collectAsStateWithLifecycle()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -70,12 +81,21 @@ fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit
                     if (!embedded) IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali") }
                 },
                 actions = {
+                    IconButton(onClick = { showJump = true }) { Icon(AppIcons.FormatListNumbered, contentDescription = "Lompat ke ayat") }
                     IconButton(onClick = { vm.randomAyah(); onBack() }) { Icon(AppIcons.Shuffle, contentDescription = "Ayat acak") }
                     IconButton(onClick = onOpenSettings) { Icon(Icons.Default.Settings, contentDescription = "Pengaturan") }
                 },
             )
         },
     ) { padding ->
+        if (showJump) {
+            JumpToAyahDialog(
+                surahs = surahsForJump,
+                initial = null,
+                onDismiss = { showJump = false },
+                onJump = { surah, ayah -> showJump = false; vm.goToAyah(surah, ayah); onBack() },
+            )
+        }
         CenteredContent(Modifier.padding(padding)) {
             Column(Modifier.fillMaxSize()) {
                 PrimaryScrollableTabRow(selectedTabIndex = tab, edgePadding = 8.dp) {
@@ -107,8 +127,27 @@ private fun SurahList(vm: AppViewModel, onBack: () -> Unit, onOpenSurahInfo: (In
     val surahs by vm.surahs.collectAsStateWithLifecycle()
     val font = remember { surahNameFontFamily(vm.getApplication()) }
     val items = remember(surahs) { surahs.values.toList() }
+    val settings by vm.settingsRepository.settings.collectAsStateWithLifecycle(AppSettings())
+    val lastSurah = surahs[settings.lastSurah]
     val glyphSize = MaterialTheme.typography.headlineSmall.fontSize
     LazyColumn(Modifier.fillMaxSize(), contentPadding = ListPadding, verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
+        if (lastSurah != null && settings.lastAyah > 0) {
+            item(key = "continue") {
+                Card(
+                    onClick = { vm.goToAyah(lastSurah.id, settings.lastAyah); onBack() },
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer, contentColor = MaterialTheme.colorScheme.onPrimaryContainer),
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                ) {
+                    Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Icon(AppIcons.MenuBook, contentDescription = null)
+                        Column(Modifier.padding(start = 16.dp)) {
+                            Text("Lanjutkan membaca", style = MaterialTheme.typography.titleMedium)
+                            Text("${lastSurah.nameLatin} ${lastSurah.id}:${settings.lastAyah}", style = MaterialTheme.typography.bodyMedium)
+                        }
+                    }
+                }
+            }
+        }
         itemsIndexed(items, key = { _, s -> s.id }) { index, s ->
             SegmentedListItem(
                 onClick = { vm.clearSelection(); vm.goToPage(s.firstPage); onBack() },
@@ -131,6 +170,7 @@ private fun SurahList(vm: AppViewModel, onBack: () -> Unit, onOpenSurahInfo: (In
 @Composable
 private fun JuzList(vm: AppViewModel, onBack: () -> Unit) {
     val juz by vm.juz.collectAsStateWithLifecycle()
+    val commonFont = remember { commonFontFamily(vm.getApplication()) }
     val surahs by vm.surahs.collectAsStateWithLifecycle()
     LazyColumn(Modifier.fillMaxSize(), contentPadding = ListPadding, verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
         itemsIndexed(juz, key = { _, j -> j.id }) { index, j ->
@@ -140,6 +180,9 @@ private fun JuzList(vm: AppViewModel, onBack: () -> Unit) {
                 colors = segmentedItemColors(),
                 leadingContent = { NumberBadge(j.id) },
                 supportingContent = { Text("${surahs[j.surah]?.nameLatin.orEmpty()} ${j.surah}:${j.ayah} • Hal. ${j.page}") },
+                trailingContent = {
+                    Text(juzOpeningGlyph(j.id), style = TextStyle(fontFamily = commonFont, fontSize = 22.sp, color = MaterialTheme.colorScheme.primary))
+                },
             ) { Text("Juz ${j.id}") }
         }
     }

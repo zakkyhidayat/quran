@@ -135,7 +135,7 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
                     }
                 }
 
-                Labeled("Kontras warna", icon = AppIcons.Contrast) {
+                Labeled("Kontras warna") {
                     val options = listOf(ContrastLevel.Standard to "Standar", ContrastLevel.Medium to "Sedang", ContrastLevel.High to "Tinggi")
                     val usesDynamic = settings.colorMode == ColorMode.Dynamic && dynamicSupported
                     SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
@@ -340,15 +340,9 @@ private fun SectionTitle(icon: ImageVector, text: String) {
 }
 
 @Composable
-private fun Labeled(label: String, icon: ImageVector? = null, content: @Composable () -> Unit) {
+private fun Labeled(label: String, content: @Composable () -> Unit) {
     Column(Modifier.padding(vertical = 6.dp)) {
-        Row(Modifier.padding(start = 4.dp, bottom = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-            if (icon != null) {
-                Icon(icon, contentDescription = null, modifier = Modifier.size(16.dp))
-                Spacer(Modifier.width(6.dp))
-            }
-            Text(label, style = MaterialTheme.typography.bodyMedium)
-        }
+        Text(label, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(start = 4.dp, bottom = 6.dp))
         content()
     }
 }

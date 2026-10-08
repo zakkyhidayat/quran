@@ -85,6 +85,8 @@ object AppIcons {
     val PieChart = svg("PieChart", "M11,2v20c-5.07,-0.5 -9,-4.79 -9,-10s3.93,-9.5 9,-10zM13.03,2v8.99L22,10.99c-0.47,-4.74 -4.24,-8.52 -8.97,-8.99zM13.03,13.01L13.03,22c4.74,-0.47 8.52,-4.25 8.99,-8.99h-8.99z")
 
     val CalendarViewWeek = svg("CalendarViewWeek", "M6,5H3C2.45,5 2,5.45 2,6V18C2,18.55 2.45,19 3,19H6C6.55,19 7,18.55 7,18V6C7,5.45 6.55,5 6,5zM21,5H18C17.45,5 17,5.45 17,6V18C17,18.55 17.45,19 18,19H21C21.55,19 22,18.55 22,18V6C22,5.45 21.55,5 21,5zM13.5,5H10.5C9.95,5 9.5,5.45 9.5,6V18C9.5,18.55 9.95,19 10.5,19H13.5C14.05,19 14.5,18.55 14.5,18V6C14.5,5.45 14.05,5 13.5,5z")
+
+    val FormatListNumbered = svg("FormatListNumbered", "M2,17h2v0.5L3,18.5v1h1v0.5L2,20v1h3v-4L2,17zM3,8h1L4,4L2,4v1h1L3,8zM2,11h1.8L2,13.1v0.9h3v-1L3.2,13L5,10.9L5,10L2,10v1zM7,5v2h14L21,5L7,5zM7,19h14v-2L7,17v2zM7,13h14v-2L7,11v2z")
 }
 
 private fun svg(name: String, pathData: String): ImageVector =

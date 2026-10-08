@@ -65,9 +65,6 @@ private const val MIN_LINE_EM = 15.5f
 private const val MAX_LINE_EM = 17f
 private const val FILL_RATIO = 0.995f
 
-private const val BASMALLAH =
-    "بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ"
-
 @Volatile
 private var fontCache: Set<String>? = null
 
@@ -76,6 +73,14 @@ private fun availableFonts(context: Context): Set<String> =
 
 internal fun pageFontFamily(context: Context, page: Int): FontFamily =
     if ("p$page.ttf" in availableFonts(context)) FontFamily(Font("fonts/p$page.ttf", context.assets)) else FontFamily.Default
+
+// quran-common: glyph kaligrafi basmalah (U+FDFD), judul juz (U+E001..E01E), dan kata pembuka juz (U+E900..E91D).
+internal fun commonFontFamily(context: Context): FontFamily =
+    FontFamily(Font("fonts/quran-common.ttf", context.assets))
+
+internal fun juzTitleGlyph(juz: Int): String = (0xE001 + juz - 1).toChar().toString()
+
+internal fun juzOpeningGlyph(juz: Int): String = (0xE900 + juz - 1).toChar().toString()
 
 internal fun surahNameFontFamily(context: Context): FontFamily =
     FontFamily(Font("fonts/surah_names.ttf", context.assets))
@@ -102,7 +107,7 @@ fun MushafPage(
     val context = LocalContext.current
     val pageFont = remember(page) { pageFontFamily(context, page) }
     val headerFont = remember { surahHeaderFontFamily(context) }
-    val hafsFont = remember { arabicFontFamily(context) }
+    val basmalahFont = remember { pageFontFamily(context, 1) }
     val measurer = rememberTextMeasurer()
     val density = LocalDensity.current
     val dark = MaterialTheme.colorScheme.background.luminance() < 0.5f
@@ -125,12 +130,7 @@ fun MushafPage(
                     when (line.type) {
                         LineType.Ayah -> AyahLine(line, pageFont, glyphSize, glyphFilter, selected, onAyahClick, lineHeight)
                         LineType.SurahName -> SurahHeader(surahs[line.surah], headerFont, headerFilter) { onSurahClick(line.surah!!) }
-                        LineType.Basmallah -> Text(
-                            text = BASMALLAH,
-                            style = TextStyle(fontFamily = hafsFont, fontSize = glyphSize, color = MaterialTheme.colorScheme.onSurface),
-                            maxLines = 1,
-                            softWrap = false,
-                        )
+                        LineType.Basmallah -> BasmalahLine(glyphSize, glyphFilter, basmalahFont)
                     }
                 }
             }
@@ -175,7 +175,7 @@ private fun ScreenReaderLayer(
                         )
                     }
                 }
-                LineType.Basmallah -> Unit
+                LineType.Basmallah -> Box(Modifier.size(1.dp).semantics { contentDescription = "Bismillahirrahmanirrahim" })
             }
         }
     }
@@ -285,6 +285,31 @@ private fun JustifiedRow(
                 bounds[2 * i + 1] = x + placeable.width
                 x -= gap
             }
+        }
+    }
+}
+
+// Basmalah memakai glyph ayat 1:1 dari font halaman 1 (U+FC41..FC44 = bismi / Allahi / alrrahmani / alrraheemi),
+// sehingga gaya dan warna tajwidnya sama dengan teks ayat di halaman.
+private const val BASMALAH_GLYPHS = "ﱁﱂﱃﱄ"
+
+@Composable
+private fun BasmalahLine(size: TextUnit, filter: ColorFilter?, font: FontFamily) {
+    val style = TextStyle(fontFamily = font, fontSize = size)
+    val gap = with(LocalDensity.current) { size.toPx() * 0.25f }
+    val bounds = remember { FloatArray(BASMALAH_GLYPHS.length * 2) }
+    JustifiedRow(centered = true, minGapPx = gap, bounds = bounds, modifier = Modifier.fillMaxWidth()) {
+        BASMALAH_GLYPHS.forEach { glyph ->
+            Text(
+                text = glyph.toString(),
+                style = style,
+                maxLines = 1,
+                softWrap = false,
+                modifier = Modifier.graphicsLayer {
+                    colorFilter = filter
+                    compositingStrategy = CompositingStrategy.Offscreen
+                },
+            )
         }
     }
 }

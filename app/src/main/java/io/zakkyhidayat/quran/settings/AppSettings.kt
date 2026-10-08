@@ -26,6 +26,8 @@ data class AppSettings(
     val showTransliteration: Boolean = true,
     val translationIds: List<String> = listOf("id-kemenag"),
     val lastPage: Int = 1,
+    val lastSurah: Int = 0,
+    val lastAyah: Int = 0,
 )
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
@@ -39,6 +41,8 @@ class SettingsRepository(private val context: Context) {
     private val transliterationKey = booleanPreferencesKey("transliteration")
     private val translationsKey = stringPreferencesKey("translations")
     private val lastPageKey = intPreferencesKey("last_page")
+    private val lastSurahKey = intPreferencesKey("last_surah")
+    private val lastAyahKey = intPreferencesKey("last_ayah")
 
     val settings: Flow<AppSettings> = context.dataStore.data.map { prefs ->
         AppSettings(
@@ -50,6 +54,8 @@ class SettingsRepository(private val context: Context) {
             showTransliteration = prefs[transliterationKey] ?: true,
             translationIds = prefs[translationsKey]?.split(',')?.filter { it.isNotBlank() } ?: listOf("id-kemenag"),
             lastPage = prefs[lastPageKey] ?: 1,
+            lastSurah = prefs[lastSurahKey] ?: 0,
+            lastAyah = prefs[lastAyahKey] ?: 0,
         )
     }
 
@@ -68,6 +74,11 @@ class SettingsRepository(private val context: Context) {
     suspend fun setTranslations(ids: List<String>) = context.dataStore.edit { it[translationsKey] = ids.joinToString(",") }
 
     suspend fun setLastPage(page: Int) = context.dataStore.edit { it[lastPageKey] = page }
+
+    suspend fun setLastAyah(surah: Int, ayah: Int) = context.dataStore.edit {
+        it[lastSurahKey] = surah
+        it[lastAyahKey] = ayah
+    }
 }
 
 private inline fun <reified T : Enum<T>> String?.toEnum(default: T): T =
