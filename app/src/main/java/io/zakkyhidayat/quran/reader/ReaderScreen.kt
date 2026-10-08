@@ -75,7 +75,7 @@ private val PageEndPadding = 4.dp
 
 // Blok halaman digeser ke luar tepi kiri layar sebesar ini (dan dilebarkan sama besar) supaya margin kiri lebih sempit.
 private val PageStartBleed = 3.dp
-private val HeaderHeight = 48.dp
+private val HeaderHeight = 32.dp
 private val FooterHeight = 32.dp
 private val PageChromeHeight = HeaderHeight + FooterHeight
 // Kertas B5: 176 x 250 mm.
@@ -184,25 +184,23 @@ fun ReaderScreen(
                         Row(Modifier.width(blockWidth).height(HeaderHeight).padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                             val headSurah = pageInfo?.let { surahs[it.surah] }
                             if (headSurah != null) {
-                                // Arab di atas, Latin di bawahnya; ketuk membuka info surah.
-                                Column(
-                                    Modifier.clickable(onClickLabel = "Buka info surah") { onOpenSurahInfo(headSurah.id) },
-                                    horizontalAlignment = Alignment.Start,
-                                ) {
-                                    Text(
-                                        text = headSurah.nameGlyph.toString(),
-                                        style = TextStyle(
-                                            fontFamily = nameFont,
-                                            fontSize = 20.sp,
-                                            // Metrik vertikal font ini ~2,6 em; dibatasi supaya baris Latin di bawahnya tetap muat.
-                                            lineHeight = 22.sp,
-                                            lineHeightStyle = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.Both),
-                                            color = MaterialTheme.colorScheme.onSurface,
-                                        ),
-                                        modifier = Modifier.height(24.dp).wrapContentHeight(Alignment.CenterVertically, unbounded = true).clearAndSetSemantics { },
-                                    )
-                                    Text(headSurah.nameLatin, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                }
+                                // Nama surah (Arab) di strip atas halaman; ketuk membuka info surah.
+                                Text(
+                                    text = headSurah.nameGlyph.toString(),
+                                    style = TextStyle(
+                                        fontFamily = nameFont,
+                                        fontSize = 20.sp,
+                                        // Metrik vertikal font ini ~2,6 em; dibatasi supaya tidak mendorong tata letak.
+                                        lineHeight = 22.sp,
+                                        lineHeightStyle = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.Both),
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                    ),
+                                    modifier = Modifier
+                                        .height(24.dp)
+                                        .wrapContentHeight(Alignment.CenterVertically, unbounded = true)
+                                        .clickable(onClickLabel = "Buka info surah") { onOpenSurahInfo(headSurah.id) }
+                                        .semantics { contentDescription = "Info surah ${headSurah.nameLatin}" },
+                                )
                             }
                             Box(Modifier.weight(1f))
                             pageInfo?.let { info ->

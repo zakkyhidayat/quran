@@ -26,6 +26,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.luminance
@@ -320,6 +321,9 @@ private const val HEADER_FRAME_EM = 8167f / HEADER_UPEM
 private const val HEADER_FRAME_LEFT_EM = 41f / HEADER_UPEM
 private const val HEADER_FRAME_HEIGHT_EM = 1026f / HEADER_UPEM
 
+// Bingkai diskalakan vertikal supaya ada jarak dengan baris ayat di atas dan basmalah di bawahnya.
+private const val HEADER_SCALE_Y = 0.80f
+
 @Composable
 private fun SurahHeader(surah: Surah?, font: FontFamily, filter: ColorFilter?, onClick: () -> Unit) {
     if (surah == null) return
@@ -350,7 +354,9 @@ private fun SurahHeader(surah: Surah?, font: FontFamily, filter: ColorFilter?, o
                 .drawBehind {
                     val frameWidth = HEADER_FRAME_EM * fontPx
                     val x = (size.width - frameWidth) / 2f - HEADER_FRAME_LEFT_EM * fontPx
-                    drawText(layout, topLeft = Offset(x, size.height / 2f - layout.firstBaseline))
+                    scale(1f, HEADER_SCALE_Y, pivot = Offset(size.width / 2f, size.height / 2f)) {
+                        drawText(layout, topLeft = Offset(x, size.height / 2f - layout.firstBaseline))
+                    }
                 },
         )
     }
