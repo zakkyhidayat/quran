@@ -60,19 +60,20 @@ import io.zakkyhidayat.quran.ui.segmentedItemColors
 import io.zakkyhidayat.quran.ui.NumberBadge
 
 private val TABS = listOf(
+    R.string.tab_bookmark to AppIcons.BookmarkBorder,
     R.string.tab_surah to AppIcons.MenuBook,
     R.string.tab_juz to AppIcons.GridView,
     R.string.tab_hizb to AppIcons.PieChart,
     R.string.tab_manzil to AppIcons.CalendarViewWeek,
     R.string.tab_sajdah to Icons.Default.KeyboardArrowDown,
-    R.string.tab_bookmark to AppIcons.BookmarkBorder,
 )
 private val ListPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit, onOpenSurahInfo: (Int) -> Unit, embedded: Boolean = false) {
-    var tab by rememberSaveable { mutableIntStateOf(0) }
+    // Bookmark di urutan pertama, tetapi yang dibuka pertama kali tetap Surah.
+    var tab by rememberSaveable { mutableIntStateOf(1) }
     var showJump by remember { mutableStateOf(false) }
     val surahsForJump by vm.surahs.collectAsStateWithLifecycle()
     Scaffold(
@@ -111,12 +112,12 @@ fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit
                     }
                 }
                 when (tab) {
-                    0 -> SurahList(vm, onBack, onOpenSurahInfo)
-                    1 -> JuzList(vm, onBack)
-                    2 -> HizbList(vm, onBack)
-                    3 -> ManzilList(vm, onBack)
-                    4 -> SajdaList(vm, onBack)
-                    else -> BookmarkList(vm, onBack)
+                    0 -> BookmarkList(vm, onBack)
+                    1 -> SurahList(vm, onBack, onOpenSurahInfo)
+                    2 -> JuzList(vm, onBack)
+                    3 -> HizbList(vm, onBack)
+                    4 -> ManzilList(vm, onBack)
+                    else -> SajdaList(vm, onBack)
                 }
             }
         }

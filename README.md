@@ -63,7 +63,7 @@ Tarteel. Yang dipakai aplikasi ini:
 Semoga Allah membalas semua yang terlibat. Daftar lengkap kontributor ada di halaman credits QUL, yang juga ditautkan
 dari layar Tentang di aplikasi. Hak cipta font tetap pada KFGQPC; lisensi tiap terjemahan mengikuti penerbitnya.
 
-Lisensi kode aplikasi ini belum ditentukan.
+Kode aplikasi ini berlisensi [GPL-3.0](LICENSE). Lisensi itu tidak berlaku untuk font dan data pihak ketiga di atas.
 
 ## Dukung
 
