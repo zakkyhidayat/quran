@@ -85,6 +85,17 @@ class MushafRepository(context: Context) {
         list.also { translationCache = it }
     }
 
+    // Ayat yang punya kata di halaman ini (termasuk lanjutan dari halaman sebelumnya), untuk pembaca layar.
+    suspend fun pageAyahs(page: Int): List<AyahText> = withContext(Dispatchers.IO) {
+        val list = mutableListOf<AyahText>()
+        db.rawQuery(
+            "SELECT a.surah, a.ayah, a.text_ar FROM ayahs a WHERE EXISTS (" +
+                "SELECT 1 FROM words w WHERE w.surah = a.surah AND w.ayah = a.ayah AND w.page = ?) ORDER BY a.surah, a.ayah",
+            arrayOf(page.toString()),
+        ).use { c -> while (c.moveToNext()) list += AyahText(c.getInt(0), c.getInt(1), c.getString(2)) }
+        list
+    }
+
     suspend fun ayahPage(surah: Int, ayah: Int): Int = withContext(Dispatchers.IO) {
         db.rawQuery("SELECT page FROM ayahs WHERE surah = ? AND ayah = ?", arrayOf(surah.toString(), ayah.toString())).use {
             if (it.moveToFirst()) it.getInt(0) else 1

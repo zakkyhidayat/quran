@@ -49,13 +49,15 @@ private val ListPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit) {
+fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit, embedded: Boolean = false) {
     var tab by rememberSaveable { mutableIntStateOf(0) }
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Daftar") },
-                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali") } },
+                navigationIcon = {
+                    if (!embedded) IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali") }
+                },
                 actions = {
                     IconButton(onClick = { vm.randomAyah(); onBack() }) { Icon(AppIcons.Shuffle, contentDescription = "Ayat acak") }
                     IconButton(onClick = onOpenSettings) { Icon(Icons.Default.Settings, contentDescription = "Pengaturan") }

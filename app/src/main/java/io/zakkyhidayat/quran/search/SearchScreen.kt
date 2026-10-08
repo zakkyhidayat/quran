@@ -1,6 +1,8 @@
 package io.zakkyhidayat.quran.search
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -20,16 +22,14 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,7 +65,9 @@ private val NUMBER = Regex("^\\d{1,3}$")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SearchScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) {
-    var query by rememberSaveable { mutableStateOf("") }
+    val textState = rememberTextFieldState()
+    val searchBarState = rememberSearchBarState()
+    val query = textState.text.toString()
     val surahs by vm.surahs.collectAsStateWithLifecycle()
     val focus = remember { FocusRequester() }
     LaunchedEffect(Unit) { focus.requestFocus() }
@@ -104,15 +106,13 @@ fun SearchScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) {
                 modifier = Modifier.statusBarsPadding().padding(horizontal = 16.dp, vertical = 8.dp).fillMaxWidth(),
             ) {
                 SearchBarDefaults.InputField(
-                    query = query,
-                    onQueryChange = { query = it },
+                    searchBarState = searchBarState,
+                    textFieldState = textState,
                     onSearch = {},
-                    expanded = false,
-                    onExpandedChange = {},
                     placeholder = { Text("Cari ayat, surah, atau 2:255") },
                     leadingIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali") } },
                     trailingIcon = {
-                        if (query.isNotEmpty()) IconButton(onClick = { query = "" }) { Icon(Icons.Default.Close, contentDescription = "Bersihkan") }
+                        if (query.isNotEmpty()) IconButton(onClick = { textState.clearText() }) { Icon(Icons.Default.Close, contentDescription = "Bersihkan") }
                     },
                     modifier = Modifier.focusRequester(focus),
                 )

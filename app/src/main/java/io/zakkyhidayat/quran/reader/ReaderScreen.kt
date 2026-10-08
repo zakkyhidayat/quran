@@ -33,7 +33,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -51,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.zakkyhidayat.quran.AppViewModel
 import io.zakkyhidayat.quran.data.AyahRef
+import io.zakkyhidayat.quran.data.AyahText
 import io.zakkyhidayat.quran.data.BookmarkKind
 import io.zakkyhidayat.quran.data.PageLine
 import io.zakkyhidayat.quran.settings.AppSettings
@@ -65,7 +65,7 @@ private val PageMaxWidth = 640.dp
 fun ReaderScreen(
     vm: AppViewModel,
     settings: AppSettings,
-    onOpenIndex: () -> Unit,
+    onOpenIndex: (() -> Unit)?,
     onOpenSearch: () -> Unit,
     onOpenSettings: () -> Unit,
 ) {
@@ -123,6 +123,7 @@ fun ReaderScreen(
             ) { index ->
                 val page = index + 1
                 val lines by produceState<List<PageLine>?>(null, page) { value = vm.mushaf.page(page) }
+                val ayahTexts by produceState<List<AyahText>>(emptyList(), page) { value = vm.mushaf.pageAyahs(page) }
                 Box(
                     Modifier.fillMaxSize().pointerInput(selected) {
                         detectTapGestures(onTap = { if (selected != null) vm.clearSelection() else barsVisible = !barsVisible })
@@ -137,8 +138,9 @@ fun ReaderScreen(
                             page = page,
                             lines = loaded,
                             surahs = surahs,
+                            ayahTexts = ayahTexts,
                             selected = selected,
-                            onWordClick = { vm.selectAyah(AyahRef(it.surah, it.ayah)) },
+                            onAyahClick = { vm.selectAyah(it) },
                             tajweed = settings.tajweed,
                         )
                     }
@@ -155,8 +157,8 @@ fun ReaderScreen(
         AnimatedVisibility(
             visible = barsVisible,
             modifier = Modifier.align(Alignment.TopCenter),
-            enter = fadeIn() + slideInVertically { -it },
-            exit = fadeOut() + slideOutVertically { -it },
+            enter = fadeIn(MaterialTheme.motionScheme.defaultEffectsSpec()) + slideInVertically(MaterialTheme.motionScheme.defaultSpatialSpec()) { -it },
+            exit = fadeOut(MaterialTheme.motionScheme.defaultEffectsSpec()) + slideOutVertically(MaterialTheme.motionScheme.defaultSpatialSpec()) { -it },
         ) {
             TopAppBar(
                 title = {
@@ -165,7 +167,11 @@ fun ReaderScreen(
                         Text("Juz ${meta?.juz ?: ""} • Hal. $currentPage", style = MaterialTheme.typography.bodySmall)
                     }
                 },
-                navigationIcon = { IconButton(onClick = onOpenIndex) { Icon(Icons.Default.Menu, contentDescription = "Daftar surah dan juz") } },
+                navigationIcon = {
+                    if (onOpenIndex != null) {
+                        IconButton(onClick = onOpenIndex) { Icon(Icons.Default.Menu, contentDescription = "Daftar surah dan juz") }
+                    }
+                },
                 actions = {
                     IconButton(onClick = onOpenSearch) { Icon(Icons.Default.Search, contentDescription = "Cari") }
                     IconButton(onClick = { vm.togglePageBookmark(currentPage) }) {
@@ -184,7 +190,7 @@ fun ReaderScreen(
     val shown = detail
     if (sheetVisible && shown != null) {
         val ref = AyahRef(shown.surah, shown.ayah)
-        ModalBottomSheet(onDismissRequest = vm::dismissSheet, sheetState = rememberModalBottomSheetState()) {
+        ModalBottomSheet(onDismissRequest = vm::dismissSheet) {
             AyahSheetContent(
                 detail = shown,
                 surah = surahs[shown.surah],

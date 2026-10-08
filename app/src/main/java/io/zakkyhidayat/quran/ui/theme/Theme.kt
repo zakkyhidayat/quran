@@ -30,8 +30,7 @@ fun QuranTheme(
     var scheme = when {
         dynamic && dark -> dynamicDarkColorScheme(context)
         dynamic -> dynamicLightColorScheme(context)
-        dark -> OriginalDark
-        else -> OriginalLight
+        else -> originalColorScheme(dark, settings.contrast)
     }
     if (dark && settings.amoled) scheme = scheme.toAmoled()
 

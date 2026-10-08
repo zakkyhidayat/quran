@@ -41,6 +41,8 @@ data class AyahDetail(
 
 data class AyahRef(val surah: Int, val ayah: Int)
 
+data class AyahText(val surah: Int, val ayah: Int, val text: String)
+
 data class SearchResult(
     val surah: Int,
     val ayah: Int,

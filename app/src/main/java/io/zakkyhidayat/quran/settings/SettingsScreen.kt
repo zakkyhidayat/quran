@@ -94,6 +94,28 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
                         )
                     }
                 }
+                Labeled("Kontras warna") {
+                    val options = listOf(ContrastLevel.Standard to "Standar", ContrastLevel.Medium to "Sedang", ContrastLevel.High to "Tinggi")
+                    val usesDynamic = settings.colorMode == ColorMode.Dynamic && dynamicSupported
+                    SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+                        options.forEachIndexed { i, (level, label) ->
+                            SegmentedButton(
+                                selected = settings.contrast == level,
+                                onClick = { scope.launch { repo.setContrast(level) } },
+                                enabled = !usesDynamic,
+                                shape = SegmentedButtonDefaults.itemShape(i, options.size),
+                            ) { Text(label) }
+                        }
+                    }
+                    if (usesDynamic) {
+                        Text(
+                            "Kontras berlaku untuk warna Asli.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(top = 4.dp),
+                        )
+                    }
+                }
                 Group {
                     item(
                         title = "AMOLED",
