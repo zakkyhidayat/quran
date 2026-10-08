@@ -47,6 +47,7 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import io.zakkyhidayat.quran.data.AyahRef
@@ -120,7 +121,7 @@ fun MushafPage(
             lines.forEach { line ->
                 Box(Modifier.fillMaxWidth().height(lineHeight), contentAlignment = Alignment.Center) {
                     when (line.type) {
-                        LineType.Ayah -> AyahLine(line, pageFont, glyphSize, glyphFilter, selected, onAyahClick)
+                        LineType.Ayah -> AyahLine(line, pageFont, glyphSize, glyphFilter, selected, onAyahClick, lineHeight)
                         LineType.SurahName -> SurahHeader(surahs[line.surah], headerFont, headerFilter)
                         LineType.Basmallah -> Text(
                             text = BASMALLAH,
@@ -179,6 +180,7 @@ private fun AyahLine(
     filter: ColorFilter?,
     selected: AyahRef?,
     onAyahClick: (AyahRef) -> Unit,
+    cellHeight: Dp,
 ) {
     val style = TextStyle(fontFamily = font, fontSize = size)
     val highlight = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.75f)
@@ -186,6 +188,8 @@ private fun AyahLine(
     val gapPx = with(density) { size.toPx() * 0.25f }
     val pad = with(density) { 3.dp.toPx() }
     val corner = with(density) { 8.dp.toPx() }
+    // Tinggi sorotan mengikuti tinta huruf (~82% jarak baris), bukan seluruh sel baris, supaya batang antar baris tidak menempel.
+    val highlightHeight = with(density) { cellHeight.toPx() } * 0.82f
     val words = line.words
     val isSelected = remember(line, selected) {
         BooleanArray(words.size) { i -> selected != null && words[i].surah == selected.surah && words[i].ayah == selected.ayah }
@@ -208,7 +212,8 @@ private fun AyahLine(
                     // Teks berjalan kanan ke kiri: kata pertama paling kanan.
                     val left = bounds[2 * j] - pad
                     val right = bounds[2 * i + 1] + pad
-                    drawRoundRect(highlight, Offset(left, 0f), Size(right - left, this.size.height), CornerRadius(corner))
+                    val height = minOf(highlightHeight, this.size.height)
+                    drawRoundRect(highlight, Offset(left, (this.size.height - height) / 2f), Size(right - left, height), CornerRadius(corner))
                     i = j + 1
                 }
             }
