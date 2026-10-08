@@ -47,6 +47,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.zakkyhidayat.quran.AppViewModel
@@ -133,7 +135,23 @@ private fun ColumnScope.WelcomeStep() {
         Image(painterResource(R.drawable.ic_launcher_foreground), contentDescription = null, modifier = Modifier.size(144.dp))
     }
     Spacer(Modifier.height(24.dp))
-    StepTitle(stringResource(R.string.onb_welcome_title), stringResource(R.string.onb_welcome_body))
+    // Salam di tengah dan tebal; penjelasan di bawahnya.
+    Text(
+        stringResource(R.string.onb_welcome_title),
+        style = MaterialTheme.typography.headlineMedium,
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth().semantics { heading() },
+    )
+    Spacer(Modifier.height(12.dp))
+    Text(
+        stringResource(R.string.onb_welcome_body),
+        style = MaterialTheme.typography.bodyLarge,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth(),
+    )
+    Spacer(Modifier.height(24.dp))
     LanguageSection(showTitle = false)
 }
 

@@ -23,6 +23,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.first
+import io.zakkyhidayat.quran.data.Backup
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -71,6 +74,33 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             pageMeta.value = mushaf.pageMeta()
             translations.value = mushaf.translations()
             restoreActiveTranslations()
+        }
+        autoBackup()
+    }
+
+    /**
+     * Cadangan otomatis: bila pengguna sudah memilih berkas tujuan, tulis ulang berkas itu setiap kali bookmark atau
+     * posisi baca terakhir berubah. Jeda 2 detik menggabungkan perubahan beruntun (misalnya membalik banyak halaman).
+     */
+    @OptIn(kotlinx.coroutines.FlowPreview::class)
+    private fun autoBackup() {
+        val settingsFlow = settingsRepository.settings
+        viewModelScope.launch {
+            combine(
+                bookmarkStore.bookmarks,
+                settingsFlow.map { Triple(it.lastPage, it.lastSurah, it.lastAyah) }.distinctUntilChanged(),
+                settingsFlow.map { it.autoBackupUri }.distinctUntilChanged(),
+            ) { _, _, uri -> uri }
+                .debounce(2_000)
+                .collectLatest { uri ->
+                    if (uri == null) return@collectLatest
+                    runCatching { Backup.export(getApplication(), android.net.Uri.parse(uri), settingsRepository, bookmarkStore) }
+                        .onSuccess { settingsRepository.setAutoBackupAt(System.currentTimeMillis()) }
+                        .onFailure {
+                            android.util.Log.w("Backup", "Cadangan otomatis gagal: $it")
+                            settingsRepository.setAutoBackupAt(-1)
+                        }
+                }
         }
     }
 

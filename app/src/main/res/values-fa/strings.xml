@@ -147,7 +147,7 @@
     <string name="onb_welcome_title">السلام علیکم</string>
     <string name="onb_welcome_body">خوش آمدید. این برنامه برای خواندن قرآن با مصحف مدینه است. ابتدا زبان برنامه را انتخاب کنید.</string>
     <string name="onb_mushaf_title">دربارهٔ این مصحف</string>
-    <string name="onb_mushaf_body">صفحه‌ها مطابق مصحف مدینه چاپ مجتمع ملک فهد است: رسم عثمانی، روایت حفص، ۶۰۴ صفحهٔ ۱۵ سطری. اگر به خط هندی‌پاکستانی عادت دارید، حروف و چیدمان صفحه متفاوت به نظر می‌رسد.</string>
+    <string name="onb_mushaf_body">صفحه‌ها مطابق مصحف مدینه چاپ مجتمع ملک فهد است: رسم عثمانی، روایت حفص، ۶۰۴ صفحهٔ ۱۵ سطری. سبک‌های دیگر صفحه، مانند هندی‌پاکستانی یا شمرلی، در دسترس نیستند؛ اگر به یکی از آن‌ها عادت دارید، حروف و چیدمان صفحه متفاوت به نظر می‌رسد.</string>
     <string name="onb_translation_title">ترجمه‌ها</string>
     <string name="onb_translation_body">ترجمه‌ها هنگام افزودن بارگیری می‌شوند تا برنامه کم‌حجم بماند. بدون ترجمه هم می‌توانید بخوانید.</string>
     <string name="onb_appearance_title">ظاهر</string>
@@ -165,4 +165,9 @@
     <string name="backup_export_done">پشتیبان ذخیره شد</string>
     <string name="backup_import_done">پشتیبان بازیابی شد. نشانک‌های تازه: %1$d</string>
     <string name="backup_failed">پشتیبان‌گیری ناموفق: %1$s</string>
+    <string name="auto_backup">پشتیبان‌گیری خودکار</string>
+    <string name="auto_backup_off_sub">یک بار فایلی انتخاب کنید؛ با هر تغییر نشانک‌ها یا آخرین جای خواندن به‌روز می‌شود</string>
+    <string name="auto_backup_on_sub">ذخیره در %1$s • آخرین بار %2$s</string>
+    <string name="auto_backup_pending">هنوز نه</string>
+    <string name="auto_backup_error">ذخیره در فایل انتخاب‌شده ممکن نشد. برای انتخاب دوبارهٔ فایل، پشتیبان‌گیری خودکار را خاموش و روشن کنید.</string>
 </resources>

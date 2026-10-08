@@ -147,7 +147,7 @@
     <string name="onb_welcome_title">السلام علیکم</string>
     <string name="onb_welcome_body">خوش آمدید۔ یہ ایپ مدنی مصحف میں قرآن مجید پڑھنے کے لیے ہے۔ پہلے ایپ کی زبان منتخب کریں۔</string>
     <string name="onb_mushaf_title">اس مصحف کے بارے میں</string>
-    <string name="onb_mushaf_body">صفحات شاہ فہد کمپلیکس کے چھاپے ہوئے مدنی مصحف کے مطابق ہیں: رسمِ عثمانی، روایتِ حفص، 15 سطروں کے 604 صفحات۔ اگر آپ انڈو پاک رسم الخط کے عادی ہیں تو حروف اور صفحات کی ترتیب مختلف نظر آئے گی۔</string>
+    <string name="onb_mushaf_body">صفحات شاہ فہد کمپلیکس کے چھاپے ہوئے مدنی مصحف کے مطابق ہیں: رسمِ عثمانی، روایتِ حفص، 15 سطروں کے 604 صفحات۔ دوسرے انداز، جیسے انڈو پاک یا شمرلی، شامل نہیں، اس لیے اگر آپ ان میں سے کسی کے عادی ہیں تو حروف اور صفحات کی ترتیب مختلف نظر آئے گی۔</string>
     <string name="onb_translation_title">ترجمے</string>
     <string name="onb_translation_body">ترجمے شامل کرنے پر ڈاؤن لوڈ ہوتے ہیں، اس لیے ایپ ہلکی رہتی ہے۔ آپ بغیر ترجمے کے بھی پڑھ سکتے ہیں۔</string>
     <string name="onb_appearance_title">ظاہری شکل</string>
@@ -165,4 +165,9 @@
     <string name="backup_export_done">بیک اپ محفوظ ہو گیا</string>
     <string name="backup_import_done">بیک اپ بحال ہو گیا۔ نئے بُک مارکس: %1$d</string>
     <string name="backup_failed">بیک اپ ناکام: %1$s</string>
+    <string name="auto_backup">خودکار بیک اپ</string>
+    <string name="auto_backup_off_sub">ایک بار فائل منتخب کریں؛ بُک مارکس یا آخری پڑھی جگہ بدلنے پر یہ اپ ڈیٹ ہو جاتی ہے</string>
+    <string name="auto_backup_on_sub">%1$s میں محفوظ • آخری بار %2$s</string>
+    <string name="auto_backup_pending">ابھی نہیں</string>
+    <string name="auto_backup_error">منتخب فائل میں محفوظ نہیں ہو سکا۔ فائل دوبارہ چننے کے لیے خودکار بیک اپ بند کر کے دوبارہ چلائیں۔</string>
 </resources>

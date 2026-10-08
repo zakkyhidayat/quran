@@ -144,10 +144,10 @@
     <string name="onb_skip">Langkau</string>
     <string name="onb_next">Seterusnya</string>
     <string name="onb_start">Mula membaca</string>
-    <string name="onb_welcome_title">Assalamualaikum</string>
+    <string name="onb_welcome_title">Assalamu’alaykum</string>
     <string name="onb_welcome_body">Selamat datang. Aplikasi ini untuk membaca al-Quran dengan mushaf Madinah. Mula-mula, pilih bahasa aplikasi.</string>
     <string name="onb_mushaf_title">Tentang mushaf ini</string>
-    <string name="onb_mushaf_body">Halaman mengikut mushaf Madinah cetakan Kompleks Raja Fahd: rasm Uthmani, riwayat Hafs, 604 halaman 15 baris. Jika anda biasa dengan tulisan IndoPak, bentuk huruf dan susun atur halaman akan kelihatan berbeza.</string>
+    <string name="onb_mushaf_body">Halaman mengikut mushaf Madinah cetakan Kompleks Raja Fahd: rasm Uthmani, riwayat Hafs, 604 halaman 15 baris. Gaya halaman lain seperti IndoPak atau Shamarly tidak disertakan, jadi jika anda biasa dengan salah satunya, bentuk huruf dan susun atur halaman akan kelihatan berbeza.</string>
     <string name="onb_translation_title">Terjemahan</string>
     <string name="onb_translation_body">Terjemahan dimuat turun apabila anda menambahnya, jadi aplikasi kekal kecil. Anda juga boleh membaca tanpa terjemahan.</string>
     <string name="onb_appearance_title">Penampilan</string>
@@ -165,4 +165,9 @@
     <string name="backup_export_done">Sandaran disimpan</string>
     <string name="backup_import_done">Sandaran dipulihkan. Penanda baharu: %1$d</string>
     <string name="backup_failed">Sandaran gagal: %1$s</string>
+    <string name="auto_backup">Sandaran automatik</string>
+    <string name="auto_backup_off_sub">Pilih fail sekali; ia dikemas kini setiap kali penanda atau kedudukan bacaan terakhir berubah</string>
+    <string name="auto_backup_on_sub">Disimpan ke %1$s • terakhir %2$s</string>
+    <string name="auto_backup_pending">belum</string>
+    <string name="auto_backup_error">Tidak dapat menyimpan ke fail yang dipilih. Matikan dan hidupkan semula untuk memilih fail sekali lagi.</string>
 </resources>

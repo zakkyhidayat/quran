@@ -32,6 +32,10 @@ data class AppSettings(
     val readingMode: ReadingMode = ReadingMode.Mushaf,
     val onboardingDone: Boolean = false,
     val gestureHintDone: Boolean = false,
+    /** Berkas tujuan cadangan otomatis (URI SAF); null = mati. */
+    val autoBackupUri: String? = null,
+    /** Waktu cadangan otomatis terakhir berhasil (ms); -1 = terakhir gagal; 0 = belum pernah. */
+    val autoBackupAt: Long = 0,
     val lastPage: Int = 1,
     val lastSurah: Int = 0,
     val lastAyah: Int = 0,
@@ -50,6 +54,11 @@ class SettingsRepository(private val context: Context) {
     private val readingModeKey = stringPreferencesKey("reading_mode")
     private val onboardingKey = booleanPreferencesKey("onboarding_done")
     private val gestureHintKey = booleanPreferencesKey("gesture_hint_done")
+    private val autoBackupUriKey = stringPreferencesKey("auto_backup_uri")
+    private val autoBackupAtKey = stringPreferencesKey("auto_backup_at")
+
+    // Khusus perangkat ini: tidak ikut diekspor dan tidak ditimpa saat memulihkan cadangan.
+    private val deviceOnlyKeys = setOf(autoBackupUriKey.name, autoBackupAtKey.name)
     private val lastPageKey = intPreferencesKey("last_page")
     private val lastSurahKey = intPreferencesKey("last_surah")
     private val lastAyahKey = intPreferencesKey("last_ayah")
@@ -64,6 +73,8 @@ class SettingsRepository(private val context: Context) {
             showTransliteration = prefs[transliterationKey] ?: true,
             translationIds = prefs[translationsKey]?.split(',')?.filter { it.isNotBlank() } ?: defaultTranslations(),
             readingMode = prefs[readingModeKey].toEnum(ReadingMode.Mushaf),
+            autoBackupUri = prefs[autoBackupUriKey],
+            autoBackupAt = prefs[autoBackupAtKey]?.toLongOrNull() ?: 0,
             // Pengguna lama (sudah pernah membaca) tidak perlu onboarding maupun petunjuk gerakan.
             onboardingDone = prefs[onboardingKey] ?: (prefs[lastPageKey] != null),
             // Pengguna baru: onboarding_done tersimpan, jadi petunjuk tetap tampil walau baca terakhir sudah tercatat.
@@ -97,12 +108,15 @@ class SettingsRepository(private val context: Context) {
     suspend fun setTranslations(ids: List<String>) = context.dataStore.edit { it[translationsKey] = ids.joinToString(",") }
 
     /** Semua pengaturan tersimpan (untuk cadangan), dengan nilai Boolean/Int/String apa adanya. */
-    suspend fun exportAll(): Map<String, Any> = context.dataStore.data.first().asMap().mapKeys { it.key.name }
+    suspend fun exportAll(): Map<String, Any> =
+        context.dataStore.data.first().asMap().mapKeys { it.key.name }.filterKeys { it !in deviceOnlyKeys }
 
     /** Ganti semua pengaturan dengan isi cadangan; tipe ditentukan dari nilainya. */
     suspend fun importAll(values: Map<String, Any?>) = context.dataStore.edit { prefs ->
+        val kept = prefs.asMap().filterKeys { it.name in deviceOnlyKeys }
         prefs.clear()
-        values.forEach { (name, value) ->
+        kept.forEach { (key, value) -> if (value is String) prefs[stringPreferencesKey(key.name)] = value }
+        values.filterKeys { it !in deviceOnlyKeys }.forEach { (name, value) ->
             when (value) {
                 is Boolean -> prefs[booleanPreferencesKey(name)] = value
                 is Int -> prefs[intPreferencesKey(name)] = value
@@ -111,6 +125,13 @@ class SettingsRepository(private val context: Context) {
             }
         }
     }
+
+    suspend fun setAutoBackup(uri: String?) = context.dataStore.edit {
+        if (uri == null) it.remove(autoBackupUriKey) else it[autoBackupUriKey] = uri
+        it[autoBackupAtKey] = "0"
+    }
+
+    suspend fun setAutoBackupAt(time: Long) = context.dataStore.edit { it[autoBackupAtKey] = time.toString() }
 
     suspend fun setOnboardingDone() = context.dataStore.edit { it[onboardingKey] = true }
 

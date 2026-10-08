@@ -147,7 +147,7 @@
     <string name="onb_welcome_title">Assalamu’alaykum</string>
     <string name="onb_welcome_body">Bienvenue. Cette application sert à lire le Coran dans le mushaf de Médine. Choisissez d’abord la langue de l’application.</string>
     <string name="onb_mushaf_title">À propos de ce mushaf</string>
-    <string name="onb_mushaf_body">Les pages suivent le mushaf de Médine imprimé par le Complexe du Roi Fahd : écriture uthmanie, lecture de Hafs, 604 pages de 15 lignes. Si vous êtes habitué à l’écriture indo-pakistanaise, les lettres et la mise en page paraîtront différentes.</string>
+    <string name="onb_mushaf_body">Les pages suivent le mushaf de Médine imprimé par le Complexe du Roi Fahd : écriture uthmanie, lecture de Hafs, 604 pages de 15 lignes. Les autres styles de page, comme l’indo-pakistanais ou le Shamarly, ne sont pas inclus ; si vous êtes habitué à l’un d’eux, les lettres et la mise en page paraîtront différentes.</string>
     <string name="onb_translation_title">Traductions</string>
     <string name="onb_translation_body">Les traductions sont téléchargées quand vous les ajoutez, pour que l’application reste légère. Vous pouvez aussi lire sans traduction.</string>
     <string name="onb_appearance_title">Apparence</string>
@@ -165,4 +165,9 @@
     <string name="backup_export_done">Sauvegarde enregistrée</string>
     <string name="backup_import_done">Sauvegarde restaurée. Nouveaux signets : %1$d</string>
     <string name="backup_failed">Échec de la sauvegarde : %1$s</string>
+    <string name="auto_backup">Sauvegarde automatique</string>
+    <string name="auto_backup_off_sub">Choisissez un fichier une fois ; il est mis à jour à chaque changement de signets ou de dernière position de lecture</string>
+    <string name="auto_backup_on_sub">Enregistrement dans %1$s • dernier : %2$s</string>
+    <string name="auto_backup_pending">pas encore</string>
+    <string name="auto_backup_error">Impossible d’enregistrer dans le fichier choisi. Désactivez puis réactivez la sauvegarde automatique pour le choisir à nouveau.</string>
 </resources>

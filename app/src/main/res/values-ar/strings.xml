@@ -147,7 +147,7 @@
     <string name="onb_welcome_title">السلام عليكم</string>
     <string name="onb_welcome_body">مرحبًا بك. هذا التطبيق لقراءة القرآن الكريم بمصحف المدينة. اختر أولًا لغة التطبيق.</string>
     <string name="onb_mushaf_title">عن هذا المصحف</string>
-    <string name="onb_mushaf_body">تتبع الصفحات مصحف المدينة المطبوع في مجمع الملك فهد: الرسم العثماني، رواية حفص، 604 صفحات في كل منها 15 سطرًا. إن كنت معتادًا على الخط الهندي أو المصحف الإندونيسي القياسي فستبدو الحروف وتخطيط الصفحات مختلفة.</string>
+    <string name="onb_mushaf_body">تتبع الصفحات مصحف المدينة المطبوع في مجمع الملك فهد: الرسم العثماني، رواية حفص، 604 صفحات في كل منها 15 سطرًا. لا تتوفر أنماط صفحات أخرى مثل الهندي أو الشمرلي، فإن كنت معتادًا على أحدها فستبدو الحروف وتخطيط الصفحات مختلفة.</string>
     <string name="onb_translation_title">الترجمات</string>
     <string name="onb_translation_body">تُنزَّل الترجمات عند إضافتها، فيبقى التطبيق صغيرًا. ويمكنك القراءة دون ترجمة أيضًا.</string>
     <string name="onb_appearance_title">المظهر</string>
@@ -165,4 +165,9 @@
     <string name="backup_export_done">تم حفظ النسخة الاحتياطية</string>
     <string name="backup_import_done">تمت الاستعادة. العلامات الجديدة: %1$d</string>
     <string name="backup_failed">فشل النسخ الاحتياطي: %1$s</string>
+    <string name="auto_backup">نسخ احتياطي تلقائي</string>
+    <string name="auto_backup_off_sub">اختر ملفًا مرة واحدة؛ يُحدَّث كلما تغيّرت العلامات أو موضع آخر قراءة</string>
+    <string name="auto_backup_on_sub">الحفظ في %1$s • آخر حفظ %2$s</string>
+    <string name="auto_backup_pending">لم يتم بعد</string>
+    <string name="auto_backup_error">تعذّر الحفظ في الملف المختار. أوقف النسخ التلقائي ثم شغّله لاختيار الملف من جديد.</string>
 </resources>

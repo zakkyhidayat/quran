@@ -145,10 +145,10 @@
     <string name="onb_skip">Skip</string>
     <string name="onb_next">Next</string>
     <string name="onb_start">Start reading</string>
-    <string name="onb_welcome_title">Assalamu’alaikum</string>
+    <string name="onb_welcome_title">Assalamu’alaykum</string>
     <string name="onb_welcome_body">Welcome. This app is for reading the Qur’an in the Madani mushaf. First, choose the language of the app.</string>
     <string name="onb_mushaf_title">About this mushaf</string>
-    <string name="onb_mushaf_body">Pages follow the Madani mushaf printed by the King Fahd Complex: Uthmani script, riwayah Hafs, 604 pages of 15 lines. If you are used to the IndoPak script or the Indonesian Standard Mushaf, the letters and page layout will look different.</string>
+    <string name="onb_mushaf_body">Pages follow the Madani mushaf printed by the King Fahd Complex: Uthmani script, riwayah Hafs, 604 pages of 15 lines. Other page styles, such as IndoPak or Shamarly, are not included, so if you are used to one of them the letters and page layout will look different.</string>
     <string name="onb_translation_title">Translations</string>
     <string name="onb_translation_body">Translations are downloaded when you add them, so the app stays small. You can also read without a translation.</string>
     <string name="onb_appearance_title">Appearance</string>
@@ -166,4 +166,9 @@
     <string name="backup_export_done">Backup saved</string>
     <string name="backup_import_done">Backup restored. New bookmarks: %1$d</string>
     <string name="backup_failed">Backup failed: %1$s</string>
+    <string name="auto_backup">Auto backup</string>
+    <string name="auto_backup_off_sub">Choose a file once; it is updated whenever your bookmarks or last read position change</string>
+    <string name="auto_backup_on_sub">Saving to %1$s • last saved %2$s</string>
+    <string name="auto_backup_pending">not yet</string>
+    <string name="auto_backup_error">Could not save to the chosen file. Turn auto backup off and on to choose it again.</string>
 </resources>

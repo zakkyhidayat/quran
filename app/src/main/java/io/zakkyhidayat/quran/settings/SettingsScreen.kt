@@ -138,7 +138,7 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
                 TranslationControls(vm, settings)
 
                 SectionTitle(AppIcons.Backup, stringResource(R.string.backup))
-                BackupControls(vm)
+                BackupControls(vm, settings)
 
                 SectionTitle(Icons.Default.Info, stringResource(R.string.about))
                 Group {
@@ -504,7 +504,7 @@ internal fun TajweedToggle(vm: AppViewModel, settings: AppSettings) {
 
 /** Cadangan lokal: ekspor dan pulihkan bookmark serta pengaturan lewat pemilih berkas sistem. */
 @Composable
-private fun BackupControls(vm: AppViewModel) {
+private fun BackupControls(vm: AppViewModel, settings: AppSettings) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     fun toast(text: String) = android.widget.Toast.makeText(context, text, android.widget.Toast.LENGTH_LONG).show()
@@ -529,7 +529,48 @@ private fun BackupControls(vm: AppViewModel) {
                 .onFailure { toast(failed.format(it.message.orEmpty())) }
         }
     }
+    // Cadangan otomatis: pilih berkas sekali, izin aksesnya disimpan permanen.
+    val autoLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+        if (uri != null) scope.launch {
+            val flags = android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION or android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            runCatching { context.contentResolver.takePersistableUriPermission(uri, flags) }
+            vm.settingsRepository.setAutoBackup(uri.toString())
+        }
+    }
+    val autoUri = settings.autoBackupUri
+    val autoSubtitle = when {
+        autoUri == null -> stringResource(R.string.auto_backup_off_sub)
+        settings.autoBackupAt < 0 -> stringResource(R.string.auto_backup_error)
+        else -> stringResource(
+            R.string.auto_backup_on_sub,
+            remember(autoUri) { displayName(context, autoUri) },
+            if (settings.autoBackupAt == 0L) stringResource(R.string.auto_backup_pending)
+            // Jam bila hari ini, tanggal bila lebih lama.
+            else android.text.format.DateUtils.formatSameDayTime(
+                settings.autoBackupAt, System.currentTimeMillis(), java.text.DateFormat.MEDIUM, java.text.DateFormat.SHORT,
+            ).toString(),
+        )
+    }
     Group {
+        item(
+            title = stringResource(R.string.auto_backup),
+            subtitle = autoSubtitle,
+            onClick = {
+                if (autoUri == null) {
+                    autoLauncher.launch("quran-autobackup.json")
+                } else {
+                    runCatching {
+                        context.contentResolver.releasePersistableUriPermission(
+                            android.net.Uri.parse(autoUri),
+                            android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION or android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION,
+                        )
+                    }
+                    scope.launch { vm.settingsRepository.setAutoBackup(null) }
+                }
+            },
+            leading = { Icon(AppIcons.Backup, contentDescription = null) },
+            trailing = { IconSwitch(autoUri != null) },
+        )
         item(
             title = stringResource(R.string.backup_export),
             subtitle = stringResource(R.string.backup_export_sub),
@@ -547,3 +588,9 @@ private fun BackupControls(vm: AppViewModel) {
         )
     }
 }
+
+// Nama berkas yang ditampilkan untuk URI SAF; cadangan ke ujung URI bila penyedia tidak memberi nama.
+private fun displayName(context: android.content.Context, uri: String): String = runCatching {
+    context.contentResolver.query(android.net.Uri.parse(uri), arrayOf(android.provider.OpenableColumns.DISPLAY_NAME), null, null, null)
+        ?.use { if (it.moveToFirst()) it.getString(0) else null }
+}.getOrNull() ?: uri.substringAfterLast('/')

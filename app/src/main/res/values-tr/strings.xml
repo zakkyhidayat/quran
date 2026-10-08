@@ -147,7 +147,7 @@
     <string name="onb_welcome_title">Esselâmü aleyküm</string>
     <string name="onb_welcome_body">Hoş geldiniz. Bu uygulama Kur’an’ı Medine mushafıyla okumak içindir. Önce uygulamanın dilini seçin.</string>
     <string name="onb_mushaf_title">Bu mushaf hakkında</string>
-    <string name="onb_mushaf_body">Sayfalar Kral Fahd Kompleksi’nin bastığı Medine mushafını izler: Osmanlı hattı, Hafs rivayeti, 15 satırlık 604 sayfa. Hint-Pakistan hattına alışkınsanız harfler ve sayfa düzeni farklı görünecektir.</string>
+    <string name="onb_mushaf_body">Sayfalar Kral Fahd Kompleksi’nin bastığı Medine mushafını izler: Osmanlı hattı, Hafs rivayeti, 15 satırlık 604 sayfa. Hint-Pakistan veya Şemerli gibi diğer sayfa düzenleri yoktur; bunlardan birine alışkınsanız harfler ve sayfa düzeni farklı görünecektir.</string>
     <string name="onb_translation_title">Mealler</string>
     <string name="onb_translation_body">Mealler eklediğinizde indirilir, böylece uygulama küçük kalır. Meal olmadan da okuyabilirsiniz.</string>
     <string name="onb_appearance_title">Görünüm</string>
@@ -165,4 +165,9 @@
     <string name="backup_export_done">Yedek kaydedildi</string>
     <string name="backup_import_done">Yedek geri yüklendi. Yeni yer işaretleri: %1$d</string>
     <string name="backup_failed">Yedekleme başarısız: %1$s</string>
+    <string name="auto_backup">Otomatik yedekleme</string>
+    <string name="auto_backup_off_sub">Bir kez dosya seçin; yer işaretleri veya son okuma konumu değiştikçe güncellenir</string>
+    <string name="auto_backup_on_sub">%1$s dosyasına kaydediliyor • son: %2$s</string>
+    <string name="auto_backup_pending">henüz yok</string>
+    <string name="auto_backup_error">Seçilen dosyaya kaydedilemedi. Dosyayı yeniden seçmek için otomatik yedeklemeyi kapatıp açın.</string>
 </resources>

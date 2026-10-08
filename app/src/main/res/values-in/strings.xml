@@ -144,10 +144,10 @@
     <string name="onb_skip">Lewati</string>
     <string name="onb_next">Lanjut</string>
     <string name="onb_start">Mulai membaca</string>
-    <string name="onb_welcome_title">Assalamu’alaikum</string>
+    <string name="onb_welcome_title">Assalamu’alaykum</string>
     <string name="onb_welcome_body">Selamat datang. Aplikasi ini untuk membaca Al-Qur’an dengan mushaf Madinah. Pertama, pilih bahasa aplikasi.</string>
     <string name="onb_mushaf_title">Tentang mushaf ini</string>
-    <string name="onb_mushaf_body">Halamannya mengikuti mushaf Madinah cetakan Kompleks Raja Fahd: rasm Utsmani, riwayat Hafs, 604 halaman, 15 baris. Bila Anda terbiasa dengan khat IndoPak atau Mushaf Standar Indonesia, bentuk huruf dan letak halamannya akan terlihat berbeda.</string>
+    <string name="onb_mushaf_body">Halamannya mengikuti mushaf Madinah cetakan Kompleks Raja Fahd: rasm Utsmani, riwayat Hafs, 604 halaman, 15 baris. Gaya halaman lain, seperti IndoPak atau Shamarly, tidak disertakan, jadi bila Anda terbiasa dengan salah satunya, bentuk huruf dan letak halamannya akan terlihat berbeda.</string>
     <string name="onb_translation_title">Terjemahan</string>
     <string name="onb_translation_body">Terjemahan diunduh saat Anda menambahkannya, sehingga aplikasi tetap kecil. Anda juga boleh membaca tanpa terjemahan.</string>
     <string name="onb_appearance_title">Tampilan</string>
@@ -165,4 +165,9 @@
     <string name="backup_export_done">Cadangan tersimpan</string>
     <string name="backup_import_done">Cadangan dipulihkan. Bookmark baru: %1$d</string>
     <string name="backup_failed">Cadangan gagal: %1$s</string>
+    <string name="auto_backup">Cadangan otomatis</string>
+    <string name="auto_backup_off_sub">Pilih berkas sekali; berkas diperbarui setiap kali bookmark atau posisi baca terakhir berubah</string>
+    <string name="auto_backup_on_sub">Disimpan ke %1$s • terakhir %2$s</string>
+    <string name="auto_backup_pending">belum</string>
+    <string name="auto_backup_error">Tidak bisa menyimpan ke berkas yang dipilih. Matikan lalu nyalakan lagi untuk memilih ulang berkasnya.</string>
 </resources>

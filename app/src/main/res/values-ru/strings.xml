@@ -147,7 +147,7 @@
     <string name="onb_welcome_title">Ассаляму алейкум</string>
     <string name="onb_welcome_body">Добро пожаловать. Это приложение для чтения Корана по мединскому мусхафу. Сначала выберите язык приложения.</string>
     <string name="onb_mushaf_title">Об этом мусхафе</string>
-    <string name="onb_mushaf_body">Страницы повторяют мединский мусхаф, напечатанный Комплексом короля Фахда: османское письмо, чтение Хафса, 604 страницы по 15 строк. Если вы привыкли к индо-пакистанскому письму, буквы и вёрстка будут выглядеть иначе.</string>
+    <string name="onb_mushaf_body">Страницы повторяют мединский мусхаф, напечатанный Комплексом короля Фахда: османское письмо, чтение Хафса, 604 страницы по 15 строк. Другие стили страниц, например индо-пакистанский или Шамарли, не включены, поэтому если вы привыкли к одному из них, буквы и вёрстка будут выглядеть иначе.</string>
     <string name="onb_translation_title">Переводы</string>
     <string name="onb_translation_body">Переводы скачиваются при добавлении, поэтому приложение остаётся лёгким. Читать можно и без перевода.</string>
     <string name="onb_appearance_title">Оформление</string>
@@ -165,4 +165,9 @@
     <string name="backup_export_done">Копия сохранена</string>
     <string name="backup_import_done">Копия восстановлена. Новых закладок: %1$d</string>
     <string name="backup_failed">Ошибка резервного копирования: %1$s</string>
+    <string name="auto_backup">Автоматическое копирование</string>
+    <string name="auto_backup_off_sub">Выберите файл один раз; он обновляется при каждом изменении закладок или места чтения</string>
+    <string name="auto_backup_on_sub">Сохраняется в %1$s • последний раз %2$s</string>
+    <string name="auto_backup_pending">ещё нет</string>
+    <string name="auto_backup_error">Не удалось сохранить в выбранный файл. Выключите и снова включите автокопирование, чтобы выбрать файл заново.</string>
 </resources>

@@ -147,7 +147,7 @@
     <string name="onb_welcome_title">আসসালামু আলাইকুম</string>
     <string name="onb_welcome_body">স্বাগতম। এই অ্যাপটি মদিনার মুসহাফে কুরআন পড়ার জন্য। প্রথমে অ্যাপের ভাষা বেছে নিন।</string>
     <string name="onb_mushaf_title">এই মুসহাফ সম্পর্কে</string>
-    <string name="onb_mushaf_body">পৃষ্ঠাগুলো বাদশাহ ফাহাদ কমপ্লেক্সের ছাপা মদিনার মুসহাফ অনুযায়ী: উসমানি লিপি, হাফস রেওয়ায়াত, ১৫ লাইনের ৬০৪ পৃষ্ঠা। আপনি ইন্দো-পাক লিপিতে অভ্যস্ত হলে অক্ষর ও পৃষ্ঠার বিন্যাস ভিন্ন দেখাবে।</string>
+    <string name="onb_mushaf_body">পৃষ্ঠাগুলো বাদশাহ ফাহাদ কমপ্লেক্সের ছাপা মদিনার মুসহাফ অনুযায়ী: উসমানি লিপি, হাফস রেওয়ায়াত, ১৫ লাইনের ৬০৪ পৃষ্ঠা। ইন্দো-পাক বা শামারলির মতো অন্য পৃষ্ঠা-রীতি নেই, তাই সেগুলোর কোনোটিতে অভ্যস্ত হলে অক্ষর ও পৃষ্ঠার বিন্যাস ভিন্ন দেখাবে।</string>
     <string name="onb_translation_title">অনুবাদ</string>
     <string name="onb_translation_body">অনুবাদ যোগ করলে তখনই ডাউনলোড হয়, তাই অ্যাপটি হালকা থাকে। অনুবাদ ছাড়াও পড়তে পারেন।</string>
     <string name="onb_appearance_title">চেহারা</string>
@@ -165,4 +165,9 @@
     <string name="backup_export_done">ব্যাকআপ সংরক্ষিত হয়েছে</string>
     <string name="backup_import_done">ব্যাকআপ পুনরুদ্ধার হয়েছে। নতুন বুকমার্ক: %1$d</string>
     <string name="backup_failed">ব্যাকআপ ব্যর্থ: %1$s</string>
+    <string name="auto_backup">স্বয়ংক্রিয় ব্যাকআপ</string>
+    <string name="auto_backup_off_sub">একবার একটি ফাইল বেছে নিন; বুকমার্ক বা সর্বশেষ পড়ার অবস্থান বদলালে তা হালনাগাদ হবে</string>
+    <string name="auto_backup_on_sub">%1$s-এ সংরক্ষণ • সর্বশেষ %2$s</string>
+    <string name="auto_backup_pending">এখনো নয়</string>
+    <string name="auto_backup_error">বেছে নেওয়া ফাইলে সংরক্ষণ করা যায়নি। আবার ফাইল বাছতে স্বয়ংক্রিয় ব্যাকআপ বন্ধ করে চালু করুন।</string>
 </resources>
