@@ -21,7 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedListItem
-import androidx.compose.material3.Tab
+import androidx.compose.material3.LeadingIconTab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -44,7 +44,7 @@ import io.zakkyhidayat.quran.ui.CenteredContent
 import io.zakkyhidayat.quran.ui.segmentedItemColors
 import io.zakkyhidayat.quran.ui.NumberBadge
 
-private val TABS = listOf("Surah", "Juz", "Bookmark")
+private val TABS = listOf("Surah" to AppIcons.MenuBook, "Juz" to AppIcons.GridView, "Bookmark" to AppIcons.BookmarkBorder)
 private val ListPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -68,7 +68,14 @@ fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit
         CenteredContent(Modifier.padding(padding)) {
             Column(Modifier.fillMaxSize()) {
                 PrimaryTabRow(selectedTabIndex = tab) {
-                    TABS.forEachIndexed { i, title -> Tab(selected = tab == i, onClick = { tab = i }, text = { Text(title) }) }
+                    TABS.forEachIndexed { i, (title, icon) ->
+                        LeadingIconTab(
+                            selected = tab == i,
+                            onClick = { tab = i },
+                            text = { Text(title) },
+                            icon = { Icon(icon, contentDescription = null) },
+                        )
+                    }
                 }
                 when (tab) {
                     0 -> SurahList(vm, onBack)
