@@ -32,7 +32,7 @@ fun QuranTheme(
         dynamic -> dynamicLightColorScheme(context)
         else -> originalColorScheme(dark, settings.contrast)
     }
-    if (dark && settings.amoled) scheme = scheme.toAmoled()
+    if (dark) scheme = if (settings.amoled) scheme.toAmoled() else scheme.liftedDark()
 
     MaterialExpressiveTheme(
         colorScheme = scheme,

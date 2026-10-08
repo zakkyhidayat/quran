@@ -25,9 +25,6 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.CompositingStrategy
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.input.pointer.pointerInput
@@ -73,8 +70,8 @@ private var fontCache: Set<String>? = null
 private fun availableFonts(context: Context): Set<String> =
     fontCache ?: (context.assets.list("fonts")?.toSet() ?: emptySet()).also { fontCache = it }
 
-internal fun pageFontFamily(context: Context, page: Int): FontFamily =
-    if ("p$page.ttf" in availableFonts(context)) FontFamily(Font("fonts/p$page.ttf", context.assets)) else FontFamily.Default
+internal fun pageFontFamily(context: Context, page: Int, palette: GlyphPalette = GlyphPalette.LightTajweed): FontFamily =
+    if ("p$page.ttf" in availableFonts(context)) PalettedFonts.family(context, "p$page.ttf", palette.index) else FontFamily.Default
 
 // quran-common: glyph kaligrafi basmalah (U+FDFD), judul juz (U+E001..E01E), dan kata pembuka juz (U+E900..E91D).
 internal fun commonFontFamily(context: Context): FontFamily =
@@ -87,8 +84,10 @@ internal fun juzOpeningGlyph(juz: Int): String = (0xE900 + juz - 1).toChar().toS
 internal fun surahNameFontFamily(context: Context): FontFamily =
     FontFamily(Font("fonts/surah_names.ttf", context.assets))
 
-internal fun surahHeaderFontFamily(context: Context): FontFamily =
-    FontFamily(Font("fonts/QCF_SurahHeader_COLOR-Regular.ttf", context.assets))
+internal fun surahHeaderFontFamily(context: Context, dark: Boolean): FontFamily =
+    // Mode gelap: palet 1 dengan isian bingkai (warna 18, bawaannya hitam) diganti hijau tua (warna 12) agar serasi dengan nomor ayat.
+    if (dark) PalettedFonts.family(context, "QCF_SurahHeader_COLOR-Regular.ttf", 1, listOf(18 to 12))
+    else PalettedFonts.family(context, "QCF_SurahHeader_COLOR-Regular.ttf", 0)
 
 // KFGQPC Hafs Uthmanic Script: font teks Arab Unicode (sheet ayat, basmalah, hasil pencarian).
 internal fun arabicFontFamily(context: Context): FontFamily =
@@ -107,16 +106,13 @@ fun MushafPage(
     onSurahClick: (Int) -> Unit = {},
 ) {
     val context = LocalContext.current
-    val pageFont = remember(page) { pageFontFamily(context, page) }
-    val headerFont = remember { surahHeaderFontFamily(context) }
-    val basmalahFont = remember { pageFontFamily(context, 1) }
+    val dark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val palette = GlyphPalette.of(tajweed, dark)
+    val pageFont = remember(page, palette) { pageFontFamily(context, page, palette) }
+    val headerFont = remember(dark) { surahHeaderFontFamily(context, dark) }
+    val basmalahFont = remember(palette) { pageFontFamily(context, 1, palette) }
     val measurer = rememberTextMeasurer()
     val density = LocalDensity.current
-    val dark = MaterialTheme.colorScheme.background.luminance() < 0.5f
-    val glyphFilter = remember(tajweed, dark) { GlyphColors.filter(tajweed, dark) }
-    val headerFilter = remember(dark) { GlyphColors.filter(true, dark) }
-    // Penanda nomor ayat selalu berwarna (palet P6 / P3): hanya huruf yang dimonokromkan saat tajwid dimatikan.
-    val markerFilter = headerFilter
 
     BoxWithConstraints(modifier.fillMaxSize()) {
         val widthPx = constraints.maxWidth
@@ -139,9 +135,9 @@ fun MushafPage(
                 val thisHeight = if (line.type == LineType.SurahName) headerLineHeight else lineHeight
                 Box(Modifier.fillMaxWidth().height(thisHeight), contentAlignment = Alignment.Center) {
                     when (line.type) {
-                        LineType.Ayah -> AyahLine(line, pageFont, glyphSize, glyphFilter, markerFilter, selected, onAyahClick, thisHeight)
-                        LineType.SurahName -> SurahHeader(surahs[line.surah], headerFont, headerFilter) { onSurahClick(line.surah!!) }
-                        LineType.Basmallah -> BasmalahLine(glyphSize, glyphFilter, basmalahFont)
+                        LineType.Ayah -> AyahLine(line, pageFont, glyphSize, selected, onAyahClick, thisHeight)
+                        LineType.SurahName -> SurahHeader(surahs[line.surah], headerFont) { onSurahClick(line.surah!!) }
+                        LineType.Basmallah -> BasmalahLine(glyphSize, basmalahFont)
                     }
                 }
             }
@@ -197,8 +193,6 @@ private fun AyahLine(
     line: PageLine,
     font: FontFamily,
     size: TextUnit,
-    filter: ColorFilter?,
-    markerFilter: ColorFilter?,
     selected: AyahRef?,
     onAyahClick: (AyahRef) -> Unit,
     cellHeight: Dp,
@@ -262,31 +256,9 @@ private fun AyahLine(
                 style = style,
                 maxLines = 1,
                 softWrap = false,
-                modifier = Modifier.glyphLayer(if (word.isEnd) markerFilter else filter, size),
             )
         }
     }
-}
-
-// Lapisan warna per kata. Glyph V4 menjorok melewati kotak kata (harakat, ujung huruf, tumpang tindih dengan kata di
-// sebelahnya), sedangkan lapisan offscreen memotong tepat di kotak kata. Lapisan karenanya diperluas, tetapi ukuran yang
-// dilaporkan ke tata letak tetap ukuran kata, jadi susunan baris tidak berubah.
-@Composable
-private fun Modifier.glyphLayer(filter: ColorFilter?, fontSize: TextUnit): Modifier {
-    if (filter == null) return this
-    val density = LocalDensity.current
-    val padX = with(density) { (fontSize.toPx() * 0.5f).roundToInt() }
-    val padY = with(density) { (fontSize.toPx() * 0.6f).roundToInt() }
-    return this
-        .layout { measurable, constraints ->
-            val placeable = measurable.measure(constraints)
-            layout(placeable.width - 2 * padX, placeable.height - 2 * padY) { placeable.place(-padX, -padY) }
-        }
-        .graphicsLayer {
-            colorFilter = filter
-            compositingStrategy = CompositingStrategy.Offscreen
-        }
-        .padding(horizontal = with(density) { padX.toDp() }, vertical = with(density) { padY.toDp() })
 }
 
 // Susun kata dari kanan ke kiri. Baris penuh dibagi rata (justifikasi); baris pendek ditengahkan dengan jarak tetap.
@@ -324,7 +296,7 @@ private fun JustifiedRow(
 private const val BASMALAH_GLYPHS = "ﱁﱂﱃﱄ"
 
 @Composable
-private fun BasmalahLine(size: TextUnit, filter: ColorFilter?, font: FontFamily) {
+private fun BasmalahLine(size: TextUnit, font: FontFamily) {
     val style = TextStyle(fontFamily = font, fontSize = size)
     val gap = with(LocalDensity.current) { size.toPx() * 0.25f }
     val bounds = remember { FloatArray(BASMALAH_GLYPHS.length * 2) }
@@ -335,7 +307,6 @@ private fun BasmalahLine(size: TextUnit, filter: ColorFilter?, font: FontFamily)
                 style = style,
                 maxLines = 1,
                 softWrap = false,
-                modifier = Modifier.glyphLayer(filter, size),
             )
         }
     }
@@ -353,7 +324,7 @@ private const val HEADER_WIDTH_RATIO = 0.94f
 private const val HEADER_LINE_RATIO = 1.12f
 
 @Composable
-private fun SurahHeader(surah: Surah?, font: FontFamily, filter: ColorFilter?, onClick: () -> Unit) {
+private fun SurahHeader(surah: Surah?, font: FontFamily, onClick: () -> Unit) {
     if (surah == null) return
     val measurer = rememberTextMeasurer()
     val density = LocalDensity.current
@@ -375,10 +346,6 @@ private fun SurahHeader(surah: Surah?, font: FontFamily, filter: ColorFilter?, o
                 .fillMaxWidth()
                 .requiredHeight(with(density) { (fontPx * HEADER_FRAME_HEIGHT_EM).toDp() })
                 .pointerInput(surah.id) { detectTapGestures { onClick() } }
-                .graphicsLayer {
-                    colorFilter = filter
-                    compositingStrategy = CompositingStrategy.Offscreen
-                }
                 .drawBehind {
                     val frameWidth = HEADER_FRAME_EM * fontPx
                     val x = (size.width - frameWidth) / 2f - HEADER_FRAME_LEFT_EM * fontPx
