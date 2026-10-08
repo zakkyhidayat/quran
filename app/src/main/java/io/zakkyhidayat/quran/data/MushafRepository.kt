@@ -170,6 +170,17 @@ class MushafRepository(context: Context) {
         )
     }
 
+    @Volatile private var ayahIndexCache: List<AyahPos>? = null
+
+    /** Semua 6236 ayat beserta halamannya, urut mushaf. */
+    suspend fun ayahIndex(): List<AyahPos> = ayahIndexCache ?: withContext(Dispatchers.IO) {
+        val list = ArrayList<AyahPos>(6236)
+        db.rawQuery("SELECT surah, ayah, page FROM ayahs ORDER BY surah, ayah", null).use { c ->
+            while (c.moveToNext()) list += AyahPos(c.getInt(0), c.getInt(1), c.getInt(2))
+        }
+        list.also { ayahIndexCache = it }
+    }
+
     suspend fun firstAyahOnPage(page: Int): AyahRef = withContext(Dispatchers.IO) {
         db.rawQuery("SELECT surah, ayah FROM words WHERE page = ? ORDER BY id LIMIT 1", arrayOf(page.toString())).use {
             if (it.moveToFirst()) AyahRef(it.getInt(0), it.getInt(1)) else AyahRef(1, 1)

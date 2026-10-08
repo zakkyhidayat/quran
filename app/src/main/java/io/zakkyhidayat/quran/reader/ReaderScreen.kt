@@ -1,5 +1,17 @@
 package io.zakkyhidayat.quran.reader
 
+import kotlinx.coroutines.launch
+import io.zakkyhidayat.quran.settings.ReadingMode
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.material3.Surface
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.res.stringResource
 import io.zakkyhidayat.quran.R
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -111,17 +123,36 @@ fun ReaderScreen(
 
     val startPage = remember { (vm.pendingPage.value ?: settings.lastPage).coerceIn(1, PAGE_COUNT) }
     val pagerState = rememberPagerState(initialPage = startPage - 1) { PAGE_COUNT }
-    val currentPage by remember { derivedStateOf { pagerState.currentPage + 1 } }
+    val mode = settings.readingMode
+    val listMode = mode != ReadingMode.Mushaf
+    // Mode daftar: halaman ayat teratas yang terlihat, dan tujuan gulir (halaman + ayat) saat melompat.
+    var listPage by remember { mutableIntStateOf(startPage) }
+    var listTarget by remember { mutableStateOf(startPage to vm.selected.value) }
+    val currentPage by remember(listMode) { derivedStateOf { if (listMode) listPage else pagerState.currentPage + 1 } }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(listMode) {
         vm.pendingPage.collect { page ->
             if (page != null) {
-                pagerState.scrollToPage(page - 1)
+                if (listMode) {
+                    listTarget = page to vm.selected.value
+                } else {
+                    pagerState.scrollToPage(page - 1)
+                }
                 vm.pendingPage.value = null
             }
         }
     }
-    LaunchedEffect(Unit) {
+    // Berpindah mode tetap di posisi yang sama.
+    LaunchedEffect(listMode) {
+        if (listMode) {
+            listPage = pagerState.currentPage + 1
+            listTarget = listPage to vm.selected.value
+        } else {
+            pagerState.scrollToPage(listPage - 1)
+        }
+    }
+    LaunchedEffect(listMode) {
+        if (listMode) return@LaunchedEffect
         snapshotFlow { pagerState.currentPage }.collectLatest { index ->
             vm.currentPage.value = index + 1
             delay(600)
@@ -135,6 +166,7 @@ fun ReaderScreen(
     }
 
     var showJump by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val commonFont = remember { commonFontFamily(context) }
     val nameFont = remember { surahNameFontFamily(context) }
@@ -169,104 +201,126 @@ fun ReaderScreen(
                     IconButton(onClick = onOpenSettings) { Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.settings)) }
                 },
             )
-            // Halaman mushaf selalu kiri-ke-kanan secara tata letak (halaman berikutnya di kiri, nama surah di kiri atas),
-            // juga saat antarmuka berbahasa Arab/Urdu/Persia yang RTL.
-            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                HorizontalPager(
-                    state = pagerState,
-                    reverseLayout = true,
-                    beyondViewportPageCount = 1,
+            if (listMode) {
+                AyahListReader(
+                    vm = vm,
+                    surahs = surahs,
+                    translationIds = settings.translationIds,
+                    showArabic = mode == ReadingMode.AyahTranslation,
+                    targetPage = listTarget.first,
+                    targetAyah = listTarget.second,
+                    onPageChange = { page, first ->
+                        listPage = page
+                        vm.currentPage.value = page
+                        scope.launch {
+                            vm.settingsRepository.setLastPage(page)
+                            vm.settingsRepository.setLastAyah(first.surah, first.ayah)
+                        }
+                    },
                     modifier = Modifier.weight(1f).fillMaxWidth(),
-                ) { index ->
-                    val page = index + 1
-                    val lines by produceState<List<PageLine>?>(null, page) { value = vm.mushaf.page(page) }
-                    val ayahTexts by produceState<List<AyahText>>(emptyList(), page) { value = vm.mushaf.pageAyahs(page) }
-                    val pageInfo = pageMeta.getOrNull(index)
-                    BoxWithConstraints(
-                        Modifier.fillMaxSize().pointerInput(selected) {
-                            detectTapGestures(onTap = { if (selected != null) vm.clearSelection() })
-                        },
-                    ) {
-                        // Blok halaman berproporsi kertas B5 (176 x 250 mm), seperti mushaf cetak; header dan nomor menempel di sekelilingnya.
-                        val bleed = if (maxWidth - PageEndPadding < PageMaxWidth) PageStartBleed else 0.dp
-                        val available = minOf(maxWidth - PageEndPadding + bleed, PageMaxWidth)
-                        val blockWidth = minOf(available, (maxHeight - PageChromeHeight) / PageHeightOverWidth)
-                        val blockHeight = blockWidth * PageHeightOverWidth
-                        // Di layar sempit blok menempel ke kiri; di layar lebar sisa ruang dibagi dua agar halaman tetap di tengah.
-                        val startOffset = ((maxWidth - blockWidth - PageEndPadding) / 2).coerceAtLeast(0.dp) - bleed
-                        Column(Modifier.align(Alignment.CenterStart).offset(x = startOffset), horizontalAlignment = Alignment.CenterHorizontally) {
-                            Row(Modifier.width(blockWidth).height(HeaderHeight).padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                                val headSurah = pageInfo?.let { surahs[it.surah] }
-                                // Nama surah (font nama surah) disamakan dengan judul juz kaligrafi: warna sama, tinggi tinta sama (~21 sp).
-                                val stripColor = MaterialTheme.colorScheme.onSurfaceVariant
-                                if (headSurah != null) {
-                                    Text(
-                                        text = headSurah.nameGlyph.toString(),
-                                        style = TextStyle(
-                                            fontFamily = nameFont,
-                                            fontSize = 18.sp,
-                                            // Metrik vertikal font ini ~2,6 em; dibatasi supaya tidak mendorong tata letak.
-                                            lineHeight = 21.sp,
-                                            lineHeightStyle = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.Both),
-                                            color = stripColor,
-                                        ),
-                                        modifier = Modifier
-                                            .height(24.dp)
-                                            .wrapContentHeight(Alignment.CenterVertically, unbounded = true)
-                                            .clickable(onClickLabel = stringResource(R.string.open_surah_info)) { onOpenSurahInfo(headSurah.id) }
-                                            .semantics { contentDescription = context.getString(R.string.surah_info_cd, headSurah.nameLatin) },
-                                    )
+                )
+            } else {
+                // Halaman mushaf selalu kiri-ke-kanan secara tata letak (halaman berikutnya di kiri, nama surah di kiri atas),
+                // juga saat antarmuka berbahasa Arab/Urdu/Persia yang RTL.
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                    HorizontalPager(
+                        state = pagerState,
+                        reverseLayout = true,
+                        beyondViewportPageCount = 1,
+                        modifier = Modifier.weight(1f).fillMaxWidth(),
+                    ) { index ->
+                        val page = index + 1
+                        val lines by produceState<List<PageLine>?>(null, page) { value = vm.mushaf.page(page) }
+                        val ayahTexts by produceState<List<AyahText>>(emptyList(), page) { value = vm.mushaf.pageAyahs(page) }
+                        val pageInfo = pageMeta.getOrNull(index)
+                        BoxWithConstraints(
+                            Modifier.fillMaxSize().pointerInput(selected) {
+                                detectTapGestures(onTap = { if (selected != null) vm.clearSelection() })
+                            },
+                        ) {
+                            // Blok halaman berproporsi kertas B5 (176 x 250 mm), seperti mushaf cetak; header dan nomor menempel di sekelilingnya.
+                            val bleed = if (maxWidth - PageEndPadding < PageMaxWidth) PageStartBleed else 0.dp
+                            val available = minOf(maxWidth - PageEndPadding + bleed, PageMaxWidth)
+                            val blockWidth = minOf(available, (maxHeight - PageChromeHeight) / PageHeightOverWidth)
+                            val blockHeight = blockWidth * PageHeightOverWidth
+                            // Di layar sempit blok menempel ke kiri; di layar lebar sisa ruang dibagi dua agar halaman tetap di tengah.
+                            val startOffset = ((maxWidth - blockWidth - PageEndPadding) / 2).coerceAtLeast(0.dp) - bleed
+                            Column(Modifier.align(Alignment.CenterStart).offset(x = startOffset), horizontalAlignment = Alignment.CenterHorizontally) {
+                                Row(Modifier.width(blockWidth).height(HeaderHeight).padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                                    val headSurah = pageInfo?.let { surahs[it.surah] }
+                                    // Nama surah (font nama surah) disamakan dengan judul juz kaligrafi: warna sama, tinggi tinta sama (~21 sp).
+                                    val stripColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                    if (headSurah != null) {
+                                        Text(
+                                            text = headSurah.nameGlyph.toString(),
+                                            style = TextStyle(
+                                                fontFamily = nameFont,
+                                                fontSize = 18.sp,
+                                                // Metrik vertikal font ini ~2,6 em; dibatasi supaya tidak mendorong tata letak.
+                                                lineHeight = 21.sp,
+                                                lineHeightStyle = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.Both),
+                                                color = stripColor,
+                                            ),
+                                            modifier = Modifier
+                                                .height(24.dp)
+                                                .wrapContentHeight(Alignment.CenterVertically, unbounded = true)
+                                                .clickable(onClickLabel = stringResource(R.string.open_surah_info)) { onOpenSurahInfo(headSurah.id) }
+                                                .semantics { contentDescription = context.getString(R.string.surah_info_cd, headSurah.nameLatin) },
+                                        )
+                                    }
+                                    Box(Modifier.weight(1f))
+                                    pageInfo?.let { info ->
+                                        Text(
+                                            text = juzTitleGlyph(info.juz),
+                                            style = TextStyle(fontFamily = commonFont, fontSize = 18.sp, color = stripColor),
+                                            modifier = Modifier.semantics { contentDescription = context.getString(R.string.juz_n, info.juz) },
+                                        )
+                                    }
                                 }
-                                Box(Modifier.weight(1f))
-                                pageInfo?.let { info ->
-                                    Text(
-                                        text = juzTitleGlyph(info.juz),
-                                        style = TextStyle(fontFamily = commonFont, fontSize = 18.sp, color = stripColor),
-                                        modifier = Modifier.semantics { contentDescription = context.getString(R.string.juz_n, info.juz) },
-                                    )
+                                Spacer(Modifier.height(HeaderGap))
+                                Box(Modifier.size(blockWidth, blockHeight), contentAlignment = Alignment.Center) {
+                                    val loaded = lines
+                                    if (loaded == null) {
+                                        LoadingIndicator()
+                                    } else {
+                                        MushafPage(
+                                            page = page,
+                                            lines = loaded,
+                                            ayahTexts = ayahTexts,
+                                            surahs = surahs,
+                                            selected = selected,
+                                            onAyahClick = { vm.selectAyah(it) },
+                                            tajweed = settings.tajweed,
+                                            onSurahClick = onOpenSurahInfo,
+                                        )
+                                    }
                                 }
-                            }
-                            Spacer(Modifier.height(HeaderGap))
-                            Box(Modifier.size(blockWidth, blockHeight), contentAlignment = Alignment.Center) {
-                                val loaded = lines
-                                if (loaded == null) {
-                                    LoadingIndicator()
-                                } else {
-                                    MushafPage(
-                                        page = page,
-                                        lines = loaded,
-                                        ayahTexts = ayahTexts,
-                                        surahs = surahs,
-                                        selected = selected,
-                                        onAyahClick = { vm.selectAyah(it) },
-                                        tajweed = settings.tajweed,
-                                        onSurahClick = onOpenSurahInfo,
-                                    )
+                                val pageSurah = pageInfo?.surah
+                                val previous = pageSurah?.let { surahs[it - 1] }
+                                val next = pageSurah?.let { surahs[it + 1] }
+                                // Mushaf dibaca kanan ke kiri: surah berikutnya di kiri, sebelumnya di kanan.
+                                Row(Modifier.width(blockWidth).height(FooterHeight), verticalAlignment = Alignment.CenterVertically) {
+                                    IconButton(
+                                        onClick = { next?.let { vm.clearSelection(); vm.goToPage(it.firstPage) } },
+                                        enabled = next != null,
+                                        modifier = Modifier.size(32.dp),
+                                    ) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = stringResource(R.string.next_surah_cd, next?.nameLatin.orEmpty()), modifier = Modifier.size(20.dp)) }
+                                    Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                                        Text("$page", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                    }
+                                    IconButton(
+                                        onClick = { previous?.let { vm.clearSelection(); vm.goToPage(it.firstPage) } },
+                                        enabled = previous != null,
+                                        modifier = Modifier.size(32.dp),
+                                    ) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = stringResource(R.string.previous_surah_cd, previous?.nameLatin.orEmpty()), modifier = Modifier.size(20.dp)) }
                                 }
-                            }
-                            val pageSurah = pageInfo?.surah
-                            val previous = pageSurah?.let { surahs[it - 1] }
-                            val next = pageSurah?.let { surahs[it + 1] }
-                            // Mushaf dibaca kanan ke kiri: surah berikutnya di kiri, sebelumnya di kanan.
-                            Row(Modifier.width(blockWidth).height(FooterHeight), verticalAlignment = Alignment.CenterVertically) {
-                                IconButton(
-                                    onClick = { next?.let { vm.clearSelection(); vm.goToPage(it.firstPage) } },
-                                    enabled = next != null,
-                                    modifier = Modifier.size(32.dp),
-                                ) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = stringResource(R.string.next_surah_cd, next?.nameLatin.orEmpty()), modifier = Modifier.size(20.dp)) }
-                                Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                                    Text("$page", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                }
-                                IconButton(
-                                    onClick = { previous?.let { vm.clearSelection(); vm.goToPage(it.firstPage) } },
-                                    enabled = previous != null,
-                                    modifier = Modifier.size(32.dp),
-                                ) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = stringResource(R.string.previous_surah_cd, previous?.nameLatin.orEmpty()), modifier = Modifier.size(20.dp)) }
                             }
                         }
                     }
                 }
             }
+            // Pill cara baca di barisnya sendiri, jadi tidak menutupi halaman; tinggi halaman menyesuaikan.
+            ReadingModeBar(mode) { scope.launch { vm.settingsRepository.setReadingMode(it) } }
         }
     }
 
@@ -296,3 +350,45 @@ fun ReaderScreen(
     }
 }
 
+
+@Composable
+private fun ReadingModeBar(mode: ReadingMode, onSelect: (ReadingMode) -> Unit) {
+    val options = listOf(
+        Triple(ReadingMode.Mushaf, R.string.mode_mushaf, AppIcons.MenuBook),
+        Triple(ReadingMode.AyahTranslation, R.string.mode_ayah_translation, AppIcons.Translate),
+        Triple(ReadingMode.Translation, R.string.mode_translation, AppIcons.Notes),
+    )
+    Box(Modifier.fillMaxWidth().padding(vertical = 8.dp), contentAlignment = Alignment.Center) {
+        Surface(shape = CircleShape, color = MaterialTheme.colorScheme.surfaceContainerHigh) {
+            Row(Modifier.padding(4.dp).selectableGroup(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                options.forEach { (value, label, icon) ->
+                    val chosen = mode == value
+                    val name = stringResource(label)
+                    Surface(
+                        selected = chosen,
+                        onClick = { onSelect(value) },
+                        shape = CircleShape,
+                        color = if (chosen) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent,
+                        contentColor = if (chosen) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.semantics {
+                            role = Role.Tab
+                            if (!chosen) contentDescription = name
+                        },
+                    ) {
+                        Row(
+                            Modifier.heightIn(min = 40.dp).padding(horizontal = 14.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Icon(icon, contentDescription = null, modifier = Modifier.size(18.dp))
+                            // Label hanya pada mode aktif, agar pill tetap ringkas di layar sempit.
+                            if (chosen) {
+                                Spacer(Modifier.width(8.dp))
+                                Text(name, style = MaterialTheme.typography.labelLarge, maxLines = 1)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

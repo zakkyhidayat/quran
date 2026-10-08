@@ -138,4 +138,7 @@
     <string name="tab_ruku">Ruku</string>
     <string name="juz_hizb">Juz %1$d • Hizb %2$d</string>
     <string name="ruku_in_surah">%1$s, ruku %2$d</string>
+    <string name="mode_mushaf">Mushaf</string>
+    <string name="mode_ayah_translation">Ayah + translation</string>
+    <string name="mode_translation">Translation</string>
 </resources>

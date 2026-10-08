@@ -137,4 +137,7 @@
     <string name="tab_ruku">রুকু</string>
     <string name="juz_hizb">পারা %1$d • হিযব %2$d</string>
     <string name="ruku_in_surah">%1$s, রুকু %2$d</string>
+    <string name="mode_mushaf">মুসহাফ</string>
+    <string name="mode_ayah_translation">আয়াত + অনুবাদ</string>
+    <string name="mode_translation">অনুবাদ</string>
 </resources>

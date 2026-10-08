@@ -17,6 +17,9 @@ enum class ColorMode { Original, Dynamic }
 
 enum class ContrastLevel { Standard, Medium, High }
 
+/** Cara baca, berlaku untuk semua surah: halaman mushaf, ayat dengan terjemahan, atau terjemahan saja. */
+enum class ReadingMode { Mushaf, AyahTranslation, Translation }
+
 data class AppSettings(
     val themeMode: ThemeMode = ThemeMode.System,
     val colorMode: ColorMode = ColorMode.Dynamic,
@@ -25,6 +28,7 @@ data class AppSettings(
     val tajweed: Boolean = true,
     val showTransliteration: Boolean = true,
     val translationIds: List<String> = listOf("id-kemenag"),
+    val readingMode: ReadingMode = ReadingMode.Mushaf,
     val lastPage: Int = 1,
     val lastSurah: Int = 0,
     val lastAyah: Int = 0,
@@ -40,6 +44,7 @@ class SettingsRepository(private val context: Context) {
     private val tajweedKey = booleanPreferencesKey("tajweed")
     private val transliterationKey = booleanPreferencesKey("transliteration")
     private val translationsKey = stringPreferencesKey("translations")
+    private val readingModeKey = stringPreferencesKey("reading_mode")
     private val lastPageKey = intPreferencesKey("last_page")
     private val lastSurahKey = intPreferencesKey("last_surah")
     private val lastAyahKey = intPreferencesKey("last_ayah")
@@ -53,6 +58,7 @@ class SettingsRepository(private val context: Context) {
             tajweed = prefs[tajweedKey] ?: true,
             showTransliteration = prefs[transliterationKey] ?: true,
             translationIds = prefs[translationsKey]?.split(',')?.filter { it.isNotBlank() } ?: defaultTranslations(),
+            readingMode = prefs[readingModeKey].toEnum(ReadingMode.Mushaf),
             lastPage = prefs[lastPageKey] ?: 1,
             lastSurah = prefs[lastSurahKey] ?: 0,
             lastAyah = prefs[lastAyahKey] ?: 0,
@@ -80,6 +86,8 @@ class SettingsRepository(private val context: Context) {
     suspend fun setShowTransliteration(value: Boolean) = context.dataStore.edit { it[transliterationKey] = value }
 
     suspend fun setTranslations(ids: List<String>) = context.dataStore.edit { it[translationsKey] = ids.joinToString(",") }
+
+    suspend fun setReadingMode(value: ReadingMode) = context.dataStore.edit { it[readingModeKey] = value.name }
 
     suspend fun setLastPage(page: Int) = context.dataStore.edit { it[lastPageKey] = page }
 
