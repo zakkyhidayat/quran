@@ -26,7 +26,6 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.CompositingStrategy
-import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.luminance
@@ -114,12 +113,20 @@ fun MushafPage(
     val dark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val glyphFilter = remember(tajweed, dark) { GlyphColors.filter(tajweed, dark) }
     val headerFilter = remember(dark) { GlyphColors.filter(true, dark) }
+    // Penanda nomor ayat selalu berwarna (palet P6 / P3): hanya huruf yang dimonokromkan saat tajwid dimatikan.
+    val markerFilter = headerFilter
 
     BoxWithConstraints(modifier.fillMaxSize()) {
         val widthPx = constraints.maxWidth
-        val lineHeight = maxHeight / LINES_PER_PAGE
+        val nominal = maxHeight / LINES_PER_PAGE
         val glyphSize = remember(page, lines, widthPx) { fitFontSize(measurer, density, lines, pageFont, widthPx) }
-        val topPadding = lineHeight * ((LINES_PER_PAGE - lines.size) / 2f)
+        // Baris bingkai surah lebih tinggi dari baris ayat (bingkai tidak diubah proporsinya); baris ayat di halaman itu
+        // dirapatkan secukupnya agar total tetap seukuran halaman.
+        val headerLineHeight = with(density) { (widthPx * HEADER_WIDTH_RATIO * HEADER_FRAME_HEIGHT_EM / HEADER_FRAME_EM * HEADER_LINE_RATIO).toDp() }
+        val headerCount = lines.count { it.type == LineType.SurahName }
+        val otherCount = lines.size - headerCount
+        val lineHeight = if (headerCount == 0) nominal else minOf(nominal, (maxHeight - headerLineHeight * headerCount) / otherCount)
+        val topPadding = (maxHeight - lineHeight * otherCount - headerLineHeight * headerCount).coerceAtLeast(0.dp) / 2f
 
         ScreenReaderLayer(lines, ayahTexts, surahs, onAyahClick, onSurahClick)
 
@@ -127,9 +134,10 @@ fun MushafPage(
         Column(Modifier.fillMaxSize().clearAndSetSemantics { }) {
             Box(Modifier.height(topPadding))
             lines.forEach { line ->
-                Box(Modifier.fillMaxWidth().height(lineHeight), contentAlignment = Alignment.Center) {
+                val thisHeight = if (line.type == LineType.SurahName) headerLineHeight else lineHeight
+                Box(Modifier.fillMaxWidth().height(thisHeight), contentAlignment = Alignment.Center) {
                     when (line.type) {
-                        LineType.Ayah -> AyahLine(line, pageFont, glyphSize, glyphFilter, selected, onAyahClick, lineHeight)
+                        LineType.Ayah -> AyahLine(line, pageFont, glyphSize, glyphFilter, markerFilter, selected, onAyahClick, thisHeight)
                         LineType.SurahName -> SurahHeader(surahs[line.surah], headerFont, headerFilter) { onSurahClick(line.surah!!) }
                         LineType.Basmallah -> BasmalahLine(glyphSize, glyphFilter, basmalahFont)
                     }
@@ -188,6 +196,7 @@ private fun AyahLine(
     font: FontFamily,
     size: TextUnit,
     filter: ColorFilter?,
+    markerFilter: ColorFilter?,
     selected: AyahRef?,
     onAyahClick: (AyahRef) -> Unit,
     cellHeight: Dp,
@@ -252,7 +261,7 @@ private fun AyahLine(
                 maxLines = 1,
                 softWrap = false,
                 modifier = Modifier.graphicsLayer {
-                    colorFilter = filter
+                    colorFilter = if (word.isEnd) markerFilter else filter
                     compositingStrategy = CompositingStrategy.Offscreen
                 },
             )
@@ -322,7 +331,9 @@ private const val HEADER_FRAME_LEFT_EM = 41f / HEADER_UPEM
 private const val HEADER_FRAME_HEIGHT_EM = 1026f / HEADER_UPEM
 
 // Bingkai diskalakan vertikal supaya ada jarak dengan baris ayat di atas dan basmalah di bawahnya.
-private const val HEADER_SCALE_Y = 0.66f
+// Lebar bingkai 94% lebar halaman; baris bingkai 112% tinggi bingkai (jarak ~6% di atas dan bawah). Proporsi bingkai tetap asli.
+private const val HEADER_WIDTH_RATIO = 0.94f
+private const val HEADER_LINE_RATIO = 1.12f
 
 @Composable
 private fun SurahHeader(surah: Surah?, font: FontFamily, filter: ColorFilter?, onClick: () -> Unit) {
@@ -330,7 +341,7 @@ private fun SurahHeader(surah: Surah?, font: FontFamily, filter: ColorFilter?, o
     val measurer = rememberTextMeasurer()
     val density = LocalDensity.current
     BoxWithConstraints(Modifier.fillMaxWidth()) {
-        val fontPx = constraints.maxWidth * 0.99f / HEADER_FRAME_EM
+        val fontPx = constraints.maxWidth * HEADER_WIDTH_RATIO / HEADER_FRAME_EM
         val fontSize = with(density) { fontPx.toSp() }
         val layout = remember(surah.id, font, fontSize) {
             measurer.measure(
@@ -354,9 +365,7 @@ private fun SurahHeader(surah: Surah?, font: FontFamily, filter: ColorFilter?, o
                 .drawBehind {
                     val frameWidth = HEADER_FRAME_EM * fontPx
                     val x = (size.width - frameWidth) / 2f - HEADER_FRAME_LEFT_EM * fontPx
-                    scale(1f, HEADER_SCALE_Y, pivot = Offset(size.width / 2f, size.height / 2f)) {
-                        drawText(layout, topLeft = Offset(x, size.height / 2f - layout.firstBaseline))
-                    }
+                    drawText(layout, topLeft = Offset(x, size.height / 2f - layout.firstBaseline))
                 },
         )
     }

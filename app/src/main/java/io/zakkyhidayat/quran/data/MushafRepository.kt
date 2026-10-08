@@ -40,9 +40,9 @@ class MushafRepository(context: Context) {
     private fun words(first: Int, last: Int): List<Word> {
         val words = ArrayList<Word>(last - first + 1)
         db.rawQuery(
-            "SELECT text, surah, ayah FROM words WHERE id BETWEEN ? AND ? ORDER BY id",
+            "SELECT text, surah, ayah, is_end FROM words WHERE id BETWEEN ? AND ? ORDER BY id",
             arrayOf(first.toString(), last.toString()),
-        ).use { c -> while (c.moveToNext()) words += Word(c.getString(0), c.getInt(1), c.getInt(2)) }
+        ).use { c -> while (c.moveToNext()) words += Word(c.getString(0), c.getInt(1), c.getInt(2), c.getInt(3) == 1) }
         return words
     }
 

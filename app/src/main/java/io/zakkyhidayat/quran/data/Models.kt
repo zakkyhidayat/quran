@@ -2,7 +2,7 @@ package io.zakkyhidayat.quran.data
 
 enum class LineType { Ayah, SurahName, Basmallah }
 
-data class Word(val text: String, val surah: Int, val ayah: Int)
+data class Word(val text: String, val surah: Int, val ayah: Int, val isEnd: Boolean = false)
 
 data class PageLine(
     val number: Int,

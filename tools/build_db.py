@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "data-src"
 OUT = Path(sys.argv[2]) if len(sys.argv) > 2 else ROOT / "app/src/main/assets/quran.db"
 
-DATA_VERSION = 7
+DATA_VERSION = 8
 
 TRANSLATIONS = [
     # id, lang, nama tampil, sumber, folder
@@ -188,7 +188,7 @@ CREATE TABLE page_lines (
 ) WITHOUT ROWID;
 CREATE TABLE words (
     id INTEGER PRIMARY KEY, surah INTEGER NOT NULL, ayah INTEGER NOT NULL, pos INTEGER NOT NULL,
-    text TEXT NOT NULL, page INTEGER NOT NULL, line INTEGER NOT NULL
+    text TEXT NOT NULL, page INTEGER NOT NULL, line INTEGER NOT NULL, is_end INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX words_ayah ON words (surah, ayah);
 CREATE TABLE ayahs (
@@ -376,7 +376,9 @@ def main():
 
     for wid, surah, ayah, pos, text in words_src.execute("SELECT id, surah, ayah, word, text FROM words ORDER BY id"):
         page, line = word_page[wid]
-        db.execute("INSERT INTO words VALUES (?,?,?,?,?,?,?)", (wid, surah, ayah, pos, text, page, line))
+        db.execute("INSERT INTO words VALUES (?,?,?,?,?,?,?,0)", (wid, surah, ayah, pos, text, page, line))
+    # Kata terakhir tiap ayat adalah penanda nomor ayat (lingkaran berwarna di font V4).
+    db.execute("UPDATE words SET is_end = 1 WHERE id IN (SELECT MAX(id) FROM words GROUP BY surah, ayah)")
 
     for surah, ayah, text in hafs.execute("SELECT surah, ayah, text FROM verses ORDER BY surah, ayah"):
         page = db.execute("SELECT page FROM words WHERE surah=? AND ayah=? ORDER BY pos LIMIT 1", (surah, ayah)).fetchone()[0]
