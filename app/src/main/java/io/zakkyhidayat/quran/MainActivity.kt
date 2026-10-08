@@ -43,7 +43,9 @@ class MainActivity : ComponentActivity() {
                 val style = if (dark) SystemBarStyle.dark(Color.TRANSPARENT) else SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
                 enableEdgeToEdge(statusBarStyle = style, navigationBarStyle = style)
             }
-            QuranTheme(settings) { AppNav(vm, settings) }
+            QuranTheme(settings) {
+                if (settings.onboardingDone) AppNav(vm, settings) else io.zakkyhidayat.quran.onboarding.OnboardingScreen(vm, settings)
+            }
         }
     }
 }

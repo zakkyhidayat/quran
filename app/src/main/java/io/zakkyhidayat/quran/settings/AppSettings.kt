@@ -29,6 +29,8 @@ data class AppSettings(
     val showTransliteration: Boolean = true,
     val translationIds: List<String> = listOf("id-kemenag"),
     val readingMode: ReadingMode = ReadingMode.Mushaf,
+    val onboardingDone: Boolean = false,
+    val gestureHintDone: Boolean = false,
     val lastPage: Int = 1,
     val lastSurah: Int = 0,
     val lastAyah: Int = 0,
@@ -45,6 +47,8 @@ class SettingsRepository(private val context: Context) {
     private val transliterationKey = booleanPreferencesKey("transliteration")
     private val translationsKey = stringPreferencesKey("translations")
     private val readingModeKey = stringPreferencesKey("reading_mode")
+    private val onboardingKey = booleanPreferencesKey("onboarding_done")
+    private val gestureHintKey = booleanPreferencesKey("gesture_hint_done")
     private val lastPageKey = intPreferencesKey("last_page")
     private val lastSurahKey = intPreferencesKey("last_surah")
     private val lastAyahKey = intPreferencesKey("last_ayah")
@@ -59,6 +63,9 @@ class SettingsRepository(private val context: Context) {
             showTransliteration = prefs[transliterationKey] ?: true,
             translationIds = prefs[translationsKey]?.split(',')?.filter { it.isNotBlank() } ?: defaultTranslations(),
             readingMode = prefs[readingModeKey].toEnum(ReadingMode.Mushaf),
+            // Pengguna lama (sudah pernah membaca) tidak perlu onboarding maupun petunjuk gerakan.
+            onboardingDone = prefs[onboardingKey] ?: (prefs[lastPageKey] != null),
+            gestureHintDone = prefs[gestureHintKey] ?: (prefs[lastPageKey] != null),
             lastPage = prefs[lastPageKey] ?: 1,
             lastSurah = prefs[lastSurahKey] ?: 0,
             lastAyah = prefs[lastAyahKey] ?: 0,
@@ -86,6 +93,10 @@ class SettingsRepository(private val context: Context) {
     suspend fun setShowTransliteration(value: Boolean) = context.dataStore.edit { it[transliterationKey] = value }
 
     suspend fun setTranslations(ids: List<String>) = context.dataStore.edit { it[translationsKey] = ids.joinToString(",") }
+
+    suspend fun setOnboardingDone() = context.dataStore.edit { it[onboardingKey] = true }
+
+    suspend fun setGestureHintDone() = context.dataStore.edit { it[gestureHintKey] = true }
 
     suspend fun setReadingMode(value: ReadingMode) = context.dataStore.edit { it[readingModeKey] = value.name }
 

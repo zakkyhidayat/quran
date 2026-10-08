@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.material3.Surface
+import androidx.compose.material3.TextButton
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.layout.heightIn
@@ -319,6 +320,9 @@ fun ReaderScreen(
                     }
                 }
             }
+            if (!listMode && !settings.gestureHintDone) {
+                GestureHint { scope.launch { vm.settingsRepository.setGestureHintDone() } }
+            }
             // Pill cara baca di barisnya sendiri, jadi tidak menutupi halaman; tinggi halaman menyesuaikan.
             ReadingModeBar(mode) { scope.launch { vm.settingsRepository.setReadingMode(it) } }
         }
@@ -389,6 +393,26 @@ private fun ReadingModeBar(mode: ReadingMode, onSelect: (ReadingMode) -> Unit) {
                     }
                 }
             }
+        }
+    }
+}
+
+// Petunjuk sekali untuk pengguna baru, di baris sendiri di atas pill (tidak menutupi halaman).
+@Composable
+private fun GestureHint(onDismiss: () -> Unit) {
+    Surface(
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.secondaryContainer,
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+    ) {
+        Row(Modifier.padding(start = 16.dp, end = 8.dp, top = 12.dp, bottom = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(stringResource(R.string.hint_title), style = MaterialTheme.typography.titleSmall)
+                listOf(R.string.hint_swipe, R.string.hint_tap_ayah, R.string.hint_tap_surah).forEach {
+                    Text("• " + stringResource(it), style = MaterialTheme.typography.bodyMedium)
+                }
+            }
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.hint_ok)) }
         }
     }
 }

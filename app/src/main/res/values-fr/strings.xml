@@ -140,4 +140,21 @@
     <string name="mode_mushaf">Mushaf</string>
     <string name="mode_ayah_translation">Verset + traduction</string>
     <string name="mode_translation">Traduction</string>
+    <string name="onb_step">Étape %1$d sur %2$d</string>
+    <string name="onb_skip">Passer</string>
+    <string name="onb_next">Suivant</string>
+    <string name="onb_start">Commencer la lecture</string>
+    <string name="onb_welcome_title">Assalamu’alaykum</string>
+    <string name="onb_welcome_body">Bienvenue. Cette application sert à lire le Coran dans le mushaf de Médine. Choisissez d’abord la langue de l’application.</string>
+    <string name="onb_mushaf_title">À propos de ce mushaf</string>
+    <string name="onb_mushaf_body">Les pages suivent le mushaf de Médine imprimé par le Complexe du Roi Fahd : écriture uthmanie, lecture de Hafs, 604 pages de 15 lignes. Si vous êtes habitué à l’écriture indo-pakistanaise, les lettres et la mise en page paraîtront différentes.</string>
+    <string name="onb_translation_title">Traductions</string>
+    <string name="onb_translation_body">Les traductions sont téléchargées quand vous les ajoutez, pour que l’application reste légère. Vous pouvez aussi lire sans traduction.</string>
+    <string name="onb_appearance_title">Apparence</string>
+    <string name="onb_appearance_body">Choisissez un thème et des couleurs. Vous pourrez tout modifier plus tard dans les Paramètres.</string>
+    <string name="hint_title">Comment lire</string>
+    <string name="hint_swipe">Balayez sur le côté pour tourner les pages</string>
+    <string name="hint_tap_ayah">Touchez un verset pour sa traduction</string>
+    <string name="hint_tap_surah">Touchez le nom d’une sourate pour ses infos</string>
+    <string name="hint_ok">Compris</string>
 </resources>

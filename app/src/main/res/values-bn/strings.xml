@@ -140,4 +140,21 @@
     <string name="mode_mushaf">মুসহাফ</string>
     <string name="mode_ayah_translation">আয়াত + অনুবাদ</string>
     <string name="mode_translation">অনুবাদ</string>
+    <string name="onb_step">ধাপ %1$d/%2$d</string>
+    <string name="onb_skip">এড়িয়ে যান</string>
+    <string name="onb_next">পরবর্তী</string>
+    <string name="onb_start">পড়া শুরু করুন</string>
+    <string name="onb_welcome_title">আসসালামু আলাইকুম</string>
+    <string name="onb_welcome_body">স্বাগতম। এই অ্যাপটি মদিনার মুসহাফে কুরআন পড়ার জন্য। প্রথমে অ্যাপের ভাষা বেছে নিন।</string>
+    <string name="onb_mushaf_title">এই মুসহাফ সম্পর্কে</string>
+    <string name="onb_mushaf_body">পৃষ্ঠাগুলো বাদশাহ ফাহাদ কমপ্লেক্সের ছাপা মদিনার মুসহাফ অনুযায়ী: উসমানি লিপি, হাফস রেওয়ায়াত, ১৫ লাইনের ৬০৪ পৃষ্ঠা। আপনি ইন্দো-পাক লিপিতে অভ্যস্ত হলে অক্ষর ও পৃষ্ঠার বিন্যাস ভিন্ন দেখাবে।</string>
+    <string name="onb_translation_title">অনুবাদ</string>
+    <string name="onb_translation_body">অনুবাদ যোগ করলে তখনই ডাউনলোড হয়, তাই অ্যাপটি হালকা থাকে। অনুবাদ ছাড়াও পড়তে পারেন।</string>
+    <string name="onb_appearance_title">চেহারা</string>
+    <string name="onb_appearance_body">থিম ও রং বেছে নিন। পরে সেটিংস থেকে সব বদলাতে পারবেন।</string>
+    <string name="hint_title">কীভাবে পড়বেন</string>
+    <string name="hint_swipe">পৃষ্ঠা উল্টাতে পাশে সোয়াইপ করুন</string>
+    <string name="hint_tap_ayah">অনুবাদ দেখতে আয়াতে ট্যাপ করুন</string>
+    <string name="hint_tap_surah">সূরার তথ্যের জন্য নামে ট্যাপ করুন</string>
+    <string name="hint_ok">বুঝেছি</string>
 </resources>

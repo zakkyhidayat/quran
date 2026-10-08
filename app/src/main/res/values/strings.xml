@@ -141,4 +141,21 @@
     <string name="mode_mushaf">Mushaf</string>
     <string name="mode_ayah_translation">Ayah + translation</string>
     <string name="mode_translation">Translation</string>
+    <string name="onb_step">Step %1$d of %2$d</string>
+    <string name="onb_skip">Skip</string>
+    <string name="onb_next">Next</string>
+    <string name="onb_start">Start reading</string>
+    <string name="onb_welcome_title">Assalamu’alaikum</string>
+    <string name="onb_welcome_body">Welcome. This app is for reading the Qur’an in the Madani mushaf. First, choose the language of the app.</string>
+    <string name="onb_mushaf_title">About this mushaf</string>
+    <string name="onb_mushaf_body">Pages follow the Madani mushaf printed by the King Fahd Complex: Uthmani script, riwayah Hafs, 604 pages of 15 lines. If you are used to the IndoPak script or the Indonesian Standard Mushaf, the letters and page layout will look different.</string>
+    <string name="onb_translation_title">Translations</string>
+    <string name="onb_translation_body">Translations are downloaded when you add them, so the app stays small. You can also read without a translation.</string>
+    <string name="onb_appearance_title">Appearance</string>
+    <string name="onb_appearance_body">Choose a theme and colours. You can change everything later in Settings.</string>
+    <string name="hint_title">How to read</string>
+    <string name="hint_swipe">Swipe sideways to turn pages</string>
+    <string name="hint_tap_ayah">Tap an ayah for its translation</string>
+    <string name="hint_tap_surah">Tap a surah name for surah info</string>
+    <string name="hint_ok">Got it</string>
 </resources>

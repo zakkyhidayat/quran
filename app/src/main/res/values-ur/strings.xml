@@ -140,4 +140,21 @@
     <string name="mode_mushaf">مصحف</string>
     <string name="mode_ayah_translation">آیت + ترجمہ</string>
     <string name="mode_translation">ترجمہ</string>
+    <string name="onb_step">مرحلہ %1$d از %2$d</string>
+    <string name="onb_skip">چھوڑیں</string>
+    <string name="onb_next">آگے</string>
+    <string name="onb_start">پڑھنا شروع کریں</string>
+    <string name="onb_welcome_title">السلام علیکم</string>
+    <string name="onb_welcome_body">خوش آمدید۔ یہ ایپ مدنی مصحف میں قرآن مجید پڑھنے کے لیے ہے۔ پہلے ایپ کی زبان منتخب کریں۔</string>
+    <string name="onb_mushaf_title">اس مصحف کے بارے میں</string>
+    <string name="onb_mushaf_body">صفحات شاہ فہد کمپلیکس کے چھاپے ہوئے مدنی مصحف کے مطابق ہیں: رسمِ عثمانی، روایتِ حفص، 15 سطروں کے 604 صفحات۔ اگر آپ انڈو پاک رسم الخط کے عادی ہیں تو حروف اور صفحات کی ترتیب مختلف نظر آئے گی۔</string>
+    <string name="onb_translation_title">ترجمے</string>
+    <string name="onb_translation_body">ترجمے شامل کرنے پر ڈاؤن لوڈ ہوتے ہیں، اس لیے ایپ ہلکی رہتی ہے۔ آپ بغیر ترجمے کے بھی پڑھ سکتے ہیں۔</string>
+    <string name="onb_appearance_title">ظاہری شکل</string>
+    <string name="onb_appearance_body">تھیم اور رنگ منتخب کریں۔ بعد میں ترتیبات سے سب کچھ بدل سکتے ہیں۔</string>
+    <string name="hint_title">پڑھنے کا طریقہ</string>
+    <string name="hint_swipe">صفحہ پلٹنے کے لیے دائیں بائیں سوائپ کریں</string>
+    <string name="hint_tap_ayah">ترجمہ دیکھنے کے لیے آیت پر تھپتھپائیں</string>
+    <string name="hint_tap_surah">سورہ کی معلومات کے لیے اس کے نام پر تھپتھپائیں</string>
+    <string name="hint_ok">سمجھ گیا</string>
 </resources>

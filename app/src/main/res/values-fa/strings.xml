@@ -140,4 +140,21 @@
     <string name="mode_mushaf">مصحف</string>
     <string name="mode_ayah_translation">آیه + ترجمه</string>
     <string name="mode_translation">ترجمه</string>
+    <string name="onb_step">گام %1$d از %2$d</string>
+    <string name="onb_skip">رد شدن</string>
+    <string name="onb_next">بعدی</string>
+    <string name="onb_start">شروع خواندن</string>
+    <string name="onb_welcome_title">السلام علیکم</string>
+    <string name="onb_welcome_body">خوش آمدید. این برنامه برای خواندن قرآن با مصحف مدینه است. ابتدا زبان برنامه را انتخاب کنید.</string>
+    <string name="onb_mushaf_title">دربارهٔ این مصحف</string>
+    <string name="onb_mushaf_body">صفحه‌ها مطابق مصحف مدینه چاپ مجتمع ملک فهد است: رسم عثمانی، روایت حفص، ۶۰۴ صفحهٔ ۱۵ سطری. اگر به خط هندی‌پاکستانی عادت دارید، حروف و چیدمان صفحه متفاوت به نظر می‌رسد.</string>
+    <string name="onb_translation_title">ترجمه‌ها</string>
+    <string name="onb_translation_body">ترجمه‌ها هنگام افزودن بارگیری می‌شوند تا برنامه کم‌حجم بماند. بدون ترجمه هم می‌توانید بخوانید.</string>
+    <string name="onb_appearance_title">ظاهر</string>
+    <string name="onb_appearance_body">پوسته و رنگ‌ها را انتخاب کنید. بعدًا همه را از تنظیمات می‌توانید تغییر دهید.</string>
+    <string name="hint_title">روش خواندن</string>
+    <string name="hint_swipe">برای ورق زدن به پهلو بکشید</string>
+    <string name="hint_tap_ayah">برای دیدن ترجمه روی آیه ضربه بزنید</string>
+    <string name="hint_tap_surah">برای اطلاعات سوره روی نامش ضربه بزنید</string>
+    <string name="hint_ok">متوجه شدم</string>
 </resources>

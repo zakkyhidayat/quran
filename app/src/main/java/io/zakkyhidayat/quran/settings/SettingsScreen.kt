@@ -84,16 +84,11 @@ import kotlinx.coroutines.launch
 fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) {
     val repo = vm.settingsRepository
     val scope = rememberCoroutineScope()
-    val translations by vm.translations.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val version = remember(context) {
         runCatching { context.packageManager.getPackageInfo(context.packageName, 0).versionName }.getOrNull().orEmpty()
     }
     val dynamicSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-    var showAddTranslation by rememberSaveable { mutableStateOf(false) }
-    val dark = MaterialTheme.colorScheme.background.luminance() < 0.5f
-    val dynamicPreview = if (dynamicSupported) (if (dark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)) else null
-    val originalPreview = originalColorScheme(dark, settings.contrast)
 
     Scaffold(
         topBar = {
@@ -109,71 +104,7 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
 
                 SectionTitle(AppIcons.Palette, stringResource(R.string.appearance))
 
-                Labeled(stringResource(R.string.theme)) {
-                    val options = listOf(
-                        Triple(ThemeMode.System, stringResource(R.string.theme_system), AppIcons.BrightnessAuto),
-                        Triple(ThemeMode.Light, stringResource(R.string.theme_light), AppIcons.LightMode),
-                        Triple(ThemeMode.Dark, stringResource(R.string.theme_dark), AppIcons.DarkMode),
-                    )
-                    SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-                        options.forEachIndexed { i, (mode, label, icon) ->
-                            SegmentedButton(
-                                selected = settings.themeMode == mode,
-                                onClick = { scope.launch { repo.setThemeMode(mode) } },
-                                shape = SegmentedButtonDefaults.itemShape(i, options.size),
-                                icon = { Icon(icon, contentDescription = null, modifier = Modifier.size(SegmentedButtonDefaults.IconSize)) },
-                            ) { Text(label) }
-                        }
-                    }
-                }
-
-                Labeled(stringResource(R.string.color_palette)) {
-                    Row(Modifier.fillMaxWidth().height(IntrinsicSize.Max), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        PaletteCard(
-                            modifier = Modifier.weight(1f).fillMaxHeight(),
-                            title = stringResource(R.string.palette_dynamic),
-                            icon = AppIcons.AutoAwesome,
-                            selected = settings.colorMode == ColorMode.Dynamic && dynamicSupported,
-                            enabled = dynamicSupported,
-                            scheme = dynamicPreview,
-                            caption = if (dynamicSupported) stringResource(R.string.from_wallpaper) else stringResource(R.string.needs_android12),
-                            onClick = { scope.launch { repo.setColorMode(ColorMode.Dynamic) } },
-                        )
-                        PaletteCard(
-                            modifier = Modifier.weight(1f).fillMaxHeight(),
-                            title = stringResource(R.string.palette_original),
-                            icon = AppIcons.Palette,
-                            selected = settings.colorMode == ColorMode.Original || !dynamicSupported,
-                            enabled = true,
-                            scheme = originalPreview,
-                            caption = stringResource(R.string.classic_teal),
-                            onClick = { scope.launch { repo.setColorMode(ColorMode.Original) } },
-                        )
-                    }
-                }
-
-                Labeled(stringResource(R.string.contrast)) {
-                    val options = listOf(ContrastLevel.Standard to stringResource(R.string.contrast_standard), ContrastLevel.Medium to stringResource(R.string.contrast_medium), ContrastLevel.High to stringResource(R.string.contrast_high))
-                    val usesDynamic = settings.colorMode == ColorMode.Dynamic && dynamicSupported
-                    SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-                        options.forEachIndexed { i, (level, label) ->
-                            SegmentedButton(
-                                selected = settings.contrast == level,
-                                onClick = { scope.launch { repo.setContrast(level) } },
-                                enabled = !usesDynamic,
-                                shape = SegmentedButtonDefaults.itemShape(i, options.size),
-                            ) { Text(label) }
-                        }
-                    }
-                    if (usesDynamic) {
-                        Text(
-                            stringResource(R.string.contrast_note),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(top = 4.dp),
-                        )
-                    }
-                }
+                AppearanceControls(vm, settings)
 
                 Spacer(Modifier.height(8.dp))
                 Group {
@@ -201,38 +132,7 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
                 }
 
                 SectionTitle(AppIcons.Translate, stringResource(R.string.translations))
-                val ordered = translations.map { it.id }
-                val active = translations.filter { it.id in settings.translationIds }
-                val inactive = translations.filter { it.id !in settings.translationIds }
-                Group {
-                    active.forEach { tr ->
-                        item(
-                            title = translationLabel(tr),
-                            trailing = {
-                                IconButton(
-                                    onClick = { scope.launch { repo.setTranslations(ordered.filter { it in settings.translationIds && it != tr.id }) } },
-                                ) { Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete_translation_cd, translationLabel(tr))) }
-                            },
-                        )
-                    }
-                }
-                FilledTonalButton(onClick = { showAddTranslation = true }, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
-                    Icon(Icons.Default.Add, contentDescription = null)
-                    Text("  " + stringResource(R.string.add_translation))
-                }
-                if (showAddTranslation) {
-                    AddTranslationDialog(
-                        vm = vm,
-                        inactive = inactive,
-                        onActivate = { id ->
-                            // Urutan mengikuti daftar terjemahan terbaru (paket yang baru diunduh sudah masuk).
-                            val all = vm.translations.value.map { it.id }
-                            scope.launch { repo.setTranslations(all.filter { it in settings.translationIds || it == id }) }
-                            showAddTranslation = false
-                        },
-                        onDismiss = { showAddTranslation = false },
-                    )
-                }
+                TranslationControls(vm, settings)
 
                 SectionTitle(Icons.Default.Info, stringResource(R.string.about))
                 Group {
@@ -412,14 +312,14 @@ private fun openUrl(context: android.content.Context, url: String) {
 }
 
 @Composable
-private fun LanguageSection() {
+internal fun LanguageSection(showTitle: Boolean = true) {
     val context = LocalContext.current
     var code by remember { mutableStateOf(AppLanguage.saved(context)) }
     var open by rememberSaveable { mutableStateOf(false) }
     // Nama bahasa ditulis dalam bahasanya sendiri agar mudah ditemukan apa pun bahasa yang sedang aktif.
     val systemLabel = stringResource(R.string.language_system)
     val options = listOf("" to systemLabel) + AppLanguage.supported.map { it to AppLanguage.endonyms.getValue(it) }
-    SectionTitle(AppIcons.Translate, stringResource(R.string.language))
+    if (showTitle) SectionTitle(AppIcons.Translate, stringResource(R.string.language))
     Group {
         item(
             title = options.first { it.first == code }.second,
@@ -455,6 +355,143 @@ private fun LanguageSection() {
                 }
             },
             confirmButton = { TextButton(onClick = { open = false }) { Text(stringResource(R.string.close)) } },
+        )
+    }
+}
+
+/** Tema, palet warna, dan kontras. Dipakai di Pengaturan dan onboarding. */
+@Composable
+internal fun AppearanceControls(vm: AppViewModel, settings: AppSettings) {
+    val repo = vm.settingsRepository
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val dynamicSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    val dark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val dynamicPreview = if (dynamicSupported) (if (dark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)) else null
+    val originalPreview = originalColorScheme(dark, settings.contrast)
+    Column {
+        Labeled(stringResource(R.string.theme)) {
+            val options = listOf(
+                Triple(ThemeMode.System, stringResource(R.string.theme_system), AppIcons.BrightnessAuto),
+                Triple(ThemeMode.Light, stringResource(R.string.theme_light), AppIcons.LightMode),
+                Triple(ThemeMode.Dark, stringResource(R.string.theme_dark), AppIcons.DarkMode),
+            )
+            SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+                options.forEachIndexed { i, (mode, label, icon) ->
+                    SegmentedButton(
+                        selected = settings.themeMode == mode,
+                        onClick = { scope.launch { repo.setThemeMode(mode) } },
+                        shape = SegmentedButtonDefaults.itemShape(i, options.size),
+                        icon = { Icon(icon, contentDescription = null, modifier = Modifier.size(SegmentedButtonDefaults.IconSize)) },
+                    ) { Text(label) }
+                }
+            }
+        }
+
+        Labeled(stringResource(R.string.color_palette)) {
+            Row(Modifier.fillMaxWidth().height(IntrinsicSize.Max), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                PaletteCard(
+                    modifier = Modifier.weight(1f).fillMaxHeight(),
+                    title = stringResource(R.string.palette_dynamic),
+                    icon = AppIcons.AutoAwesome,
+                    selected = settings.colorMode == ColorMode.Dynamic && dynamicSupported,
+                    enabled = dynamicSupported,
+                    scheme = dynamicPreview,
+                    caption = if (dynamicSupported) stringResource(R.string.from_wallpaper) else stringResource(R.string.needs_android12),
+                    onClick = { scope.launch { repo.setColorMode(ColorMode.Dynamic) } },
+                )
+                PaletteCard(
+                    modifier = Modifier.weight(1f).fillMaxHeight(),
+                    title = stringResource(R.string.palette_original),
+                    icon = AppIcons.Palette,
+                    selected = settings.colorMode == ColorMode.Original || !dynamicSupported,
+                    enabled = true,
+                    scheme = originalPreview,
+                    caption = stringResource(R.string.classic_teal),
+                    onClick = { scope.launch { repo.setColorMode(ColorMode.Original) } },
+                )
+            }
+        }
+
+        Labeled(stringResource(R.string.contrast)) {
+            val options = listOf(ContrastLevel.Standard to stringResource(R.string.contrast_standard), ContrastLevel.Medium to stringResource(R.string.contrast_medium), ContrastLevel.High to stringResource(R.string.contrast_high))
+            val usesDynamic = settings.colorMode == ColorMode.Dynamic && dynamicSupported
+            SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+                options.forEachIndexed { i, (level, label) ->
+                    SegmentedButton(
+                        selected = settings.contrast == level,
+                        onClick = { scope.launch { repo.setContrast(level) } },
+                        enabled = !usesDynamic,
+                        shape = SegmentedButtonDefaults.itemShape(i, options.size),
+                    ) { Text(label) }
+                }
+            }
+            if (usesDynamic) {
+                Text(
+                    stringResource(R.string.contrast_note),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 4.dp),
+                )
+            }
+        }
+    }
+}
+
+/** Daftar terjemahan aktif (dengan tombol hapus) dan tombol tambah. Dipakai di Pengaturan dan onboarding. */
+@Composable
+internal fun TranslationControls(vm: AppViewModel, settings: AppSettings) {
+    val repo = vm.settingsRepository
+    val scope = rememberCoroutineScope()
+    val translations by vm.translations.collectAsStateWithLifecycle()
+    var showAddTranslation by rememberSaveable { mutableStateOf(false) }
+    Column {
+        val ordered = translations.map { it.id }
+        val active = translations.filter { it.id in settings.translationIds }
+        val inactive = translations.filter { it.id !in settings.translationIds }
+        Group {
+            active.forEach { tr ->
+                item(
+                    title = translationLabel(tr),
+                    trailing = {
+                        IconButton(
+                            onClick = { scope.launch { repo.setTranslations(ordered.filter { it in settings.translationIds && it != tr.id }) } },
+                        ) { Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete_translation_cd, translationLabel(tr))) }
+                    },
+                )
+            }
+        }
+        FilledTonalButton(onClick = { showAddTranslation = true }, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
+            Icon(Icons.Default.Add, contentDescription = null)
+            Text("  " + stringResource(R.string.add_translation))
+        }
+        if (showAddTranslation) {
+            AddTranslationDialog(
+                vm = vm,
+                inactive = inactive,
+                onActivate = { id ->
+                    // Urutan mengikuti daftar terjemahan terbaru (paket yang baru diunduh sudah masuk).
+                    val all = vm.translations.value.map { it.id }
+                    scope.launch { repo.setTranslations(all.filter { it in settings.translationIds || it == id }) }
+                    showAddTranslation = false
+                },
+                onDismiss = { showAddTranslation = false },
+            )
+        }
+    }
+}
+
+/** Sakelar warna tajwid sebagai satu baris berkelompok. */
+@Composable
+internal fun TajweedToggle(vm: AppViewModel, settings: AppSettings) {
+    val scope = rememberCoroutineScope()
+    Group {
+        item(
+            title = stringResource(R.string.tajweed_title),
+            subtitle = stringResource(R.string.tajweed_sub),
+            onClick = { scope.launch { vm.settingsRepository.setTajweed(!settings.tajweed) } },
+            leading = { Icon(AppIcons.FormatColorText, contentDescription = null) },
+            trailing = { IconSwitch(settings.tajweed) },
         )
     }
 }

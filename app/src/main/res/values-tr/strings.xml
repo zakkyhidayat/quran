@@ -140,4 +140,21 @@
     <string name="mode_mushaf">Mushaf</string>
     <string name="mode_ayah_translation">Ayet + meal</string>
     <string name="mode_translation">Meal</string>
+    <string name="onb_step">Adım %1$d / %2$d</string>
+    <string name="onb_skip">Atla</string>
+    <string name="onb_next">İleri</string>
+    <string name="onb_start">Okumaya başla</string>
+    <string name="onb_welcome_title">Esselâmü aleyküm</string>
+    <string name="onb_welcome_body">Hoş geldiniz. Bu uygulama Kur’an’ı Medine mushafıyla okumak içindir. Önce uygulamanın dilini seçin.</string>
+    <string name="onb_mushaf_title">Bu mushaf hakkında</string>
+    <string name="onb_mushaf_body">Sayfalar Kral Fahd Kompleksi’nin bastığı Medine mushafını izler: Osmanlı hattı, Hafs rivayeti, 15 satırlık 604 sayfa. Hint-Pakistan hattına alışkınsanız harfler ve sayfa düzeni farklı görünecektir.</string>
+    <string name="onb_translation_title">Mealler</string>
+    <string name="onb_translation_body">Mealler eklediğinizde indirilir, böylece uygulama küçük kalır. Meal olmadan da okuyabilirsiniz.</string>
+    <string name="onb_appearance_title">Görünüm</string>
+    <string name="onb_appearance_body">Bir tema ve renkler seçin. Her şeyi daha sonra Ayarlar’dan değiştirebilirsiniz.</string>
+    <string name="hint_title">Nasıl okunur</string>
+    <string name="hint_swipe">Sayfa çevirmek için yana kaydırın</string>
+    <string name="hint_tap_ayah">Meali için bir ayete dokunun</string>
+    <string name="hint_tap_surah">Sure bilgisi için sure adına dokunun</string>
+    <string name="hint_ok">Anladım</string>
 </resources>

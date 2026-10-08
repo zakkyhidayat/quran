@@ -140,4 +140,21 @@
     <string name="mode_mushaf">Mushaf</string>
     <string name="mode_ayah_translation">Ayat + terjemahan</string>
     <string name="mode_translation">Terjemahan</string>
+    <string name="onb_step">Langkah %1$d daripada %2$d</string>
+    <string name="onb_skip">Langkau</string>
+    <string name="onb_next">Seterusnya</string>
+    <string name="onb_start">Mula membaca</string>
+    <string name="onb_welcome_title">Assalamualaikum</string>
+    <string name="onb_welcome_body">Selamat datang. Aplikasi ini untuk membaca al-Quran dengan mushaf Madinah. Mula-mula, pilih bahasa aplikasi.</string>
+    <string name="onb_mushaf_title">Tentang mushaf ini</string>
+    <string name="onb_mushaf_body">Halaman mengikut mushaf Madinah cetakan Kompleks Raja Fahd: rasm Uthmani, riwayat Hafs, 604 halaman 15 baris. Jika anda biasa dengan tulisan IndoPak, bentuk huruf dan susun atur halaman akan kelihatan berbeza.</string>
+    <string name="onb_translation_title">Terjemahan</string>
+    <string name="onb_translation_body">Terjemahan dimuat turun apabila anda menambahnya, jadi aplikasi kekal kecil. Anda juga boleh membaca tanpa terjemahan.</string>
+    <string name="onb_appearance_title">Penampilan</string>
+    <string name="onb_appearance_body">Pilih tema dan warna. Semuanya boleh diubah kemudian dalam Tetapan.</string>
+    <string name="hint_title">Cara membaca</string>
+    <string name="hint_swipe">Leret ke sisi untuk menukar halaman</string>
+    <string name="hint_tap_ayah">Ketik ayat untuk terjemahannya</string>
+    <string name="hint_tap_surah">Ketik nama surah untuk maklumat surah</string>
+    <string name="hint_ok">Faham</string>
 </resources>

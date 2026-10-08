@@ -140,4 +140,21 @@
     <string name="mode_mushaf">Мусхаф</string>
     <string name="mode_ayah_translation">Аят + перевод</string>
     <string name="mode_translation">Перевод</string>
+    <string name="onb_step">Шаг %1$d из %2$d</string>
+    <string name="onb_skip">Пропустить</string>
+    <string name="onb_next">Далее</string>
+    <string name="onb_start">Начать чтение</string>
+    <string name="onb_welcome_title">Ассаляму алейкум</string>
+    <string name="onb_welcome_body">Добро пожаловать. Это приложение для чтения Корана по мединскому мусхафу. Сначала выберите язык приложения.</string>
+    <string name="onb_mushaf_title">Об этом мусхафе</string>
+    <string name="onb_mushaf_body">Страницы повторяют мединский мусхаф, напечатанный Комплексом короля Фахда: османское письмо, чтение Хафса, 604 страницы по 15 строк. Если вы привыкли к индо-пакистанскому письму, буквы и вёрстка будут выглядеть иначе.</string>
+    <string name="onb_translation_title">Переводы</string>
+    <string name="onb_translation_body">Переводы скачиваются при добавлении, поэтому приложение остаётся лёгким. Читать можно и без перевода.</string>
+    <string name="onb_appearance_title">Оформление</string>
+    <string name="onb_appearance_body">Выберите тему и цвета. Всё можно изменить позже в настройках.</string>
+    <string name="hint_title">Как читать</string>
+    <string name="hint_swipe">Листайте в сторону, чтобы перелистывать страницы</string>
+    <string name="hint_tap_ayah">Нажмите на аят, чтобы увидеть перевод</string>
+    <string name="hint_tap_surah">Нажмите на название суры, чтобы узнать о ней</string>
+    <string name="hint_ok">Понятно</string>
 </resources>
