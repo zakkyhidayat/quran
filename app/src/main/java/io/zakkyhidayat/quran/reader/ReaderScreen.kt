@@ -144,31 +144,25 @@ fun ReaderScreen(
     val pagerState = rememberPagerState(initialPage = startPage - 1) { PAGE_COUNT }
     val mode = settings.readingMode
     val listMode = mode != ReadingMode.Mushaf
-    // Mode daftar: halaman ayat teratas yang terlihat, dan tujuan gulir (halaman + ayat) saat melompat.
-    var listPage by remember { mutableIntStateOf(startPage) }
-    var listTarget by remember { mutableStateOf(startPage to vm.selected.value) }
-    val currentPage by remember(listMode) { derivedStateOf { if (listMode) listPage else pagerState.currentPage + 1 } }
+    // Mode daftar punya pager sendiri (satu layar = satu halaman mushaf); posisinya disamakan saat berganti mode.
+    val listPagerState = rememberPagerState(initialPage = startPage - 1) { PAGE_COUNT }
+    val activePager = if (listMode) listPagerState else pagerState
+    val currentPage by remember(listMode) { derivedStateOf { activePager.currentPage + 1 } }
+    // Ayat tujuan di mode daftar (lompat ke ayat, baca terakhir): halaman itu digulir sampai ayatnya terlihat.
+    var listTargetAyah by remember { mutableStateOf(vm.selected.value) }
 
     LaunchedEffect(listMode) {
         vm.pendingPage.collect { page ->
             if (page != null) {
-                if (listMode) {
-                    listTarget = page to vm.selected.value
-                } else {
-                    pagerState.scrollToPage(page - 1)
-                }
+                if (listMode) listTargetAyah = vm.selected.value
+                activePager.scrollToPage(page - 1)
                 vm.pendingPage.value = null
             }
         }
     }
-    // Berpindah mode tetap di posisi yang sama.
+    // Berpindah mode tetap di halaman yang sama.
     LaunchedEffect(listMode) {
-        if (listMode) {
-            listPage = pagerState.currentPage + 1
-            listTarget = listPage to vm.selected.value
-        } else {
-            pagerState.scrollToPage(listPage - 1)
-        }
+        if (listMode) listPagerState.scrollToPage(pagerState.currentPage) else pagerState.scrollToPage(listPagerState.currentPage)
     }
     val prefetchContext = LocalContext.current
     val prefetchPalette = GlyphPalette.of(settings.tajweed, MaterialTheme.colorScheme.background.luminance() < 0.5f)
@@ -177,9 +171,9 @@ fun ReaderScreen(
             withContext(Dispatchers.IO) { prefetchPageFonts(prefetchContext, page, prefetchPalette) }
         }
     }
+    // Baca terakhir mengikuti pager yang sedang aktif (mushaf atau daftar).
     LaunchedEffect(listMode) {
-        if (listMode) return@LaunchedEffect
-        snapshotFlow { pagerState.currentPage }.collectLatest { index ->
+        snapshotFlow { activePager.currentPage }.collectLatest { index ->
             vm.currentPage.value = index + 1
             delay(600)
             val page = index + 1
@@ -191,8 +185,6 @@ fun ReaderScreen(
     }
 
     var showJump by remember { mutableStateOf(false) }
-    // Penulisan posisi dari mode daftar ditunda dan digabung, seperti di mode mushaf.
-    var positionWrite by remember { mutableStateOf<kotlinx.coroutines.Job?>(null) }
     val motion = MaterialTheme.motionScheme
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -359,20 +351,8 @@ fun ReaderScreen(
                     surahs = surahs,
                     translationIds = settings.translationIds,
                     showArabic = mode == ReadingMode.AyahTranslation,
-                    targetPage = listTarget.first,
-                    targetAyah = listTarget.second,
-                    onPageChange = { page, first ->
-                        // Lapisan daftar yang tersembunyi (disiapkan di belakang) tidak boleh mengubah posisi baca.
-                        if (listMode) {
-                            listPage = page
-                            vm.currentPage.value = page
-                            positionWrite?.cancel()
-                            positionWrite = scope.launch {
-                                delay(600)
-                                vm.settingsRepository.setPosition(page, first.surah, first.ayah)
-                            }
-                        }
-                    },
+                    state = listPagerState,
+                    targetAyah = listTargetAyah,
                     modifier = Modifier.fillMaxSize(),
                 )
             }
