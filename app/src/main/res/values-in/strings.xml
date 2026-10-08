@@ -188,4 +188,11 @@
     <string name="reminder_title">Waktunya membaca: %1$s</string>
     <string name="reminder_text">Lanjutkan dari %1$s %2$d:%3$d</string>
     <string name="ok">OK</string>
+    <string name="permissions">Izin</string>
+    <string name="perm_notifications">Notifikasi</string>
+    <string name="perm_notifications_sub">Dibutuhkan untuk pengingat membaca harian</string>
+    <string name="perm_install">Pasang aplikasi tak dikenal</string>
+    <string name="perm_install_sub">Dibutuhkan untuk memasang pembaruan aplikasi yang diunduh dari GitHub</string>
+    <string name="perm_granted">Diizinkan</string>
+    <string name="perm_denied">Belum diizinkan</string>
 </resources>

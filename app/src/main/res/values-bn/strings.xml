@@ -188,4 +188,11 @@
     <string name="reminder_title">পড়ার সময়: %1$s</string>
     <string name="reminder_text">%1$s %2$d:%3$d থেকে চালিয়ে যান</string>
     <string name="ok">ঠিক আছে</string>
+    <string name="permissions">অনুমতি</string>
+    <string name="perm_notifications">বিজ্ঞপ্তি</string>
+    <string name="perm_notifications_sub">দৈনিক পড়ার অনুস্মারকের জন্য প্রয়োজন</string>
+    <string name="perm_install">অজানা অ্যাপ ইনস্টল</string>
+    <string name="perm_install_sub">GitHub থেকে ডাউনলোড করা আপডেট ইনস্টল করতে প্রয়োজন</string>
+    <string name="perm_granted">অনুমোদিত</string>
+    <string name="perm_denied">অনুমোদিত নয়</string>
 </resources>

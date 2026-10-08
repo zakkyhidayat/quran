@@ -189,4 +189,11 @@
     <string name="reminder_title">Time to read: %1$s</string>
     <string name="reminder_text">Continue from %1$s %2$d:%3$d</string>
     <string name="ok">OK</string>
+    <string name="permissions">Permissions</string>
+    <string name="perm_notifications">Notifications</string>
+    <string name="perm_notifications_sub">Needed for the daily reading reminder</string>
+    <string name="perm_install">Install unknown apps</string>
+    <string name="perm_install_sub">Needed to install app updates downloaded from GitHub</string>
+    <string name="perm_granted">Allowed</string>
+    <string name="perm_denied">Not allowed</string>
 </resources>

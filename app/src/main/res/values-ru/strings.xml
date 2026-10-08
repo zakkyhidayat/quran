@@ -188,4 +188,11 @@
     <string name="reminder_title">Время читать: %1$s</string>
     <string name="reminder_text">Продолжить с %1$s %2$d:%3$d</string>
     <string name="ok">ОК</string>
+    <string name="permissions">Разрешения</string>
+    <string name="perm_notifications">Уведомления</string>
+    <string name="perm_notifications_sub">Нужны для ежедневного напоминания о чтении</string>
+    <string name="perm_install">Установка неизвестных приложений</string>
+    <string name="perm_install_sub">Нужно для установки обновлений, скачанных с GitHub</string>
+    <string name="perm_granted">Разрешено</string>
+    <string name="perm_denied">Не разрешено</string>
 </resources>

@@ -143,6 +143,9 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
                 SectionTitle(AppIcons.Backup, stringResource(R.string.backup))
                 BackupControls(vm, settings)
 
+                SectionTitle(AppIcons.Shield, stringResource(R.string.permissions))
+                PermissionControls()
+
                 SectionTitle(Icons.Default.Info, stringResource(R.string.about))
                 Group {
                     if (io.zakkyhidayat.quran.BuildConfig.UPDATER_ENABLED) {
@@ -693,6 +696,64 @@ private fun ReminderControls(vm: AppViewModel, settings: AppSettings) {
                 }) { Text(stringResource(R.string.ok)) }
             },
             dismissButton = { TextButton(onClick = { showTime = false }) { Text(stringResource(R.string.cancel)) } },
+        )
+    }
+}
+
+/**
+ * Status izin yang dibutuhkan aplikasi: notifikasi (pengingat membaca) dan, di varian GitHub, memasang aplikasi
+ * (pembaruan). Diperiksa ulang setiap kali layar kembali aktif, karena izin diubah di Pengaturan Android.
+ */
+@Composable
+private fun PermissionControls() {
+    val context = LocalContext.current
+    var notifications by remember { mutableStateOf(io.zakkyhidayat.quran.reminder.Reminder.canNotify(context)) }
+    var install by remember { mutableStateOf(io.zakkyhidayat.quran.data.Updater.canInstall(context)) }
+    androidx.lifecycle.compose.LifecycleResumeEffect(Unit) {
+        notifications = io.zakkyhidayat.quran.reminder.Reminder.canNotify(context)
+        install = io.zakkyhidayat.quran.data.Updater.canInstall(context)
+        onPauseOrDispose { }
+    }
+    Group {
+        item(
+            title = stringResource(R.string.perm_notifications),
+            subtitle = stringResource(R.string.perm_notifications_sub),
+            onClick = {
+                context.startActivity(
+                    android.content.Intent(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                        .putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, context.packageName),
+                )
+            },
+            leading = { Icon(AppIcons.Alarm, contentDescription = null) },
+            trailing = { PermissionStatus(notifications) },
+        )
+        if (io.zakkyhidayat.quran.BuildConfig.UPDATER_ENABLED) {
+            item(
+                title = stringResource(R.string.perm_install),
+                subtitle = stringResource(R.string.perm_install_sub),
+                onClick = { io.zakkyhidayat.quran.data.Updater.openInstallPermissionSettings(context) },
+                leading = { Icon(AppIcons.Download, contentDescription = null) },
+                trailing = { PermissionStatus(install) },
+            )
+        }
+    }
+}
+
+@Composable
+private fun PermissionStatus(granted: Boolean) {
+    val color = if (granted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            if (granted) Icons.Default.Check else AppIcons.Warning,
+            contentDescription = null,
+            tint = color,
+            modifier = Modifier.size(18.dp),
+        )
+        Spacer(Modifier.width(4.dp))
+        Text(
+            stringResource(if (granted) R.string.perm_granted else R.string.perm_denied),
+            style = MaterialTheme.typography.labelLarge,
+            color = color,
         )
     }
 }

@@ -188,4 +188,11 @@
     <string name="reminder_title">حان وقت القراءة: %1$s</string>
     <string name="reminder_text">تابع من %1$s %2$d:%3$d</string>
     <string name="ok">حسنًا</string>
+    <string name="permissions">الأذونات</string>
+    <string name="perm_notifications">الإشعارات</string>
+    <string name="perm_notifications_sub">مطلوبة لتذكير القراءة اليومي</string>
+    <string name="perm_install">تثبيت تطبيقات غير معروفة</string>
+    <string name="perm_install_sub">مطلوب لتثبيت تحديثات التطبيق المنزّلة من GitHub</string>
+    <string name="perm_granted">مسموح</string>
+    <string name="perm_denied">غير مسموح</string>
 </resources>

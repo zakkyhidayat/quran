@@ -188,4 +188,11 @@
     <string name="reminder_title">وقت خواندن: %1$s</string>
     <string name="reminder_text">ادامه از %1$s %2$d:%3$d</string>
     <string name="ok">تأیید</string>
+    <string name="permissions">مجوزها</string>
+    <string name="perm_notifications">اعلان‌ها</string>
+    <string name="perm_notifications_sub">برای یادآور خواندن روزانه لازم است</string>
+    <string name="perm_install">نصب برنامه‌های ناشناس</string>
+    <string name="perm_install_sub">برای نصب به‌روزرسانی‌های بارگیری‌شده از GitHub لازم است</string>
+    <string name="perm_granted">مجاز</string>
+    <string name="perm_denied">غیرمجاز</string>
 </resources>

@@ -188,4 +188,11 @@
     <string name="reminder_title">C’est l’heure de lire : %1$s</string>
     <string name="reminder_text">Reprendre à %1$s %2$d:%3$d</string>
     <string name="ok">OK</string>
+    <string name="permissions">Autorisations</string>
+    <string name="perm_notifications">Notifications</string>
+    <string name="perm_notifications_sub">Nécessaires pour le rappel de lecture quotidien</string>
+    <string name="perm_install">Installer des applis inconnues</string>
+    <string name="perm_install_sub">Nécessaire pour installer les mises à jour téléchargées depuis GitHub</string>
+    <string name="perm_granted">Autorisé</string>
+    <string name="perm_denied">Non autorisé</string>
 </resources>
