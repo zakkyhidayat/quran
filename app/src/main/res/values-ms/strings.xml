@@ -133,4 +133,8 @@
     <string name="support">Sokong pembangunan</string>
     <string name="support_sub">Belanja pembangun secawan kopi di Ko-fi</string>
     <string name="no_translation_hint">Tiada terjemahan dipaparkan. Tambah dalam Tetapan → Terjemahan.</string>
+    <string name="tab_rub">Rubu\'</string>
+    <string name="tab_ruku">Ruku\'</string>
+    <string name="juz_hizb">Juzuk %1$d • Hizb %2$d</string>
+    <string name="ruku_in_surah">%1$s, ruku\' %2$d</string>
 </resources>

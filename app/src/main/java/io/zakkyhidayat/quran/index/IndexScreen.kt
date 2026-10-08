@@ -30,6 +30,7 @@ import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.LeadingIconTab
 import androidx.compose.material3.Tab
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -66,7 +67,9 @@ private val TABS = listOf(
     R.string.tab_surah to AppIcons.MenuBook,
     R.string.tab_juz to AppIcons.GridView,
     R.string.tab_hizb to AppIcons.PieChart,
+    R.string.tab_rub to AppIcons.Quarter,
     R.string.tab_manzil to AppIcons.CalendarViewWeek,
+    R.string.tab_ruku to AppIcons.FormatListNumbered,
 )
 // Tab Sajdah disembunyikan sementara; tempatnya mungkin dipakai fitur surah/ayat lain dari QUL. SajdaList tetap ada.
 private val ListPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
@@ -103,7 +106,7 @@ fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit
         }
         CenteredContent(Modifier.padding(padding)) {
             Column(Modifier.fillMaxSize()) {
-                PrimaryScrollableTabRow(selectedTabIndex = tab, edgePadding = 8.dp) {
+                PrimaryScrollableTabRow(selectedTabIndex = tab, edgePadding = 8.dp, minTabWidth = 0.dp) {
                     TABS.forEachIndexed { i, (title, icon) ->
                         if (i == 0) {
                             // Bookmark cukup ikon; namanya tetap dibacakan pembaca layar.
@@ -111,7 +114,7 @@ fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit
                             Tab(
                                 selected = tab == i,
                                 onClick = { tab = i },
-                                modifier = Modifier.background(MaterialTheme.colorScheme.secondaryContainer),
+                                modifier = Modifier.width(64.dp).background(MaterialTheme.colorScheme.secondaryContainer),
                                 selectedContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                                 unselectedContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                                 icon = { Icon(icon, contentDescription = stringResource(title)) },
@@ -131,7 +134,9 @@ fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit
                     1 -> SurahList(vm, onBack, onOpenSurahInfo)
                     2 -> JuzList(vm, onBack)
                     3 -> HizbList(vm, onBack)
-                    else -> ManzilList(vm, onBack)
+                    4 -> RubList(vm, onBack)
+                    5 -> ManzilList(vm, onBack)
+                    else -> RukuList(vm, onBack)
                 }
             }
         }
@@ -255,6 +260,46 @@ private fun HizbList(vm: AppViewModel, onBack: () -> Unit) {
                     modifier = Modifier.padding(start = 24.dp),
                 ) { Text(stringResource(R.string.rub_n, quarter)) }
             }
+        }
+    }
+}
+
+// Rub' (seperempat hizb): 240 bagian, masing-masing dengan juz dan hizb tempatnya.
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun RubList(vm: AppViewModel, onBack: () -> Unit) {
+    val rub by vm.rub.collectAsStateWithLifecycle()
+    val surahs by vm.surahs.collectAsStateWithLifecycle()
+    LazyColumn(Modifier.fillMaxSize(), contentPadding = ListPadding, verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
+        itemsIndexed(rub, key = { _, m -> m.id }) { index, m ->
+            val hizb = (m.id - 1) / 4 + 1
+            SegmentedListItem(
+                onClick = { vm.goToAyah(m.surah, m.ayah); onBack() },
+                shapes = ListItemDefaults.segmentedShapes(index, rub.size),
+                colors = segmentedItemColors(),
+                leadingContent = { NumberBadge(m.id) },
+                overlineContent = { Text(stringResource(R.string.juz_hizb, (hizb - 1) / 2 + 1, hizb)) },
+                supportingContent = { Text(stringResource(R.string.ref_place, surahs[m.surah]?.nameLatin.orEmpty(), m.surah, m.ayah, m.page)) },
+            ) { Text(stringResource(R.string.rub_n, "${(m.id - 1) % 4 + 1}/4")) }
+        }
+    }
+}
+
+// Ruku: 558 bagian; extra berisi nomor ruku di dalam surahnya.
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun RukuList(vm: AppViewModel, onBack: () -> Unit) {
+    val ruku by vm.ruku.collectAsStateWithLifecycle()
+    val surahs by vm.surahs.collectAsStateWithLifecycle()
+    LazyColumn(Modifier.fillMaxSize(), contentPadding = ListPadding, verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
+        itemsIndexed(ruku, key = { _, m -> m.id }) { index, m ->
+            SegmentedListItem(
+                onClick = { vm.goToAyah(m.surah, m.ayah); onBack() },
+                shapes = ListItemDefaults.segmentedShapes(index, ruku.size),
+                colors = segmentedItemColors(),
+                leadingContent = { NumberBadge(m.id) },
+                supportingContent = { Text(stringResource(R.string.ref_place, surahs[m.surah]?.nameLatin.orEmpty(), m.surah, m.ayah, m.page)) },
+            ) { Text(stringResource(R.string.ruku_in_surah, surahs[m.surah]?.nameLatin.orEmpty(), m.extra.toIntOrNull() ?: 0)) }
         }
     }
 }

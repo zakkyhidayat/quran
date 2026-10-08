@@ -133,4 +133,8 @@
     <string name="support">Dukung pengembangan</string>
     <string name="support_sub">Traktir kopi pengembang lewat Ko-fi</string>
     <string name="no_translation_hint">Belum ada terjemahan. Tambahkan di Pengaturan → Terjemahan.</string>
+    <string name="tab_rub">Rub\'</string>
+    <string name="tab_ruku">Ruku</string>
+    <string name="juz_hizb">Juz %1$d • Hizb %2$d</string>
+    <string name="ruku_in_surah">%1$s, ruku %2$d</string>
 </resources>

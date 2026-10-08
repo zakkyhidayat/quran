@@ -133,4 +133,8 @@
     <string name="support">Geliştirmeyi destekle</string>
     <string name="support_sub">Ko-fi\'de geliştiriciye bir kahve ısmarla</string>
     <string name="no_translation_hint">Gösterilen meal yok. Ayarlar → Mealler bölümünden ekleyin.</string>
+    <string name="tab_rub">Rub\'lar</string>
+    <string name="tab_ruku">Rükûlar</string>
+    <string name="juz_hizb">Cüz %1$d • Hizb %2$d</string>
+    <string name="ruku_in_surah">%1$s, %2$d. rükû</string>
 </resources>

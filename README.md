@@ -25,7 +25,6 @@ Choices made on purpose:
 | Layout | 604 fixed pages, 15 lines | Memorisation relies on where an ayah sits on the page, so text never reflows |
 | Tajweed | V4 font colours (can be turned off) | Same colour source as the printed tajweed mushaf |
 | Page style | One style only | Fewer settings, a consistent page |
-| Word by word | Not included | The focus is reading the mushaf, not language study |
 
 ## Features
 
@@ -33,9 +32,10 @@ Choices made on purpose:
 - Light, dark, and AMOLED themes; dynamic colour (Android 12+) or the original palette; three contrast levels.
 - Tap an ayah for its translations (with footnotes), Latin transliteration, and position (juz, hizb, rub', manzil, ruku,
   sajdah).
-- Translations in Indonesian (Kemenag, The Sabiq Company, King Fahad Quran Complex) and English (Saheeh International),
-  with more available to download in the app.
-- Indexes by surah, juz, hizb, and manzil; surah info; go to ayah; random ayah; continue reading from the last ayah.
+- Translations are downloaded in the app, so the APK carries none; the active ones download automatically on first
+  launch. Available now: Indonesian (Kemenag, The Sabiq Company, King Fahad Quran Complex) and English (Saheeh
+  International), with more languages to come.
+- Indexes by surah, juz, hizb, rub', manzil, and ruku; surah info; go to ayah; random ayah; continue reading from the last ayah.
 - Page and ayah bookmarks; search by Arabic text, translation, surah name, or a reference such as `2:255`.
 - Interface in 10 languages, following the device language by default: English, Indonesian, Arabic, Urdu, Bengali,
   Turkish, Persian, Malay, French, and Russian.
@@ -48,8 +48,9 @@ Choices made on purpose:
       bottom of the screen)
 - [ ] Onboarding for new users: language, about this mushaf, translations, appearance
 - [ ] In-app updates for builds from GitHub Releases
-- [ ] All translations downloadable, none bundled in the APK
+- [x] All translations downloadable, none bundled in the APK
 - [ ] Reading reminders to keep a daily portion by juz, hizb, or manzil
+- [ ] Word-by-word meaning (tap a word to see its translation)
 - [ ] Audio recitation
 
 ## Data, credits, and licence

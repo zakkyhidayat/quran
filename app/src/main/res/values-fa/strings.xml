@@ -133,4 +133,8 @@
     <string name="support">حمایت از توسعه</string>
     <string name="support_sub">در Ko-fi برای توسعه‌دهنده قهوه بخرید</string>
     <string name="no_translation_hint">ترجمه‌ای نمایش داده نمی‌شود. از تنظیمات ← ترجمه‌ها اضافه کنید.</string>
+    <string name="tab_rub">ربع‌ها</string>
+    <string name="tab_ruku">رکوع‌ها</string>
+    <string name="juz_hizb">جزء %1$d • حزب %2$d</string>
+    <string name="ruku_in_surah">%1$s، رکوع %2$d</string>
 </resources>

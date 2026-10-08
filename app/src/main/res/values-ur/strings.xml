@@ -133,4 +133,8 @@
     <string name="support">ترقی میں مدد کریں</string>
     <string name="support_sub">Ko-fi پر ڈویلپر کو کافی پلائیں</string>
     <string name="no_translation_hint">کوئی ترجمہ نہیں دکھایا جا رہا۔ ترتیبات ← ترجمے میں شامل کریں۔</string>
+    <string name="tab_rub">ارباع</string>
+    <string name="tab_ruku">رکوع</string>
+    <string name="juz_hizb">پارہ %1$d • حزب %2$d</string>
+    <string name="ruku_in_surah">%1$s، رکوع %2$d</string>
 </resources>

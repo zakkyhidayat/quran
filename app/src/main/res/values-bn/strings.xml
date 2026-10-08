@@ -133,4 +133,8 @@
     <string name="support">উন্নয়নে সহায়তা করুন</string>
     <string name="support_sub">Ko-fi-তে ডেভেলপারকে একটি কফি কিনে দিন</string>
     <string name="no_translation_hint">কোনো অনুবাদ দেখানো হচ্ছে না। সেটিংস → অনুবাদ থেকে যোগ করুন।</string>
+    <string name="tab_rub">রুবʼ</string>
+    <string name="tab_ruku">রুকু</string>
+    <string name="juz_hizb">পারা %1$d • হিযব %2$d</string>
+    <string name="ruku_in_surah">%1$s, রুকু %2$d</string>
 </resources>

@@ -133,4 +133,8 @@
     <string name="support">ادعم التطوير</string>
     <string name="support_sub">اشترِ للمطوّر قهوة على Ko-fi</string>
     <string name="no_translation_hint">لا توجد ترجمة معروضة. أضف ترجمة من الإعدادات ← الترجمات.</string>
+    <string name="tab_rub">الأرباع</string>
+    <string name="tab_ruku">الركوعات</string>
+    <string name="juz_hizb">الجزء %1$d • الحزب %2$d</string>
+    <string name="ruku_in_surah">%1$s، الركوع %2$d</string>
 </resources>
