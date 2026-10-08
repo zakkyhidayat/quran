@@ -133,4 +133,5 @@
     <string name="credits_sub">Most QUL resources were created by the community: King Fahd Glorious Quran Printing Complex, Tanzil, Quran.com, the translators, and many others. Tap for the full list.</string>
     <string name="support">Support development</string>
     <string name="support_sub">Buy the developer a coffee on Ko-fi</string>
+    <string name="no_translation_hint">No translation shown. Add one in Settings → Translations.</string>
 </resources>

@@ -132,4 +132,5 @@
     <string name="credits_sub">بیشتر منابع QUL را جامعه فراهم کرده است: مجتمع ملک فهد برای چاپ قرآن، تنزیل، Quran.com، مترجمان و بسیاری دیگر. برای فهرست کامل ضربه بزنید.</string>
     <string name="support">حمایت از توسعه</string>
     <string name="support_sub">در Ko-fi برای توسعه‌دهنده قهوه بخرید</string>
+    <string name="no_translation_hint">ترجمه‌ای نمایش داده نمی‌شود. از تنظیمات ← ترجمه‌ها اضافه کنید.</string>
 </resources>

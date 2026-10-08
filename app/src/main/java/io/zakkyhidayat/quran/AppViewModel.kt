@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -50,7 +51,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     val detail: StateFlow<AyahDetail?> = combine(
         selected,
         settingsRepository.settings.map { it.translationIds }.distinctUntilChanged(),
-    ) { sel, ids -> sel to ids }
+        // Muat ulang juga saat paket terjemahan selesai terpasang di latar belakang.
+        translations,
+    ) { sel, ids, _ -> sel to ids }
         .mapLatest { (sel, ids) -> sel?.let { mushaf.ayahDetail(it.surah, it.ayah, ids) } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
@@ -65,6 +68,24 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             sajda.value = mushaf.markers(MarkerKind.Sajda)
             pageMeta.value = mushaf.pageMeta()
             translations.value = mushaf.translations()
+            restoreActiveTranslations()
+        }
+    }
+
+    /**
+     * Terjemahan tidak dibundel: terjemahan aktif yang belum terpasang (bawaan untuk pengguna baru, atau terjemahan yang
+     * dulu dibundel bagi pengguna lama) diunduh diam-diam dari katalog. Gagal (luring) dicoba lagi saat aplikasi dibuka.
+     */
+    private suspend fun restoreActiveTranslations() {
+        val active = settingsRepository.settings.first().translationIds
+        val installed = translations.value.map { it.id }.toSet()
+        val missing = active.filter { it !in installed }
+        if (missing.isEmpty()) return
+        val packs = runCatching { mushaf.catalog() }
+            .onFailure { android.util.Log.w("TranslationPacks", "Katalog gagal dimuat: $it") }
+            .getOrNull() ?: return
+        for (pack in packs.filter { it.id in missing }) {
+            runCatching { installPack(pack) }.onFailure { android.util.Log.w("TranslationPacks", "Gagal memasang ${pack.id}: $it") }
         }
     }
 

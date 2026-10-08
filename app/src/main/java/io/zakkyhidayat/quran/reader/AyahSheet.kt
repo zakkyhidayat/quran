@@ -145,6 +145,14 @@ fun AyahSheetContent(
                 }
             }
         }
+        if (detail.translations.isEmpty()) {
+            Spacer(Modifier.height(16.dp))
+            Text(
+                stringResource(R.string.no_translation_hint),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
         detail.translations.forEach { tr ->
             Spacer(Modifier.height(16.dp))
             Card(

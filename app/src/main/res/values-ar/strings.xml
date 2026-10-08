@@ -132,4 +132,5 @@
     <string name="credits_sub">معظم موارد QUL أعدّها المجتمع: مجمع الملك فهد لطباعة المصحف الشريف، وتنزيل، وQuran.com، والمترجمون، وغيرهم كثير. اضغط لعرض القائمة كاملة.</string>
     <string name="support">ادعم التطوير</string>
     <string name="support_sub">اشترِ للمطوّر قهوة على Ko-fi</string>
+    <string name="no_translation_hint">لا توجد ترجمة معروضة. أضف ترجمة من الإعدادات ← الترجمات.</string>
 </resources>

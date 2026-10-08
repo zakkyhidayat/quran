@@ -132,4 +132,5 @@
     <string name="credits_sub">QUL کے زیادہ تر وسائل کمیونٹی نے تیار کیے: شاہ فہد قرآن پرنٹنگ کمپلیکس، تنزیل، Quran.com، مترجمین اور بہت سے دوسرے۔ پوری فہرست کے لیے تھپتھپائیں۔</string>
     <string name="support">ترقی میں مدد کریں</string>
     <string name="support_sub">Ko-fi پر ڈویلپر کو کافی پلائیں</string>
+    <string name="no_translation_hint">کوئی ترجمہ نہیں دکھایا جا رہا۔ ترتیبات ← ترجمے میں شامل کریں۔</string>
 </resources>

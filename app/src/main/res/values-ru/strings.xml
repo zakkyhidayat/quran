@@ -132,4 +132,5 @@
     <string name="credits_sub">Большинство материалов QUL создано сообществом: Комплексом короля Фахда по печати Корана, Tanzil, Quran.com, переводчиками и многими другими. Нажмите, чтобы увидеть полный список.</string>
     <string name="support">Поддержать разработку</string>
     <string name="support_sub">Угостите разработчика кофе на Ko-fi</string>
+    <string name="no_translation_hint">Перевод не показан. Добавьте его в разделе Настройки → Переводы.</string>
 </resources>

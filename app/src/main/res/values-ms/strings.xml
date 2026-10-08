@@ -132,4 +132,5 @@
     <string name="credits_sub">Kebanyakan sumber QUL dihasilkan oleh komuniti: Kompleks Percetakan Al-Quran Raja Fahd, Tanzil, Quran.com, para penterjemah dan ramai lagi. Ketik untuk senarai penuh.</string>
     <string name="support">Sokong pembangunan</string>
     <string name="support_sub">Belanja pembangun secawan kopi di Ko-fi</string>
+    <string name="no_translation_hint">Tiada terjemahan dipaparkan. Tambah dalam Tetapan → Terjemahan.</string>
 </resources>

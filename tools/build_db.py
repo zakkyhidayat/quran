@@ -15,15 +15,11 @@ ROOT = Path(__file__).resolve().parent.parent
 SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "data-src"
 OUT = Path(sys.argv[2]) if len(sys.argv) > 2 else ROOT / "app/src/main/assets/quran.db"
 
-DATA_VERSION = 8
+DATA_VERSION = 9
 
-TRANSLATIONS = [
-    # id, lang, nama tampil, sumber, folder
-    ("id-kemenag", "id", "Kemenag RI", "Kementerian Agama RI", "quran-id-with-footnote-tags"),
-    ("id-sabiq", "id", "The Sabiq Company", "The Sabiq Company", "the-sabiq-company-with-footnote-tags"),
-    ("id-kfqpc", "id", "King Fahad Quran Complex", "King Fahad Quran Complex", "king-fahad-quran-complex-with-footnote-tags"),
-    ("en-sahih", "en", "Saheeh International", "Saheeh International", "en-sahih-international-with-footnote-tags"),
-]
+# Terjemahan tidak lagi dibundel di quran.db; semuanya paket unduhan (tools/build_translation_packs.py). Tabel
+# translations/translation_texts/footnotes tetap dibuat kosong agar skema aplikasi tidak berubah. TEXT_OVERRIDES dan
+# SABIQ_FIXES di bawah tetap dipakai oleh parser paket.
 
 # Rekonstruksi manual untuk ayat yang penanda catatannya rusak di sumber (urutan = urutan id catatan).
 TEXT_OVERRIDES = {
@@ -401,11 +397,6 @@ def main():
     load_markers(db)
     load_surah_info(db)
     load_transliteration(db)
-
-    for tr_id, lang, name, source, folder in TRANSLATIONS:
-        db.execute("INSERT INTO translations VALUES (?,?,?,?)", (tr_id, lang, name, source))
-        n, stats = build_translation(db, tr_id, folder)
-        print(f"{tr_id}: {n} ayat, {stats}")
 
     db.execute(f"PRAGMA user_version = {DATA_VERSION}")
     db.commit()

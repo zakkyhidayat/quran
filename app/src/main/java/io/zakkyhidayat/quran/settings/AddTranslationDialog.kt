@@ -78,6 +78,7 @@ internal fun AddTranslationDialog(
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
+            android.util.Log.w("TranslationPacks", "Katalog gagal dimuat: $e; sebab: ${e.cause}")
             CatalogState.Failed
         }
     }
@@ -143,6 +144,7 @@ internal fun AddTranslationDialog(
                                             } catch (e: CancellationException) {
                                                 throw e
                                             } catch (e: Exception) {
+                                                android.util.Log.w("TranslationPacks", "Gagal mengunduh ${pack.id}", e)
                                                 failedLabel = label
                                             } finally {
                                                 downloading = null

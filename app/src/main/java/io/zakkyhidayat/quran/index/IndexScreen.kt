@@ -29,6 +29,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.LeadingIconTab
 import androidx.compose.material3.Tab
+import androidx.compose.foundation.background
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -106,9 +107,13 @@ fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit
                     TABS.forEachIndexed { i, (title, icon) ->
                         if (i == 0) {
                             // Bookmark cukup ikon; namanya tetap dibacakan pembaca layar.
+                            // Latar tonal seukuran tab membedakan Bookmark (koleksi pribadi) dari tab daftar isi lainnya.
                             Tab(
                                 selected = tab == i,
                                 onClick = { tab = i },
+                                modifier = Modifier.background(MaterialTheme.colorScheme.secondaryContainer),
+                                selectedContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                                unselectedContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                                 icon = { Icon(icon, contentDescription = stringResource(title)) },
                             )
                         } else {

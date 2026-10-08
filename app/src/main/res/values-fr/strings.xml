@@ -132,4 +132,5 @@
     <string name="credits_sub">La plupart des ressources de QUL ont été créées par la communauté : le Complexe du Roi Fahd pour l\'impression du Coran, Tanzil, Quran.com, les traducteurs et bien d\'autres. Touchez pour la liste complète.</string>
     <string name="support">Soutenir le développement</string>
     <string name="support_sub">Offrez un café au développeur sur Ko-fi</string>
+    <string name="no_translation_hint">Aucune traduction affichée. Ajoutez-en une dans Paramètres → Traductions.</string>
 </resources>

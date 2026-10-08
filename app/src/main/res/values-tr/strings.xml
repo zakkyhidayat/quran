@@ -132,4 +132,5 @@
     <string name="credits_sub">QUL kaynaklarının çoğu topluluk tarafından hazırlandı: Kral Fahd Kur\'an Basım Kompleksi, Tanzil, Quran.com, mütercimler ve daha birçokları. Tam liste için dokunun.</string>
     <string name="support">Geliştirmeyi destekle</string>
     <string name="support_sub">Ko-fi\'de geliştiriciye bir kahve ısmarla</string>
+    <string name="no_translation_hint">Gösterilen meal yok. Ayarlar → Mealler bölümünden ekleyin.</string>
 </resources>

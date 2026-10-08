@@ -132,4 +132,5 @@
     <string name="credits_sub">QUL-এর বেশিরভাগ উপকরণ সম্প্রদায়ের তৈরি: বাদশাহ ফাহাদ কুরআন মুদ্রণ কমপ্লেক্স, তানযিল, Quran.com, অনুবাদকগণ ও আরও অনেকে। পূর্ণ তালিকার জন্য ট্যাপ করুন।</string>
     <string name="support">উন্নয়নে সহায়তা করুন</string>
     <string name="support_sub">Ko-fi-তে ডেভেলপারকে একটি কফি কিনে দিন</string>
+    <string name="no_translation_hint">কোনো অনুবাদ দেখানো হচ্ছে না। সেটিংস → অনুবাদ থেকে যোগ করুন।</string>
 </resources>

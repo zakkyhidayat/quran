@@ -28,6 +28,11 @@ AYAH_TOTAL = 6236
 
 PACKS = [
     # id, bahasa (ISO 639-1), nama tampil, pengarang/sumber, nomor QUL, folder di data-src/
+    # Empat yang pertama dulu dibundel di quran.db; id-nya dipertahankan agar pilihan pengguna lama tetap berlaku.
+    ("id-kemenag", "id", "Kemenag RI", "Kementerian Agama RI", 224, "quran-id-with-footnote-tags"),
+    ("id-sabiq", "id", "The Sabiq Company", "The Sabiq Company", 194, "the-sabiq-company-with-footnote-tags"),
+    ("id-kfqpc", "id", "King Fahad Quran Complex", "King Fahad Quran Complex", 173, "king-fahad-quran-complex-with-footnote-tags"),
+    ("en-sahih", "en", "Saheeh International", "Saheeh International", 193, "en-sahih-international-with-footnote-tags"),
     ("en-khattab", "en", "The Clear Quran (Khattab)", "Dr. Mustafa Khattab", 426, "en-khattab"),
     ("en-yusufali", "en", "Yusuf Ali", "Abdullah Yusuf Ali", 124, "en-yusufali"),
     ("ur-jalandhari", "ur", "Jalandhari", "Fatah Muhammad Jalandhari", 218, "ur-jalandhari"),
