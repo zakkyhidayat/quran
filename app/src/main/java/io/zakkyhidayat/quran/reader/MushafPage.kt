@@ -97,6 +97,7 @@ fun MushafPage(
     onAyahClick: (AyahRef) -> Unit,
     modifier: Modifier = Modifier,
     tajweed: Boolean = true,
+    onSurahClick: (Int) -> Unit = {},
 ) {
     val context = LocalContext.current
     val pageFont = remember(page) { pageFontFamily(context, page) }
@@ -114,7 +115,7 @@ fun MushafPage(
         val glyphSize = remember(page, lines, widthPx) { fitFontSize(measurer, density, lines, pageFont, widthPx) }
         val topPadding = lineHeight * ((LINES_PER_PAGE - lines.size) / 2f)
 
-        ScreenReaderLayer(lines, ayahTexts, surahs, onAyahClick)
+        ScreenReaderLayer(lines, ayahTexts, surahs, onAyahClick, onSurahClick)
 
         // Glyph V4 berupa kode private-use: tidak berguna untuk pembaca layar, jadi disembunyikan dari semantics.
         Column(Modifier.fillMaxSize().clearAndSetSemantics { }) {
@@ -123,7 +124,7 @@ fun MushafPage(
                 Box(Modifier.fillMaxWidth().height(lineHeight), contentAlignment = Alignment.Center) {
                     when (line.type) {
                         LineType.Ayah -> AyahLine(line, pageFont, glyphSize, glyphFilter, selected, onAyahClick, lineHeight)
-                        LineType.SurahName -> SurahHeader(surahs[line.surah], headerFont, headerFilter)
+                        LineType.SurahName -> SurahHeader(surahs[line.surah], headerFont, headerFilter) { onSurahClick(line.surah!!) }
                         LineType.Basmallah -> Text(
                             text = BASMALLAH,
                             style = TextStyle(fontFamily = hafsFont, fontSize = glyphSize, color = MaterialTheme.colorScheme.onSurface),
@@ -144,6 +145,7 @@ private fun ScreenReaderLayer(
     ayahTexts: List<AyahText>,
     surahs: Map<Int, Surah>,
     onAyahClick: (AyahRef) -> Unit,
+    onSurahClick: (Int) -> Unit,
 ) {
     val byRef = remember(ayahTexts) { ayahTexts.associateBy { AyahRef(it.surah, it.ayah) } }
     val seen = HashSet<AyahRef>()
@@ -151,7 +153,13 @@ private fun ScreenReaderLayer(
         lines.forEach { line ->
             when (line.type) {
                 LineType.SurahName -> surahs[line.surah]?.let { surah ->
-                    Box(Modifier.size(1.dp).semantics { heading(); contentDescription = "Surah ${surah.nameLatin}" })
+                    Box(
+                        Modifier.size(1.dp).semantics {
+                            heading()
+                            contentDescription = "Surah ${surah.nameLatin}"
+                            onClick(label = "Buka info surah") { onSurahClick(surah.id); true }
+                        },
+                    )
                 }
                 LineType.Ayah -> line.words.forEach { word ->
                     val ref = AyahRef(word.surah, word.ayah)
@@ -288,7 +296,7 @@ private const val HEADER_FRAME_LEFT_EM = 41f / HEADER_UPEM
 private const val HEADER_FRAME_HEIGHT_EM = 1026f / HEADER_UPEM
 
 @Composable
-private fun SurahHeader(surah: Surah?, font: FontFamily, filter: ColorFilter?) {
+private fun SurahHeader(surah: Surah?, font: FontFamily, filter: ColorFilter?, onClick: () -> Unit) {
     if (surah == null) return
     val measurer = rememberTextMeasurer()
     val density = LocalDensity.current
@@ -309,6 +317,7 @@ private fun SurahHeader(surah: Surah?, font: FontFamily, filter: ColorFilter?) {
             Modifier
                 .fillMaxWidth()
                 .requiredHeight(with(density) { (fontPx * HEADER_FRAME_HEIGHT_EM).toDp() })
+                .pointerInput(surah.id) { detectTapGestures { onClick() } }
                 .graphicsLayer {
                     colorFilter = filter
                     compositingStrategy = CompositingStrategy.Offscreen

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,6 +12,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Settings
@@ -58,7 +60,7 @@ private val ListPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit, embedded: Boolean = false) {
+fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit, onOpenSurahInfo: (Int) -> Unit, embedded: Boolean = false) {
     var tab by rememberSaveable { mutableIntStateOf(0) }
     Scaffold(
         topBar = {
@@ -87,7 +89,7 @@ fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit
                     }
                 }
                 when (tab) {
-                    0 -> SurahList(vm, onBack)
+                    0 -> SurahList(vm, onBack, onOpenSurahInfo)
                     1 -> JuzList(vm, onBack)
                     2 -> HizbList(vm, onBack)
                     3 -> ManzilList(vm, onBack)
@@ -101,7 +103,7 @@ fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-private fun SurahList(vm: AppViewModel, onBack: () -> Unit) {
+private fun SurahList(vm: AppViewModel, onBack: () -> Unit, onOpenSurahInfo: (Int) -> Unit) {
     val surahs by vm.surahs.collectAsStateWithLifecycle()
     val font = remember { surahNameFontFamily(vm.getApplication()) }
     val items = remember(surahs) { surahs.values.toList() }
@@ -115,7 +117,10 @@ private fun SurahList(vm: AppViewModel, onBack: () -> Unit) {
                 leadingContent = { NumberBadge(s.id) },
                 supportingContent = { Text("${s.ayahCount} ayat • Hal. ${s.firstPage}") },
                 trailingContent = {
-                    Text(s.nameGlyph.toString(), style = TextStyle(fontFamily = font, fontSize = glyphSize, color = MaterialTheme.colorScheme.primary))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(s.nameGlyph.toString(), style = TextStyle(fontFamily = font, fontSize = glyphSize, color = MaterialTheme.colorScheme.primary))
+                        IconButton(onClick = { onOpenSurahInfo(s.id) }) { Icon(Icons.Default.Info, contentDescription = "Info surah ${s.nameLatin}") }
+                    }
                 },
             ) { Text(s.nameLatin) }
         }

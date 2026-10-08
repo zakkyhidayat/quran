@@ -43,6 +43,7 @@ data class AyahDetail(
     val arabic: String,
     val translations: List<TranslationText>,
     val info: AyahInfo,
+    val transliteration: String?,
 )
 
 data class AyahRef(val surah: Int, val ayah: Int)
@@ -62,3 +63,14 @@ data class SearchResult(
 enum class BookmarkKind { Page, Ayah }
 
 data class Bookmark(val id: Long, val kind: BookmarkKind, val page: Int, val surah: Int, val ayah: Int, val createdAt: Long)
+
+data class SurahDetails(
+    val place: String?,
+    val ayahCount: Int,
+    val firstPage: Int,
+    val lastPage: Int,
+    val juzFrom: Int,
+    val juzTo: Int,
+    val rukuCount: Int,
+    val infoHtml: String,
+)

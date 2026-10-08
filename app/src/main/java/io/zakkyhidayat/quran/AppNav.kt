@@ -14,9 +14,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import io.zakkyhidayat.quran.info.SurahInfoScreen
 import io.zakkyhidayat.quran.index.IndexScreen
 import io.zakkyhidayat.quran.reader.ReaderScreen
 import io.zakkyhidayat.quran.search.SearchScreen
@@ -41,6 +44,7 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
                     embedded = true,
                     onBack = { nav.popBackStack("reader", inclusive = false) },
                     onOpenSettings = { nav.navigate("settings") },
+                    onOpenSurahInfo = { nav.navigate("surah/$it") },
                 )
             }
         }
@@ -60,10 +64,20 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
                     onOpenIndex = if (expanded) null else ({ nav.navigate("index") }),
                     onOpenSearch = { nav.navigate("search") },
                     onOpenSettings = { nav.navigate("settings") },
+                    onOpenSurahInfo = { nav.navigate("surah/$it") },
                 )
             }
             composable("index") {
-                IndexScreen(vm, onBack = { nav.popBackStack() }, onOpenSettings = { nav.navigate("settings") })
+                IndexScreen(vm, onBack = { nav.popBackStack() }, onOpenSettings = { nav.navigate("settings") }, onOpenSurahInfo = { nav.navigate("surah/$it") })
+            }
+            composable("surah/{id}", arguments = listOf(navArgument("id") { type = NavType.IntType })) { entry ->
+                SurahInfoScreen(
+                    vm = vm,
+                    surahId = entry.arguments?.getInt("id") ?: 1,
+                    onBack = { nav.popBackStack() },
+                    onOpenAyah = { surah, ayah -> vm.goToAyah(surah, ayah); nav.popBackStack("reader", inclusive = false) },
+                    onOpenPage = { page -> vm.clearSelection(); vm.goToPage(page); nav.popBackStack("reader", inclusive = false) },
+                )
             }
             composable("search") { SearchScreen(vm, settings, onBack = { nav.popBackStack() }) }
             composable("settings") { SettingsScreen(vm, settings, onBack = { nav.popBackStack() }) }

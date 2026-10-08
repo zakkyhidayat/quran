@@ -1,10 +1,5 @@
 package io.zakkyhidayat.quran.reader
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -41,11 +36,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -83,6 +75,7 @@ fun ReaderScreen(
     onOpenIndex: (() -> Unit)?,
     onOpenSearch: () -> Unit,
     onOpenSettings: () -> Unit,
+    onOpenSurahInfo: (Int) -> Unit,
 ) {
     val surahs by vm.surahs.collectAsStateWithLifecycle()
     val pageMeta by vm.pageMeta.collectAsStateWithLifecycle()
@@ -93,7 +86,6 @@ fun ReaderScreen(
 
     val startPage = remember { (vm.pendingPage.value ?: settings.lastPage).coerceIn(1, PAGE_COUNT) }
     val pagerState = rememberPagerState(initialPage = startPage - 1) { PAGE_COUNT }
-    var barsVisible by rememberSaveable { mutableStateOf(false) }
     val currentPage by remember { derivedStateOf { pagerState.currentPage + 1 } }
 
     LaunchedEffect(Unit) {
@@ -118,37 +110,31 @@ fun ReaderScreen(
 
     Scaffold(containerColor = MaterialTheme.colorScheme.background, contentWindowInsets = WindowInsets(0, 0, 0, 0)) { _ ->
         Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.systemBars)) {
-            // Bilah atas mendorong halaman ke bawah, tidak menimpanya.
-            AnimatedVisibility(
-                visible = barsVisible,
-                enter = fadeIn(MaterialTheme.motionScheme.defaultEffectsSpec()) + expandVertically(MaterialTheme.motionScheme.defaultSpatialSpec()),
-                exit = fadeOut(MaterialTheme.motionScheme.defaultEffectsSpec()) + shrinkVertically(MaterialTheme.motionScheme.defaultSpatialSpec()),
-            ) {
-                TopAppBar(
-                    windowInsets = WindowInsets(0, 0, 0, 0),
-                    title = {
-                        Column {
-                            Text(currentSurah?.nameLatin.orEmpty(), style = MaterialTheme.typography.titleMedium)
-                            Text("Juz ${meta?.juz ?: ""} • Hal. $currentPage", style = MaterialTheme.typography.bodySmall)
-                        }
-                    },
-                    navigationIcon = {
-                        if (onOpenIndex != null) {
-                            IconButton(onClick = onOpenIndex) { Icon(Icons.Default.Menu, contentDescription = "Daftar surah dan juz") }
-                        }
-                    },
-                    actions = {
-                        IconButton(onClick = onOpenSearch) { Icon(Icons.Default.Search, contentDescription = "Cari") }
-                        IconButton(onClick = { vm.togglePageBookmark(currentPage) }) {
-                            Icon(
-                                if (pageBookmarked) AppIcons.Bookmark else AppIcons.BookmarkBorder,
-                                contentDescription = if (pageBookmarked) "Hapus bookmark halaman" else "Bookmark halaman",
-                            )
-                        }
-                        IconButton(onClick = onOpenSettings) { Icon(Icons.Default.Settings, contentDescription = "Pengaturan") }
-                    },
-                )
-            }
+            // Bilah atas permanen; halaman berada di ruang di bawahnya.
+            TopAppBar(
+                windowInsets = WindowInsets(0, 0, 0, 0),
+                title = {
+                    Column {
+                        Text(currentSurah?.nameLatin.orEmpty(), style = MaterialTheme.typography.titleMedium)
+                        Text("Juz ${meta?.juz ?: ""} • Hal. $currentPage", style = MaterialTheme.typography.bodySmall)
+                    }
+                },
+                navigationIcon = {
+                    if (onOpenIndex != null) {
+                        IconButton(onClick = onOpenIndex) { Icon(Icons.Default.Menu, contentDescription = "Daftar surah dan juz") }
+                    }
+                },
+                actions = {
+                    IconButton(onClick = onOpenSearch) { Icon(Icons.Default.Search, contentDescription = "Cari") }
+                    IconButton(onClick = { vm.togglePageBookmark(currentPage) }) {
+                        Icon(
+                            if (pageBookmarked) AppIcons.Bookmark else AppIcons.BookmarkBorder,
+                            contentDescription = if (pageBookmarked) "Hapus bookmark halaman" else "Bookmark halaman",
+                        )
+                    }
+                    IconButton(onClick = onOpenSettings) { Icon(Icons.Default.Settings, contentDescription = "Pengaturan") }
+                },
+            )
             HorizontalPager(
                 state = pagerState,
                 reverseLayout = true,
@@ -161,7 +147,7 @@ fun ReaderScreen(
                 val pageInfo = pageMeta.getOrNull(index)
                 BoxWithConstraints(
                     Modifier.fillMaxSize().pointerInput(selected) {
-                        detectTapGestures(onTap = { if (selected != null) vm.clearSelection() else barsVisible = !barsVisible })
+                        detectTapGestures(onTap = { if (selected != null) vm.clearSelection() })
                     },
                 ) {
                     // Blok halaman berproporsi kertas B5 (176 x 250 mm), seperti mushaf cetak; header dan nomor menempel di sekelilingnya.
@@ -190,6 +176,7 @@ fun ReaderScreen(
                                     selected = selected,
                                     onAyahClick = { vm.selectAyah(it) },
                                     tajweed = settings.tajweed,
+                                    onSurahClick = onOpenSurahInfo,
                                 )
                             }
                         }
@@ -213,6 +200,7 @@ fun ReaderScreen(
                 onToggleBookmark = { vm.toggleAyahBookmark(ref, shown.page) },
                 onPrevious = { vm.moveSelection(-1) },
                 onNext = { vm.moveSelection(1) },
+                showTransliteration = settings.showTransliteration,
             )
         }
     }

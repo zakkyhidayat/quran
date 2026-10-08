@@ -168,6 +168,13 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
                         trailing = { IconSwitch(settings.amoled) },
                     )
                     item(
+                        title = "Transliterasi Latin",
+                        subtitle = "Tampilkan cara baca Latin di sheet ayat",
+                        onClick = { scope.launch { repo.setShowTransliteration(!settings.showTransliteration) } },
+                        leading = { Icon(AppIcons.Translate, contentDescription = null) },
+                        trailing = { IconSwitch(settings.showTransliteration) },
+                    )
+                    item(
                         title = "Warna tajwid",
                         subtitle = "Tampilkan huruf berwarna sesuai hukum tajwid",
                         onClick = { scope.launch { repo.setTajweed(!settings.tajweed) } },
@@ -198,7 +205,7 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
                     item(title = "Versi", subtitle = version)
                     item(
                         title = "Sumber data",
-                        subtitle = "Quranic Universal Library (Tarteel): layout KFGQPC V4, metadata, dan terjemahan.",
+                        subtitle = "Quranic Universal Library (Tarteel): layout KFGQPC V4, metadata, info surah, transliterasi, dan terjemahan.",
                     )
                     item(
                         title = "Font",

@@ -65,6 +65,7 @@ fun AyahSheetContent(
     onToggleBookmark: () -> Unit,
     onPrevious: () -> Unit,
     onNext: () -> Unit,
+    showTransliteration: Boolean = true,
 ) {
     val context = LocalContext.current
     val clipboard = LocalClipboard.current
@@ -127,6 +128,21 @@ fun AyahSheetContent(
             )
         }
 
+        val romanized = detail.transliteration
+        if (showTransliteration && !romanized.isNullOrBlank()) {
+            Spacer(Modifier.height(16.dp))
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
+            ) {
+                Column(Modifier.padding(16.dp)) {
+                    Text("Transliterasi", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                    Spacer(Modifier.height(4.dp))
+                    val body = MaterialTheme.typography.bodyLarge
+                    Text(romanized, style = body.copy(fontStyle = androidx.compose.ui.text.font.FontStyle.Italic, lineHeight = body.fontSize * 1.6f))
+                }
+            }
+        }
         detail.translations.forEach { tr ->
             Spacer(Modifier.height(16.dp))
             Card(

@@ -124,6 +124,26 @@ class MushafRepository(context: Context) {
         list
     }
 
+    suspend fun surahDetails(id: Int, lang: String): SurahDetails = withContext(Dispatchers.IO) {
+        val surah = surahs().getValue(id)
+        val place = db.rawQuery("SELECT place FROM surahs WHERE id = ?", arrayOf(id.toString()))
+            .use { if (it.moveToFirst() && !it.isNull(0)) it.getString(0) else null }
+        val lastPage = db.rawQuery("SELECT MAX(page) FROM words WHERE surah = ?", arrayOf(id.toString())).use { if (it.moveToFirst()) it.getInt(0) else surah.firstPage }
+        val ruku = db.rawQuery("SELECT COUNT(*) FROM ruku WHERE surah = ?", arrayOf(id.toString())).use { if (it.moveToFirst()) it.getInt(0) else 0 }
+        val html = db.rawQuery("SELECT text FROM surah_info WHERE lang = ? AND surah = ?", arrayOf(lang, id.toString()))
+            .use { if (it.moveToFirst()) it.getString(0) else "" }
+        SurahDetails(
+            place = place,
+            ayahCount = surah.ayahCount,
+            firstPage = surah.firstPage,
+            lastPage = lastPage,
+            juzFrom = containing("juz", id, 1),
+            juzTo = containing("juz", id, surah.ayahCount),
+            rukuCount = ruku,
+            infoHtml = html,
+        )
+    }
+
     suspend fun ayahPage(surah: Int, ayah: Int): Int = withContext(Dispatchers.IO) {
         db.rawQuery("SELECT page FROM ayahs WHERE surah = ? AND ayah = ?", arrayOf(surah.toString(), ayah.toString())).use {
             if (it.moveToFirst()) it.getInt(0) else 1
@@ -151,7 +171,9 @@ class MushafRepository(context: Context) {
             ).use { c -> while (c.moveToNext()) notes += Footnote(if (c.isNull(0)) null else c.getInt(0), c.getString(1)) }
             TranslationText(info, text, notes)
         }
-        AyahDetail(surah, ayah, page, arabic, texts, ayahInfo(surah, ayah))
+        val transliteration = db.rawQuery("SELECT text FROM transliteration WHERE surah = ? AND ayah = ?", key)
+            .use { if (it.moveToFirst()) it.getString(0) else null }
+        AyahDetail(surah, ayah, page, arabic, texts, ayahInfo(surah, ayah), transliteration)
     }
 
     suspend fun neighbour(ref: AyahRef, step: Int): AyahRef? {
