@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -30,6 +31,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -260,13 +262,31 @@ private fun AyahLine(
                 style = style,
                 maxLines = 1,
                 softWrap = false,
-                modifier = Modifier.graphicsLayer {
-                    colorFilter = if (word.isEnd) markerFilter else filter
-                    compositingStrategy = CompositingStrategy.Offscreen
-                },
+                modifier = Modifier.glyphLayer(if (word.isEnd) markerFilter else filter, size),
             )
         }
     }
+}
+
+// Lapisan warna per kata. Glyph V4 menjorok melewati kotak kata (harakat, ujung huruf, tumpang tindih dengan kata di
+// sebelahnya), sedangkan lapisan offscreen memotong tepat di kotak kata. Lapisan karenanya diperluas, tetapi ukuran yang
+// dilaporkan ke tata letak tetap ukuran kata, jadi susunan baris tidak berubah.
+@Composable
+private fun Modifier.glyphLayer(filter: ColorFilter?, fontSize: TextUnit): Modifier {
+    if (filter == null) return this
+    val density = LocalDensity.current
+    val padX = with(density) { (fontSize.toPx() * 0.5f).roundToInt() }
+    val padY = with(density) { (fontSize.toPx() * 0.6f).roundToInt() }
+    return this
+        .layout { measurable, constraints ->
+            val placeable = measurable.measure(constraints)
+            layout(placeable.width - 2 * padX, placeable.height - 2 * padY) { placeable.place(-padX, -padY) }
+        }
+        .graphicsLayer {
+            colorFilter = filter
+            compositingStrategy = CompositingStrategy.Offscreen
+        }
+        .padding(horizontal = with(density) { padX.toDp() }, vertical = with(density) { padY.toDp() })
 }
 
 // Susun kata dari kanan ke kiri. Baris penuh dibagi rata (justifikasi); baris pendek ditengahkan dengan jarak tetap.
@@ -315,10 +335,7 @@ private fun BasmalahLine(size: TextUnit, filter: ColorFilter?, font: FontFamily)
                 style = style,
                 maxLines = 1,
                 softWrap = false,
-                modifier = Modifier.graphicsLayer {
-                    colorFilter = filter
-                    compositingStrategy = CompositingStrategy.Offscreen
-                },
+                modifier = Modifier.glyphLayer(filter, size),
             )
         }
     }
