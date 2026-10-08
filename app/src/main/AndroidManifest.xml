@@ -2,8 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- Pengingat membaca (disembunyikan sementara): saat dinyalakan lagi, tambahkan kembali POST_NOTIFICATIONS dan
-         RECEIVE_BOOT_COMPLETED. Tanpa izin yang tidak dipakai, daftar izin aplikasi tetap minimal. -->
+    <!-- Pengingat membaca harian: POST_NOTIFICATIONS (Android 13+, diminta saat pengingat dinyalakan) untuk menampilkan
+         notifikasi, RECEIVE_BOOT_COMPLETED untuk memasang ulang alarm setelah perangkat menyala ulang. Alarm tidak
+         eksak, jadi tanpa SCHEDULE_EXACT_ALARM. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".QuranApp"
@@ -26,6 +29,7 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
                 <action android:name="android.intent.action.TIME_SET" />
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>

@@ -185,8 +185,11 @@
     <string name="reminder_time">অনুস্মারকের সময়</string>
     <string name="reminder_unit">দৈনিক অংশ</string>
     <string name="reminder_channel">পড়ার অনুস্মারক</string>
-    <string name="reminder_title">পড়ার সময়: %1$s</string>
-    <string name="reminder_text">%1$s %2$d:%3$d থেকে চালিয়ে যান</string>
+    <string name="reminder_title">আজ: %1$s</string>
+    <string name="reminder_text">%1$s %2$d – %3$s %4$d</string>
+    <string name="reminder_text_same">%1$s %2$d – %3$d</string>
+    <string name="reminder_perm_denied">দৈনিক রিমাইন্ডার দেখানোর জন্য Android সেটিংসে নোটিফিকেশনের অনুমতি দিন।</string>
+    <string name="reminder_open_settings">নোটিফিকেশন সেটিংস</string>
     <string name="ok">ঠিক আছে</string>
     <string name="permissions">অনুমতি</string>
     <string name="perm_notifications">বিজ্ঞপ্তি</string>
@@ -204,4 +207,22 @@
     <string name="settings_backup_on">স্বয়ংক্রিয় ব্যাকআপ চালু</string>
     <string name="settings_permissions_sub">অ্যাপ কী ব্যবহার করে এবং কেন</string>
     <string name="settings_about_sub">সংস্করণ, ডেটার উৎস, কৃতজ্ঞতা, সহায়তা</string>
+    <string name="counter_ruku">রুকু %1$d</string>
+    <string name="counter_cd">%1$s: আয়াত %2$d / %3$d</string>
+    <string name="counter_switch">কাউন্টার পরিবর্তন করুন</string>
+    <string name="ayah_actions_show">আয়াতের অ্যাকশন দেখান</string>
+    <string name="ayah_actions_hide">আয়াতের অ্যাকশন লুকান</string>
+    <string name="explore_title">অন্বেষণ</string>
+    <string name="explore_search">বিষয় খুঁজুন</string>
+    <string name="explore_empty">কোনো বিষয় পাওয়া যায়নি</string>
+    <string name="topic_ayah_count">%1$dটি আয়াত</string>
+    <string name="topic_subtopics">উপবিষয়</string>
+    <string name="topic_ayahs">আয়াতসমূহ</string>
+    <string name="ayah_theme_title">প্রসঙ্গ</string>
+    <string name="ayah_topics_title">বিষয়সমূহ</string>
+    <string name="similar_ayahs_title">অনুরূপ আয়াত</string>
+    <string name="similar_ayah_item">%1$s · %2$d%% মিল</string>
+    <string name="mutashabihat_title">অনুরূপ বাক্যাংশ</string>
+    <string name="mutashabihat_count">%1$dটি আয়াতে আছে</string>
+    <string name="topic_related">সম্পর্কিত বিষয়</string>
 </resources>

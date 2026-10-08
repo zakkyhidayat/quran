@@ -78,3 +78,45 @@ data class SurahDetails(
     val revelationOrder: Int?,
     val infoHtml: String,
 )
+
+// Penjelajahan tematik (data QUL opsional; semua kosong bila tabelnya tidak ada di quran.db).
+
+/** Topik atau konsep. [ayahCount] = jumlah ayat yang ditautkan langsung ke topik ini. */
+data class Topic(
+    val id: Int,
+    val name: String,
+    val nameAr: String?,
+    val description: String?,
+    val parentId: Int?,
+    val ayahCount: Int,
+)
+
+/** Tema untuk sekelompok ayat berurutan [ayahFrom]..[ayahTo] dalam satu surah. */
+data class AyahTheme(val surah: Int, val ayahFrom: Int, val ayahTo: Int, val theme: String, val keywords: String?)
+
+/** Ayat yang mirip dengan ayat lain. [score] 0-100; [fromWord]..[toWord] = kata yang cocok di ayat ini (1-based). */
+data class SimilarAyah(val surah: Int, val ayah: Int, val score: Int, val coverage: Int, val fromWord: Int?, val toWord: Int?)
+
+/** Frasa mutasyabihat pada satu ayat ([fromWord]..[toWord], 1-based inklusif) dan ayat lain yang memuat frasa yang sama. */
+data class Mutashabih(val phraseId: Int, val fromWord: Int, val toWord: Int, val phrase: String, val others: List<AyahRef>, val totalAyahs: Int)
+
+/** Semua tambahan tematik untuk satu ayat; null/kosong bila datanya tidak ada. */
+data class AyahExtras(
+    val themes: List<AyahTheme>,
+    val topics: List<Topic>,
+    val similar: List<SimilarAyah>,
+    val mutashabihat: List<Mutashabih>,
+) {
+    val isEmpty get() = themes.isEmpty() && topics.isEmpty() && similar.isEmpty() && mutashabihat.isEmpty()
+}
+
+/** Morfologi satu kata (dari QUL; belum dipakai UI). [word] = posisi kata di ayat, 1-based. */
+data class WordMorphology(
+    val surah: Int,
+    val ayah: Int,
+    val word: Int,
+    val root: String?,
+    val lemma: String?,
+    val stem: String?,
+    val pos: String?,
+)

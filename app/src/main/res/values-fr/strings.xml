@@ -185,8 +185,11 @@
     <string name="reminder_time">Heure du rappel</string>
     <string name="reminder_unit">Portion quotidienne</string>
     <string name="reminder_channel">Rappels de lecture</string>
-    <string name="reminder_title">C’est l’heure de lire : %1$s</string>
-    <string name="reminder_text">Reprendre à %1$s %2$d:%3$d</string>
+    <string name="reminder_title">Aujourd’hui : %1$s</string>
+    <string name="reminder_text">%1$s %2$d – %3$s %4$d</string>
+    <string name="reminder_text_same">%1$s %2$d – %3$d</string>
+    <string name="reminder_perm_denied">Autorisez les notifications dans les réglages d’Android pour afficher le rappel quotidien.</string>
+    <string name="reminder_open_settings">Réglages des notifications</string>
     <string name="ok">OK</string>
     <string name="permissions">Autorisations</string>
     <string name="perm_notifications">Notifications</string>
@@ -204,4 +207,22 @@
     <string name="settings_backup_on">Sauvegarde automatique activée</string>
     <string name="settings_permissions_sub">Ce que l’application utilise et pourquoi</string>
     <string name="settings_about_sub">Version, sources des données, remerciements, soutien</string>
+    <string name="counter_ruku">Ruku %1$d</string>
+    <string name="counter_cd">%1$s : verset %2$d sur %3$d</string>
+    <string name="counter_switch">Changer de compteur</string>
+    <string name="ayah_actions_show">Afficher les actions du verset</string>
+    <string name="ayah_actions_hide">Masquer les actions du verset</string>
+    <string name="explore_title">Explorer</string>
+    <string name="explore_search">Rechercher des thèmes</string>
+    <string name="explore_empty">Aucun thème trouvé</string>
+    <string name="topic_ayah_count">%1$d versets</string>
+    <string name="topic_subtopics">Sous-thèmes</string>
+    <string name="topic_ayahs">Versets</string>
+    <string name="ayah_theme_title">Thème</string>
+    <string name="ayah_topics_title">Thèmes</string>
+    <string name="similar_ayahs_title">Versets similaires</string>
+    <string name="similar_ayah_item">%1$s · %2$d%% de similarité</string>
+    <string name="mutashabihat_title">Expressions similaires</string>
+    <string name="mutashabihat_count">Présente dans %1$d versets</string>
+    <string name="topic_related">Thèmes liés</string>
 </resources>

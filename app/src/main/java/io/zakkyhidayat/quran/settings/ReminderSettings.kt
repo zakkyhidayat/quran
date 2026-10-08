@@ -32,21 +32,16 @@ import kotlinx.coroutines.launch
 /** Pengingat membaca harian: sakelar (meminta izin notifikasi di Android 13+), jam, dan satuan bagian. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ReminderControls(vm: AppViewModel, settings: AppSettings) {
+internal fun ReminderControls(vm: AppViewModel, settings: AppSettings) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val repo = vm.settingsRepository
     var showTime by rememberSaveable { mutableStateOf(false) }
+    var showDenied by rememberSaveable { mutableStateOf(false) }
     val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-        if (granted) scope.launch { repo.setReminder(true) }
+        if (granted) scope.launch { repo.setReminder(true) } else showDenied = true
     }
-    val timeText = remember(settings.reminderMinutes) {
-        val cal = java.util.Calendar.getInstance().apply {
-            set(java.util.Calendar.HOUR_OF_DAY, settings.reminderMinutes / 60)
-            set(java.util.Calendar.MINUTE, settings.reminderMinutes % 60)
-        }
-        android.text.format.DateFormat.getTimeFormat(context).format(cal.time)
-    }
+    val timeText = remember(settings.reminderMinutes) { reminderTimeText(context, settings.reminderMinutes) }
     Group {
         item(
             title = stringResource(R.string.reminder_daily),
@@ -95,6 +90,24 @@ private fun ReminderControls(vm: AppViewModel, settings: AppSettings) {
             }
         }
     }
+    // Izin ditolak: pengingat tetap mati; arahkan pengguna ke pengaturan notifikasi aplikasi.
+    if (showDenied) {
+        AlertDialog(
+            onDismissRequest = { showDenied = false },
+            title = { Text(stringResource(R.string.perm_notifications)) },
+            text = { Text(stringResource(R.string.reminder_perm_denied)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    showDenied = false
+                    context.startActivity(
+                        android.content.Intent(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                            .putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, context.packageName),
+                    )
+                }) { Text(stringResource(R.string.reminder_open_settings)) }
+            },
+            dismissButton = { TextButton(onClick = { showDenied = false }) { Text(stringResource(R.string.cancel)) } },
+        )
+    }
     if (showTime) {
         val state = androidx.compose.material3.rememberTimePickerState(
             initialHour = settings.reminderMinutes / 60,
@@ -114,4 +127,13 @@ private fun ReminderControls(vm: AppViewModel, settings: AppSettings) {
             dismissButton = { TextButton(onClick = { showTime = false }) { Text(stringResource(R.string.cancel)) } },
         )
     }
+}
+
+/** Jam pengingat ([minutes] sejak tengah malam) dalam format jam perangkat. */
+internal fun reminderTimeText(context: android.content.Context, minutes: Int): String {
+    val cal = java.util.Calendar.getInstance().apply {
+        set(java.util.Calendar.HOUR_OF_DAY, minutes / 60)
+        set(java.util.Calendar.MINUTE, minutes % 60)
+    }
+    return android.text.format.DateFormat.getTimeFormat(context).format(cal.time)
 }

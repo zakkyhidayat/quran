@@ -42,6 +42,7 @@ enum class SettingsPage(val route: String) {
     Appearance("settings/appearance"),
     Translations("settings/translations"),
     Backup("settings/backup"),
+    Reminder("settings/reminder"),
     Permissions("settings/permissions"),
     About("settings/about"),
 }
@@ -68,6 +69,7 @@ fun SettingsScreen(
             SettingsPage.Appearance -> R.string.appearance
             SettingsPage.Translations -> R.string.translations
             SettingsPage.Backup -> R.string.backup
+            SettingsPage.Reminder -> R.string.reminder
             SettingsPage.Permissions -> R.string.permissions
             SettingsPage.About -> R.string.about
         },
@@ -120,6 +122,7 @@ fun SettingsScreen(
                             }
                             SettingsPage.Translations -> TranslationControls(vm, settings)
                             SettingsPage.Backup -> BackupControls(vm, settings, snackbar)
+                            SettingsPage.Reminder -> ReminderControls(vm, settings)
                             SettingsPage.Permissions -> PermissionControls()
                             SettingsPage.About -> {
                                 Group {
@@ -207,6 +210,17 @@ private fun SettingsMain(settings: AppSettings, onOpen: (SettingsPage) -> Unit) 
             subtitle = stringResource(if (settings.autoBackupUri != null) R.string.settings_backup_on else R.string.settings_backup_sub),
             onClick = { onOpen(SettingsPage.Backup) },
             leading = { Icon(AppIcons.Backup, contentDescription = null) },
+            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
+        )
+        item(
+            title = stringResource(R.string.reminder),
+            subtitle = if (settings.reminderEnabled) {
+                stringResource(R.string.reminder_on_sub, reminderTimeText(LocalContext.current, settings.reminderMinutes))
+            } else {
+                stringResource(R.string.reminder_off_sub)
+            },
+            onClick = { onOpen(SettingsPage.Reminder) },
+            leading = { Icon(AppIcons.Alarm, contentDescription = null) },
             trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
         )
         item(

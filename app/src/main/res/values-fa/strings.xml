@@ -185,8 +185,11 @@
     <string name="reminder_time">زمان یادآوری</string>
     <string name="reminder_unit">بخش روزانه</string>
     <string name="reminder_channel">یادآورهای خواندن</string>
-    <string name="reminder_title">وقت خواندن: %1$s</string>
-    <string name="reminder_text">ادامه از %1$s %2$d:%3$d</string>
+    <string name="reminder_title">امروز: %1$s</string>
+    <string name="reminder_text">%1$s %2$d – %3$s %4$d</string>
+    <string name="reminder_text_same">%1$s %2$d – %3$d</string>
+    <string name="reminder_perm_denied">برای نمایش یادآور روزانه، اعلان‌ها را در تنظیمات اندروید مجاز کنید.</string>
+    <string name="reminder_open_settings">تنظیمات اعلان</string>
     <string name="ok">تأیید</string>
     <string name="permissions">مجوزها</string>
     <string name="perm_notifications">اعلان‌ها</string>
@@ -204,4 +207,22 @@
     <string name="settings_backup_on">پشتیبان خودکار روشن است</string>
     <string name="settings_permissions_sub">دسترسی‌های برنامه و دلیل آن‌ها</string>
     <string name="settings_about_sub">نسخه، منابع داده، سپاسگزاری، حمایت</string>
+    <string name="counter_ruku">رکوع %1$d</string>
+    <string name="counter_cd">%1$s: آیهٔ %2$d از %3$d</string>
+    <string name="counter_switch">تغییر شمارنده</string>
+    <string name="ayah_actions_show">نمایش کنش‌های آیه</string>
+    <string name="ayah_actions_hide">پنهان کردن کنش‌های آیه</string>
+    <string name="explore_title">کاوش</string>
+    <string name="explore_search">جستجوی موضوعات</string>
+    <string name="explore_empty">موضوعی یافت نشد</string>
+    <string name="topic_ayah_count">%1$d آیه</string>
+    <string name="topic_subtopics">زیرموضوعات</string>
+    <string name="topic_ayahs">آیات</string>
+    <string name="ayah_theme_title">مضمون</string>
+    <string name="ayah_topics_title">موضوعات</string>
+    <string name="similar_ayahs_title">آیات مشابه</string>
+    <string name="similar_ayah_item">%1$s · %2$d%% شباهت</string>
+    <string name="mutashabihat_title">عبارت‌های مشابه</string>
+    <string name="mutashabihat_count">در %1$d آیه آمده است</string>
+    <string name="topic_related">موضوعات مرتبط</string>
 </resources>

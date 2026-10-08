@@ -19,6 +19,8 @@ First public release candidate.
 - Onboarding for new users.
 - Backup and restore to a JSON file, and auto backup to a chosen file.
 - In-app updates for the GitHub build.
+- Daily reading reminder: a notification at a chosen time with the day's juz, hizb, or manzil and its ayah range; tapping
+  it opens the start of that portion. Asks for notification permission (Android 13+) and survives reboot and updates.
 
 ### Quality
 - Qur'an content checks in CI (counts, pages, SHA-256 fingerprints); all 6,236 ayahs verified against the source.

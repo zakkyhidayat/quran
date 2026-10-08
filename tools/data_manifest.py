@@ -45,6 +45,8 @@ OPTIONAL_DIRS = [
     "en-khattab", "en-yusufali", "ur-jalandhari", "bn-mujibur", "tr-diyanet",
     "fa-islamhouse", "ms-basmeih", "fr-hamidullah", "ru-kuliev",
 ]
+# Sumber penjelajahan tematik (tools/build_db.py, load_explore); semua berkas .db/.sqlite/.json di foldernya dicatat.
+EXPLORE_DIRS = ["topics", "ayah-theme", "similar-ayah", "mutashabihat", "morphology"]
 PAGE_FONTS = "ttf"  # p1.ttf .. p604.ttf, dihitung sebagai satu entri gabungan
 
 
@@ -53,7 +55,7 @@ def sha256(path: Path) -> str:
 
 
 def is_optional(key: str) -> bool:
-    return key.split("/")[0] in OPTIONAL_DIRS
+    return key.split("/")[0] in OPTIONAL_DIRS + EXPLORE_DIRS
 
 
 def collect() -> dict:
@@ -67,6 +69,12 @@ def collect() -> dict:
             entries[f"{folder}/{db.name}"] = {"sha256": sha256(db), "bytes": db.stat().st_size}
         else:
             entries[f"{folder}/*.db"] = None
+    for folder in EXPLORE_DIRS:
+        files = sorted(p for p in (SRC / folder).iterdir() if p.suffix in (".db", ".sqlite", ".json")) if (SRC / folder).is_dir() else []
+        for f in files:
+            entries[f"{folder}/{f.name}"] = {"sha256": sha256(f), "bytes": f.stat().st_size}
+        if not files:
+            entries[f"{folder}/*"] = None
     fonts = [SRC / PAGE_FONTS / f"p{n}.ttf" for n in range(1, 605)]
     present = [f for f in fonts if f.exists()]
     if len(present) == 604:

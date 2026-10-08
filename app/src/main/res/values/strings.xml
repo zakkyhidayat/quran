@@ -186,8 +186,11 @@
     <string name="reminder_time">Reminder time</string>
     <string name="reminder_unit">Daily portion</string>
     <string name="reminder_channel">Reading reminders</string>
-    <string name="reminder_title">Time to read: %1$s</string>
-    <string name="reminder_text">Continue from %1$s %2$d:%3$d</string>
+    <string name="reminder_title">Today: %1$s</string>
+    <string name="reminder_text">%1$s %2$d – %3$s %4$d</string>
+    <string name="reminder_text_same">%1$s %2$d – %3$d</string>
+    <string name="reminder_perm_denied">Allow notifications in Android settings so the daily reminder can appear.</string>
+    <string name="reminder_open_settings">Notification settings</string>
     <string name="ok">OK</string>
     <string name="permissions">Permissions</string>
     <string name="perm_notifications">Notifications</string>
@@ -205,4 +208,22 @@
     <string name="settings_backup_on">Auto backup is on</string>
     <string name="settings_permissions_sub">What the app may access and why</string>
     <string name="settings_about_sub">Version, data sources, credits, support</string>
+    <string name="counter_ruku">Ruku %1$d</string>
+    <string name="counter_cd">%1$s: ayah %2$d of %3$d</string>
+    <string name="counter_switch">Switch counter</string>
+    <string name="ayah_actions_show">Show ayah actions</string>
+    <string name="ayah_actions_hide">Hide ayah actions</string>
+    <string name="explore_title">Explore</string>
+    <string name="explore_search">Search topics</string>
+    <string name="explore_empty">No topics found</string>
+    <string name="topic_ayah_count">%1$d ayahs</string>
+    <string name="topic_subtopics">Subtopics</string>
+    <string name="topic_ayahs">Ayahs</string>
+    <string name="ayah_theme_title">Theme</string>
+    <string name="ayah_topics_title">Topics</string>
+    <string name="similar_ayahs_title">Similar ayahs</string>
+    <string name="similar_ayah_item">%1$s · %2$d%% similar</string>
+    <string name="mutashabihat_title">Similar phrases</string>
+    <string name="mutashabihat_count">Appears in %1$d ayahs</string>
+    <string name="topic_related">Related topics</string>
 </resources>

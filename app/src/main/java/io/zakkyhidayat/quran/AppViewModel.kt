@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import io.zakkyhidayat.quran.data.AyahDetail
+import io.zakkyhidayat.quran.data.AyahExtras
 import io.zakkyhidayat.quran.data.AyahRef
 import io.zakkyhidayat.quran.data.CatalogPack
 import io.zakkyhidayat.quran.data.Marker
@@ -63,8 +64,17 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         .mapLatest { (sel, ids) -> sel?.let { mushaf.ayahDetail(it.surah, it.ayah, ids) } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
+    // Tambahan tematik ayat terpilih (tema, topik, ayat serupa, mutasyabihat); kosong bila datanya tidak dibundel.
+    val ayahExtras: StateFlow<AyahExtras?> = selected
+        .mapLatest { sel -> sel?.let { mushaf.ayahExtras(it.surah, it.ayah) }?.takeUnless { it.isEmpty } }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    // Pintu masuk Jelajahi hanya tampil bila quran.db memuat data topik.
+    val exploreAvailable = MutableStateFlow(false)
+
     init {
         viewModelScope.launch {
+            exploreAvailable.value = mushaf.exploreAvailable()
             bookmarkStore.load()
             surahs.value = mushaf.surahs()
             juz.value = mushaf.markers(MarkerKind.Juz)

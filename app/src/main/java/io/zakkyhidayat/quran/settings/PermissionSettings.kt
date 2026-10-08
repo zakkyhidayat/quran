@@ -22,9 +22,6 @@ import androidx.compose.ui.unit.dp
 import io.zakkyhidayat.quran.R
 import io.zakkyhidayat.quran.ui.AppIcons
 
-// Pengingat membaca disembunyikan sementara sampai fiturnya dimatangkan; kodenya tetap ada (reminder/Reminder.kt).
-private const val REMINDER_VISIBLE = false
-
 /**
  * Status izin yang dibutuhkan aplikasi: notifikasi (pengingat membaca) dan, di varian GitHub, memasang aplikasi
  * (pembaruan). Diperiksa ulang setiap kali layar kembali aktif, karena izin diubah di Pengaturan Android.
@@ -40,7 +37,7 @@ internal fun PermissionControls() {
         onPauseOrDispose { }
     }
     Group {
-        if (REMINDER_VISIBLE) item(
+        item(
             title = stringResource(R.string.perm_notifications),
             subtitle = stringResource(R.string.perm_notifications_sub),
             onClick = {

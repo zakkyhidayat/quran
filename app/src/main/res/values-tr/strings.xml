@@ -185,8 +185,11 @@
     <string name="reminder_time">Hatırlatma saati</string>
     <string name="reminder_unit">Günlük bölüm</string>
     <string name="reminder_channel">Okuma hatırlatıcıları</string>
-    <string name="reminder_title">Okuma vakti: %1$s</string>
-    <string name="reminder_text">%1$s %2$d:%3$d ayetinden devam edin</string>
+    <string name="reminder_title">Bugün: %1$s</string>
+    <string name="reminder_text">%1$s %2$d – %3$s %4$d</string>
+    <string name="reminder_text_same">%1$s %2$d – %3$d</string>
+    <string name="reminder_perm_denied">Günlük hatırlatıcının görünmesi için Android ayarlarından bildirimlere izin verin.</string>
+    <string name="reminder_open_settings">Bildirim ayarları</string>
     <string name="ok">Tamam</string>
     <string name="permissions">İzinler</string>
     <string name="perm_notifications">Bildirimler</string>
@@ -204,4 +207,22 @@
     <string name="settings_backup_on">Otomatik yedek açık</string>
     <string name="settings_permissions_sub">Uygulamanın erişimi ve nedeni</string>
     <string name="settings_about_sub">Sürüm, veri kaynakları, katkılar, destek</string>
+    <string name="counter_ruku">Rükû %1$d</string>
+    <string name="counter_cd">%1$s: ayet %2$d / %3$d</string>
+    <string name="counter_switch">Sayacı değiştir</string>
+    <string name="ayah_actions_show">Ayet eylemlerini göster</string>
+    <string name="ayah_actions_hide">Ayet eylemlerini gizle</string>
+    <string name="explore_title">Keşfet</string>
+    <string name="explore_search">Konu ara</string>
+    <string name="explore_empty">Konu bulunamadı</string>
+    <string name="topic_ayah_count">%1$d ayet</string>
+    <string name="topic_subtopics">Alt konular</string>
+    <string name="topic_ayahs">Ayetler</string>
+    <string name="ayah_theme_title">Tema</string>
+    <string name="ayah_topics_title">Konular</string>
+    <string name="similar_ayahs_title">Benzer ayetler</string>
+    <string name="similar_ayah_item">%1$s · %%%2$d benzer</string>
+    <string name="mutashabihat_title">Benzer ifadeler</string>
+    <string name="mutashabihat_count">%1$d ayette geçiyor</string>
+    <string name="topic_related">İlgili konular</string>
 </resources>

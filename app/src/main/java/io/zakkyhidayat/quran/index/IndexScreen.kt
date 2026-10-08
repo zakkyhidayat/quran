@@ -82,7 +82,7 @@ private val ListPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -> Unit, onOpenSurahInfo: (Int) -> Unit) {
+fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -> Unit, onOpenSurahInfo: (Int) -> Unit, onOpenExplore: () -> Unit = {}) {
     val onBack = onOpenReader // pilihan di daftar membuka layar baca
     // Bookmark di urutan pertama, tetapi yang dibuka pertama kali tetap Surah.
     var tab by rememberSaveable { mutableIntStateOf(1) }
@@ -90,6 +90,7 @@ fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -
     val surahsForJump by vm.surahs.collectAsStateWithLifecycle()
     val settings by vm.settingsRepository.settings.collectAsStateWithLifecycle(AppSettings())
     val lastSurah = surahsForJump[settings.lastSurah]
+    val exploreAvailable by vm.exploreAvailable.collectAsStateWithLifecycle()
     Scaffold(
         // Lanjutkan membaca: FAB diperluas di kanan bawah, tampil di semua tab.
         floatingActionButton = {
@@ -110,6 +111,8 @@ fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -
             TopAppBar(
                 title = { Text(stringResource(R.string.index_title)) },
                 actions = {
+                    // Jelajahi (topik tematik) hanya ada bila quran.db dibangun dengan data QUL-nya.
+                    if (exploreAvailable) IconButton(onClick = onOpenExplore) { Icon(AppIcons.GridView, contentDescription = stringResource(R.string.explore_title)) }
                     IconButton(onClick = { showJump = true }) { Icon(AppIcons.FormatListNumbered, contentDescription = stringResource(R.string.jump_to_ayah)) }
                     IconButton(onClick = { vm.randomAyah(); onBack() }) { Icon(AppIcons.Shuffle, contentDescription = stringResource(R.string.random_ayah)) }
                     IconButton(onClick = onOpenSettings) { Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.settings)) }

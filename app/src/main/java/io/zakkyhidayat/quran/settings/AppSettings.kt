@@ -24,6 +24,9 @@ enum class ReminderUnit { Juz, Hizb, Manzil }
 /** Cara baca, berlaku untuk semua surah: halaman mushaf, ayat dengan terjemahan, atau terjemahan saja. */
 enum class ReadingMode { Mushaf, AyahTranslation, Translation }
 
+/** Isi penghitung di bilah atas pembaca; berganti tiap diketuk. */
+enum class CounterMode { Surah, Juz, Hizb, Rub, Manzil, Ruku }
+
 data class AppSettings(
     val themeMode: ThemeMode = ThemeMode.System,
     val colorMode: ColorMode = ColorMode.Dynamic,
@@ -47,6 +50,7 @@ data class AppSettings(
     /** Jam pengingat dalam menit sejak tengah malam (bawaan 20.00). */
     val reminderMinutes: Int = 20 * 60,
     val reminderUnit: ReminderUnit = ReminderUnit.Juz,
+    val counterMode: CounterMode = CounterMode.Surah,
     val lastPage: Int = 1,
     val lastSurah: Int = 0,
     val lastAyah: Int = 0,
@@ -72,6 +76,7 @@ class SettingsRepository(private val context: Context) {
     private val reminderKey = booleanPreferencesKey("reminder_enabled")
     private val reminderMinutesKey = intPreferencesKey("reminder_minutes")
     private val reminderUnitKey = stringPreferencesKey("reminder_unit")
+    private val counterModeKey = stringPreferencesKey("counter_mode")
 
     // Khusus perangkat ini: tidak ikut diekspor dan tidak ditimpa saat memulihkan cadangan.
     private val deviceOnlyKeys = setOf(autoBackupUriKey.name, autoBackupAtKey.name)
@@ -100,6 +105,7 @@ class SettingsRepository(private val context: Context) {
             onboardingDone = prefs[onboardingKey] ?: (prefs[lastPageKey] != null),
             // Pengguna baru: onboarding_done tersimpan, jadi petunjuk tetap tampil walau baca terakhir sudah tercatat.
             gestureHintDone = prefs[gestureHintKey] ?: (prefs[onboardingKey] == null && prefs[lastPageKey] != null),
+            counterMode = prefs[counterModeKey].toEnum(CounterMode.Surah),
             lastPage = prefs[lastPageKey] ?: 1,
             lastSurah = prefs[lastSurahKey] ?: 0,
             lastAyah = prefs[lastAyahKey] ?: 0,
@@ -169,6 +175,8 @@ class SettingsRepository(private val context: Context) {
     suspend fun setTranslationTextPercent(value: Int) = context.dataStore.edit { it[translationTextKey] = value }
 
     suspend fun setReadingMode(value: ReadingMode) = context.dataStore.edit { it[readingModeKey] = value.name }
+
+    suspend fun setCounterMode(value: CounterMode) = context.dataStore.edit { it[counterModeKey] = value.name }
 
     suspend fun setLastPage(page: Int) = context.dataStore.edit { it[lastPageKey] = page }
 

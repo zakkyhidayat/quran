@@ -39,6 +39,63 @@ Pilih varian **`with-footnote-tags`** untuk terjemahan (catatan kaki ditandai di
 **tidak dipakai**: `qpc-v4.json` (sama dengan `qpc-v4.db`), `transliteration-simple.db` (kata menempel),
 `pages.zip` (dokumen docx), varian ke-2 `surah_names.ttfv2` (identik dengan yang ada).
 
+## Sumber opsional: penjelajahan tematik
+
+Lima sumber QUL untuk fitur Jelajahi (topik, tema ayat, ayat serupa, mutasyabihat, morfologi). **Opsional dan belum diunduh**:
+tanpa foldernya, `build_db.py` tetap menghasilkan `quran.db` yang sama seperti sebelumnya dan aplikasi menyembunyikan fiturnya.
+Bila diunduh, ambil dari halaman berikut (butuh login), simpan di `data-src/`, lalu jalankan `python tools/build_db.py`.
+`data_manifest.py` menampilkannya sebagai `BELUM DIUNDUH` sampai ada.
+
+| # | Data | Halaman QUL | Simpan ke (di `data-src/`) | Tabel di `quran.db` |
+|---|------|-------------|----------------------------|---------------------|
+| 17 | Topik dan konsep (2.512 topik, hubungan induk-anak, ontologi dan tematik) | [ayah-topics/45](https://qul.tarteel.ai/resources/ayah-topics/45), SQLite | `topics/` | `topics`, `topic_ayahs` |
+| 18 | Tema ayat (kelompok ayat berurutan dengan satu tema) | [ayah-theme/62](https://qul.tarteel.ai/resources/ayah-theme/62), SQLite | `ayah-theme/` | `ayah_themes` |
+| 19 | Ayat serupa | [similar-ayah/74](https://qul.tarteel.ai/resources/similar-ayah/74), SQLite (atau JSON; hanya SQLite yang dibaca) | `similar-ayah/` | `similar_ayahs` |
+| 20 | Mutasyabihat (frasa mirip) | [mutashabihat/73](https://qul.tarteel.ai/resources/mutashabihat/73), JSON (zip berisi `phrases.json` dan `phrase_verses.json`) | `mutashabihat/` (ekstrak zip) | `mutashabihat`, `mutashabihat_ayahs` |
+| 21 | Akar kata per kata | [morphology/76](https://qul.tarteel.ai/resources/morphology/76), SQLite | `morphology/` | `morph_roots`, `word_morph.root_id` |
+| 22 | Lema per kata | [morphology/75](https://qul.tarteel.ai/resources/morphology/75), SQLite | `morphology/` | `morph_lemmas`, `word_morph.lemma_id` |
+| 23 | Stem per kata | [morphology/77](https://qul.tarteel.ai/resources/morphology/77), SQLite | `morphology/` | `morph_stems`, `word_morph.stem_id` |
+
+Folder `morphology/` boleh berisi beberapa berkas (satu per jenis); `build_db.py` mengenali tabelnya dari nama (`roots`/`word_roots`,
+`lemmas`/`word_lemmas`, `stems`/`word_stems`).
+
+Format yang dibaca (dari halaman sumber di atas, dibaca tanpa login; **belum dicoba dengan berkas asli**):
+
+- **Topik**: kolom `topic_id`, `topic_name`, `arabic_name`, `verse_key` (`2:255`), `is_ontology`, `is_thematic`, `parent_topic_id`,
+  `description`. Nama tabel tidak dicatat di halaman, jadi skrip mencari tabel yang punya kolom `topic_id`, `topic_name`, `verse_key`.
+- **Tema ayat**: kolom `theme`, `surah_number`, `ayah_from` (atau `from_ayah`), `ayah_to` (atau `to_ayah`), `keywords`, `total_ayahs`.
+  Nama kolom rentang tidak pasti di halaman, kedua ejaan diterima.
+- **Ayat serupa**: kolom `verse_key`, `matched_ayah_key`, `matched_words_count`, `coverage` (persen), `score` (0-100),
+  `match_words_range` (`[5, 8]`, posisi kata di ayat yang cocok).
+- **Mutasyabihat**: `phrases.json` = objek id frasa, berisi `surahs`, `ayahs`, `count`, `source` (`key`, `from`, `to`) dan `ayah`
+  (kunci ayat ke daftar `[awal, akhir]`, indeks kata 1-based inklusif). `phrase_verses.json` (indeks balik) tidak dipakai.
+- **Akar/lema/stem**: tabel `roots`(`id`, `arabic_trilateral`, `english_trilateral`, `words_count`) + `word_roots`(`root_id`,
+  `word_location` `surah:ayah:kata`); `lemmas`/`word_lemmas`(`lemma_id`, `word_location`) dan `stems`/`word_stems`(`stem_id`,
+  `location`) dengan kolom `id`, `text`, `text_clean`, `words_count`.
+- **Jenis kata (POS)**: ada di [morphology/78](https://qul.tarteel.ai/resources/morphology/78) ("Word Morphology"), tetapi halaman itu
+  menjawab galat 500 saat dibaca sehingga skemanya belum diketahui. Kolom `word_morph.pos` sengaja dibiarkan kosong; isi
+  setelah berkas diunduh dan skemanya dilihat.
+
+Skrip berhenti dengan galat bila tabel yang diharapkan tidak ada di berkas. Naikkan `DATA_VERSION` setelah menambah data ini.
+
+Skema nyata berkas yang sudah diunduh (menggantikan dugaan di atas): `topics/topics.db` tabel `topics` (`topic_id`, `name`, `arabic_name`,
+`parent_id`, `thematic_parent_id`, `ontology_parent_id`, `description` HTML dengan `<topic data-id>`, `thematic`, `ontology`, `ayahs`
+berupa daftar `1:1, 1:2`, `related_topics`); `similar-ayah/matching-ayah.db` tabel `similar_ayahs` (`match_words_range` berbentuk
+`[[5,8]]`); `morphology/word-root.db`, `word-lemma.db`, `word-stem.db` dengan tabel kata `root_words`/`lemma_words`/`stem_words`
+(`word_location`). Deskripsi topik disimpan sebagai teks polos; tautan topik masuk ke tabel `topic_links`. Tema ayat (`ayah-theme/`)
+belum diunduh.
+
+### Membangun hanya tabel penjelajahan
+
+Bila sumber dasar (layout, qpc-hafs, meta, dan lain-lain) tidak ada di `data-src/`, jangan bangun ulang seluruhnya:
+
+```bash
+python tools/build_db.py --explore-only   # buka quran.db yang ada, buang dan isi ulang hanya tabel penjelajahan, VACUUM
+python tools/verify_quran.py
+```
+
+Tabel dasar tidak disentuh. Ini juga menaikkan `user_version` ke `DATA_VERSION`.
+
 ## Paket terjemahan unduhan
 
 Selain empat terjemahan yang dibundel di `quran.db`, aplikasi bisa mengunduh terjemahan tambahan. QUL tidak punya API dan

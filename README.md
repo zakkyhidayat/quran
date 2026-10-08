@@ -52,17 +52,16 @@ Choices made on purpose:
 - [x] In-app updates for builds from GitHub Releases
 - [x] All translations downloadable, none bundled in the APK
 - [ ] Automatic cloud backup (Google Drive, Dropbox, OneDrive)
-- [ ] Reading reminders to keep a daily portion by juz, hizb, or manzil (in progress, hidden for now)
+- [x] Reading reminders to keep a daily portion by juz, hizb, or manzil
 - [ ] Word-by-word meaning (tap a word to see its translation)
 - [ ] Audio recitation
-- [ ] Ayah actions in the ayah + translation and translation-only modes: tap an ayah to show bookmark, copy, and share
+- [x] Ayah actions in the ayah + translation and translation-only modes: tap an ayah to show bookmark, copy, and share
       buttons; tap again to hide them
-- [ ] Animated transitions between the three reading modes
-      - Between ayah + translation and translation only, try animating the Arabic text in and out (expand/collapse)
-        instead of moving the whole page; needs testing first
-- [ ] A counter in the reader's top bar, between search and bookmark: ayah count within the surah, or progress through
+- [x] Animated transitions between the three reading modes
+      - Between ayah + translation and translation only, the Arabic text expands/collapses instead of moving the page
+- [x] A counter in the reader's top bar, between search and bookmark: ayah count within the surah, or progress through
       the current juz, hizb, rub', manzil, or ruku (tap to switch)
-- [ ] Remove the page number below the page in the mushaf view
+- [x] Remove the page number below the page in the mushaf view
 - [ ] Thematic browsing on the main screen, using QUL resources: topics and concepts in the Quran (2,512 topics with
       semantic relations), ayah themes, similar ayahs, mutashabihat (similar phrases), and grammar/morphology (roots,
       lemmas, parts of speech per word)

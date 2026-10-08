@@ -185,8 +185,11 @@
     <string name="reminder_time">یاد دہانی کا وقت</string>
     <string name="reminder_unit">روزانہ حصہ</string>
     <string name="reminder_channel">پڑھنے کی یاد دہانیاں</string>
-    <string name="reminder_title">پڑھنے کا وقت: %1$s</string>
-    <string name="reminder_text">%1$s %2$d:%3$d سے جاری رکھیں</string>
+    <string name="reminder_title">آج: %1$s</string>
+    <string name="reminder_text">%1$s %2$d – %3$s %4$d</string>
+    <string name="reminder_text_same">%1$s %2$d – %3$d</string>
+    <string name="reminder_perm_denied">روزانہ یاددہانی ظاہر ہونے کے لیے اینڈرائیڈ کی سیٹنگز میں اطلاعات کی اجازت دیں۔</string>
+    <string name="reminder_open_settings">اطلاعات کی سیٹنگز</string>
     <string name="ok">ٹھیک ہے</string>
     <string name="permissions">اجازتیں</string>
     <string name="perm_notifications">اطلاعات</string>
@@ -204,4 +207,22 @@
     <string name="settings_backup_on">خودکار بیک اپ فعال ہے</string>
     <string name="settings_permissions_sub">ایپ کن چیزوں تک رسائی رکھتی ہے اور کیوں</string>
     <string name="settings_about_sub">ورژن، ڈیٹا کے ماخذ، اعترافات، تعاون</string>
+    <string name="counter_ruku">رکوع %1$d</string>
+    <string name="counter_cd">%1$s: آیت %2$d از %3$d</string>
+    <string name="counter_switch">کاؤنٹر تبدیل کریں</string>
+    <string name="ayah_actions_show">آیت کے اقدامات دکھائیں</string>
+    <string name="ayah_actions_hide">آیت کے اقدامات چھپائیں</string>
+    <string name="explore_title">دریافت کریں</string>
+    <string name="explore_search">موضوعات تلاش کریں</string>
+    <string name="explore_empty">کوئی موضوع نہیں ملا</string>
+    <string name="topic_ayah_count">%1$d آیات</string>
+    <string name="topic_subtopics">ذیلی موضوعات</string>
+    <string name="topic_ayahs">آیات</string>
+    <string name="ayah_theme_title">موضوع</string>
+    <string name="ayah_topics_title">موضوعات</string>
+    <string name="similar_ayahs_title">ملتی جلتی آیات</string>
+    <string name="similar_ayah_item">%1$s · %2$d%% مشابہت</string>
+    <string name="mutashabihat_title">ملتے جلتے الفاظ</string>
+    <string name="mutashabihat_count">%1$d آیات میں آیا ہے</string>
+    <string name="topic_related">متعلقہ موضوعات</string>
 </resources>

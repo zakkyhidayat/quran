@@ -32,6 +32,15 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import io.zakkyhidayat.quran.R
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.ui.draw.clip
+import io.zakkyhidayat.quran.data.AyahRef
+import io.zakkyhidayat.quran.data.DivisionProgress
+import io.zakkyhidayat.quran.data.MarkerKind
+import io.zakkyhidayat.quran.data.Surah
+import io.zakkyhidayat.quran.settings.CounterMode
 import io.zakkyhidayat.quran.settings.ReadingMode
 import io.zakkyhidayat.quran.ui.AppIcons
 
@@ -99,5 +108,45 @@ internal fun GestureHint(onDismiss: () -> Unit) {
             }
             TextButton(onClick = onDismiss) { Text(stringResource(R.string.hint_ok)) }
         }
+    }
+}
+
+/** Isi penghitung: untuk [CounterMode.Surah] cukup ayat dan jumlah ayat surah; selain itu [division] dari repositori. */
+internal data class CounterValue(val mode: CounterMode, val ayah: AyahRef, val division: DivisionProgress?)
+
+internal fun CounterMode.kind(): MarkerKind = when (this) {
+    CounterMode.Juz -> MarkerKind.Juz
+    CounterMode.Hizb -> MarkerKind.Hizb
+    CounterMode.Rub -> MarkerKind.Rub
+    CounterMode.Manzil -> MarkerKind.Manzil
+    else -> MarkerKind.Ruku
+}
+
+/** Tombol teks ringkas di bilah atas: "12/286" atau "Juz 3 · 45/148"; diketuk untuk berganti jenis. */
+@Composable
+internal fun ReaderCounter(value: CounterValue, surah: Surah?, onSwitch: () -> Unit) {
+    val d = value.division
+    val label = when (value.mode) {
+        CounterMode.Surah -> null
+        CounterMode.Juz -> stringResource(R.string.juz_n, d?.index ?: 0)
+        CounterMode.Hizb -> stringResource(R.string.hizb_n, d?.index ?: 0)
+        CounterMode.Rub -> stringResource(R.string.rub_n, (d?.index ?: 0).toString())
+        CounterMode.Manzil -> stringResource(R.string.manzil_n, d?.index ?: 0)
+        CounterMode.Ruku -> stringResource(R.string.counter_ruku, d?.index ?: 0)
+    }
+    val n = d?.n ?: value.ayah.ayah
+    val total = d?.total ?: surah?.ayahCount ?: 0
+    val text = if (label == null) "$n/$total" else "$label · $n/$total"
+    val description = stringResource(R.string.counter_cd, label ?: surah?.nameLatin.orEmpty(), n, total)
+    Box(
+        Modifier
+            .heightIn(min = 48.dp)
+            .clip(MaterialTheme.shapes.large)
+            .clickable(onClickLabel = stringResource(R.string.counter_switch), role = Role.Button, onClick = onSwitch)
+            .padding(horizontal = 8.dp)
+            .semantics { contentDescription = description },
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(text, style = MaterialTheme.typography.labelLarge, maxLines = 1, color = MaterialTheme.colorScheme.primary)
     }
 }

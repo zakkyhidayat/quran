@@ -1,5 +1,26 @@
 package io.zakkyhidayat.quran.reader
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.material3.FilledTonalIconToggleButton
+import androidx.compose.material3.Icon
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.platform.LocalClipboard
+import io.zakkyhidayat.quran.data.BookmarkKind
+import io.zakkyhidayat.quran.ui.AppIcons
+import kotlinx.coroutines.launch
 import io.zakkyhidayat.quran.ui.scaled
 import io.zakkyhidayat.quran.ui.LocalReadingTextScale
 import androidx.compose.foundation.layout.Arrangement
@@ -26,7 +47,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -56,7 +76,8 @@ import io.zakkyhidayat.quran.ui.CenteredContent
 /**
  * Mode baca daftar: satu layar = ayat-ayat dari satu halaman mushaf, berpindah halaman dengan geser seperti mode mushaf
  * (kanan ke kiri). Isi halaman yang panjang digulir ke bawah. [showArabic] false = terjemahan saja.
- * Ayat tidak bisa diketuk: terjemahannya sudah tampil di layar.
+ * Mengetuk ayat membuka baris aksi (markah, salin, bagikan) di bawahnya; hanya satu ayat terbuka sekaligus.
+ * [onFirstVisible] melaporkan ayat pertama yang terlihat di halaman aktif (untuk penghitung di bilah atas).
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -68,6 +89,7 @@ internal fun AyahListReader(
     state: PagerState,
     targetAyah: AyahRef?,
     modifier: Modifier = Modifier,
+    onFirstVisible: (page: Int, ayah: AyahRef) -> Unit = { _, _ -> },
 ) {
     // Terjemahan saja tanpa satu pun terjemahan terpasang: satu pesan, bukan petunjuk berulang di setiap ayat.
     val installed by vm.translations.collectAsStateWithLifecycle()
@@ -91,12 +113,24 @@ internal fun AyahListReader(
     }
 
     val contentDirection = LocalLayoutDirection.current
+    var openAyah by remember { mutableStateOf<AyahRef?>(null) }
+    val bookmarks by vm.bookmarkStore.bookmarks.collectAsStateWithLifecycle()
+    val bookmarkedAyahs = remember(bookmarks) {
+        bookmarks.filter { it.kind == BookmarkKind.Ayah }.map { AyahRef(it.surah, it.ayah) }.toSet()
+    }
     // Urutan halaman selalu seperti mushaf (halaman berikutnya di kiri), juga saat antarmuka RTL; isi halaman memakai
     // arah antarmuka.
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
         HorizontalPager(state = state, reverseLayout = true, beyondViewportPageCount = 1, modifier = modifier.fillMaxSize()) { index ->
             CompositionLocalProvider(LocalLayoutDirection provides contentDirection) {
-                PageAyahs(vm, index + 1, pages[index + 1].orEmpty(), surahs, translationIds, showArabic, targetAyah)
+                PageAyahs(
+                    vm, index + 1, pages[index + 1].orEmpty(), surahs, translationIds, showArabic, targetAyah,
+                    isCurrent = state.currentPage == index,
+                    openAyah = openAyah,
+                    onToggleAyah = { ref -> openAyah = if (openAyah == ref) null else ref },
+                    bookmarkedAyahs = bookmarkedAyahs,
+                    onFirstVisible = onFirstVisible,
+                )
             }
         }
     }
@@ -111,8 +145,20 @@ private fun PageAyahs(
     translationIds: List<String>,
     showArabic: Boolean,
     targetAyah: AyahRef?,
+    isCurrent: Boolean,
+    openAyah: AyahRef?,
+    onToggleAyah: (AyahRef) -> Unit,
+    bookmarkedAyahs: Set<AyahRef>,
+    onFirstVisible: (page: Int, ayah: AyahRef) -> Unit,
 ) {
     val listState = rememberLazyListState()
+    // Ayat pertama yang terlihat, hanya dari halaman yang sedang aktif.
+    LaunchedEffect(isCurrent, ayahs) {
+        if (!isCurrent) return@LaunchedEffect
+        snapshotFlow { listState.firstVisibleItemIndex }.collect { i ->
+            ayahs.getOrNull(i)?.let { onFirstVisible(page, AyahRef(it.surah, it.ayah)) }
+        }
+    }
     // Lompat ke ayat tertentu (dari daftar, pencarian, atau baca terakhir) bila ayat itu ada di halaman ini.
     LaunchedEffect(targetAyah, ayahs) {
         val i = ayahs.indexOfFirst { targetAyah != null && it.surah == targetAyah.surah && it.ayah == targetAyah.ayah }
@@ -122,7 +168,13 @@ private fun PageAyahs(
         LazyColumn(state = listState, modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 16.dp)) {
             items(ayahs, key = { "${it.surah}:${it.ayah}" }) { pos ->
                 if (pos.ayah == 1) SurahTitle(surahs[pos.surah])
-                AyahRow(vm, pos, translationIds, showArabic)
+                val ref = AyahRef(pos.surah, pos.ayah)
+                AyahRow(
+                    vm, pos, surahs[pos.surah], translationIds, showArabic,
+                    actionsOpen = openAyah == ref,
+                    bookmarked = ref in bookmarkedAyahs,
+                    onToggle = { onToggleAyah(ref) },
+                )
             }
         }
     }
@@ -158,45 +210,86 @@ private fun SurahTitle(surah: Surah?) {
 }
 
 @Composable
-private fun AyahRow(vm: AppViewModel, pos: AyahPos, translationIds: List<String>, showArabic: Boolean) {
+private fun AyahRow(
+    vm: AppViewModel,
+    pos: AyahPos,
+    surah: Surah?,
+    translationIds: List<String>,
+    showArabic: Boolean,
+    actionsOpen: Boolean,
+    bookmarked: Boolean,
+    onToggle: () -> Unit,
+) {
     val context = LocalContext.current
+    val clipboard = LocalClipboard.current
+    val scope = rememberCoroutineScope()
     val detail by produceState<AyahDetail?>(null, pos, translationIds) {
         value = vm.mushaf.ayahDetail(pos.surah, pos.ayah, translationIds)
     }
     val arabicFont = remember { arabicFontFamily(context) }
     Column(
-        Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        Modifier
+            .fillMaxWidth()
+            .clickable(onClickLabel = stringResource(if (actionsOpen) R.string.ayah_actions_hide else R.string.ayah_actions_show), onClick = onToggle)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
     ) {
         val d = detail
         if (d == null) {
             Spacer(Modifier.height(48.dp))
             return@Column
         }
-        if (showArabic) {
+        // Teks Arab muncul/hilang dengan animasi saat berganti antara "ayat + terjemahan" dan "terjemahan saja".
+        AnimatedVisibility(
+            visible = showArabic,
+            enter = expandVertically() + fadeIn(),
+            exit = shrinkVertically() + fadeOut(),
+        ) {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                 val style = MaterialTheme.typography.headlineSmall.scaled(LocalReadingTextScale.current.arabic, 1.9f)
                 Text(
                     d.arabic,
                     style = style.copy(fontFamily = arabicFont),
                     textAlign = TextAlign.Start,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
                 )
             }
         }
-        d.translations.forEach { tr ->
-            if (d.translations.size > 1) {
-                Text(tr.info.name, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            d.translations.forEach { tr ->
+                if (d.translations.size > 1) {
+                    Text(tr.info.name, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+                }
+                val body = MaterialTheme.typography.bodyLarge.scaled(LocalReadingTextScale.current.translation, 1.5f)
+                // Nomor ayat di depan terjemahan ("84. ..."), tanpa lencana terpisah.
+                Text(
+                    buildAnnotatedString {
+                        withStyle(SpanStyle(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)) { append("${pos.ayah}. ") }
+                        append(translationText(tr.text, MaterialTheme.colorScheme.primary, MaterialTheme.typography.labelSmall.fontSize))
+                    },
+                    style = body,
+                )
             }
-            val body = MaterialTheme.typography.bodyLarge.scaled(LocalReadingTextScale.current.translation, 1.5f)
-            // Nomor ayat di depan terjemahan ("84. ..."), tanpa lencana terpisah.
-            Text(
-                buildAnnotatedString {
-                    withStyle(SpanStyle(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)) { append("${pos.ayah}. ") }
-                    append(translationText(tr.text, MaterialTheme.colorScheme.primary, MaterialTheme.typography.labelSmall.fontSize))
-                },
-                style = body,
-            )
+        }
+        AnimatedVisibility(
+            visible = actionsOpen,
+            enter = expandVertically() + fadeIn(),
+            exit = shrinkVertically() + fadeOut(),
+        ) {
+            val plainText = remember(d) { ayahShareText(d, "${surah?.nameLatin ?: ""} ${pos.surah}:${pos.ayah}") }
+            Row(Modifier.padding(top = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                FilledTonalIconToggleButton(checked = bookmarked, onCheckedChange = { vm.toggleAyahBookmark(AyahRef(pos.surah, pos.ayah), pos.page) }) {
+                    Icon(
+                        if (bookmarked) AppIcons.Bookmark else AppIcons.BookmarkBorder,
+                        contentDescription = if (bookmarked) stringResource(R.string.remove_bookmark) else stringResource(R.string.bookmark_ayah),
+                    )
+                }
+                FilledTonalIconButton(onClick = { scope.launch { copyAyahText(clipboard, plainText) } }) {
+                    Icon(AppIcons.ContentCopy, contentDescription = stringResource(R.string.copy))
+                }
+                FilledTonalIconButton(onClick = { shareAyahText(context, plainText) }) {
+                    Icon(Icons.Default.Share, contentDescription = stringResource(R.string.share))
+                }
+            }
         }
     }
     HorizontalDivider(Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))

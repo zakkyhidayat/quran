@@ -185,8 +185,11 @@
     <string name="reminder_time">Jam pengingat</string>
     <string name="reminder_unit">Bagian harian</string>
     <string name="reminder_channel">Pengingat membaca</string>
-    <string name="reminder_title">Waktunya membaca: %1$s</string>
-    <string name="reminder_text">Lanjutkan dari %1$s %2$d:%3$d</string>
+    <string name="reminder_title">Hari ini: %1$s</string>
+    <string name="reminder_text">%1$s %2$d – %3$s %4$d</string>
+    <string name="reminder_text_same">%1$s %2$d – %3$d</string>
+    <string name="reminder_perm_denied">Izinkan notifikasi di pengaturan Android agar pengingat harian dapat tampil.</string>
+    <string name="reminder_open_settings">Pengaturan notifikasi</string>
     <string name="ok">OK</string>
     <string name="permissions">Izin</string>
     <string name="perm_notifications">Notifikasi</string>
@@ -204,4 +207,22 @@
     <string name="settings_backup_on">Cadangan otomatis aktif</string>
     <string name="settings_permissions_sub">Akses yang dipakai aplikasi dan alasannya</string>
     <string name="settings_about_sub">Versi, sumber data, kredit, dukungan</string>
+    <string name="counter_ruku">Ruku %1$d</string>
+    <string name="counter_cd">%1$s: ayat %2$d dari %3$d</string>
+    <string name="counter_switch">Ganti penghitung</string>
+    <string name="ayah_actions_show">Tampilkan aksi ayat</string>
+    <string name="ayah_actions_hide">Sembunyikan aksi ayat</string>
+    <string name="explore_title">Jelajahi</string>
+    <string name="explore_search">Cari topik</string>
+    <string name="explore_empty">Topik tidak ditemukan</string>
+    <string name="topic_ayah_count">%1$d ayat</string>
+    <string name="topic_subtopics">Subtopik</string>
+    <string name="topic_ayahs">Ayat</string>
+    <string name="ayah_theme_title">Tema</string>
+    <string name="ayah_topics_title">Topik</string>
+    <string name="similar_ayahs_title">Ayat serupa</string>
+    <string name="similar_ayah_item">%1$s · %2$d%% mirip</string>
+    <string name="mutashabihat_title">Frasa serupa</string>
+    <string name="mutashabihat_count">Muncul di %1$d ayat</string>
+    <string name="topic_related">Topik terkait</string>
 </resources>

@@ -29,10 +29,12 @@ its own.
 | Permission | Why |
 |------------|-----|
 | Internet | Download translations and check for app updates, as described above |
+| Notifications (Android 13+, asked when you turn on the reminder) | Show the optional daily reading reminder |
+| Run at startup | Set the reminder again after the device restarts or the app updates; only used when the reminder is on |
 | Install unknown apps (GitHub build only, asked when you update) | Install an app update you downloaded from GitHub Releases |
 
 ## Contact
 
 Questions or concerns: open an issue at https://github.com/zakkyhidayat/quran/issues.
 
-Last updated: 2026-10-08.
+Last updated: 2026-10-09.

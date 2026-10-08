@@ -185,8 +185,11 @@
     <string name="reminder_time">وقت التذكير</string>
     <string name="reminder_unit">الورد اليومي</string>
     <string name="reminder_channel">تذكيرات القراءة</string>
-    <string name="reminder_title">حان وقت القراءة: %1$s</string>
-    <string name="reminder_text">تابع من %1$s %2$d:%3$d</string>
+    <string name="reminder_title">اليوم: %1$s</string>
+    <string name="reminder_text">%1$s %2$d – %3$s %4$d</string>
+    <string name="reminder_text_same">%1$s %2$d – %3$d</string>
+    <string name="reminder_perm_denied">اسمح بالإشعارات في إعدادات أندرويد حتى يظهر التذكير اليومي.</string>
+    <string name="reminder_open_settings">إعدادات الإشعارات</string>
     <string name="ok">حسنًا</string>
     <string name="permissions">الأذونات</string>
     <string name="perm_notifications">الإشعارات</string>
@@ -204,4 +207,22 @@
     <string name="settings_backup_on">النسخ التلقائي مفعّل</string>
     <string name="settings_permissions_sub">ما يمكن للتطبيق الوصول إليه ولماذا</string>
     <string name="settings_about_sub">الإصدار، مصادر البيانات، الشكر، الدعم</string>
+    <string name="counter_ruku">الركوع %1$d</string>
+    <string name="counter_cd">%1$s: الآية %2$d من %3$d</string>
+    <string name="counter_switch">تبديل العدّاد</string>
+    <string name="ayah_actions_show">إظهار إجراءات الآية</string>
+    <string name="ayah_actions_hide">إخفاء إجراءات الآية</string>
+    <string name="explore_title">استكشاف</string>
+    <string name="explore_search">ابحث في المواضيع</string>
+    <string name="explore_empty">لا توجد مواضيع</string>
+    <string name="topic_ayah_count">%1$d آية</string>
+    <string name="topic_subtopics">مواضيع فرعية</string>
+    <string name="topic_ayahs">الآيات</string>
+    <string name="ayah_theme_title">الموضوع</string>
+    <string name="ayah_topics_title">المواضيع</string>
+    <string name="similar_ayahs_title">آيات متشابهة</string>
+    <string name="similar_ayah_item">%1$s · تشابه %2$d%%</string>
+    <string name="mutashabihat_title">عبارات متشابهة</string>
+    <string name="mutashabihat_count">ترد في %1$d آية</string>
+    <string name="topic_related">مواضيع ذات صلة</string>
 </resources>

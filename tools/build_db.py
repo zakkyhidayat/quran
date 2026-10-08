@@ -2,6 +2,7 @@
 """Bangun app/src/main/assets/quran.db dari file QUL di data-src/.
 
 Pakai: python tools/build_db.py [data_src_dir] [output_db]
+      python tools/build_db.py --explore-only   # hanya tabel penjelajahan, di quran.db yang sudah ada
 Butuh: pip install fonttools (membaca cmap font nama surah).
 """
 import html
@@ -12,10 +13,12 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+EXPLORE_ONLY = "--explore-only" in sys.argv
+sys.argv = [a for a in sys.argv if a != "--explore-only"]
 SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "data-src"
 OUT = Path(sys.argv[2]) if len(sys.argv) > 2 else ROOT / "app/src/main/assets/quran.db"
 
-DATA_VERSION = 9
+DATA_VERSION = 10
 
 # Terjemahan tidak lagi dibundel di quran.db; semuanya paket unduhan (tools/build_translation_packs.py). Tabel
 # translations/translation_texts/footnotes tetap dibuat kosong agar skema aplikasi tidak berubah. TEXT_OVERRIDES dan
@@ -202,6 +205,65 @@ CREATE TABLE footnotes (
 ) WITHOUT ROWID;
 """
 
+# Tabel opsional untuk penjelajahan tematik. Hanya dibuat bila folder sumbernya ada di data-src/ (lihat load_explore);
+# tanpa folder itu quran.db sama persis seperti sebelumnya dan aplikasi menyembunyikan fiturnya.
+EXPLORE_SCHEMA = {
+    "topics": """
+        CREATE TABLE topics (
+            id INTEGER PRIMARY KEY, name TEXT NOT NULL, name_ar TEXT, description TEXT,
+            is_ontology INTEGER NOT NULL DEFAULT 0, is_thematic INTEGER NOT NULL DEFAULT 0, parent_id INTEGER
+        );
+        CREATE TABLE topic_ayahs (
+            topic_id INTEGER NOT NULL, surah INTEGER NOT NULL, ayah INTEGER NOT NULL,
+            PRIMARY KEY (topic_id, surah, ayah)
+        ) WITHOUT ROWID;
+        CREATE TABLE topic_links (
+            topic_id INTEGER NOT NULL, related_id INTEGER NOT NULL,
+            PRIMARY KEY (topic_id, related_id)
+        ) WITHOUT ROWID;
+        CREATE INDEX topic_ayahs_ayah ON topic_ayahs (surah, ayah);
+        CREATE INDEX topics_parent ON topics (parent_id);
+    """,
+    "ayah_theme": """
+        CREATE TABLE ayah_themes (
+            id INTEGER PRIMARY KEY, surah INTEGER NOT NULL, ayah_from INTEGER NOT NULL, ayah_to INTEGER NOT NULL,
+            theme TEXT NOT NULL, keywords TEXT
+        );
+        CREATE INDEX ayah_themes_surah ON ayah_themes (surah, ayah_from);
+    """,
+    "similar-ayah": """
+        CREATE TABLE similar_ayahs (
+            surah INTEGER NOT NULL, ayah INTEGER NOT NULL, sim_surah INTEGER NOT NULL, sim_ayah INTEGER NOT NULL,
+            matched_words INTEGER, coverage INTEGER, score INTEGER, from_word INTEGER, to_word INTEGER
+        );
+        CREATE INDEX similar_ayahs_ayah ON similar_ayahs (surah, ayah, score DESC);
+    """,
+    "mutashabihat": """
+        CREATE TABLE mutashabihat (
+            id INTEGER PRIMARY KEY, source_surah INTEGER NOT NULL, source_ayah INTEGER NOT NULL,
+            from_word INTEGER NOT NULL, to_word INTEGER NOT NULL, ayah_count INTEGER, occurrences INTEGER
+        );
+        CREATE TABLE mutashabihat_ayahs (
+            phrase_id INTEGER NOT NULL, surah INTEGER NOT NULL, ayah INTEGER NOT NULL,
+            from_word INTEGER NOT NULL, to_word INTEGER NOT NULL
+        );
+        CREATE INDEX mutashabihat_ayahs_ayah ON mutashabihat_ayahs (surah, ayah);
+        CREATE INDEX mutashabihat_ayahs_phrase ON mutashabihat_ayahs (phrase_id);
+    """,
+    "morphology": """
+        CREATE TABLE morph_roots (id INTEGER PRIMARY KEY, text_ar TEXT NOT NULL, text_en TEXT, words_count INTEGER);
+        CREATE TABLE morph_lemmas (id INTEGER PRIMARY KEY, text TEXT NOT NULL, text_clean TEXT, words_count INTEGER);
+        CREATE TABLE morph_stems (id INTEGER PRIMARY KEY, text TEXT NOT NULL, text_clean TEXT, words_count INTEGER);
+        CREATE TABLE word_morph (
+            surah INTEGER NOT NULL, ayah INTEGER NOT NULL, word INTEGER NOT NULL,
+            root_id INTEGER, lemma_id INTEGER, stem_id INTEGER, pos TEXT,
+            PRIMARY KEY (surah, ayah, word)
+        ) WITHOUT ROWID;
+        CREATE INDEX word_morph_root ON word_morph (root_id);
+        CREATE INDEX word_morph_lemma ON word_morph (lemma_id);
+    """,
+}
+
 SUP = re.compile(r'<sup foot_note="(\d+)">(\d+)</sup>')
 
 
@@ -352,6 +414,231 @@ def load_markers(db):
     print(f"sajda: {len(rows)}")
 
 
+def explore_sources(folder):
+    """Berkas SQLite (.db/.sqlite) di data-src/<folder>/; kosong bila folder tidak ada."""
+    root = SRC / folder
+    if not root.is_dir():
+        return []
+    return sorted(p for p in root.iterdir() if p.suffix in (".db", ".sqlite"))
+
+
+def find_table(conn, *needed):
+    """Nama tabel pertama yang memiliki semua kolom di `needed`, atau None. Nama tabel QUL tidak terdokumentasi."""
+    for (name,) in conn.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall():
+        cols = {r[1] for r in conn.execute(f'PRAGMA table_info("{name}")')}
+        if all(c in cols for c in needed):
+            return name
+    return None
+
+
+def split_key(key):
+    """'2:255' -> (2, 255); '2:3:5' -> (2, 3, 5)."""
+    return tuple(int(x) for x in str(key).strip().split(":"))
+
+
+def check_ayah(surah, ayah):
+    assert 1 <= surah <= 114 and ayah >= 1, (surah, ayah)
+
+
+def topic_text(raw):
+    """Deskripsi topik QUL (HTML dengan <topic data-id>) -> teks polos dan id topik yang ditautkan."""
+    raw = raw or ""
+    links = [int(x) for x in re.findall(r'<topic\b[^>]*data-id="(\d+)"', raw)]
+    plain = html.unescape(re.sub(r"<[^>]+>", "", raw))
+    return re.sub(r"\s+", " ", plain).strip(), links
+
+
+def load_topics(db):
+    """Topik dan konsep (qul.tarteel.ai/resources/ayah-topics/45): satu baris per topik, ayat sebagai daftar 's:a, s:a'.
+
+    Induk: parent_id, bila kosong thematic_parent_id lalu ontology_parent_id. Topik terkait: tautan <topic data-id> di
+    deskripsi ditambah kolom related_topics (id dipisah koma).
+    """
+    files = explore_sources("topics")
+    if not files:
+        return
+    db.executescript(EXPLORE_SCHEMA["topics"])
+    wanted = ("topic_id", "name", "arabic_name", "description", "thematic", "ontology",
+              "parent_id", "thematic_parent_id", "ontology_parent_id", "ayahs", "related_topics")
+    seen, links, related = set(), set(), set()
+    for f in files:
+        conn = sqlite3.connect(f)
+        table = find_table(conn, "topic_id", "name", "ayahs")
+        assert table, f"{f.name}: tabel dengan kolom topic_id/name/ayahs tidak ditemukan"
+        have = {r[1] for r in conn.execute(f'PRAGMA table_info("{table}")')}
+        sel = ", ".join(c if c in have else "NULL" for c in wanted)
+        for tid, name, name_ar, desc, thematic, ontology, p1, p2, p3, ayahs, rel in conn.execute(f'SELECT {sel} FROM "{table}" ORDER BY topic_id'):
+            text, desc_links = topic_text(desc)
+            parent = next((p for p in (p1, p2, p3) if p not in (None, "", 0)), None)
+            seen.add(tid)
+            db.execute(
+                "INSERT INTO topics VALUES (?,?,?,?,?,?,?)",
+                (tid, (name or "").strip(), (name_ar or "").strip() or None, text or None,
+                 1 if ontology in (1, "1", "t", "true", True) else 0, 1 if thematic in (1, "1", "t", "true", True) else 0, parent),
+            )
+            for key in re.findall(r"\d+:\d+", ayahs or ""):
+                surah, ayah = split_key(key)
+                check_ayah(surah, ayah)
+                links.add((tid, surah, ayah))
+            for other in desc_links + [int(x) for x in re.findall(r"\d+", rel or "")]:
+                if other != tid:
+                    related.add((tid, other))
+    related = {(a, b) for a, b in related if b in seen}  # buang tautan ke topik yang tidak ada
+    db.executemany("INSERT INTO topic_ayahs VALUES (?,?,?)", sorted(links))
+    db.executemany("INSERT INTO topic_links VALUES (?,?)", sorted(related))
+    print(f"topics: {len(seen)}, topic_ayahs: {len(links)}, topic_links: {len(related)}")
+
+
+def load_ayah_themes(db):
+    """Tema ayat (qul.tarteel.ai/resources/ayah-theme/62): kelompok ayat berurutan dengan satu tema."""
+    files = explore_sources("ayah-theme")
+    if not files:
+        return
+    db.executescript(EXPLORE_SCHEMA["ayah_theme"])
+    n = 0
+    for f in files:
+        conn = sqlite3.connect(f)
+        table = find_table(conn, "theme", "surah_number")
+        assert table, f"{f.name}: tabel dengan kolom theme/surah_number tidak ditemukan"
+        have = {r[1] for r in conn.execute(f'PRAGMA table_info("{table}")')}
+        # Halaman QUL menulis nama kolom awal rentang secara tidak pasti (ayah_from / from_ayah); terima keduanya.
+        start = next((c for c in ("ayah_from", "from_ayah") if c in have), None)
+        end = next((c for c in ("ayah_to", "to_ayah") if c in have), None)
+        assert start and end, f"{f.name}: kolom rentang ayat tidak dikenali ({sorted(have)})"
+        kw = "keywords" if "keywords" in have else "NULL"
+        for surah, a_from, a_to, theme, keywords in conn.execute(
+            f'SELECT surah_number, {start}, {end}, theme, {kw} FROM "{table}" ORDER BY surah_number, {start}'
+        ):
+            check_ayah(surah, a_from)
+            db.execute("INSERT INTO ayah_themes (surah, ayah_from, ayah_to, theme, keywords) VALUES (?,?,?,?,?)",
+                       (surah, a_from, a_to, theme.strip(), (keywords or "").strip() or None))
+            n += 1
+    print(f"ayah_themes: {n}")
+
+
+def load_similar_ayahs(db):
+    """Ayat serupa (qul.tarteel.ai/resources/similar-ayah/74): satu baris per pasangan ayat sumber dan ayat cocok."""
+    files = explore_sources("similar-ayah")
+    if not files:
+        return
+    db.executescript(EXPLORE_SCHEMA["similar-ayah"])
+    n = 0
+    for f in files:
+        conn = sqlite3.connect(f)
+        table = find_table(conn, "verse_key", "matched_ayah_key", "score")
+        assert table, f"{f.name}: tabel dengan kolom verse_key/matched_ayah_key/score tidak ditemukan"
+        have = {r[1] for r in conn.execute(f'PRAGMA table_info("{table}")')}
+        sel = ", ".join(c if c in have else "NULL" for c in ("matched_words_count", "coverage", "score", "match_words_range"))
+        for key, other, count, coverage, score, rng in conn.execute(f'SELECT verse_key, matched_ayah_key, {sel} FROM "{table}"'):
+            surah, ayah = split_key(key)
+            sim_surah, sim_ayah = split_key(other)
+            check_ayah(surah, ayah)
+            check_ayah(sim_surah, sim_ayah)
+            nums = [int(x) for x in re.findall(r"\d+", rng or "")]
+            db.execute(
+                "INSERT INTO similar_ayahs VALUES (?,?,?,?,?,?,?,?,?)",
+                (surah, ayah, sim_surah, sim_ayah, count, coverage, score,
+                 nums[0] if len(nums) >= 2 else None, nums[1] if len(nums) >= 2 else None),
+            )
+            n += 1
+    print(f"similar_ayahs: {n}")
+
+
+def load_mutashabihat(db):
+    """Mutasyabihat (qul.tarteel.ai/resources/mutashabihat/73): phrases.json; phrase_verses.json hanya indeks balik."""
+    path = SRC / "mutashabihat" / "phrases.json"
+    if not path.exists():
+        return
+    db.executescript(EXPLORE_SCHEMA["mutashabihat"])
+    phrases = json.loads(path.read_text(encoding="utf-8"))
+    links = 0
+    for pid, p in phrases.items():
+        surah, ayah = split_key(p["source"]["key"])
+        check_ayah(surah, ayah)
+        db.execute(
+            "INSERT INTO mutashabihat VALUES (?,?,?,?,?,?,?)",
+            (int(pid), surah, ayah, p["source"]["from"], p["source"]["to"], p.get("ayahs"), p.get("count")),
+        )
+        for key, ranges in p["ayah"].items():
+            s, a = split_key(key)
+            check_ayah(s, a)
+            for start, end in ranges:  # indeks kata 1-based, inklusif
+                db.execute("INSERT INTO mutashabihat_ayahs VALUES (?,?,?,?,?)", (int(pid), s, a, start, end))
+                links += 1
+    print(f"mutashabihat: {len(phrases)}, mutashabihat_ayahs: {links}")
+
+
+def load_morphology(db):
+    """Akar, lema, dan stem per kata (qul.tarteel.ai/resources/morphology/75, 76, 77): tiap jenis berkas sendiri.
+
+    Kolom pos (jenis kata) dibiarkan kosong: halaman "Word morphology" (morphology/78) belum bisa dibaca skemanya.
+    """
+    files = explore_sources("morphology")
+    if not files:
+        return
+    db.executescript(EXPLORE_SCHEMA["morphology"])
+    # (tabel kamus, kolom, tabel kata, kolom id, kolom lokasi yang mungkin, tabel tujuan, kolom word_morph)
+    kinds = [
+        ("roots", ("id", "arabic_trilateral"), ("word_roots", "root_words"), "root_id", "morph_roots", "root_id",
+         "SELECT id, arabic_trilateral, english_trilateral, words_count FROM roots"),
+        ("lemmas", ("id", "text"), ("word_lemmas", "lemma_words"), "lemma_id", "morph_lemmas", "lemma_id",
+         "SELECT id, text, text_clean, words_count FROM lemmas"),
+        ("stems", ("id", "text"), ("word_stems", "stem_words"), "stem_id", "morph_stems", "stem_id",
+         "SELECT id, text, text_clean, words_count FROM stems"),
+    ]
+    counts = {}
+    for f in files:
+        conn = sqlite3.connect(f)
+        tables = {r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+        for dict_table, _, word_tables, id_col, target, column, query in kinds:
+            word_table = next((t for t in word_tables if t in tables), None)  # QUL memakai dua penamaan
+            if dict_table not in tables or word_table is None:
+                continue
+            db.executemany(f"INSERT INTO {target} VALUES (?,?,?,?)", conn.execute(query).fetchall())
+            have = {r[1] for r in conn.execute(f"PRAGMA table_info({word_table})")}
+            loc = "word_location" if "word_location" in have else "location"  # QUL memakai dua nama berbeda
+            n = 0
+            for wid, location in conn.execute(f"SELECT {id_col}, {loc} FROM {word_table}").fetchall():
+                surah, ayah, word = split_key(location)
+                check_ayah(surah, ayah)
+                db.execute(
+                    f"INSERT INTO word_morph (surah, ayah, word, {column}) VALUES (?,?,?,?) "
+                    f"ON CONFLICT (surah, ayah, word) DO UPDATE SET {column} = excluded.{column}",
+                    (surah, ayah, word, wid),
+                )
+                n += 1
+            counts[target] = n
+    assert counts, f"data-src/morphology/ ada, tetapi tidak berisi tabel roots/lemmas/stems: {[f.name for f in files]}"
+    print("morfologi:", counts)
+
+
+def load_explore(db):
+    """Data penjelajahan tematik; tiap sumber opsional dan dilewati bila foldernya tidak ada."""
+    for loader in (load_topics, load_ayah_themes, load_similar_ayahs, load_mutashabihat, load_morphology):
+        loader(db)
+
+
+EXPLORE_TABLES = ["topic_links", "topic_ayahs", "topics", "ayah_themes", "similar_ayahs", "mutashabihat_ayahs", "mutashabihat",
+                  "word_morph", "morph_roots", "morph_lemmas", "morph_stems"]
+
+
+def explore_only():
+    """Buka quran.db yang sudah ada, bangun ulang hanya tabel penjelajahan dari data-src/, lalu VACUUM.
+
+    Tabel dasar tidak disentuh, jadi build penuh (butuh semua sumber dasar) tidak perlu diulang.
+    """
+    assert OUT.exists(), f"{OUT} belum ada; jalankan build penuh dulu"
+    db = sqlite3.connect(OUT)
+    for table in EXPLORE_TABLES:
+        db.execute(f"DROP TABLE IF EXISTS {table}")
+    load_explore(db)
+    db.execute(f"PRAGMA user_version = {DATA_VERSION}")
+    db.commit()
+    db.execute("VACUUM")
+    db.close()
+    print(f"OK (explore saja) -> {OUT} ({OUT.stat().st_size / 1e6:.1f} MB)")
+
+
 def main():
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.unlink(missing_ok=True)
@@ -397,6 +684,7 @@ def main():
     load_markers(db)
     load_surah_info(db)
     load_transliteration(db)
+    load_explore(db)
 
     db.execute(f"PRAGMA user_version = {DATA_VERSION}")
     db.commit()
@@ -406,4 +694,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    explore_only() if EXPLORE_ONLY else main()

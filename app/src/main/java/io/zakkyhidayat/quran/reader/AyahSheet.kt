@@ -5,8 +5,6 @@ import io.zakkyhidayat.quran.ui.LocalReadingTextScale
 import io.zakkyhidayat.quran.ui.InfoLabel
 import androidx.compose.ui.res.stringResource
 import io.zakkyhidayat.quran.R
-import android.content.ClipData
-import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,7 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.platform.toClipEntry
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -54,11 +51,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import io.zakkyhidayat.quran.data.AyahDetail
+import io.zakkyhidayat.quran.data.AyahExtras
+import androidx.compose.material3.TextButton
 import io.zakkyhidayat.quran.data.Surah
 import io.zakkyhidayat.quran.ui.AppIcons
 import kotlinx.coroutines.launch
-
-private val SUP = Regex("<sup>(\\d+)</sup>")
 
 @Composable
 fun AyahSheetContent(
@@ -69,12 +66,15 @@ fun AyahSheetContent(
     onPrevious: () -> Unit,
     onNext: () -> Unit,
     showTransliteration: Boolean = true,
+    extras: AyahExtras? = null,
+    onOpenAyah: (Int, Int) -> Unit = { _, _ -> },
+    surahNames: Map<Int, Surah> = emptyMap(),
 ) {
     val context = LocalContext.current
     val clipboard = LocalClipboard.current
     val scope = rememberCoroutineScope()
     val title = "${surah?.nameLatin ?: ""} ${detail.surah}:${detail.ayah}"
-    val plainText = remember(detail) { shareText(detail, title) }
+    val plainText = remember(detail) { ayahShareText(detail, title) }
 
     Column(
         Modifier
@@ -104,11 +104,10 @@ fun AyahSheetContent(
                 )
             }
             FilledTonalIconButton(onClick = {
-                scope.launch { clipboard.setClipEntry(ClipData.newPlainText("Ayah", plainText).toClipEntry()) }
+                scope.launch { copyAyahText(clipboard, plainText) }
             }) { Icon(AppIcons.ContentCopy, contentDescription = stringResource(R.string.copy)) }
             FilledTonalIconButton(onClick = {
-                val send = Intent(Intent.ACTION_SEND).apply { type = "text/plain"; putExtra(Intent.EXTRA_TEXT, plainText) }
-                context.startActivity(Intent.createChooser(send, null))
+                shareAyahText(context, plainText)
             }) { Icon(Icons.Default.Share, contentDescription = stringResource(R.string.share)) }
         }
 
@@ -184,7 +183,69 @@ fun AyahSheetContent(
                 }
             }
         }
+        // Bagian tematik (data QUL opsional): tampil hanya bila ada isinya.
+        if (extras != null && !extras.isEmpty) ExtrasSections(extras, surahNames, onOpenAyah)
         Spacer(Modifier.height(24.dp))
+    }
+}
+
+@Composable
+private fun ExtrasSections(extras: AyahExtras, surahs: Map<Int, Surah>, onOpenAyah: (Int, Int) -> Unit) {
+    fun name(surah: Int, ayah: Int) = "${surahs[surah]?.nameLatin.orEmpty()} $surah:$ayah"
+    if (extras.themes.isNotEmpty()) {
+        ExtrasCard(stringResource(R.string.ayah_theme_title)) {
+            extras.themes.forEach { t ->
+                Text(t.theme, style = MaterialTheme.typography.bodyLarge)
+                Text(
+                    "${t.surah}:${t.ayahFrom}-${t.ayahTo}" + if (t.keywords.isNullOrBlank()) "" else " · ${t.keywords}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+    }
+    if (extras.topics.isNotEmpty()) {
+        ExtrasCard(stringResource(R.string.ayah_topics_title)) {
+            Text(extras.topics.joinToString(" · ") { it.name }, style = MaterialTheme.typography.bodyMedium)
+        }
+    }
+    if (extras.similar.isNotEmpty()) {
+        ExtrasCard(stringResource(R.string.similar_ayahs_title)) {
+            extras.similar.forEach { s ->
+                TextButton(onClick = { onOpenAyah(s.surah, s.ayah) }) {
+                    Text(stringResource(R.string.similar_ayah_item, name(s.surah, s.ayah), s.score))
+                }
+            }
+        }
+    }
+    if (extras.mutashabihat.isNotEmpty()) {
+        ExtrasCard(stringResource(R.string.mutashabihat_title)) {
+            extras.mutashabihat.forEach { m ->
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                    Text(m.phrase, style = MaterialTheme.typography.titleLarge, modifier = Modifier.fillMaxWidth())
+                }
+                Text(
+                    stringResource(R.string.mutashabihat_count, m.totalAyahs),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                m.others.take(12).forEach { o ->
+                    TextButton(onClick = { onOpenAyah(o.surah, o.ayah) }) { Text(name(o.surah, o.ayah)) }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ExtrasCard(title: String, content: @Composable () -> Unit) {
+    Spacer(Modifier.height(16.dp))
+    Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)) {
+        Column(Modifier.padding(16.dp)) {
+            Text(title, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+            Spacer(Modifier.height(4.dp))
+            content()
+        }
     }
 }
 
@@ -198,13 +259,4 @@ internal fun translationText(raw: String, markerColor: Color, markerSize: TextUn
         last = m.range.last + 1
     }
     append(raw.substring(last))
-}
-
-private fun shareText(detail: AyahDetail, title: String): String = buildString {
-    append(detail.arabic)
-    detail.translations.forEach { tr ->
-        append("\n\n").append(SUP.replace(tr.text, ""))
-        append("\n— ").append(tr.info.name)
-    }
-    append("\n\n(").append(title.trim()).append(')')
 }

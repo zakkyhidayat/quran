@@ -29,7 +29,7 @@ GitHub Releases (`translations`), downloaded into `filesDir/translations/`, and 
 | `index/`, `search/`, `info/` | Surah/juz/hizb/rub'/manzil/ruku/bookmark lists, search, surah info |
 | `settings/` | `AppSettings` (DataStore), `SettingsScreen`, `AddTranslationDialog` |
 | `onboarding/` | First-run steps |
-| `reminder/` | Daily reading reminder (hidden for now) |
+| `reminder/` | Daily reading reminder (AlarmManager + notification) |
 | `ui/` | Theme, shared components, icons, HTML renderer for surah info, update dialog |
 | `AppLanguage.kt` | Interface language (system per-app locales on Android 13+) |
 
@@ -43,6 +43,7 @@ GitHub Releases (`translations`), downloaded into `filesDir/translations/`, and 
 | `page_lines` | 15 lines per page: type (ayah, surah name, basmalah), centred flag, first/last word |
 | `juz`, `hizb`, `rub`, `manzil`, `ruku`, `sajda` | Start of each division |
 | `surah_info`, `transliteration` | Surah descriptions (id, en) and Latin transliteration |
+| `topics`, `topic_ayahs`, `ayah_themes`, `similar_ayahs`, `mutashabihat`, `mutashabihat_ayahs`, `morph_roots`, `morph_lemmas`, `morph_stems`, `word_morph` | Opsional (penjelajahan tematik): hanya ada bila sumber QUL-nya diunduh; aplikasi memeriksa `sqlite_master` dan menyembunyikan fiturnya bila kosong |
 | `translations`, `translation_texts`, `footnotes` | Kept empty for schema compatibility; translations are downloaded packs |
 
 User data lives elsewhere: `user.db` (bookmarks) and DataStore `settings` (preferences, last read position).

@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import io.zakkyhidayat.quran.MainActivity
 import io.zakkyhidayat.quran.R
 import io.zakkyhidayat.quran.app
+import io.zakkyhidayat.quran.data.DivisionMath
 import io.zakkyhidayat.quran.data.MarkerKind
 import io.zakkyhidayat.quran.settings.AppSettings
 import io.zakkyhidayat.quran.settings.ReminderUnit
@@ -27,8 +28,9 @@ import java.util.Calendar
 
 /**
  * Pengingat membaca harian. AlarmManager (tidak eksak, jadi tanpa izin alarm tepat) memicu [ReminderReceiver] di jam
- * pilihan pengguna; notifikasinya menyebut bagian (juz/hizb/manzil) tempat posisi baca terakhir berada, dan ketukan
- * membuka posisi itu. Jadwal dipasang ulang setiap kali notifikasi tampil, setelah perangkat menyala ulang, dan saat
+ * pilihan pengguna; notifikasinya menyebut bagian (juz/hizb/manzil) yang dibaca hari ini beserta rentang ayatnya (bagian
+ * tempat posisi baca terakhir berada, atau bagian berikutnya bila sudah sampai ujungnya), dan ketukan membuka awal
+ * bagian itu. Jadwal dipasang ulang setiap kali notifikasi tampil, setelah perangkat menyala ulang, dan saat
  * jam/zona waktu berubah.
  */
 object Reminder {
@@ -62,31 +64,38 @@ object Reminder {
         Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
             ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
 
-    // Fitur ini disembunyikan dan POST_NOTIFICATIONS sengaja tidak dideklarasikan (lihat AndroidManifest.xml); canNotify()
-    // tetap menjaga panggilan ini. Hapus anotasi ini saat izin dideklarasikan kembali.
-    @android.annotation.SuppressLint("NotificationPermission")
     internal suspend fun notify(context: Context) {
         val app = context.app
         val settings = app.settings.settings.first()
         if (!settings.reminderEnabled || !canNotify(context)) return
-        val surah = settings.lastSurah.takeIf { it > 0 } ?: 1
-        val ayah = settings.lastAyah.takeIf { it > 0 } ?: 1
         val kind = when (settings.reminderUnit) {
             ReminderUnit.Juz -> MarkerKind.Juz
             ReminderUnit.Hizb -> MarkerKind.Hizb
             ReminderUnit.Manzil -> MarkerKind.Manzil
         }
-        val portion = app.mushaf.markerContaining(kind, surah, ayah)
-        val name = app.mushaf.surahs()[surah]?.nameLatin.orEmpty()
+        // Bagian hari ini dihitung dari posisi baca terakhir (nomor urut ayat di seluruh mushaf).
+        val surahs = app.mushaf.surahs()
+        val counts = surahs.values.map { it.ayahCount }
+        val starts = app.mushaf.markers(kind).map { DivisionMath.ordinal(counts, it.surah, it.ayah) }
+        val read = DivisionMath.ordinal(counts, settings.lastSurah.takeIf { it > 0 } ?: 1, settings.lastAyah.takeIf { it > 0 } ?: 1)
+        val portion = DailyPortionMath.next(starts, counts.sum(), read)
+        val (fromSurah, fromAyah) = DailyPortionMath.fromOrdinal(counts, portion.start)
+        val (toSurah, toAyah) = DailyPortionMath.fromOrdinal(counts, portion.end)
         val unitText = context.getString(
             when (settings.reminderUnit) {
                 ReminderUnit.Juz -> R.string.juz_n
                 ReminderUnit.Hizb -> R.string.hizb_n
                 ReminderUnit.Manzil -> R.string.manzil_n
             },
-            portion,
+            portion.number,
         )
-        val page = app.mushaf.ayahPage(surah, ayah)
+        val fromName = surahs[fromSurah]?.nameLatin.orEmpty()
+        val range = if (fromSurah == toSurah) {
+            context.getString(R.string.reminder_text_same, fromName, fromAyah, toAyah)
+        } else {
+            context.getString(R.string.reminder_text, fromName, fromAyah, surahs[toSurah]?.nameLatin.orEmpty(), toAyah)
+        }
+        val page = app.mushaf.ayahPage(fromSurah, fromAyah)
 
         val manager = context.getSystemService(NotificationManager::class.java)
         manager.createNotificationChannel(
@@ -101,7 +110,7 @@ object Reminder {
         val notification = NotificationCompat.Builder(context, CHANNEL)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(context.getString(R.string.reminder_title, unitText))
-            .setContentText(context.getString(R.string.reminder_text, name, surah, ayah))
+            .setContentText(range)
             .setContentIntent(open)
             .setAutoCancel(true)
             .build()
@@ -115,7 +124,8 @@ class ReminderReceiver : BroadcastReceiver() {
         CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
             try {
                 if (intent.action == ACTION_REMIND) Reminder.notify(context)
-                // Jadwalkan kemunculan berikutnya (juga setelah reboot atau perubahan jam/zona waktu).
+                // Selain itu: boot, pembaruan aplikasi, atau jam/zona waktu berubah; cukup jadwalkan ulang.
+                // Jadwalkan kemunculan berikutnya (hanya bila pengingat menyala; schedule() membatalkan alarm bila mati).
                 Reminder.schedule(context, context.app.settings.settings.first())
             } finally {
                 pending.finish()

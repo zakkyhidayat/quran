@@ -99,6 +99,7 @@ import io.zakkyhidayat.quran.data.AyahText
 import io.zakkyhidayat.quran.data.BookmarkKind
 import io.zakkyhidayat.quran.data.PageLine
 import io.zakkyhidayat.quran.settings.AppSettings
+import io.zakkyhidayat.quran.settings.CounterMode
 import io.zakkyhidayat.quran.ui.AppIcons
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -111,9 +112,8 @@ private val PageEndPadding = 8.dp
 // Blok halaman digeser ke luar tepi kiri layar sebesar ini (dan dilebarkan sama besar) supaya margin kiri lebih sempit.
 private val PageStartBleed = (-2).dp
 private val HeaderHeight = 32.dp
-private val FooterHeight = 32.dp
 private val HeaderGap = 10.dp
-private val PageChromeHeight = HeaderHeight + HeaderGap + FooterHeight
+private val PageChromeHeight = HeaderHeight + HeaderGap
 // Kertas B5: 176 x 250 mm.
 private const val PageHeightOverWidth = 250f / 176f
 
@@ -133,6 +133,7 @@ fun ReaderScreen(
     val selected by vm.selected.collectAsStateWithLifecycle()
     val sheetVisible by vm.sheetVisible.collectAsStateWithLifecycle()
     val detail by vm.detail.collectAsStateWithLifecycle()
+    val extras by vm.ayahExtras.collectAsStateWithLifecycle()
     val bookmarks by vm.bookmarkStore.bookmarks.collectAsStateWithLifecycle()
 
     val startPage = remember { (vm.pendingPage.value ?: settings.lastPage).coerceIn(1, PAGE_COUNT) }
@@ -192,6 +193,16 @@ fun ReaderScreen(
     val nameFont = remember { surahNameFontFamily(context) }
     val meta = pageMeta.getOrNull(currentPage - 1)
     val currentSurah = meta?.let { surahs[it.surah] }
+    // Ayat untuk penghitung: di mode mushaf ayat pertama halaman; di mode daftar ayat pertama yang terlihat.
+    var listFirst by remember { mutableStateOf<Pair<Int, AyahRef>?>(null) }
+    val pageFirstAyah by produceState<AyahRef?>(null, currentPage) { value = vm.mushaf.firstAyahOnPage(currentPage) }
+    val counterAyah = listFirst?.takeIf { listMode && it.first == currentPage }?.second ?: pageFirstAyah
+    val counterMode = settings.counterMode
+    val counter by produceState<CounterValue?>(null, counterAyah, counterMode, surahs) {
+        val a = counterAyah
+        if (a == null || surahs.isEmpty()) return@produceState
+        value = CounterValue(counterMode, a, if (counterMode == CounterMode.Surah) null else vm.mushaf.divisionProgress(counterMode.kind(), a.surah, a.ayah))
+    }
     val pageBookmarked = bookmarks.any { it.kind == BookmarkKind.Page && it.page == currentPage }
 
     Scaffold(containerColor = MaterialTheme.colorScheme.background, contentWindowInsets = WindowInsets(0, 0, 0, 0)) { scaffoldPadding ->
@@ -212,6 +223,12 @@ fun ReaderScreen(
                     }
                 },
                 actions = {
+                    counter?.let { c ->
+                        ReaderCounter(c, surahs[c.ayah.surah]) {
+                            val next = CounterMode.entries[(counterMode.ordinal + 1) % CounterMode.entries.size]
+                            scope.launch { vm.settingsRepository.setCounterMode(next) }
+                        }
+                    }
                     IconButton(onClick = onOpenSearch) { Icon(Icons.Default.Search, contentDescription = stringResource(R.string.search)) }
                     IconButton(onClick = { vm.togglePageBookmark(currentPage) }) {
                         Icon(
@@ -325,20 +342,6 @@ fun ReaderScreen(
                                         )
                                     }
                                 }
-                                // Nomor halaman di tengah bawah, di atas kapsul tonal.
-                                Box(Modifier.width(blockWidth).height(FooterHeight), contentAlignment = Alignment.Center) {
-                                    Surface(
-                                        shape = MaterialTheme.shapes.extraLarge,
-                                        color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    ) {
-                                        Text(
-                                            "$page",
-                                            style = MaterialTheme.typography.labelLarge,
-                                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 4.dp),
-                                        )
-                                    }
-                                }
                             }
                         }
                     }
@@ -360,6 +363,7 @@ fun ReaderScreen(
                     showArabic = lastListMode == ReadingMode.AyahTranslation,
                     state = listPagerState,
                     targetAyah = listTargetAyah,
+                    onFirstVisible = { page, ayah -> listFirst = page to ayah },
                     modifier = Modifier.fillMaxSize(),
                 )
             }
@@ -400,6 +404,9 @@ fun ReaderScreen(
                 onPrevious = { vm.moveSelection(-1) },
                 onNext = { vm.moveSelection(1) },
                 showTransliteration = settings.showTransliteration,
+                extras = extras,
+                onOpenAyah = { s, a -> vm.goToAyah(s, a, openSheet = true) },
+                surahNames = surahs,
             )
         }
     }

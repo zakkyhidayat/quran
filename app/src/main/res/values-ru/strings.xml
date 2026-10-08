@@ -185,8 +185,11 @@
     <string name="reminder_time">Время напоминания</string>
     <string name="reminder_unit">Ежедневная часть</string>
     <string name="reminder_channel">Напоминания о чтении</string>
-    <string name="reminder_title">Время читать: %1$s</string>
-    <string name="reminder_text">Продолжить с %1$s %2$d:%3$d</string>
+    <string name="reminder_title">Сегодня: %1$s</string>
+    <string name="reminder_text">%1$s %2$d – %3$s %4$d</string>
+    <string name="reminder_text_same">%1$s %2$d – %3$d</string>
+    <string name="reminder_perm_denied">Разрешите уведомления в настройках Android, чтобы ежедневное напоминание могло появляться.</string>
+    <string name="reminder_open_settings">Настройки уведомлений</string>
     <string name="ok">ОК</string>
     <string name="permissions">Разрешения</string>
     <string name="perm_notifications">Уведомления</string>
@@ -204,4 +207,22 @@
     <string name="settings_backup_on">Автокопирование включено</string>
     <string name="settings_permissions_sub">К чему есть доступ у приложения и зачем</string>
     <string name="settings_about_sub">Версия, источники данных, благодарности, поддержка</string>
+    <string name="counter_ruku">Руку %1$d</string>
+    <string name="counter_cd">%1$s: аят %2$d из %3$d</string>
+    <string name="counter_switch">Сменить счётчик</string>
+    <string name="ayah_actions_show">Показать действия аята</string>
+    <string name="ayah_actions_hide">Скрыть действия аята</string>
+    <string name="explore_title">Обзор</string>
+    <string name="explore_search">Поиск тем</string>
+    <string name="explore_empty">Темы не найдены</string>
+    <string name="topic_ayah_count">Аятов: %1$d</string>
+    <string name="topic_subtopics">Подтемы</string>
+    <string name="topic_ayahs">Аяты</string>
+    <string name="ayah_theme_title">Тема</string>
+    <string name="ayah_topics_title">Темы</string>
+    <string name="similar_ayahs_title">Похожие аяты</string>
+    <string name="similar_ayah_item">%1$s · сходство %2$d%%</string>
+    <string name="mutashabihat_title">Похожие фразы</string>
+    <string name="mutashabihat_count">Встречается в аятах: %1$d</string>
+    <string name="topic_related">Связанные темы</string>
 </resources>
