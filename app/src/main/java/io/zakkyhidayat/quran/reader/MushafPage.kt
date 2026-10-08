@@ -322,7 +322,7 @@ private const val HEADER_FRAME_LEFT_EM = 41f / HEADER_UPEM
 private const val HEADER_FRAME_HEIGHT_EM = 1026f / HEADER_UPEM
 
 // Bingkai diskalakan vertikal supaya ada jarak dengan baris ayat di atas dan basmalah di bawahnya.
-private const val HEADER_SCALE_Y = 0.80f
+private const val HEADER_SCALE_Y = 0.66f
 
 @Composable
 private fun SurahHeader(surah: Surah?, font: FontFamily, filter: ColorFilter?, onClick: () -> Unit) {

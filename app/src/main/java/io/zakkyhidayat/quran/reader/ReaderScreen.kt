@@ -40,6 +40,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.sp
@@ -71,10 +75,10 @@ import kotlinx.coroutines.flow.collectLatest
 private const val PAGE_COUNT = 604
 private val PageMaxWidth = 640.dp
 // Margin tidak simetris: kiri rapat ke tepi layar, kanan memberi sedikit ruang.
-private val PageEndPadding = 4.dp
+private val PageEndPadding = 8.dp
 
 // Blok halaman digeser ke luar tepi kiri layar sebesar ini (dan dilebarkan sama besar) supaya margin kiri lebih sempit.
-private val PageStartBleed = 3.dp
+private val PageStartBleed = (-2).dp
 private val HeaderHeight = 32.dp
 private val FooterHeight = 32.dp
 private val PageChromeHeight = HeaderHeight + FooterHeight
@@ -183,17 +187,18 @@ fun ReaderScreen(
                     Column(Modifier.align(Alignment.CenterStart).offset(x = startOffset), horizontalAlignment = Alignment.CenterHorizontally) {
                         Row(Modifier.width(blockWidth).height(HeaderHeight).padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                             val headSurah = pageInfo?.let { surahs[it.surah] }
+                            // Nama surah (font nama surah) disamakan dengan judul juz kaligrafi: warna sama, tinggi tinta sama (~21 sp).
+                            val stripColor = MaterialTheme.colorScheme.onSurfaceVariant
                             if (headSurah != null) {
-                                // Nama surah (Arab) di strip atas halaman; ketuk membuka info surah.
                                 Text(
                                     text = headSurah.nameGlyph.toString(),
                                     style = TextStyle(
                                         fontFamily = nameFont,
-                                        fontSize = 20.sp,
+                                        fontSize = 18.sp,
                                         // Metrik vertikal font ini ~2,6 em; dibatasi supaya tidak mendorong tata letak.
-                                        lineHeight = 22.sp,
+                                        lineHeight = 21.sp,
                                         lineHeightStyle = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.Both),
-                                        color = MaterialTheme.colorScheme.onSurface,
+                                        color = stripColor,
                                     ),
                                     modifier = Modifier
                                         .height(24.dp)
@@ -206,7 +211,7 @@ fun ReaderScreen(
                             pageInfo?.let { info ->
                                 Text(
                                     text = juzTitleGlyph(info.juz),
-                                    style = TextStyle(fontFamily = commonFont, fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurfaceVariant),
+                                    style = TextStyle(fontFamily = commonFont, fontSize = 18.sp, color = stripColor),
                                     modifier = Modifier.semantics { contentDescription = "Juz ${info.juz}" },
                                 )
                             }
@@ -278,3 +283,4 @@ fun ReaderScreen(
         }
     }
 }
+
