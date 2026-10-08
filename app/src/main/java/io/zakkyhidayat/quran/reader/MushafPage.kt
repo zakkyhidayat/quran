@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
@@ -62,7 +63,7 @@ private const val REFERENCE_PX = 100f
 private const val DEFAULT_LINE_EM = 16.2f
 private const val MIN_LINE_EM = 15.5f
 private const val MAX_LINE_EM = 17f
-private const val FILL_RATIO = 0.97f
+private const val FILL_RATIO = 0.995f
 
 private const val BASMALLAH =
     "بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ"
@@ -183,13 +184,17 @@ private fun AyahLine(
     cellHeight: Dp,
 ) {
     val style = TextStyle(fontFamily = font, fontSize = size)
-    val highlight = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.75f)
+    // Abu-abu netral (warna teks di atas latar), bukan warna tema: warna tajwid (hijau, merah, biru) tetap terbaca.
+    // Terang: 10% (lebih pucat); gelap: 18% (lebih terang).
+    // Buram (sudah dicampur dengan latar) supaya tumpang tindih antar baris tidak tampak sebagai garis lebih gelap.
+    val highlightAlpha = if (MaterialTheme.colorScheme.background.luminance() < 0.5f) 0.18f else 0.10f
+    val highlight = MaterialTheme.colorScheme.onSurface.copy(alpha = highlightAlpha).compositeOver(MaterialTheme.colorScheme.background)
     val density = LocalDensity.current
     val gapPx = with(density) { size.toPx() * 0.25f }
-    val pad = with(density) { 3.dp.toPx() }
+    val pad = with(density) { 2.dp.toPx() }
     val corner = with(density) { 8.dp.toPx() }
-    // Tinggi sorotan mengikuti tinta huruf (~82% jarak baris), bukan seluruh sel baris, supaya batang antar baris tidak menempel.
-    val highlightHeight = with(density) { cellHeight.toPx() } * 0.82f
+    // Tinggi sorotan = satu sel baris penuh (tanpa celah antar baris); tumpang tindih 1 px penuh di tiap sisi menutup piksel sambungan sepenuhnya (anti-aliasing setengah piksel meninggalkan garis lebih terang).
+    val highlightHeight = with(density) { cellHeight.toPx() }
     val words = line.words
     val isSelected = remember(line, selected) {
         BooleanArray(words.size) { i -> selected != null && words[i].surah == selected.surah && words[i].ayah == selected.ayah }
@@ -210,10 +215,11 @@ private fun AyahLine(
                     var j = i
                     while (j + 1 < isSelected.size && isSelected[j + 1]) j++
                     // Teks berjalan kanan ke kiri: kata pertama paling kanan.
-                    val left = bounds[2 * j] - pad
+                    // Sisi kiri tanpa pad: di sana biasanya kata pertama ayat berikutnya, jangan sampai tertutup sorotan.
+                    val left = bounds[2 * j]
                     val right = bounds[2 * i + 1] + pad
                     val height = minOf(highlightHeight, this.size.height)
-                    drawRoundRect(highlight, Offset(left, (this.size.height - height) / 2f), Size(right - left, height), CornerRadius(corner))
+                    drawRoundRect(highlight, Offset(left, (this.size.height - height) / 2f - 1f), Size(right - left, height + 2f), CornerRadius(corner))
                     i = j + 1
                 }
             }

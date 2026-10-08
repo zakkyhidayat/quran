@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
@@ -63,7 +64,11 @@ import kotlinx.coroutines.flow.collectLatest
 
 private const val PAGE_COUNT = 604
 private val PageMaxWidth = 640.dp
-private val PagePadding = 8.dp
+// Margin tidak simetris: kiri rapat ke tepi layar, kanan memberi sedikit ruang.
+private val PageEndPadding = 4.dp
+
+// Blok halaman digeser ke luar tepi kiri layar sebesar ini (dan dilebarkan sama besar) supaya margin kiri lebih sempit.
+private val PageStartBleed = 3.dp
 private val HeaderHeight = 28.dp
 private val FooterHeight = 24.dp
 private val PageChromeHeight = HeaderHeight + FooterHeight
@@ -160,10 +165,13 @@ fun ReaderScreen(
                     },
                 ) {
                     // Blok halaman berproporsi kertas B5 (176 x 250 mm), seperti mushaf cetak; header dan nomor menempel di sekelilingnya.
-                    val available = minOf(maxWidth - PagePadding * 2, PageMaxWidth)
+                    val bleed = if (maxWidth - PageEndPadding < PageMaxWidth) PageStartBleed else 0.dp
+                    val available = minOf(maxWidth - PageEndPadding + bleed, PageMaxWidth)
                     val blockWidth = minOf(available, (maxHeight - PageChromeHeight) / PageHeightOverWidth)
                     val blockHeight = blockWidth * PageHeightOverWidth
-                    Column(Modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
+                    // Di layar sempit blok menempel ke kiri; di layar lebar sisa ruang dibagi dua agar halaman tetap di tengah.
+                    val startOffset = ((maxWidth - blockWidth - PageEndPadding) / 2).coerceAtLeast(0.dp) - bleed
+                    Column(Modifier.align(Alignment.CenterStart).offset(x = startOffset), horizontalAlignment = Alignment.CenterHorizontally) {
                         Row(Modifier.width(blockWidth).height(HeaderHeight).padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                             Text(pageInfo?.let { surahs[it.surah]?.nameLatin }.orEmpty(), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             Box(Modifier.weight(1f))
