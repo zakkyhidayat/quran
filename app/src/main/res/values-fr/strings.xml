@@ -195,4 +195,7 @@
     <string name="perm_install_sub">Nécessaire pour installer les mises à jour téléchargées depuis GitHub</string>
     <string name="perm_granted">Autorisé</string>
     <string name="perm_denied">Non autorisé</string>
+    <string name="arabic_text_size">Taille du texte arabe</string>
+    <string name="translation_text_size">Taille du texte de la traduction</string>
+    <string name="translation_text_sample">Au nom d\'Allah, le Tout Miséricordieux, le Très Miséricordieux.</string>
 </resources>

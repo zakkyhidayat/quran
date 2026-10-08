@@ -33,6 +33,10 @@ data class AppSettings(
     val showTransliteration: Boolean = true,
     val translationIds: List<String> = listOf("id-kemenag"),
     val readingMode: ReadingMode = ReadingMode.Mushaf,
+    /** Ukuran teks Arab (daftar ayat, lembar ayat) dalam persen dari ukuran bawaan. Halaman mushaf tidak terpengaruh. */
+    val arabicTextPercent: Int = 100,
+    /** Ukuran teks terjemahan dalam persen dari ukuran bawaan. */
+    val translationTextPercent: Int = 100,
     val onboardingDone: Boolean = false,
     val gestureHintDone: Boolean = false,
     /** Berkas tujuan cadangan otomatis (URI SAF); null = mati. */
@@ -59,6 +63,8 @@ class SettingsRepository(private val context: Context) {
     private val transliterationKey = booleanPreferencesKey("transliteration")
     private val translationsKey = stringPreferencesKey("translations")
     private val readingModeKey = stringPreferencesKey("reading_mode")
+    private val arabicTextKey = intPreferencesKey("arabic_text_percent")
+    private val translationTextKey = intPreferencesKey("translation_text_percent")
     private val onboardingKey = booleanPreferencesKey("onboarding_done")
     private val gestureHintKey = booleanPreferencesKey("gesture_hint_done")
     private val autoBackupUriKey = stringPreferencesKey("auto_backup_uri")
@@ -83,6 +89,8 @@ class SettingsRepository(private val context: Context) {
             showTransliteration = prefs[transliterationKey] ?: true,
             translationIds = prefs[translationsKey]?.split(',')?.filter { it.isNotBlank() } ?: defaultTranslations(),
             readingMode = prefs[readingModeKey].toEnum(ReadingMode.Mushaf),
+            arabicTextPercent = prefs[arabicTextKey] ?: 100,
+            translationTextPercent = prefs[translationTextKey] ?: 100,
             autoBackupUri = prefs[autoBackupUriKey],
             autoBackupAt = prefs[autoBackupAtKey]?.toLongOrNull() ?: 0,
             reminderEnabled = prefs[reminderKey] ?: false,
@@ -155,6 +163,10 @@ class SettingsRepository(private val context: Context) {
     suspend fun setOnboardingDone() = context.dataStore.edit { it[onboardingKey] = true }
 
     suspend fun setGestureHintDone() = context.dataStore.edit { it[gestureHintKey] = true }
+
+    suspend fun setArabicTextPercent(value: Int) = context.dataStore.edit { it[arabicTextKey] = value }
+
+    suspend fun setTranslationTextPercent(value: Int) = context.dataStore.edit { it[translationTextKey] = value }
 
     suspend fun setReadingMode(value: ReadingMode) = context.dataStore.edit { it[readingModeKey] = value.name }
 

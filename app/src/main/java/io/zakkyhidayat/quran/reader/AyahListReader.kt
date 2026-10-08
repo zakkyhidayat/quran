@@ -1,5 +1,7 @@
 package io.zakkyhidayat.quran.reader
 
+import io.zakkyhidayat.quran.ui.scaled
+import io.zakkyhidayat.quran.ui.LocalReadingTextScale
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -173,10 +175,10 @@ private fun AyahRow(vm: AppViewModel, pos: AyahPos, translationIds: List<String>
         }
         if (showArabic) {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                val style = MaterialTheme.typography.headlineSmall
+                val style = MaterialTheme.typography.headlineSmall.scaled(LocalReadingTextScale.current.arabic, 1.9f)
                 Text(
                     d.arabic,
-                    style = style.copy(fontFamily = arabicFont, lineHeight = style.fontSize * 1.9f),
+                    style = style.copy(fontFamily = arabicFont),
                     textAlign = TextAlign.Start,
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -186,14 +188,14 @@ private fun AyahRow(vm: AppViewModel, pos: AyahPos, translationIds: List<String>
             if (d.translations.size > 1) {
                 Text(tr.info.name, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
             }
-            val body = MaterialTheme.typography.bodyLarge
+            val body = MaterialTheme.typography.bodyLarge.scaled(LocalReadingTextScale.current.translation, 1.5f)
             // Nomor ayat di depan terjemahan ("84. ..."), tanpa lencana terpisah.
             Text(
                 buildAnnotatedString {
                     withStyle(SpanStyle(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)) { append("${pos.ayah}. ") }
                     append(translationText(tr.text, MaterialTheme.colorScheme.primary, MaterialTheme.typography.labelSmall.fontSize))
                 },
-                style = body.copy(lineHeight = body.fontSize * 1.5f),
+                style = body,
             )
         }
     }

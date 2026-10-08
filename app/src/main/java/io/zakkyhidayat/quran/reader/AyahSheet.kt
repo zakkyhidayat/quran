@@ -1,5 +1,7 @@
 package io.zakkyhidayat.quran.reader
 
+import io.zakkyhidayat.quran.ui.scaled
+import io.zakkyhidayat.quran.ui.LocalReadingTextScale
 import io.zakkyhidayat.quran.ui.InfoLabel
 import androidx.compose.ui.res.stringResource
 import io.zakkyhidayat.quran.R
@@ -116,10 +118,10 @@ fun AyahSheetContent(
         }
         Spacer(Modifier.height(8.dp))
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-            val arabicStyle = MaterialTheme.typography.headlineMedium
+            val arabicStyle = MaterialTheme.typography.headlineMedium.scaled(LocalReadingTextScale.current.arabic, 1.9f)
             Text(
                 text = detail.arabic,
-                style = arabicStyle.copy(fontFamily = remember { arabicFontFamily(context) }, lineHeight = arabicStyle.fontSize * 1.9f),
+                style = arabicStyle.copy(fontFamily = remember { arabicFontFamily(context) }),
                 textAlign = TextAlign.Start,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -135,8 +137,8 @@ fun AyahSheetContent(
                 Column(Modifier.padding(16.dp)) {
                     Text(stringResource(R.string.transliteration), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                     Spacer(Modifier.height(4.dp))
-                    val body = MaterialTheme.typography.bodyLarge
-                    Text(romanized, style = body.copy(fontStyle = androidx.compose.ui.text.font.FontStyle.Italic, lineHeight = body.fontSize * 1.6f))
+                    val body = MaterialTheme.typography.bodyLarge.scaled(LocalReadingTextScale.current.translation, 1.6f)
+                    Text(romanized, style = body.copy(fontStyle = androidx.compose.ui.text.font.FontStyle.Italic))
                 }
             }
         }
@@ -157,10 +159,10 @@ fun AyahSheetContent(
                 Column(Modifier.padding(16.dp)) {
                     Text(tr.info.name, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                     Spacer(Modifier.height(4.dp))
-                    val body = MaterialTheme.typography.bodyLarge
+                    val body = MaterialTheme.typography.bodyLarge.scaled(LocalReadingTextScale.current.translation, 1.6f)
                     Text(
                         text = translationText(tr.text, MaterialTheme.colorScheme.primary, MaterialTheme.typography.labelSmall.fontSize),
-                        style = body.copy(lineHeight = body.fontSize * 1.6f),
+                        style = body,
                     )
                     if (tr.footnotes.isNotEmpty()) {
                         Spacer(Modifier.height(12.dp))

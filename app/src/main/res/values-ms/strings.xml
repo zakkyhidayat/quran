@@ -195,4 +195,7 @@
     <string name="perm_install_sub">Diperlukan untuk memasang kemas kini yang dimuat turun dari GitHub</string>
     <string name="perm_granted">Dibenarkan</string>
     <string name="perm_denied">Tidak dibenarkan</string>
+    <string name="arabic_text_size">Saiz teks Arab</string>
+    <string name="translation_text_size">Saiz teks terjemahan</string>
+    <string name="translation_text_sample">Dengan nama Allah, Yang Maha Pemurah, lagi Maha Mengasihani.</string>
 </resources>

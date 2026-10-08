@@ -195,4 +195,7 @@
     <string name="perm_install_sub">GitHub سے ڈاؤن لوڈ کی گئی اپ ڈیٹس انسٹال کرنے کے لیے ضروری</string>
     <string name="perm_granted">اجازت ہے</string>
     <string name="perm_denied">اجازت نہیں</string>
+    <string name="arabic_text_size">عربی متن کا سائز</string>
+    <string name="translation_text_size">ترجمے کا سائز</string>
+    <string name="translation_text_sample">اللہ کے نام سے جو بڑا مہربان نہایت رحم والا ہے۔</string>
 </resources>

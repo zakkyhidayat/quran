@@ -195,4 +195,7 @@
     <string name="perm_install_sub">مطلوب لتثبيت تحديثات التطبيق المنزّلة من GitHub</string>
     <string name="perm_granted">مسموح</string>
     <string name="perm_denied">غير مسموح</string>
+    <string name="arabic_text_size">حجم النص العربي</string>
+    <string name="translation_text_size">حجم نص الترجمة</string>
+    <string name="translation_text_sample">بسم الله الرحمن الرحيم.</string>
 </resources>

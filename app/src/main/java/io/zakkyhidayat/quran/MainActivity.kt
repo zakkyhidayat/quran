@@ -52,12 +52,19 @@ class MainActivity : ComponentActivity() {
                 enableEdgeToEdge(statusBarStyle = style, navigationBarStyle = style)
             }
             QuranTheme(settings) {
+              androidx.compose.runtime.CompositionLocalProvider(
+                io.zakkyhidayat.quran.ui.LocalReadingTextScale provides io.zakkyhidayat.quran.ui.ReadingTextScale(
+                    arabic = settings.arabicTextPercent / 100f,
+                    translation = settings.translationTextPercent / 100f,
+                ),
+              ) {
                 if (settings.onboardingDone) {
                     AppNav(vm, settings)
                     io.zakkyhidayat.quran.ui.UpdateDialog(vm)
                 } else {
                     io.zakkyhidayat.quran.onboarding.OnboardingScreen(vm, settings)
                 }
+              }
             }
         }
     }

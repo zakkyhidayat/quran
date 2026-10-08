@@ -196,4 +196,7 @@
     <string name="perm_install_sub">Needed to install app updates downloaded from GitHub</string>
     <string name="perm_granted">Allowed</string>
     <string name="perm_denied">Not allowed</string>
+    <string name="arabic_text_size">Arabic text size</string>
+    <string name="translation_text_size">Translation text size</string>
+    <string name="translation_text_sample">In the name of Allah, the Entirely Merciful, the Especially Merciful.</string>
 </resources>

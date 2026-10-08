@@ -195,4 +195,7 @@
     <string name="perm_install_sub">GitHub’dan indirilen güncellemeleri yüklemek için gerekli</string>
     <string name="perm_granted">İzin verildi</string>
     <string name="perm_denied">İzin yok</string>
+    <string name="arabic_text_size">Arapça metin boyutu</string>
+    <string name="translation_text_size">Meal metni boyutu</string>
+    <string name="translation_text_sample">Rahmân ve Rahîm olan Allah\'ın adıyla.</string>
 </resources>

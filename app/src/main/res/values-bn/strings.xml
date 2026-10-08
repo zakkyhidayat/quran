@@ -195,4 +195,7 @@
     <string name="perm_install_sub">GitHub থেকে ডাউনলোড করা আপডেট ইনস্টল করতে প্রয়োজন</string>
     <string name="perm_granted">অনুমোদিত</string>
     <string name="perm_denied">অনুমোদিত নয়</string>
+    <string name="arabic_text_size">আরবি লেখার আকার</string>
+    <string name="translation_text_size">অনুবাদের আকার</string>
+    <string name="translation_text_sample">পরম করুণাময় অতি দয়ালু আল্লাহর নামে।</string>
 </resources>

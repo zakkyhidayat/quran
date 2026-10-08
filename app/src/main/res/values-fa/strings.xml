@@ -195,4 +195,7 @@
     <string name="perm_install_sub">برای نصب به‌روزرسانی‌های بارگیری‌شده از GitHub لازم است</string>
     <string name="perm_granted">مجاز</string>
     <string name="perm_denied">غیرمجاز</string>
+    <string name="arabic_text_size">اندازهٔ متن عربی</string>
+    <string name="translation_text_size">اندازهٔ متن ترجمه</string>
+    <string name="translation_text_sample">به نام خداوند بخشندهٔ مهربان.</string>
 </resources>

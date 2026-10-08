@@ -1,5 +1,6 @@
 package io.zakkyhidayat.quran.settings
 
+import io.zakkyhidayat.quran.ui.scaled
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.SnackbarHostState
@@ -128,6 +129,7 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
                         SectionTitle(AppIcons.Palette, stringResource(R.string.appearance))
 
                         AppearanceControls(vm, settings)
+                TextSizeControls(vm, settings)
 
                         Spacer(Modifier.height(8.dp))
                         Group {
@@ -442,6 +444,50 @@ internal fun LanguageSection(showTitle: Boolean = true) {
             },
             confirmButton = { TextButton(onClick = { open = false }) { Text(stringResource(R.string.close)) } },
         )
+    }
+}
+
+/** Ukuran teks Arab dan terjemahan (daftar ayat dan lembar ayat), masing-masing 80-160%, dengan pratinjau. */
+@Composable
+internal fun TextSizeControls(vm: AppViewModel, settings: AppSettings) {
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val arabicFont = remember { io.zakkyhidayat.quran.reader.arabicFontFamily(context) }
+    TextSizeSlider(
+        label = stringResource(R.string.arabic_text_size),
+        percent = settings.arabicTextPercent,
+        onChange = { scope.launch { vm.settingsRepository.setArabicTextPercent(it) } },
+    ) { scale ->
+        androidx.compose.runtime.CompositionLocalProvider(androidx.compose.ui.platform.LocalLayoutDirection provides androidx.compose.ui.unit.LayoutDirection.Rtl) {
+            Text(
+                "بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ",
+                style = MaterialTheme.typography.headlineSmall.scaled(scale, 1.9f).copy(fontFamily = arabicFont),
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+    }
+    TextSizeSlider(
+        label = stringResource(R.string.translation_text_size),
+        percent = settings.translationTextPercent,
+        onChange = { scope.launch { vm.settingsRepository.setTranslationTextPercent(it) } },
+    ) { scale ->
+        Text(stringResource(R.string.translation_text_sample), style = MaterialTheme.typography.bodyLarge.scaled(scale, 1.5f))
+    }
+}
+
+@Composable
+private fun TextSizeSlider(label: String, percent: Int, onChange: (Int) -> Unit, preview: @Composable (Float) -> Unit) {
+    // Nilai sementara selama digeser (pratinjau langsung); disimpan saat jari dilepas.
+    var value by remember(percent) { androidx.compose.runtime.mutableFloatStateOf(percent.toFloat()) }
+    Labeled("$label · ${value.toInt()}%") {
+        androidx.compose.material3.Slider(
+            value = value,
+            onValueChange = { value = it },
+            onValueChangeFinished = { onChange(value.toInt()) },
+            valueRange = 80f..160f,
+            steps = 7,
+        )
+        preview(value / 100f)
     }
 }
 
