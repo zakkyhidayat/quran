@@ -28,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -84,6 +85,20 @@ internal fun AyahListReader(
         index?.flatMap { pos -> if (pos.ayah == 1) listOf(ListRow.Header(pos.surah), ListRow.Ayah(pos)) else listOf(ListRow.Ayah(pos)) }
     }
     val state = rememberLazyListState()
+
+    // Terjemahan saja tanpa satu pun terjemahan terpasang: satu pesan, bukan petunjuk berulang di setiap ayat.
+    val installed by vm.translations.collectAsStateWithLifecycle()
+    if (!showArabic && installed.none { it.id in translationIds }) {
+        Box(modifier.fillMaxSize().padding(32.dp), contentAlignment = Alignment.Center) {
+            Text(
+                stringResource(R.string.no_translation_hint),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+            )
+        }
+        return
+    }
 
     if (rows == null) {
         Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) { LoadingIndicator() }
@@ -194,13 +209,6 @@ private fun AyahRow(vm: AppViewModel, pos: AyahPos, translationIds: List<String>
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
-        }
-        if (d.translations.isEmpty() && !showArabic) {
-            Text(
-                stringResource(R.string.no_translation_hint),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
         }
         d.translations.forEach { tr ->
             if (d.translations.size > 1) {

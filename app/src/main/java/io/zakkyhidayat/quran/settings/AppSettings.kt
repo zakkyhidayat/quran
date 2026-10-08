@@ -65,7 +65,8 @@ class SettingsRepository(private val context: Context) {
             readingMode = prefs[readingModeKey].toEnum(ReadingMode.Mushaf),
             // Pengguna lama (sudah pernah membaca) tidak perlu onboarding maupun petunjuk gerakan.
             onboardingDone = prefs[onboardingKey] ?: (prefs[lastPageKey] != null),
-            gestureHintDone = prefs[gestureHintKey] ?: (prefs[lastPageKey] != null),
+            // Pengguna baru: onboarding_done tersimpan, jadi petunjuk tetap tampil walau baca terakhir sudah tercatat.
+            gestureHintDone = prefs[gestureHintKey] ?: (prefs[onboardingKey] == null && prefs[lastPageKey] != null),
             lastPage = prefs[lastPageKey] ?: 1,
             lastSurah = prefs[lastSurahKey] ?: 0,
             lastAyah = prefs[lastAyahKey] ?: 0,

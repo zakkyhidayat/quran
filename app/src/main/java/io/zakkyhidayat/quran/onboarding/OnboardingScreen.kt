@@ -29,6 +29,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -72,8 +73,9 @@ fun OnboardingScreen(vm: AppViewModel, settings: AppSettings) {
     val scope = rememberCoroutineScope()
     val finish: () -> Unit = { scope.launch { vm.settingsRepository.setOnboardingDone() } }
 
-    Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).windowInsetsPadding(WindowInsets.systemBars)) {
-        CenteredContent {
+    // Surface agar warna teks bawaan mengikuti tema (onBackground), bukan hitam.
+    Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+        CenteredContent(Modifier.windowInsetsPadding(WindowInsets.systemBars)) {
             Column(Modifier.fillMaxSize()) {
                 Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                     Text(
@@ -141,11 +143,9 @@ private fun MushafStep(vm: AppViewModel, settings: AppSettings) {
     val lines by produceState<List<PageLine>?>(null) { value = vm.mushaf.page(1) }
     val surahs by vm.surahs.collectAsStateWithLifecycle()
     // Pratinjau Al-Fatihah; ikut berubah saat sakelar tajwid di bawahnya diubah.
-    Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        Box(Modifier.fillMaxWidth().aspectRatio(176f / 150f).padding(12.dp)) {
+    // Proporsi halaman B5 seperti di layar baca, agar baris tidak berdesakan.
+    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+        Box(Modifier.fillMaxWidth(0.8f).aspectRatio(176f / 250f)) {
             lines?.let {
                 MushafPage(
                     page = 1,
