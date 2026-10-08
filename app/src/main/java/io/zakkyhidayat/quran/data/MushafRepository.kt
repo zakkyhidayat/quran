@@ -126,8 +126,14 @@ class MushafRepository(context: Context) {
 
     suspend fun surahDetails(id: Int, lang: String): SurahDetails = withContext(Dispatchers.IO) {
         val surah = surahs().getValue(id)
-        val place = db.rawQuery("SELECT place FROM surahs WHERE id = ?", arrayOf(id.toString()))
-            .use { if (it.moveToFirst() && !it.isNull(0)) it.getString(0) else null }
+        var place: String? = null
+        var order: Int? = null
+        db.rawQuery("SELECT place, revelation_order FROM surahs WHERE id = ?", arrayOf(id.toString())).use {
+            if (it.moveToFirst()) {
+                if (!it.isNull(0)) place = it.getString(0)
+                if (!it.isNull(1)) order = it.getInt(1)
+            }
+        }
         val lastPage = db.rawQuery("SELECT MAX(page) FROM words WHERE surah = ?", arrayOf(id.toString())).use { if (it.moveToFirst()) it.getInt(0) else surah.firstPage }
         val ruku = db.rawQuery("SELECT COUNT(*) FROM ruku WHERE surah = ?", arrayOf(id.toString())).use { if (it.moveToFirst()) it.getInt(0) else 0 }
         val html = db.rawQuery("SELECT text FROM surah_info WHERE lang = ? AND surah = ?", arrayOf(lang, id.toString()))
@@ -140,6 +146,7 @@ class MushafRepository(context: Context) {
             juzFrom = containing("juz", id, 1),
             juzTo = containing("juz", id, surah.ayahCount),
             rukuCount = ruku,
+            revelationOrder = order,
             infoHtml = html,
         )
     }

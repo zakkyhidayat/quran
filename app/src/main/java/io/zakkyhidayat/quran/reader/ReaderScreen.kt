@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -36,9 +37,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.sp
 import io.zakkyhidayat.quran.ui.JumpToAyahDialog
 import androidx.compose.runtime.mutableStateOf
@@ -72,7 +75,7 @@ private val PageEndPadding = 4.dp
 
 // Blok halaman digeser ke luar tepi kiri layar sebesar ini (dan dilebarkan sama besar) supaya margin kiri lebih sempit.
 private val PageStartBleed = 3.dp
-private val HeaderHeight = 28.dp
+private val HeaderHeight = 48.dp
 private val FooterHeight = 32.dp
 private val PageChromeHeight = HeaderHeight + FooterHeight
 // Kertas B5: 176 x 250 mm.
@@ -123,6 +126,7 @@ fun ReaderScreen(
     var showJump by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val commonFont = remember { commonFontFamily(context) }
+    val nameFont = remember { surahNameFontFamily(context) }
     val meta = pageMeta.getOrNull(currentPage - 1)
     val currentSurah = meta?.let { surahs[it.surah] }
     val pageBookmarked = bookmarks.any { it.kind == BookmarkKind.Page && it.page == currentPage }
@@ -178,7 +182,28 @@ fun ReaderScreen(
                     val startOffset = ((maxWidth - blockWidth - PageEndPadding) / 2).coerceAtLeast(0.dp) - bleed
                     Column(Modifier.align(Alignment.CenterStart).offset(x = startOffset), horizontalAlignment = Alignment.CenterHorizontally) {
                         Row(Modifier.width(blockWidth).height(HeaderHeight).padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Text(pageInfo?.let { surahs[it.surah]?.nameLatin }.orEmpty(), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            val headSurah = pageInfo?.let { surahs[it.surah] }
+                            if (headSurah != null) {
+                                // Arab di atas, Latin di bawahnya; ketuk membuka info surah.
+                                Column(
+                                    Modifier.clickable(onClickLabel = "Buka info surah") { onOpenSurahInfo(headSurah.id) },
+                                    horizontalAlignment = Alignment.Start,
+                                ) {
+                                    Text(
+                                        text = headSurah.nameGlyph.toString(),
+                                        style = TextStyle(
+                                            fontFamily = nameFont,
+                                            fontSize = 20.sp,
+                                            // Metrik vertikal font ini ~2,6 em; dibatasi supaya baris Latin di bawahnya tetap muat.
+                                            lineHeight = 22.sp,
+                                            lineHeightStyle = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.Both),
+                                            color = MaterialTheme.colorScheme.onSurface,
+                                        ),
+                                        modifier = Modifier.height(24.dp).wrapContentHeight(Alignment.CenterVertically, unbounded = true).clearAndSetSemantics { },
+                                    )
+                                    Text(headSurah.nameLatin, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                }
+                            }
                             Box(Modifier.weight(1f))
                             pageInfo?.let { info ->
                                 Text(

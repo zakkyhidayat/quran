@@ -72,5 +72,6 @@ data class SurahDetails(
     val juzFrom: Int,
     val juzTo: Int,
     val rukuCount: Int,
+    val revelationOrder: Int?,
     val infoHtml: String,
 )

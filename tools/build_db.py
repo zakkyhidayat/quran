@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "data-src"
 OUT = Path(sys.argv[2]) if len(sys.argv) > 2 else ROOT / "app/src/main/assets/quran.db"
 
-DATA_VERSION = 6
+DATA_VERSION = 7
 
 TRANSLATIONS = [
     # id, lang, nama tampil, sumber, folder
@@ -162,7 +162,7 @@ SCHEMA = """
 CREATE TABLE surahs (
     id INTEGER PRIMARY KEY, name_ar TEXT NOT NULL, name_latin TEXT NOT NULL,
     ayah_count INTEGER NOT NULL, first_page INTEGER NOT NULL, name_glyph INTEGER NOT NULL,
-    place TEXT
+    place TEXT, revelation_order INTEGER
 );
 CREATE TABLE surah_info (
     lang TEXT NOT NULL, surah INTEGER NOT NULL, name TEXT NOT NULL, short_text TEXT NOT NULL, text TEXT NOT NULL,
@@ -297,11 +297,16 @@ def load_surah_info(db):
             if lang == "id":
                 places[number] = detect_place(text)
         print(f"surah_info {lang}: {len(rows)}")
-    missing = [n for n, v in places.items() if v is None]
-    assert not missing, f"tempat turun tidak terdeteksi: {missing}"
-    for number, place in places.items():
-        db.execute("UPDATE surahs SET place=? WHERE id=?", (place, number))
-    print("tempat turun:", {k: sum(1 for v in places.values() if v == k) for k in ("makki", "madani")})
+    meta = sqlite3.connect(next((SRC / "meta").glob("*surah-name*.sqlite")))
+    rows = meta.execute("SELECT id, revelation_place, revelation_order FROM chapters ORDER BY id").fetchall()
+    assert len(rows) == 114
+    official = {n: ("makki" if place == "makkah" else "madani") for n, place, _ in rows}
+    # Metadata resmi jadi sumber utama; deteksi dari teks hanya untuk pemeriksaan silang.
+    disagree = [n for n in official if places.get(n) and places[n] != official[n]]
+    print("tempat turun beda dengan tebakan teks (memakai metadata):", disagree)
+    for number, place, order in rows:
+        db.execute("UPDATE surahs SET place=?, revelation_order=? WHERE id=?", (official[number], order, number))
+    print("tempat turun:", {k: sum(1 for v in official.values() if v == k) for k in ("makki", "madani")})
 
 
 def load_transliteration(db):
@@ -384,7 +389,7 @@ def main():
         count, first_page = db.execute(
             "SELECT COUNT(*), MIN(page) FROM ayahs WHERE surah=?", (sid,)
         ).fetchone()
-        db.execute("INSERT INTO surahs VALUES (?,?,?,?,?,?,NULL)", (sid, name_ar, latin, count, first_page, glyphs[sid]))
+        db.execute("INSERT INTO surahs VALUES (?,?,?,?,?,?,NULL,NULL)", (sid, name_ar, latin, count, first_page, glyphs[sid]))
 
     load_markers(db)
     load_surah_info(db)

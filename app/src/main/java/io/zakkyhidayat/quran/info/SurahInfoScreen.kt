@@ -78,6 +78,7 @@ fun SurahInfoScreen(vm: AppViewModel, surahId: Int, onBack: () -> Unit, onOpenAy
                         AssistChip(onClick = {}, label = { Text(if (d.firstPage == d.lastPage) "Hal. ${d.firstPage}" else "Hal. ${d.firstPage}–${d.lastPage}") })
                         AssistChip(onClick = {}, label = { Text(if (d.juzFrom == d.juzTo) "Juz ${d.juzFrom}" else "Juz ${d.juzFrom}–${d.juzTo}") })
                         AssistChip(onClick = {}, label = { Text("${d.rukuCount} ruku") })
+                        d.revelationOrder?.let { AssistChip(onClick = {}, label = { Text("Turun ke-$it") }) }
                     }
                     FilledTonalButton(
                         onClick = { onOpenPage(d.firstPage) },
