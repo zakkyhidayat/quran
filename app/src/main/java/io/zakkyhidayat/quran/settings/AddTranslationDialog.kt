@@ -1,5 +1,6 @@
 package io.zakkyhidayat.quran.settings
 
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.ListItem
@@ -46,7 +47,6 @@ import io.zakkyhidayat.quran.data.CatalogPack
 import io.zakkyhidayat.quran.data.TranslationInfo
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 private sealed interface CatalogState {
     data object Loading : CatalogState
@@ -148,7 +148,7 @@ internal fun AddTranslationDialog(
                                         )
                                     } else if (pack.bytes > 0) {
                                         Text(
-                                            stringResource(R.string.translation_size_mb, String.format(Locale.getDefault(), "%.1f", pack.bytes / 1_000_000.0)),
+                                            stringResource(R.string.translation_size_mb, String.format(LocalConfiguration.current.locales[0], "%.1f", pack.bytes / 1_000_000.0)),
                                             style = MaterialTheme.typography.labelMedium,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         )

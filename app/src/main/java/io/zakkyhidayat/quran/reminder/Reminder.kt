@@ -62,6 +62,9 @@ object Reminder {
         Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
             ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
 
+    // Fitur ini disembunyikan dan POST_NOTIFICATIONS sengaja tidak dideklarasikan (lihat AndroidManifest.xml); canNotify()
+    // tetap menjaga panggilan ini. Hapus anotasi ini saat izin dideklarasikan kembali.
+    @android.annotation.SuppressLint("NotificationPermission")
     internal suspend fun notify(context: Context) {
         val app = context.app
         val settings = app.settings.settings.first()

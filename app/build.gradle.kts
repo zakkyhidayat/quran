@@ -76,6 +76,15 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    // Android Lint di CI: temuan lama dicatat di lint-baseline.xml, temuan baru menggagalkan build.
+    lint {
+        baseline = file("lint-baseline.xml")
+        abortOnError = true
+        checkDependencies = false
+        // local.properties hanya ada di mesin pengembang (tidak di git) dan ditulis oleh Android Studio.
+        disable += "PropertyEscape"
+    }
+
     packaging {
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
     }

@@ -1,5 +1,6 @@
 package io.zakkyhidayat.quran.ui
 
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,7 +31,6 @@ import io.zakkyhidayat.quran.R
 import io.zakkyhidayat.quran.data.Updater
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 /** Tawaran pembaruan dari GitHub Releases: unduh APK dengan progres, lalu buka pemasang sistem. */
 @Composable
@@ -50,7 +50,7 @@ fun UpdateDialog(vm: AppViewModel) {
             Column {
                 if (current.bytes > 0) {
                     Text(
-                        stringResource(R.string.translation_size_mb, String.format(Locale.getDefault(), "%.1f", current.bytes / 1_000_000.0)),
+                        stringResource(R.string.translation_size_mb, String.format(LocalConfiguration.current.locales[0], "%.1f", current.bytes / 1_000_000.0)),
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )

@@ -1,5 +1,6 @@
 package io.zakkyhidayat.quran.reader
 
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.graphics.luminance
 import kotlinx.coroutines.withContext
@@ -192,14 +193,16 @@ fun ReaderScreen(
     val motion = MaterialTheme.motionScheme
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val resources = LocalResources.current
     val commonFont = remember { commonFontFamily(context) }
     val nameFont = remember { surahNameFontFamily(context) }
     val meta = pageMeta.getOrNull(currentPage - 1)
     val currentSurah = meta?.let { surahs[it.surah] }
     val pageBookmarked = bookmarks.any { it.kind == BookmarkKind.Page && it.page == currentPage }
 
-    Scaffold(containerColor = MaterialTheme.colorScheme.background, contentWindowInsets = WindowInsets(0, 0, 0, 0)) { _ ->
-        Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.systemBars)) {
+    Scaffold(containerColor = MaterialTheme.colorScheme.background, contentWindowInsets = WindowInsets(0, 0, 0, 0)) { scaffoldPadding ->
+        // Inset ditangani sendiri (systemBars); padding Scaffold di sini selalu nol karena contentWindowInsets kosong.
+        Column(Modifier.fillMaxSize().padding(scaffoldPadding).windowInsetsPadding(WindowInsets.systemBars)) {
             // Bilah atas permanen; halaman berada di ruang di bawahnya.
             TopAppBar(
                 windowInsets = WindowInsets(0, 0, 0, 0),
@@ -291,7 +294,7 @@ fun ReaderScreen(
                                                 .height(24.dp)
                                                 .wrapContentHeight(Alignment.CenterVertically, unbounded = true)
                                                 .clickable(onClickLabel = stringResource(R.string.open_surah_info)) { onOpenSurahInfo(headSurah.id) }
-                                                .semantics { contentDescription = context.getString(R.string.surah_info_cd, headSurah.nameLatin) },
+                                                .semantics { contentDescription = resources.getString(R.string.surah_info_cd, headSurah.nameLatin) },
                                         )
                                     }
                                     Box(Modifier.weight(1f))
@@ -299,7 +302,7 @@ fun ReaderScreen(
                                         Text(
                                             text = juzTitleGlyph(info.juz),
                                             style = TextStyle(fontFamily = commonFont, fontSize = 18.sp, color = stripColor),
-                                            modifier = Modifier.semantics { contentDescription = context.getString(R.string.juz_n, info.juz) },
+                                            modifier = Modifier.semantics { contentDescription = resources.getString(R.string.juz_n, info.juz) },
                                         )
                                     }
                                 }

@@ -1,5 +1,6 @@
 package io.zakkyhidayat.quran.reader
 
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.DisposableEffect
@@ -199,7 +200,7 @@ private fun ScreenReaderLayer(
     onAyahClick: (AyahRef) -> Unit,
     onSurahClick: (Int) -> Unit,
 ) {
-    val context = LocalContext.current
+    val resources = LocalResources.current
     val byRef = remember(ayahTexts) { ayahTexts.associateBy { AyahRef(it.surah, it.ayah) } }
     val seen = HashSet<AyahRef>()
     Column {
@@ -209,8 +210,8 @@ private fun ScreenReaderLayer(
                     Box(
                         Modifier.size(1.dp).semantics {
                             heading()
-                            contentDescription = context.getString(R.string.surah_cd, surah.nameLatin)
-                            onClick(label = context.getString(R.string.open_surah_info)) { onSurahClick(surah.id); true }
+                            contentDescription = resources.getString(R.string.surah_cd, surah.nameLatin)
+                            onClick(label = resources.getString(R.string.open_surah_info)) { onSurahClick(surah.id); true }
                         },
                     )
                 }
@@ -222,8 +223,8 @@ private fun ScreenReaderLayer(
                         Box(
                             Modifier.size(1.dp).semantics {
                                 role = Role.Button
-                                contentDescription = context.getString(R.string.ayah_cd, name, ref.ayah, text.text)
-                                onClick(label = context.getString(R.string.show_translation)) { onAyahClick(ref); true }
+                                contentDescription = resources.getString(R.string.ayah_cd, name, ref.ayah, text.text)
+                                onClick(label = resources.getString(R.string.show_translation)) { onAyahClick(ref); true }
                             },
                         )
                     }

@@ -21,7 +21,7 @@ jobs:
         run: python tools/check_strings.py
 
   android:
-    name: Unit tests and debug build
+    name: Unit tests, lint, and debug build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -33,4 +33,4 @@ jobs:
           java-version: "21"
       - uses: gradle/actions/setup-gradle@v5
       # Font halaman tidak ada di git; build debug tetap berjalan (halaman memakai font bawaan), cukup untuk tes.
-      - run: ./gradlew --no-daemon :app:testGithubDebugUnitTest :app:assembleGithubDebug
+      - run: ./gradlew --no-daemon :app:testGithubDebugUnitTest :app:lintGithubDebug :app:assembleGithubDebug
