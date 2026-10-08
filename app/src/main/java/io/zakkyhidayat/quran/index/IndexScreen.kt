@@ -28,6 +28,7 @@ import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.LeadingIconTab
+import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -60,13 +61,13 @@ import io.zakkyhidayat.quran.ui.segmentedItemColors
 import io.zakkyhidayat.quran.ui.NumberBadge
 
 private val TABS = listOf(
-    R.string.tab_bookmark to AppIcons.BookmarkBorder,
+    R.string.tab_bookmark to AppIcons.Bookmark,
     R.string.tab_surah to AppIcons.MenuBook,
     R.string.tab_juz to AppIcons.GridView,
     R.string.tab_hizb to AppIcons.PieChart,
     R.string.tab_manzil to AppIcons.CalendarViewWeek,
-    R.string.tab_sajdah to Icons.Default.KeyboardArrowDown,
 )
+// Tab Sajdah disembunyikan sementara; tempatnya mungkin dipakai fitur surah/ayat lain dari QUL. SajdaList tetap ada.
 private val ListPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -103,12 +104,21 @@ fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit
             Column(Modifier.fillMaxSize()) {
                 PrimaryScrollableTabRow(selectedTabIndex = tab, edgePadding = 8.dp) {
                     TABS.forEachIndexed { i, (title, icon) ->
-                        LeadingIconTab(
-                            selected = tab == i,
-                            onClick = { tab = i },
-                            text = { Text(stringResource(title)) },
-                            icon = { Icon(icon, contentDescription = null) },
-                        )
+                        if (i == 0) {
+                            // Bookmark cukup ikon; namanya tetap dibacakan pembaca layar.
+                            Tab(
+                                selected = tab == i,
+                                onClick = { tab = i },
+                                icon = { Icon(icon, contentDescription = stringResource(title)) },
+                            )
+                        } else {
+                            LeadingIconTab(
+                                selected = tab == i,
+                                onClick = { tab = i },
+                                text = { Text(stringResource(title)) },
+                                icon = { Icon(icon, contentDescription = null) },
+                            )
+                        }
                     }
                 }
                 when (tab) {
@@ -116,8 +126,7 @@ fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit
                     1 -> SurahList(vm, onBack, onOpenSurahInfo)
                     2 -> JuzList(vm, onBack)
                     3 -> HizbList(vm, onBack)
-                    4 -> ManzilList(vm, onBack)
-                    else -> SajdaList(vm, onBack)
+                    else -> ManzilList(vm, onBack)
                 }
             }
         }

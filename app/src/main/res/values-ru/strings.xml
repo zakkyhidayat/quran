@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Dibuat oleh tools/ui_translations.py; ubah di sana. -->
 <resources>
     <string name="back">Назад</string>
     <string name="jump_to_ayah">Перейти к аяту</string>
