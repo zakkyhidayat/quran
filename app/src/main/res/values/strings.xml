@@ -171,4 +171,12 @@
     <string name="auto_backup_on_sub">Saving to %1$s • last saved %2$s</string>
     <string name="auto_backup_pending">not yet</string>
     <string name="auto_backup_error">Could not save to the chosen file. Turn auto backup off and on to choose it again.</string>
+    <string name="update_title">Version %1$s is available</string>
+    <string name="update_install">Update</string>
+    <string name="update_later">Later</string>
+    <string name="update_skip">Skip this version</string>
+    <string name="update_failed">The download failed. Check your connection and try again.</string>
+    <string name="update_check_sub">%1$s • tap to check for updates</string>
+    <string name="update_latest">You have the latest version</string>
+    <string name="update_check_failed">Could not check for updates. Check your connection.</string>
 </resources>

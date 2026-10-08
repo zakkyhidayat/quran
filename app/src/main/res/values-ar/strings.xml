@@ -170,4 +170,12 @@
     <string name="auto_backup_on_sub">الحفظ في %1$s • آخر حفظ %2$s</string>
     <string name="auto_backup_pending">لم يتم بعد</string>
     <string name="auto_backup_error">تعذّر الحفظ في الملف المختار. أوقف النسخ التلقائي ثم شغّله لاختيار الملف من جديد.</string>
+    <string name="update_title">الإصدار %1$s متاح</string>
+    <string name="update_install">تحديث</string>
+    <string name="update_later">لاحقًا</string>
+    <string name="update_skip">تخطَّ هذا الإصدار</string>
+    <string name="update_failed">فشل التنزيل. تحقّق من الاتصال وحاول مرة أخرى.</string>
+    <string name="update_check_sub">%1$s • اضغط للتحقق من التحديثات</string>
+    <string name="update_latest">لديك أحدث إصدار</string>
+    <string name="update_check_failed">تعذّر التحقق من التحديثات. تحقّق من الاتصال.</string>
 </resources>

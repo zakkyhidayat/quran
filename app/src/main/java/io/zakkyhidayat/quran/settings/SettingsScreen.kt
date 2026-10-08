@@ -142,7 +142,26 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
 
                 SectionTitle(Icons.Default.Info, stringResource(R.string.about))
                 Group {
-                    item(title = stringResource(R.string.version), subtitle = version)
+                    if (io.zakkyhidayat.quran.BuildConfig.UPDATER_ENABLED) {
+                        val latest = stringResource(R.string.update_latest)
+                        val failedCheck = stringResource(R.string.update_check_failed)
+                        item(
+                            title = stringResource(R.string.version),
+                            subtitle = stringResource(R.string.update_check_sub, version),
+                            onClick = {
+                                vm.checkForUpdate(manual = true) { found ->
+                                    when (found) {
+                                        false -> android.widget.Toast.makeText(context, latest, android.widget.Toast.LENGTH_SHORT).show()
+                                        null -> android.widget.Toast.makeText(context, failedCheck, android.widget.Toast.LENGTH_LONG).show()
+                                        true -> Unit // dialog pembaruan tampil
+                                    }
+                                }
+                            },
+                            trailing = { Icon(AppIcons.Download, contentDescription = null) },
+                        )
+                    } else {
+                        item(title = stringResource(R.string.version), subtitle = version)
+                    }
                     item(
                         title = stringResource(R.string.data_source),
                         subtitle = stringResource(R.string.data_source_sub),

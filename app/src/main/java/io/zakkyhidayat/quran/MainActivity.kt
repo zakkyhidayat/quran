@@ -44,7 +44,12 @@ class MainActivity : ComponentActivity() {
                 enableEdgeToEdge(statusBarStyle = style, navigationBarStyle = style)
             }
             QuranTheme(settings) {
-                if (settings.onboardingDone) AppNav(vm, settings) else io.zakkyhidayat.quran.onboarding.OnboardingScreen(vm, settings)
+                if (settings.onboardingDone) {
+                    AppNav(vm, settings)
+                    io.zakkyhidayat.quran.ui.UpdateDialog(vm)
+                } else {
+                    io.zakkyhidayat.quran.onboarding.OnboardingScreen(vm, settings)
+                }
             }
         }
     }

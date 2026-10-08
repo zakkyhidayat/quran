@@ -170,4 +170,12 @@
     <string name="auto_backup_on_sub">Disimpan ke %1$s • terakhir %2$s</string>
     <string name="auto_backup_pending">belum</string>
     <string name="auto_backup_error">Tidak dapat menyimpan ke fail yang dipilih. Matikan dan hidupkan semula untuk memilih fail sekali lagi.</string>
+    <string name="update_title">Versi %1$s tersedia</string>
+    <string name="update_install">Kemas kini</string>
+    <string name="update_later">Kemudian</string>
+    <string name="update_skip">Langkau versi ini</string>
+    <string name="update_failed">Muat turun gagal. Semak sambungan dan cuba lagi.</string>
+    <string name="update_check_sub">%1$s • ketik untuk semak kemas kini</string>
+    <string name="update_latest">Anda menggunakan versi terkini</string>
+    <string name="update_check_failed">Tidak dapat menyemak kemas kini. Semak sambungan.</string>
 </resources>

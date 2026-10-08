@@ -170,4 +170,12 @@
     <string name="auto_backup_on_sub">%1$s-এ সংরক্ষণ • সর্বশেষ %2$s</string>
     <string name="auto_backup_pending">এখনো নয়</string>
     <string name="auto_backup_error">বেছে নেওয়া ফাইলে সংরক্ষণ করা যায়নি। আবার ফাইল বাছতে স্বয়ংক্রিয় ব্যাকআপ বন্ধ করে চালু করুন।</string>
+    <string name="update_title">সংস্করণ %1$s উপলব্ধ</string>
+    <string name="update_install">আপডেট</string>
+    <string name="update_later">পরে</string>
+    <string name="update_skip">এই সংস্করণ এড়িয়ে যান</string>
+    <string name="update_failed">ডাউনলোড ব্যর্থ। সংযোগ দেখে আবার চেষ্টা করুন।</string>
+    <string name="update_check_sub">%1$s • আপডেট দেখতে ট্যাপ করুন</string>
+    <string name="update_latest">আপনার কাছে সর্বশেষ সংস্করণ আছে</string>
+    <string name="update_check_failed">আপডেট দেখা যায়নি। সংযোগ পরীক্ষা করুন।</string>
 </resources>

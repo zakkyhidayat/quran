@@ -49,7 +49,7 @@ Choices made on purpose:
 - [x] Reading modes for all surahs: mushaf page, ayahs with translation, translation only (switched from a pill at the
       bottom of the screen)
 - [x] Onboarding for new users: language, about this mushaf, translations, appearance
-- [ ] In-app updates for builds from GitHub Releases
+- [x] In-app updates for builds from GitHub Releases
 - [x] All translations downloadable, none bundled in the APK
 - [ ] Automatic cloud backup (Google Drive, Dropbox, OneDrive)
 - [ ] Reading reminders to keep a daily portion by juz, hizb, or manzil
@@ -91,12 +91,13 @@ Requires JDK 17+, the Android SDK, and Python 3 with `fonttools`.
    `quran.db` is committed; rebuild it only when the data changes: `python tools/build_db.py`.
 3. Build:
    ```bash
-   ./gradlew :app:assembleDebug
+   ./gradlew :app:assembleGithubDebug
    ```
 
 Minimum Android version: 8.0 (API 26).
 
-Versions follow semantic versioning from git tags `vX.Y.Z`, with `versionCode = X*10000 + Y*100 + Z`.
+Versions follow semantic versioning from git tags `vX.Y.Z`, with `versionCode = X*10000 + Y*100 + Z`. Releases are
+built and signed by GitHub Actions; see [docs/RELEASING.md](docs/RELEASING.md).
 
 ## Translating the interface
 

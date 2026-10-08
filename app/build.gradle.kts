@@ -14,6 +14,9 @@ val semver: Triple<Int, Int, Int> = Regex("""^v(\d+)\.(\d+)\.(\d+)""").find(gitT
     ?.let { (major, minor, patch) -> Triple(major.toInt(), minor.toInt(), patch.toInt()) }
     ?: Triple(0, 1, 0)
 
+// Penandatanganan rilis dari variabel lingkungan (GitHub Actions) bila tersedia; tanpa itu rilis tidak ditandatangani.
+val releaseKeystore: String? = System.getenv("RELEASE_KEYSTORE_PATH")
+
 android {
     namespace = "io.zakkyhidayat.quran"
     compileSdk = 37
@@ -25,11 +28,37 @@ android {
         versionCode = semver.first * 10000 + semver.second * 100 + semver.third
         versionName = "${semver.first}.${semver.second}.${semver.third}"
         // Katalog paket terjemahan unduhan; paket diambil relatif terhadap alamat ini (lihat docs/DATA_SOURCES.md).
+        buildConfigField("String", "GITHUB_REPO", "\"zakkyhidayat/quran\"")
         buildConfigField("String", "TRANSLATION_CATALOG_URL", "\"https://github.com/zakkyhidayat/quran/releases/download/translations/catalog.json\"")
+    }
+
+    // github: APK di GitHub Releases dengan pembaruan dari dalam aplikasi. play: tanpa pembaruan sendiri (kebijakan Play).
+    flavorDimensions += "distribution"
+    productFlavors {
+        create("github") {
+            dimension = "distribution"
+            buildConfigField("boolean", "UPDATER_ENABLED", "true")
+        }
+        create("play") {
+            dimension = "distribution"
+            buildConfigField("boolean", "UPDATER_ENABLED", "false")
+        }
+    }
+
+    signingConfigs {
+        if (releaseKeystore != null) {
+            create("release") {
+                storeFile = file(releaseKeystore)
+                storePassword = System.getenv("RELEASE_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("RELEASE_KEY_ALIAS")
+                keyPassword = System.getenv("RELEASE_KEY_PASSWORD")
+            }
+        }
     }
 
     buildTypes {
         release {
+            if (releaseKeystore != null) signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")

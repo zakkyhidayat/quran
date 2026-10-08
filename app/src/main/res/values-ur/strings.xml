@@ -170,4 +170,12 @@
     <string name="auto_backup_on_sub">%1$s میں محفوظ • آخری بار %2$s</string>
     <string name="auto_backup_pending">ابھی نہیں</string>
     <string name="auto_backup_error">منتخب فائل میں محفوظ نہیں ہو سکا۔ فائل دوبارہ چننے کے لیے خودکار بیک اپ بند کر کے دوبارہ چلائیں۔</string>
+    <string name="update_title">ورژن %1$s دستیاب ہے</string>
+    <string name="update_install">اپ ڈیٹ کریں</string>
+    <string name="update_later">بعد میں</string>
+    <string name="update_skip">یہ ورژن چھوڑیں</string>
+    <string name="update_failed">ڈاؤن لوڈ ناکام۔ کنکشن چیک کر کے دوبارہ کوشش کریں۔</string>
+    <string name="update_check_sub">%1$s • اپ ڈیٹ چیک کرنے کے لیے تھپتھپائیں</string>
+    <string name="update_latest">آپ کے پاس تازہ ترین ورژن ہے</string>
+    <string name="update_check_failed">اپ ڈیٹ چیک نہیں ہو سکا۔ کنکشن چیک کریں۔</string>
 </resources>
