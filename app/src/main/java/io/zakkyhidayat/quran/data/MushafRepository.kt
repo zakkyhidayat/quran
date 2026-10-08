@@ -9,7 +9,7 @@ class MushafRepository(context: Context) {
     private val db = ContentDatabase.get(context)
 
     @Volatile private var surahCache: Map<Int, Surah>? = null
-    @Volatile private var juzCache: List<Juz>? = null
+    private val markerCache = java.util.concurrent.ConcurrentHashMap<MarkerKind, List<Marker>>()
     @Volatile private var pageMetaCache: List<PageMeta>? = null
     @Volatile private var translationCache: List<TranslationInfo>? = null
 
@@ -56,12 +56,40 @@ class MushafRepository(context: Context) {
         map.also { surahCache = it }
     }
 
-    suspend fun juz(): List<Juz> = juzCache ?: withContext(Dispatchers.IO) {
-        val list = mutableListOf<Juz>()
-        db.rawQuery("SELECT id, surah, ayah, page FROM juz ORDER BY id", null).use { c ->
-            while (c.moveToNext()) list += Juz(c.getInt(0), c.getInt(1), c.getInt(2), c.getInt(3))
+    suspend fun markers(kind: MarkerKind): List<Marker> = markerCache[kind] ?: withContext(Dispatchers.IO) {
+        val list = mutableListOf<Marker>()
+        val extra = when (kind) {
+            MarkerKind.Ruku -> ", CAST(surah_ruku AS TEXT)"
+            MarkerKind.Sajda -> ", type"
+            else -> ", ''"
         }
-        list.also { juzCache = it }
+        db.rawQuery("SELECT id, surah, ayah, page$extra FROM ${kind.table} ORDER BY id", null).use { c ->
+            while (c.moveToNext()) list += Marker(c.getInt(0), c.getInt(1), c.getInt(2), c.getInt(3), c.getString(4))
+        }
+        list.also { markerCache[kind] = it }
+    }
+
+    suspend fun juz(): List<Marker> = markers(MarkerKind.Juz)
+
+    // Bagian yang memuat ayat ini: penanda terakhir yang dimulai pada atau sebelum ayat tersebut.
+    private fun containing(table: String, surah: Int, ayah: Int): Int =
+        db.rawQuery(
+            "SELECT id FROM $table WHERE surah < ? OR (surah = ? AND ayah <= ?) ORDER BY surah DESC, ayah DESC LIMIT 1",
+            arrayOf(surah.toString(), surah.toString(), ayah.toString()),
+        ).use { if (it.moveToFirst()) it.getInt(0) else 1 }
+
+    private fun ayahInfo(surah: Int, ayah: Int): AyahInfo {
+        val rub = containing("rub", surah, ayah)
+        val sajda = db.rawQuery("SELECT type FROM sajda WHERE surah = ? AND ayah = ?", arrayOf(surah.toString(), ayah.toString()))
+            .use { if (it.moveToFirst()) it.getString(0) else null }
+        return AyahInfo(
+            juz = containing("juz", surah, ayah),
+            hizb = (rub - 1) / 4 + 1,
+            rubInHizb = (rub - 1) % 4 + 1,
+            manzil = containing("manzil", surah, ayah),
+            ruku = containing("ruku", surah, ayah),
+            sajda = sajda,
+        )
     }
 
     // Indeks 0 = halaman 1. Surah = surah kata pertama di halaman itu.
@@ -123,7 +151,7 @@ class MushafRepository(context: Context) {
             ).use { c -> while (c.moveToNext()) notes += Footnote(if (c.isNull(0)) null else c.getInt(0), c.getString(1)) }
             TranslationText(info, text, notes)
         }
-        AyahDetail(surah, ayah, page, arabic, texts)
+        AyahDetail(surah, ayah, page, arabic, texts, ayahInfo(surah, ayah))
     }
 
     suspend fun neighbour(ref: AyahRef, step: Int): AyahRef? {

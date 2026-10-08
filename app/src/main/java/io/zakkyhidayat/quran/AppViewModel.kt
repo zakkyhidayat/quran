@@ -5,7 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import io.zakkyhidayat.quran.data.AyahDetail
 import io.zakkyhidayat.quran.data.AyahRef
-import io.zakkyhidayat.quran.data.Juz
+import io.zakkyhidayat.quran.data.Marker
+import io.zakkyhidayat.quran.data.MarkerKind
 import io.zakkyhidayat.quran.data.PageMeta
 import io.zakkyhidayat.quran.data.Surah
 import io.zakkyhidayat.quran.data.TranslationInfo
@@ -28,7 +29,11 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     val bookmarkStore = app.bookmarks
 
     val surahs = MutableStateFlow<Map<Int, Surah>>(emptyMap())
-    val juz = MutableStateFlow<List<Juz>>(emptyList())
+    val juz = MutableStateFlow<List<Marker>>(emptyList())
+    val hizb = MutableStateFlow<List<Marker>>(emptyList())
+    val rub = MutableStateFlow<List<Marker>>(emptyList())
+    val manzil = MutableStateFlow<List<Marker>>(emptyList())
+    val sajda = MutableStateFlow<List<Marker>>(emptyList())
     val pageMeta = MutableStateFlow<List<PageMeta>>(emptyList())
     val translations = MutableStateFlow<List<TranslationInfo>>(emptyList())
 
@@ -50,7 +55,11 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             bookmarkStore.load()
             surahs.value = mushaf.surahs()
-            juz.value = mushaf.juz()
+            juz.value = mushaf.markers(MarkerKind.Juz)
+            hizb.value = mushaf.markers(MarkerKind.Hizb)
+            rub.value = mushaf.markers(MarkerKind.Rub)
+            manzil.value = mushaf.markers(MarkerKind.Manzil)
+            sajda.value = mushaf.markers(MarkerKind.Sajda)
             pageMeta.value = mushaf.pageMeta()
             translations.value = mushaf.translations()
         }

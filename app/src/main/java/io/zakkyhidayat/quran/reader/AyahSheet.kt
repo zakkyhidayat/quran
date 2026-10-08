@@ -10,12 +10,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilledTonalIconButton
@@ -78,7 +82,12 @@ fun AyahSheetContent(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
                 Text(title, style = MaterialTheme.typography.titleLarge)
-                Text("Halaman ${detail.page}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                val info = detail.info
+                Text(
+                    "Halaman ${detail.page} • Juz ${info.juz} • Hizb ${info.hizb} (rub' ${info.rubInHizb}/4) • Manzil ${info.manzil} • Ruku ${info.ruku}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
             IconButton(onClick = onPrevious) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = "Ayat sebelumnya") }
             IconButton(onClick = onNext) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = "Ayat berikutnya") }
@@ -99,6 +108,14 @@ fun AyahSheetContent(
             }) { Icon(Icons.Default.Share, contentDescription = "Bagikan") }
         }
 
+        detail.info.sajda?.let { type ->
+            Spacer(Modifier.height(4.dp))
+            AssistChip(
+                onClick = {},
+                label = { Text(if (type == "required") "Ayat sajdah tilawah (wajib)" else "Ayat sajdah tilawah (dianjurkan)") },
+                leadingIcon = { Icon(Icons.Default.KeyboardArrowDown, contentDescription = null, modifier = Modifier.size(AssistChipDefaults.IconSize)) },
+            )
+        }
         Spacer(Modifier.height(8.dp))
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
             val arabicStyle = MaterialTheme.typography.headlineMedium

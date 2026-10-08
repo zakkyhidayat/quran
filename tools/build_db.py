@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "data-src"
 OUT = Path(sys.argv[2]) if len(sys.argv) > 2 else ROOT / "app/src/main/assets/quran.db"
 
-DATA_VERSION = 4
+DATA_VERSION = 5
 
 TRANSLATIONS = [
     # id, lang, nama tampil, sumber, folder
@@ -158,18 +158,21 @@ SURAHS = """\
 الناس|An-Nas
 """
 
-JUZ_STARTS = [
-    (1, 1), (2, 142), (2, 253), (3, 93), (4, 24), (4, 148), (5, 82), (6, 111), (7, 88), (8, 41),
-    (9, 93), (11, 6), (12, 53), (15, 1), (17, 1), (18, 75), (21, 1), (23, 1), (25, 21), (27, 56),
-    (29, 46), (33, 31), (36, 28), (39, 32), (41, 47), (46, 1), (51, 31), (58, 1), (67, 1), (78, 1),
-]
-
 SCHEMA = """
 CREATE TABLE surahs (
     id INTEGER PRIMARY KEY, name_ar TEXT NOT NULL, name_latin TEXT NOT NULL,
     ayah_count INTEGER NOT NULL, first_page INTEGER NOT NULL, name_glyph INTEGER NOT NULL
 );
 CREATE TABLE juz (id INTEGER PRIMARY KEY, surah INTEGER NOT NULL, ayah INTEGER NOT NULL, page INTEGER NOT NULL);
+CREATE TABLE hizb (id INTEGER PRIMARY KEY, surah INTEGER NOT NULL, ayah INTEGER NOT NULL, page INTEGER NOT NULL);
+CREATE TABLE rub (id INTEGER PRIMARY KEY, surah INTEGER NOT NULL, ayah INTEGER NOT NULL, page INTEGER NOT NULL);
+CREATE TABLE manzil (id INTEGER PRIMARY KEY, surah INTEGER NOT NULL, ayah INTEGER NOT NULL, page INTEGER NOT NULL);
+CREATE TABLE ruku (
+    id INTEGER PRIMARY KEY, surah_ruku INTEGER NOT NULL, surah INTEGER NOT NULL, ayah INTEGER NOT NULL, page INTEGER NOT NULL
+);
+CREATE TABLE sajda (
+    id INTEGER PRIMARY KEY, surah INTEGER NOT NULL, ayah INTEGER NOT NULL, page INTEGER NOT NULL, type TEXT NOT NULL
+);
 CREATE TABLE page_lines (
     page INTEGER NOT NULL, line INTEGER NOT NULL, type TEXT NOT NULL, centered INTEGER NOT NULL,
     first_word INTEGER, last_word INTEGER, surah INTEGER,
@@ -254,6 +257,35 @@ def build_translation(db, tr_id, folder):
     return len(rows), stats
 
 
+def verse_page(db, key: str):
+    surah, ayah = (int(x) for x in key.split(":"))
+    page = db.execute("SELECT page FROM ayahs WHERE surah=? AND ayah=?", (surah, ayah)).fetchone()[0]
+    return surah, ayah, page
+
+
+def load_markers(db):
+    """Juz, hizb, rub, manzil, ruku, dan sajdah dari metadata QUL (titik awal tiap bagian)."""
+    meta = SRC / "meta"
+    for table, number_col in (("juz", "juz_number"), ("hizb", "hizb_number"), ("rub", "rub_number"), ("manzil", "manzil_number")):
+        src = sqlite3.connect(meta / f"quran-metadata-{table}.sqlite")
+        # tabel sumber bernama sama dengan kunci kecuali hizb yang jamak
+        src_table = {"hizb": "hizbs"}.get(table, table)
+        rows = src.execute(f"SELECT {number_col}, first_verse_key FROM {src_table} ORDER BY {number_col}").fetchall()
+        for number, key in rows:
+            db.execute(f"INSERT INTO {table} VALUES (?,?,?,?)", (number, *verse_page(db, key)))
+        print(f"{table}: {len(rows)}")
+    src = sqlite3.connect(meta / "quran-metadata-ruku.sqlite")
+    rows = src.execute("SELECT ruku_number, surah_ruku_number, first_verse_key FROM ruku ORDER BY ruku_number").fetchall()
+    for number, surah_ruku, key in rows:
+        db.execute("INSERT INTO ruku VALUES (?,?,?,?,?)", (number, surah_ruku, *verse_page(db, key)))
+    print(f"ruku: {len(rows)}")
+    src = sqlite3.connect(meta / "quran-metadata-sajda.sqlite")
+    rows = src.execute("SELECT sajdah_number, verse_key, sajdah_type FROM sajdah ORDER BY sajdah_number").fetchall()
+    for number, key, kind in rows:
+        db.execute("INSERT INTO sajda VALUES (?,?,?,?,?)", (number, *verse_page(db, key), kind))
+    print(f"sajda: {len(rows)}")
+
+
 def main():
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.unlink(missing_ok=True)
@@ -294,9 +326,7 @@ def main():
         ).fetchone()
         db.execute("INSERT INTO surahs VALUES (?,?,?,?,?,?)", (sid, name_ar, latin, count, first_page, glyphs[sid]))
 
-    for n, (surah, ayah) in enumerate(JUZ_STARTS, 1):
-        page = db.execute("SELECT page FROM ayahs WHERE surah=? AND ayah=?", (surah, ayah)).fetchone()[0]
-        db.execute("INSERT INTO juz VALUES (?,?,?,?)", (n, surah, ayah, page))
+    load_markers(db)
 
     for tr_id, lang, name, source, folder in TRANSLATIONS:
         db.execute("INSERT INTO translations VALUES (?,?,?,?)", (tr_id, lang, name, source))

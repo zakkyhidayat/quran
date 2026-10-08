@@ -21,7 +21,12 @@ data class Surah(
     val nameGlyph: Char,
 )
 
-data class Juz(val id: Int, val surah: Int, val ayah: Int, val page: Int)
+// Titik awal sebuah bagian (juz, hizb, rub, manzil, ruku, atau sajdah). extra: nomor ruku di surah, atau tipe sajdah.
+data class Marker(val id: Int, val surah: Int, val ayah: Int, val page: Int, val extra: String = "")
+
+enum class MarkerKind(val table: String) { Juz("juz"), Hizb("hizb"), Rub("rub"), Manzil("manzil"), Ruku("ruku"), Sajda("sajda") }
+
+data class AyahInfo(val juz: Int, val hizb: Int, val rubInHizb: Int, val manzil: Int, val ruku: Int, val sajda: String?)
 
 data class PageMeta(val surah: Int, val juz: Int)
 
@@ -37,6 +42,7 @@ data class AyahDetail(
     val page: Int,
     val arabic: String,
     val translations: List<TranslationText>,
+    val info: AyahInfo,
 )
 
 data class AyahRef(val surah: Int, val ayah: Int)

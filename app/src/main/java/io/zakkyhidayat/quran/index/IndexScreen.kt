@@ -11,6 +11,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -18,7 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.PrimaryTabRow
+import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.LeadingIconTab
@@ -44,7 +46,14 @@ import io.zakkyhidayat.quran.ui.CenteredContent
 import io.zakkyhidayat.quran.ui.segmentedItemColors
 import io.zakkyhidayat.quran.ui.NumberBadge
 
-private val TABS = listOf("Surah" to AppIcons.MenuBook, "Juz" to AppIcons.GridView, "Bookmark" to AppIcons.BookmarkBorder)
+private val TABS = listOf(
+    "Surah" to AppIcons.MenuBook,
+    "Juz" to AppIcons.GridView,
+    "Hizb" to AppIcons.PieChart,
+    "Manzil" to AppIcons.CalendarViewWeek,
+    "Sajdah" to Icons.Default.KeyboardArrowDown,
+    "Bookmark" to AppIcons.BookmarkBorder,
+)
 private val ListPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,7 +76,7 @@ fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit
     ) { padding ->
         CenteredContent(Modifier.padding(padding)) {
             Column(Modifier.fillMaxSize()) {
-                PrimaryTabRow(selectedTabIndex = tab) {
+                PrimaryScrollableTabRow(selectedTabIndex = tab, edgePadding = 8.dp) {
                     TABS.forEachIndexed { i, (title, icon) ->
                         LeadingIconTab(
                             selected = tab == i,
@@ -80,6 +89,9 @@ fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit
                 when (tab) {
                     0 -> SurahList(vm, onBack)
                     1 -> JuzList(vm, onBack)
+                    2 -> HizbList(vm, onBack)
+                    3 -> ManzilList(vm, onBack)
+                    4 -> SajdaList(vm, onBack)
                     else -> BookmarkList(vm, onBack)
                 }
             }
@@ -127,6 +139,96 @@ private fun JuzList(vm: AppViewModel, onBack: () -> Unit) {
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun HizbList(vm: AppViewModel, onBack: () -> Unit) {
+    val hizb by vm.hizb.collectAsStateWithLifecycle()
+    val rub by vm.rub.collectAsStateWithLifecycle()
+    val surahs by vm.surahs.collectAsStateWithLifecycle()
+    var expanded by rememberSaveable { mutableIntStateOf(0) }
+    // Baris hizb; hizb yang dibuka menampilkan tiga rub' di dalamnya (1/4, 1/2, 3/4).
+    val rows = remember(hizb, rub, expanded) {
+        buildList {
+            hizb.forEach { h ->
+                add(h to null as String?)
+                if (h.id == expanded) {
+                    val base = (h.id - 1) * 4
+                    listOf("¼" to 1, "½" to 2, "¾" to 3).forEach { (label, offset) -> rub.getOrNull(base + offset)?.let { add(it to label) } }
+                }
+            }
+        }
+    }
+    LazyColumn(Modifier.fillMaxSize(), contentPadding = ListPadding, verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
+        itemsIndexed(rows, key = { _, r -> if (r.second == null) "h${r.first.id}" else "r${r.first.id}" }) { index, (m, quarter) ->
+            val place = "${surahs[m.surah]?.nameLatin.orEmpty()} ${m.surah}:${m.ayah} • Hal. ${m.page}"
+            if (quarter == null) {
+                SegmentedListItem(
+                    onClick = { vm.goToAyah(m.surah, m.ayah); onBack() },
+                    shapes = ListItemDefaults.segmentedShapes(index, rows.size),
+                    colors = segmentedItemColors(),
+                    leadingContent = { NumberBadge(m.id) },
+                    supportingContent = { Text("Juz ${(m.id - 1) / 2 + 1} • $place") },
+                    trailingContent = {
+                        IconButton(onClick = { expanded = if (expanded == m.id) 0 else m.id }) {
+                            Icon(
+                                if (expanded == m.id) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                                contentDescription = if (expanded == m.id) "Tutup rub'" else "Tampilkan rub'",
+                            )
+                        }
+                    },
+                ) { Text("Hizb ${m.id}") }
+            } else {
+                SegmentedListItem(
+                    onClick = { vm.goToAyah(m.surah, m.ayah); onBack() },
+                    shapes = ListItemDefaults.segmentedShapes(index, rows.size),
+                    colors = segmentedItemColors(),
+                    supportingContent = { Text(place) },
+                    modifier = Modifier.padding(start = 24.dp),
+                ) { Text("Rub' $quarter") }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun ManzilList(vm: AppViewModel, onBack: () -> Unit) {
+    val manzil by vm.manzil.collectAsStateWithLifecycle()
+    val surahs by vm.surahs.collectAsStateWithLifecycle()
+    LazyColumn(Modifier.fillMaxSize(), contentPadding = ListPadding, verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
+        itemsIndexed(manzil, key = { _, m -> m.id }) { index, m ->
+            SegmentedListItem(
+                onClick = { vm.goToAyah(m.surah, m.ayah); onBack() },
+                shapes = ListItemDefaults.segmentedShapes(index, manzil.size),
+                colors = segmentedItemColors(),
+                leadingContent = { NumberBadge(m.id) },
+                supportingContent = { Text("${surahs[m.surah]?.nameLatin.orEmpty()} ${m.surah}:${m.ayah} • Hal. ${m.page}") },
+            ) { Text("Manzil ${m.id}") }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun SajdaList(vm: AppViewModel, onBack: () -> Unit) {
+    val sajda by vm.sajda.collectAsStateWithLifecycle()
+    val surahs by vm.surahs.collectAsStateWithLifecycle()
+    LazyColumn(Modifier.fillMaxSize(), contentPadding = ListPadding, verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
+        itemsIndexed(sajda, key = { _, m -> m.id }) { index, m ->
+            SegmentedListItem(
+                onClick = { vm.goToAyah(m.surah, m.ayah, openSheet = true); onBack() },
+                shapes = ListItemDefaults.segmentedShapes(index, sajda.size),
+                colors = segmentedItemColors(),
+                leadingContent = { NumberBadge(m.id) },
+                overlineContent = { Text(sajdaLabel(m.extra)) },
+                supportingContent = { Text("Hal. ${m.page}") },
+            ) { Text("${surahs[m.surah]?.nameLatin.orEmpty()} ${m.surah}:${m.ayah}") }
+        }
+    }
+}
+
+internal fun sajdaLabel(type: String): String = if (type == "required") "Sajdah tilawah (wajib)" else "Sajdah tilawah (dianjurkan)"
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable

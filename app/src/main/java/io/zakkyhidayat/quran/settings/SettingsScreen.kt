@@ -198,7 +198,11 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
                     item(title = "Versi", subtitle = version)
                     item(
                         title = "Sumber data",
-                        subtitle = "Quranic Universal Library (Tarteel): layout KFGQPC V4, font tajwid, dan terjemahan.",
+                        subtitle = "Quranic Universal Library (Tarteel): layout KFGQPC V4, metadata, dan terjemahan.",
+                    )
+                    item(
+                        title = "Font",
+                        subtitle = "KFGQPC (King Fahd Glorious Quran Printing Complex): font halaman V4 tajwid, header surah, dan Hafs Uthmanic Script. Hak cipta KFGQPC; digunakan tanpa perubahan.",
                     )
                 }
             }
