@@ -78,7 +78,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
      * Terjemahan tidak dibundel: terjemahan aktif yang belum terpasang (bawaan untuk pengguna baru, atau terjemahan yang
      * dulu dibundel bagi pengguna lama) diunduh diam-diam dari katalog. Gagal (luring) dicoba lagi saat aplikasi dibuka.
      */
-    private suspend fun restoreActiveTranslations() {
+    suspend fun restoreActiveTranslations() {
         val active = settingsRepository.settings.first().translationIds
         val installed = translations.value.map { it.id }.toSet()
         val missing = active.filter { it !in installed }

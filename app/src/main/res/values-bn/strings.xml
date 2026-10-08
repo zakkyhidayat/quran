@@ -157,4 +157,12 @@
     <string name="hint_tap_ayah">অনুবাদ দেখতে আয়াতে ট্যাপ করুন</string>
     <string name="hint_tap_surah">সূরার তথ্যের জন্য নামে ট্যাপ করুন</string>
     <string name="hint_ok">বুঝেছি</string>
+    <string name="backup">ব্যাকআপ</string>
+    <string name="backup_export">ব্যাকআপ রপ্তানি</string>
+    <string name="backup_export_sub">বুকমার্ক ও সেটিংস একটি ফাইলে সংরক্ষণ করুন, এই ডিভাইসে বা Google Drive-এর মতো ক্লাউড অ্যাপে</string>
+    <string name="backup_import">ব্যাকআপ থেকে পুনরুদ্ধার</string>
+    <string name="backup_import_sub">বুকমার্ক বিদ্যমানগুলোর সাথে যোগ হবে; সেটিংস প্রতিস্থাপিত হবে</string>
+    <string name="backup_export_done">ব্যাকআপ সংরক্ষিত হয়েছে</string>
+    <string name="backup_import_done">ব্যাকআপ পুনরুদ্ধার হয়েছে। নতুন বুকমার্ক: %1$d</string>
+    <string name="backup_failed">ব্যাকআপ ব্যর্থ: %1$s</string>
 </resources>

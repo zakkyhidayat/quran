@@ -157,4 +157,12 @@
     <string name="hint_tap_ayah">برای دیدن ترجمه روی آیه ضربه بزنید</string>
     <string name="hint_tap_surah">برای اطلاعات سوره روی نامش ضربه بزنید</string>
     <string name="hint_ok">متوجه شدم</string>
+    <string name="backup">پشتیبان‌گیری</string>
+    <string name="backup_export">برون‌بری پشتیبان</string>
+    <string name="backup_export_sub">نشانک‌ها و تنظیمات را در فایلی روی همین دستگاه یا در برنامهٔ ابری مانند Google Drive ذخیره کنید</string>
+    <string name="backup_import">بازیابی از پشتیبان</string>
+    <string name="backup_import_sub">نشانک‌ها به موارد موجود افزوده و تنظیمات جایگزین می‌شوند</string>
+    <string name="backup_export_done">پشتیبان ذخیره شد</string>
+    <string name="backup_import_done">پشتیبان بازیابی شد. نشانک‌های تازه: %1$d</string>
+    <string name="backup_failed">پشتیبان‌گیری ناموفق: %1$s</string>
 </resources>

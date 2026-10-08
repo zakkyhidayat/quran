@@ -157,4 +157,12 @@
     <string name="hint_tap_ayah">ترجمہ دیکھنے کے لیے آیت پر تھپتھپائیں</string>
     <string name="hint_tap_surah">سورہ کی معلومات کے لیے اس کے نام پر تھپتھپائیں</string>
     <string name="hint_ok">سمجھ گیا</string>
+    <string name="backup">بیک اپ</string>
+    <string name="backup_export">بیک اپ برآمد کریں</string>
+    <string name="backup_export_sub">بُک مارکس اور ترتیبات کو فائل میں محفوظ کریں، اسی ڈیوائس پر یا Google Drive جیسی کلاؤڈ ایپ میں</string>
+    <string name="backup_import">بیک اپ سے بحال کریں</string>
+    <string name="backup_import_sub">بُک مارکس موجودہ میں شامل ہوں گے؛ ترتیبات بدل دی جائیں گی</string>
+    <string name="backup_export_done">بیک اپ محفوظ ہو گیا</string>
+    <string name="backup_import_done">بیک اپ بحال ہو گیا۔ نئے بُک مارکس: %1$d</string>
+    <string name="backup_failed">بیک اپ ناکام: %1$s</string>
 </resources>

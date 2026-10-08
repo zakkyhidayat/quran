@@ -157,4 +157,12 @@
     <string name="hint_tap_ayah">Meali için bir ayete dokunun</string>
     <string name="hint_tap_surah">Sure bilgisi için sure adına dokunun</string>
     <string name="hint_ok">Anladım</string>
+    <string name="backup">Yedekleme</string>
+    <string name="backup_export">Yedeği dışa aktar</string>
+    <string name="backup_export_sub">Yer işaretlerini ve ayarları bu cihazda ya da Google Drive gibi bir bulut uygulamasında bir dosyaya kaydedin</string>
+    <string name="backup_import">Yedekten geri yükle</string>
+    <string name="backup_import_sub">Yer işaretleri mevcutlara eklenir; ayarlar değiştirilir</string>
+    <string name="backup_export_done">Yedek kaydedildi</string>
+    <string name="backup_import_done">Yedek geri yüklendi. Yeni yer işaretleri: %1$d</string>
+    <string name="backup_failed">Yedekleme başarısız: %1$s</string>
 </resources>

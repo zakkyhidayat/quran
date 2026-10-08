@@ -157,4 +157,12 @@
     <string name="hint_tap_ayah">Ketuk ayat untuk melihat terjemahannya</string>
     <string name="hint_tap_surah">Ketuk nama surah untuk info surah</string>
     <string name="hint_ok">Mengerti</string>
+    <string name="backup">Cadangan</string>
+    <string name="backup_export">Ekspor cadangan</string>
+    <string name="backup_export_sub">Simpan bookmark dan pengaturan ke berkas, di perangkat ini atau di aplikasi awan seperti Google Drive</string>
+    <string name="backup_import">Pulihkan dari cadangan</string>
+    <string name="backup_import_sub">Bookmark ditambahkan ke yang sudah ada; pengaturan diganti</string>
+    <string name="backup_export_done">Cadangan tersimpan</string>
+    <string name="backup_import_done">Cadangan dipulihkan. Bookmark baru: %1$d</string>
+    <string name="backup_failed">Cadangan gagal: %1$s</string>
 </resources>

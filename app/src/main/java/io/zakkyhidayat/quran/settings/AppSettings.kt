@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 enum class ThemeMode { System, Light, Dark }
@@ -94,6 +95,22 @@ class SettingsRepository(private val context: Context) {
     suspend fun setShowTransliteration(value: Boolean) = context.dataStore.edit { it[transliterationKey] = value }
 
     suspend fun setTranslations(ids: List<String>) = context.dataStore.edit { it[translationsKey] = ids.joinToString(",") }
+
+    /** Semua pengaturan tersimpan (untuk cadangan), dengan nilai Boolean/Int/String apa adanya. */
+    suspend fun exportAll(): Map<String, Any> = context.dataStore.data.first().asMap().mapKeys { it.key.name }
+
+    /** Ganti semua pengaturan dengan isi cadangan; tipe ditentukan dari nilainya. */
+    suspend fun importAll(values: Map<String, Any?>) = context.dataStore.edit { prefs ->
+        prefs.clear()
+        values.forEach { (name, value) ->
+            when (value) {
+                is Boolean -> prefs[booleanPreferencesKey(name)] = value
+                is Int -> prefs[intPreferencesKey(name)] = value
+                is String -> prefs[stringPreferencesKey(name)] = value
+                else -> Unit
+            }
+        }
+    }
 
     suspend fun setOnboardingDone() = context.dataStore.edit { it[onboardingKey] = true }
 

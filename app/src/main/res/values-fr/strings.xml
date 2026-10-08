@@ -157,4 +157,12 @@
     <string name="hint_tap_ayah">Touchez un verset pour sa traduction</string>
     <string name="hint_tap_surah">Touchez le nom d’une sourate pour ses infos</string>
     <string name="hint_ok">Compris</string>
+    <string name="backup">Sauvegarde</string>
+    <string name="backup_export">Exporter une sauvegarde</string>
+    <string name="backup_export_sub">Enregistrer les signets et les paramètres dans un fichier, sur cet appareil ou dans une application cloud comme Google Drive</string>
+    <string name="backup_import">Restaurer une sauvegarde</string>
+    <string name="backup_import_sub">Les signets s’ajoutent aux vôtres ; les paramètres sont remplacés</string>
+    <string name="backup_export_done">Sauvegarde enregistrée</string>
+    <string name="backup_import_done">Sauvegarde restaurée. Nouveaux signets : %1$d</string>
+    <string name="backup_failed">Échec de la sauvegarde : %1$s</string>
 </resources>

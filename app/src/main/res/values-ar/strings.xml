@@ -157,4 +157,12 @@
     <string name="hint_tap_ayah">اضغط على آية لعرض ترجمتها</string>
     <string name="hint_tap_surah">اضغط على اسم السورة لعرض معلوماتها</string>
     <string name="hint_ok">حسنًا</string>
+    <string name="backup">النسخ الاحتياطي</string>
+    <string name="backup_export">تصدير نسخة احتياطية</string>
+    <string name="backup_export_sub">احفظ العلامات والإعدادات في ملف على هذا الجهاز أو في تطبيق سحابي مثل Google Drive</string>
+    <string name="backup_import">الاستعادة من نسخة احتياطية</string>
+    <string name="backup_import_sub">تُضاف العلامات إلى الموجودة؛ وتُستبدل الإعدادات</string>
+    <string name="backup_export_done">تم حفظ النسخة الاحتياطية</string>
+    <string name="backup_import_done">تمت الاستعادة. العلامات الجديدة: %1$d</string>
+    <string name="backup_failed">فشل النسخ الاحتياطي: %1$s</string>
 </resources>

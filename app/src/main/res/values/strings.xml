@@ -158,4 +158,12 @@
     <string name="hint_tap_ayah">Tap an ayah for its translation</string>
     <string name="hint_tap_surah">Tap a surah name for surah info</string>
     <string name="hint_ok">Got it</string>
+    <string name="backup">Backup</string>
+    <string name="backup_export">Export backup</string>
+    <string name="backup_export_sub">Save bookmarks and settings to a file, on this device or in a cloud app such as Google Drive</string>
+    <string name="backup_import">Restore from backup</string>
+    <string name="backup_import_sub">Bookmarks are added to the ones you have; settings are replaced</string>
+    <string name="backup_export_done">Backup saved</string>
+    <string name="backup_import_done">Backup restored. New bookmarks: %1$d</string>
+    <string name="backup_failed">Backup failed: %1$s</string>
 </resources>

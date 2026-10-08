@@ -36,6 +36,8 @@ Choices made on purpose:
   launch. Available now: Indonesian (Kemenag, The Sabiq Company, King Fahad Quran Complex) and English (Saheeh
   International), with more languages to come.
 - Indexes by surah, juz, hizb, rub', manzil, and ruku; surah info; go to ayah; random ayah; continue reading from the last ayah.
+- Backup and restore of bookmarks and settings to a file (on the device or any cloud app with a file provider, such as
+  Google Drive).
 - Page and ayah bookmarks; search by Arabic text, translation, surah name, or a reference such as `2:255`.
 - Interface in 10 languages, following the device language by default: English, Indonesian, Arabic, Urdu, Bengali,
   Turkish, Persian, Malay, French, and Russian.
@@ -44,11 +46,12 @@ Choices made on purpose:
 
 ## Roadmap
 
-- [ ] Reading modes for all surahs: mushaf page, ayahs with translation, translation only (switched from a pill at the
+- [x] Reading modes for all surahs: mushaf page, ayahs with translation, translation only (switched from a pill at the
       bottom of the screen)
-- [ ] Onboarding for new users: language, about this mushaf, translations, appearance
+- [x] Onboarding for new users: language, about this mushaf, translations, appearance
 - [ ] In-app updates for builds from GitHub Releases
 - [x] All translations downloadable, none bundled in the APK
+- [ ] Automatic cloud backup (Google Drive, Dropbox, OneDrive)
 - [ ] Reading reminders to keep a daily portion by juz, hizb, or manzil
 - [ ] Word-by-word meaning (tap a word to see its translation)
 - [ ] Audio recitation

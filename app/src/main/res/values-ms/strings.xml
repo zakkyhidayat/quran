@@ -157,4 +157,12 @@
     <string name="hint_tap_ayah">Ketik ayat untuk terjemahannya</string>
     <string name="hint_tap_surah">Ketik nama surah untuk maklumat surah</string>
     <string name="hint_ok">Faham</string>
+    <string name="backup">Sandaran</string>
+    <string name="backup_export">Eksport sandaran</string>
+    <string name="backup_export_sub">Simpan penanda dan tetapan ke fail, pada peranti ini atau dalam aplikasi awan seperti Google Drive</string>
+    <string name="backup_import">Pulihkan daripada sandaran</string>
+    <string name="backup_import_sub">Penanda ditambah kepada yang sedia ada; tetapan diganti</string>
+    <string name="backup_export_done">Sandaran disimpan</string>
+    <string name="backup_import_done">Sandaran dipulihkan. Penanda baharu: %1$d</string>
+    <string name="backup_failed">Sandaran gagal: %1$s</string>
 </resources>

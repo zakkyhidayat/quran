@@ -3,6 +3,9 @@ package io.zakkyhidayat.quran.settings
 import androidx.compose.ui.res.stringResource
 import io.zakkyhidayat.quran.R
 import android.os.Build
+import io.zakkyhidayat.quran.data.Backup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -133,6 +136,9 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
 
                 SectionTitle(AppIcons.Translate, stringResource(R.string.translations))
                 TranslationControls(vm, settings)
+
+                SectionTitle(AppIcons.Backup, stringResource(R.string.backup))
+                BackupControls(vm)
 
                 SectionTitle(Icons.Default.Info, stringResource(R.string.about))
                 Group {
@@ -492,6 +498,52 @@ internal fun TajweedToggle(vm: AppViewModel, settings: AppSettings) {
             onClick = { scope.launch { vm.settingsRepository.setTajweed(!settings.tajweed) } },
             leading = { Icon(AppIcons.FormatColorText, contentDescription = null) },
             trailing = { IconSwitch(settings.tajweed) },
+        )
+    }
+}
+
+/** Cadangan lokal: ekspor dan pulihkan bookmark serta pengaturan lewat pemilih berkas sistem. */
+@Composable
+private fun BackupControls(vm: AppViewModel) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    fun toast(text: String) = android.widget.Toast.makeText(context, text, android.widget.Toast.LENGTH_LONG).show()
+    val exportDone = stringResource(R.string.backup_export_done)
+    val importDone = stringResource(R.string.backup_import_done)
+    val failed = stringResource(R.string.backup_failed)
+    val exportLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+        if (uri != null) scope.launch {
+            runCatching { Backup.export(context, uri, vm.settingsRepository, vm.bookmarkStore) }
+                .onSuccess { toast(exportDone) }
+                .onFailure { toast(failed.format(it.message.orEmpty())) }
+        }
+    }
+    val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        if (uri != null) scope.launch {
+            runCatching { Backup.import(context, uri, vm.settingsRepository, vm.bookmarkStore) }
+                .onSuccess {
+                    toast(importDone.format(it.bookmarksAdded))
+                    // Terjemahan aktif dari cadangan diunduh ulang bila belum terpasang.
+                    vm.restoreActiveTranslations()
+                }
+                .onFailure { toast(failed.format(it.message.orEmpty())) }
+        }
+    }
+    Group {
+        item(
+            title = stringResource(R.string.backup_export),
+            subtitle = stringResource(R.string.backup_export_sub),
+            onClick = {
+                val date = java.text.SimpleDateFormat("yyyyMMdd", java.util.Locale.ROOT).format(java.util.Date())
+                exportLauncher.launch("quran-backup-$date.json")
+            },
+            leading = { Icon(AppIcons.Upload, contentDescription = null) },
+        )
+        item(
+            title = stringResource(R.string.backup_import),
+            subtitle = stringResource(R.string.backup_import_sub),
+            onClick = { importLauncher.launch(arrayOf("application/json", "application/octet-stream", "text/plain")) },
+            leading = { Icon(AppIcons.Download, contentDescription = null) },
         )
     }
 }

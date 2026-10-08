@@ -52,6 +52,34 @@ class BookmarkStore(context: Context) : SQLiteOpenHelper(context, "user.db", nul
         state.value = query()
     }
 
+    /** Tambahkan bookmark dari cadangan; yang sudah ada (jenis, halaman, surah, ayat sama) dilewati. */
+    suspend fun importAll(items: List<Bookmark>): Int = withContext(Dispatchers.IO) {
+        var added = 0
+        writableDatabase.beginTransaction()
+        try {
+            items.forEach { b ->
+                val id = writableDatabase.insertWithOnConflict(
+                    "bookmark",
+                    null,
+                    ContentValues().apply {
+                        put("kind", b.kind.name)
+                        put("page", b.page)
+                        put("surah", b.surah)
+                        put("ayah", b.ayah)
+                        put("created_at", b.createdAt.takeIf { it > 0 } ?: System.currentTimeMillis())
+                    },
+                    SQLiteDatabase.CONFLICT_IGNORE,
+                )
+                if (id != -1L) added++
+            }
+            writableDatabase.setTransactionSuccessful()
+        } finally {
+            writableDatabase.endTransaction()
+        }
+        state.value = query()
+        added
+    }
+
     private fun query(): List<Bookmark> {
         val list = mutableListOf<Bookmark>()
         readableDatabase.rawQuery(
