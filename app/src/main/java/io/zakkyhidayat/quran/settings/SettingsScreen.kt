@@ -1,5 +1,7 @@
 package io.zakkyhidayat.quran.settings
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.ui.res.stringResource
@@ -113,95 +115,119 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
         },
     ) { padding ->
         CenteredContent(Modifier.padding(padding)) {
-            Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp)) {
-                LanguageSection()
-
-                SectionTitle(AppIcons.Palette, stringResource(R.string.appearance))
-
-                AppearanceControls(vm, settings)
-
-                Spacer(Modifier.height(8.dp))
-                Group {
-                    item(
-                        title = stringResource(R.string.amoled),
-                        subtitle = stringResource(R.string.amoled_sub),
-                        onClick = { scope.launch { repo.setAmoled(!settings.amoled) } },
-                        leading = { Icon(AppIcons.DarkMode, contentDescription = null) },
-                        trailing = { IconSwitch(settings.amoled) },
-                    )
-                    item(
-                        title = stringResource(R.string.translit_title),
-                        subtitle = stringResource(R.string.translit_sub),
-                        onClick = { scope.launch { repo.setShowTransliteration(!settings.showTransliteration) } },
-                        leading = { Icon(AppIcons.Translate, contentDescription = null) },
-                        trailing = { IconSwitch(settings.showTransliteration) },
-                    )
-                    item(
-                        title = stringResource(R.string.tajweed_title),
-                        subtitle = stringResource(R.string.tajweed_sub),
-                        onClick = { scope.launch { repo.setTajweed(!settings.tajweed) } },
-                        leading = { Icon(AppIcons.FormatColorText, contentDescription = null) },
-                        trailing = { IconSwitch(settings.tajweed) },
-                    )
-                }
-
-                SectionTitle(AppIcons.Translate, stringResource(R.string.translations))
-                TranslationControls(vm, settings)
-
-                if (REMINDER_VISIBLE) {
-                    SectionTitle(AppIcons.Alarm, stringResource(R.string.reminder))
-                    ReminderControls(vm, settings)
-                }
-
-                SectionTitle(AppIcons.Backup, stringResource(R.string.backup))
-                BackupControls(vm, settings, snackbar)
-
-                SectionTitle(AppIcons.Shield, stringResource(R.string.permissions))
-                PermissionControls()
-
-                SectionTitle(Icons.Default.Info, stringResource(R.string.about))
-                Group {
-                    if (io.zakkyhidayat.quran.BuildConfig.UPDATER_ENABLED) {
-                        val latest = stringResource(R.string.update_latest)
-                        val failedCheck = stringResource(R.string.update_check_failed)
-                        item(
-                            title = stringResource(R.string.version),
-                            subtitle = stringResource(R.string.update_check_sub, version),
-                            onClick = {
-                                vm.checkForUpdate(manual = true) { found ->
-                                    when (found) {
-                                        false -> scope.launch { snackbar.showSnackbar(latest) }
-                                        null -> scope.launch { snackbar.showSnackbar(failedCheck) }
-                                        true -> Unit // dialog pembaruan tampil
-                                    }
-                                }
-                            },
-                            trailing = { Icon(Icons.Default.Refresh, contentDescription = null) },
-                        )
-                    } else {
-                        item(title = stringResource(R.string.version), subtitle = version)
+            // LazyColumn: hanya bagian yang terlihat yang disusun saat layar dibuka (dulu semua ~40 elemen sekaligus,
+            // membuat transisi masuk tersendat).
+            LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 24.dp)) {
+                item(key = "section0") {
+                    Column {
+                        LanguageSection()
                     }
-                    item(
-                        title = stringResource(R.string.data_source),
-                        subtitle = stringResource(R.string.data_source_sub),
-                    )
-                    item(
-                        title = stringResource(R.string.font),
-                        subtitle = stringResource(R.string.font_sub),
-                    )
-                    item(
-                        title = stringResource(R.string.credits),
-                        subtitle = stringResource(R.string.credits_sub),
-                        onClick = { openUrl(context, "https://qul.tarteel.ai/credits") },
-                        trailing = { Icon(AppIcons.OpenInNew, contentDescription = null) },
-                    )
-                    item(
-                        title = stringResource(R.string.support),
-                        subtitle = stringResource(R.string.support_sub),
-                        onClick = { openUrl(context, "https://ko-fi.com/zakkyhidayat") },
-                        leading = { Icon(AppIcons.Favorite, contentDescription = null) },
-                        trailing = { Icon(AppIcons.OpenInNew, contentDescription = null) },
-                    )
+                }
+                item(key = "section1") {
+                    Column {
+                        SectionTitle(AppIcons.Palette, stringResource(R.string.appearance))
+
+                        AppearanceControls(vm, settings)
+
+                        Spacer(Modifier.height(8.dp))
+                        Group {
+                            item(
+                                title = stringResource(R.string.amoled),
+                                subtitle = stringResource(R.string.amoled_sub),
+                                onClick = { scope.launch { repo.setAmoled(!settings.amoled) } },
+                                leading = { Icon(AppIcons.DarkMode, contentDescription = null) },
+                                trailing = { IconSwitch(settings.amoled) },
+                            )
+                            item(
+                                title = stringResource(R.string.translit_title),
+                                subtitle = stringResource(R.string.translit_sub),
+                                onClick = { scope.launch { repo.setShowTransliteration(!settings.showTransliteration) } },
+                                leading = { Icon(AppIcons.Translate, contentDescription = null) },
+                                trailing = { IconSwitch(settings.showTransliteration) },
+                            )
+                            item(
+                                title = stringResource(R.string.tajweed_title),
+                                subtitle = stringResource(R.string.tajweed_sub),
+                                onClick = { scope.launch { repo.setTajweed(!settings.tajweed) } },
+                                leading = { Icon(AppIcons.FormatColorText, contentDescription = null) },
+                                trailing = { IconSwitch(settings.tajweed) },
+                            )
+                        }
+                    }
+                }
+                item(key = "section2") {
+                    Column {
+                        SectionTitle(AppIcons.Translate, stringResource(R.string.translations))
+                        TranslationControls(vm, settings)
+                    }
+                }
+                item(key = "section3") {
+                    Column {
+                        if (REMINDER_VISIBLE) {
+                            SectionTitle(AppIcons.Alarm, stringResource(R.string.reminder))
+                            ReminderControls(vm, settings)
+                        }
+                    }
+                }
+                item(key = "section4") {
+                    Column {
+                        SectionTitle(AppIcons.Backup, stringResource(R.string.backup))
+                        BackupControls(vm, settings, snackbar)
+                    }
+                }
+                item(key = "section5") {
+                    Column {
+                        SectionTitle(AppIcons.Shield, stringResource(R.string.permissions))
+                        PermissionControls()
+                    }
+                }
+                item(key = "section6") {
+                    Column {
+                        SectionTitle(Icons.Default.Info, stringResource(R.string.about))
+                        Group {
+                            if (io.zakkyhidayat.quran.BuildConfig.UPDATER_ENABLED) {
+                                val latest = stringResource(R.string.update_latest)
+                                val failedCheck = stringResource(R.string.update_check_failed)
+                                item(
+                                    title = stringResource(R.string.version),
+                                    subtitle = stringResource(R.string.update_check_sub, version),
+                                    onClick = {
+                                        vm.checkForUpdate(manual = true) { found ->
+                                            when (found) {
+                                                false -> scope.launch { snackbar.showSnackbar(latest) }
+                                                null -> scope.launch { snackbar.showSnackbar(failedCheck) }
+                                                true -> Unit // dialog pembaruan tampil
+                                            }
+                                        }
+                                    },
+                                    trailing = { Icon(Icons.Default.Refresh, contentDescription = null) },
+                                )
+                            } else {
+                                item(title = stringResource(R.string.version), subtitle = version)
+                            }
+                            item(
+                                title = stringResource(R.string.data_source),
+                                subtitle = stringResource(R.string.data_source_sub),
+                            )
+                            item(
+                                title = stringResource(R.string.font),
+                                subtitle = stringResource(R.string.font_sub),
+                            )
+                            item(
+                                title = stringResource(R.string.credits),
+                                subtitle = stringResource(R.string.credits_sub),
+                                onClick = { openUrl(context, "https://qul.tarteel.ai/credits") },
+                                trailing = { Icon(AppIcons.OpenInNew, contentDescription = null) },
+                            )
+                            item(
+                                title = stringResource(R.string.support),
+                                subtitle = stringResource(R.string.support_sub),
+                                onClick = { openUrl(context, "https://ko-fi.com/zakkyhidayat") },
+                                leading = { Icon(AppIcons.Favorite, contentDescription = null) },
+                                trailing = { Icon(AppIcons.OpenInNew, contentDescription = null) },
+                            )
+                        }
+                    }
                 }
             }
         }
