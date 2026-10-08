@@ -85,6 +85,11 @@ android {
         disable += "PropertyEscape"
     }
 
+    // Robolectric (tes JVM dengan Android tiruan) butuh resource aplikasi.
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
+
     packaging {
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
     }
@@ -107,6 +112,8 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     debugImplementation(libs.androidx.compose.ui.tooling)
     testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.test.core)
 }
 
 // Varian pengukuran dari plugin Baseline Profile (benchmarkRelease, nonMinifiedRelease) memakai ID terpisah, supaya
