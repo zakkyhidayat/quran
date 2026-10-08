@@ -34,6 +34,10 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -46,7 +50,6 @@ import io.zakkyhidayat.quran.data.AyahPos
 import io.zakkyhidayat.quran.data.AyahRef
 import io.zakkyhidayat.quran.data.Surah
 import io.zakkyhidayat.quran.ui.CenteredContent
-import io.zakkyhidayat.quran.ui.NumberBadge
 
 /**
  * Mode baca daftar: satu layar = ayat-ayat dari satu halaman mushaf, berpindah halaman dengan geser seperti mode mushaf
@@ -119,17 +122,6 @@ private fun PageAyahs(
                 if (pos.ayah == 1) SurahTitle(surahs[pos.surah])
                 AyahRow(vm, pos, translationIds, showArabic)
             }
-            item(key = "page") {
-                Box(Modifier.fillMaxWidth().padding(top = 8.dp), contentAlignment = Alignment.Center) {
-                    Surface(
-                        shape = MaterialTheme.shapes.extraLarge,
-                        color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    ) {
-                        Text("$page", style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(horizontal = 14.dp, vertical = 4.dp))
-                    }
-                }
-            }
         }
     }
 }
@@ -174,8 +166,6 @@ private fun AyahRow(vm: AppViewModel, pos: AyahPos, translationIds: List<String>
         Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        // Satu penanda nomor ayat saja (teks Arab sudah membawa tanda akhir ayat).
-        NumberBadge(pos.ayah, Modifier.size(36.dp))
         val d = detail
         if (d == null) {
             Spacer(Modifier.height(48.dp))
@@ -197,8 +187,12 @@ private fun AyahRow(vm: AppViewModel, pos: AyahPos, translationIds: List<String>
                 Text(tr.info.name, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
             }
             val body = MaterialTheme.typography.bodyLarge
+            // Nomor ayat di depan terjemahan ("84. ..."), tanpa lencana terpisah.
             Text(
-                translationText(tr.text, MaterialTheme.colorScheme.primary, MaterialTheme.typography.labelSmall.fontSize),
+                buildAnnotatedString {
+                    withStyle(SpanStyle(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)) { append("${pos.ayah}. ") }
+                    append(translationText(tr.text, MaterialTheme.colorScheme.primary, MaterialTheme.typography.labelSmall.fontSize))
+                },
                 style = body.copy(lineHeight = body.fontSize * 1.5f),
             )
         }

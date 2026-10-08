@@ -144,6 +144,10 @@ fun ReaderScreen(
     val pagerState = rememberPagerState(initialPage = startPage - 1) { PAGE_COUNT }
     val mode = settings.readingMode
     val listMode = mode != ReadingMode.Mushaf
+    // Mode daftar terakhir: saat kembali ke mushaf, lapisan daftar masih memudar dan harus tetap tampil seperti sebelumnya
+    // (dulu sempat berubah jadi "terjemahan saja" sepersekian detik).
+    var lastListMode by remember { mutableStateOf(if (listMode) mode else ReadingMode.AyahTranslation) }
+    if (listMode) lastListMode = mode
     // Mode daftar punya pager sendiri (satu layar = satu halaman mushaf); posisinya disamakan saat berganti mode.
     val listPagerState = rememberPagerState(initialPage = startPage - 1) { PAGE_COUNT }
     val activePager = if (listMode) listPagerState else pagerState
@@ -350,7 +354,7 @@ fun ReaderScreen(
                     vm = vm,
                     surahs = surahs,
                     translationIds = settings.translationIds,
-                    showArabic = mode == ReadingMode.AyahTranslation,
+                    showArabic = lastListMode == ReadingMode.AyahTranslation,
                     state = listPagerState,
                     targetAyah = listTargetAyah,
                     modifier = Modifier.fillMaxSize(),
