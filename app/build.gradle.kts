@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.androidx.baselineprofile)
 }
 
 // Versi dari git tag vX.Y.Z; versionCode = X*10000 + Y*100 + Z.
@@ -63,14 +64,6 @@ android {
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
-        // Seperti rilis (R8, tanpa debuggable) tetapi ditandatangani kunci debug dan ber-ID terpisah, untuk mengukur
-        // kelancaran di perangkat tanpa mengganggu aplikasi terpasang: ./gradlew :app:installGithubBenchmark
-        create("benchmark") {
-            initWith(getByName("release"))
-            signingConfig = signingConfigs.getByName("debug")
-            applicationIdSuffix = ".bench"
-            matchingFallbacks += "release"
-        }
     }
 
     buildFeatures {
@@ -98,7 +91,27 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.material3)
+    // Memasang Baseline Profile saat aplikasi dipasang dari luar Play Store (APK GitHub).
+    implementation(libs.androidx.profileinstaller)
+    "baselineProfile"(project(":baselineprofile"))
     implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.androidx.compose.ui.tooling.preview)
     debugImplementation(libs.androidx.compose.ui.tooling)
+}
+
+// Varian pengukuran dari plugin Baseline Profile (benchmarkRelease, nonMinifiedRelease) memakai ID terpisah, supaya
+// pengujian otomatis di perangkat (yang memasang lalu MENCOPOT aplikasi target) tidak menyentuh aplikasi terpasang.
+// Harus lewat API varian: plugin membuat build type itu sendiri, jadi applicationIdSuffix di blok buildTypes tidak berlaku.
+// Profil hasil generator digabung ke src/main agar varian github dan play sama-sama memakainya.
+baselineProfile {
+    mergeIntoMain = true
+}
+
+androidComponents {
+    onVariants { variant ->
+        val type = variant.buildType.orEmpty()
+        if (type.startsWith("benchmark") || type.startsWith("nonMinified")) {
+            variant.applicationId.set("io.zakkyhidayat.quran.bench")
+        }
+    }
 }

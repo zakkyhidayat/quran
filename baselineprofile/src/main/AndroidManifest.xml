@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Android 11+: aplikasi penguji harus mendeklarasikan paket target agar bisa menemukannya. -->
+    <queries>
+        <package android:name="io.zakkyhidayat.quran.bench" />
+    </queries>
+</manifest>

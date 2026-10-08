@@ -1,5 +1,9 @@
 package io.zakkyhidayat.quran.reader
 
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.unit.DpSize
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.Dispatchers
 import androidx.compose.ui.unit.LayoutDirection
@@ -121,6 +125,8 @@ fun MushafPage(
     surahs: Map<Int, Surah>,
     selected: AyahRef?,
     onAyahClick: (AyahRef) -> Unit,
+    /** Ukuran halaman; diberikan pemanggil (sudah dihitungnya) agar tidak perlu sub-komposisi BoxWithConstraints. */
+    pageSize: DpSize,
     modifier: Modifier = Modifier,
     tajweed: Boolean = true,
     onSurahClick: (Int) -> Unit = {},
@@ -142,17 +148,19 @@ fun MushafPage(
     val density = LocalDensity.current
     val resolver = LocalFontFamilyResolver.current
 
-    BoxWithConstraints(modifier.fillMaxSize()) {
-        val widthPx = constraints.maxWidth
+    val screenReader = rememberTouchExplorationEnabled()
+    Box(modifier.size(pageSize)) {
+        val maxHeight = pageSize.height
+        val widthPx = with(density) { pageSize.width.roundToPx() }
         val nominal = maxHeight / LINES_PER_PAGE
         // Semua pengukuran teks (ukuran glyph, ~130 kata) dikerjakan di thread latar belakang; thread utama hanya
         // menggambar hasilnya. Halaman tetangga disusun lebih dulu oleh pager, jadi biasanya siap sebelum terlihat.
-        val prepared by produceState<PreparedPage?>(null, page, lines, widthPx, font, basmalah, density) {
+        val prepared by produceState<PreparedPage?>(null, page, lines, widthPx, font, basmalah, header, density, surahs) {
             value = withContext(Dispatchers.Default) {
-                preparePage(TextMeasurer(resolver, density, LayoutDirection.Ltr, cacheSize = 0), density, lines, font, basmalah, widthPx)
+                preparePage(TextMeasurer(resolver, density, LayoutDirection.Ltr, cacheSize = 0), density, lines, font, basmalah, header, surahs, widthPx)
             }
         }
-        val ready = prepared ?: return@BoxWithConstraints
+        val ready = prepared ?: return@Box
         // Baris bingkai surah lebih tinggi dari baris ayat (bingkai tidak diubah proporsinya); baris ayat di halaman itu
         // dirapatkan secukupnya agar total tetap seukuran halaman.
         val headerLineHeight = with(density) { (widthPx * HEADER_WIDTH_RATIO * HEADER_FRAME_HEIGHT_EM / HEADER_FRAME_EM * HEADER_LINE_RATIO).toDp() }
@@ -161,7 +169,9 @@ fun MushafPage(
         val lineHeight = if (headerCount == 0) nominal else minOf(nominal, (maxHeight - headerLineHeight * headerCount) / otherCount)
         val topPadding = (maxHeight - lineHeight * otherCount - headerLineHeight * headerCount).coerceAtLeast(0.dp) / 2f
 
-        ScreenReaderLayer(lines, ayahTexts, surahs, onAyahClick, onSurahClick)
+        // Lapisan pembaca layar (satu node per ayat) hanya disusun saat TalkBack aktif: tanpa itu tidak ada gunanya, dan
+        // menyusunnya untuk setiap halaman tetangga menambah kerja saat geser.
+        if (screenReader) ScreenReaderLayer(lines, ayahTexts, surahs, onAyahClick, onSurahClick)
 
         // Glyph V4 berupa kode private-use: tidak berguna untuk pembaca layar, jadi disembunyikan dari semantics.
         Column(Modifier.fillMaxSize().clearAndSetSemantics { }) {
@@ -171,7 +181,7 @@ fun MushafPage(
                 Box(Modifier.fillMaxWidth().height(thisHeight), contentAlignment = Alignment.Center) {
                     when (line.type) {
                         LineType.Ayah -> AyahLine(line, ready.words[line] ?: emptyList(), ready.gapPx, selected, onAyahClick, thisHeight)
-                        LineType.SurahName -> SurahHeader(surahs[line.surah], header) { onSurahClick(line.surah!!) }
+                        LineType.SurahName -> ready.headers[line]?.let { SurahHeader(it, widthPx) { onSurahClick(line.surah!!) } }
                         LineType.Basmallah -> GlyphRow(ready.basmalah, centered = true, minGapPx = ready.gapPx, bounds = remember { FloatArray(ready.basmalah.size * 2) })
                     }
                 }
@@ -235,6 +245,7 @@ private const val BASMALAH_GLYPHS = "ﱁﱂﱃﱄ"
 private class PreparedPage(
     val words: Map<PageLine, List<TextLayoutResult>>,
     val basmalah: List<TextLayoutResult>,
+    val headers: Map<PageLine, TextLayoutResult>,
     val gapPx: Float,
 )
 
@@ -244,6 +255,8 @@ private fun preparePage(
     lines: List<PageLine>,
     font: FontFamily,
     basmalahFont: FontFamily,
+    headerFont: FontFamily,
+    surahs: Map<Int, Surah>,
     widthPx: Int,
 ): PreparedPage {
     val size = fitFontSize(measurer, density, lines, font, widthPx)
@@ -253,7 +266,11 @@ private fun preparePage(
     val words = lines.filter { it.type == LineType.Ayah }.associateWith { line -> line.words.map { measure(it.text, style) } }
     val basmalahStyle = TextStyle(fontFamily = basmalahFont, fontSize = size)
     val basmalah = BASMALAH_GLYPHS.map { measure(it.toString(), basmalahStyle) }
-    return PreparedPage(words, basmalah, with(density) { size.toPx() * 0.25f })
+    val headerStyle = TextStyle(fontFamily = headerFont, fontSize = with(density) { headerFontPx(widthPx).toSp() })
+    val headers = lines.filter { it.type == LineType.SurahName }.mapNotNull { line ->
+        surahs[line.surah]?.let { line to measure(it.nameGlyph.toString(), headerStyle) }
+    }.toMap()
+    return PreparedPage(words, basmalah, headers, with(density) { size.toPx() * 0.25f })
 }
 
 /**
@@ -366,36 +383,24 @@ private const val HEADER_FRAME_HEIGHT_EM = 1026f / HEADER_UPEM
 private const val HEADER_WIDTH_RATIO = 0.94f
 private const val HEADER_LINE_RATIO = 1.12f
 
+private fun headerFontPx(widthPx: Int): Float = widthPx * HEADER_WIDTH_RATIO / HEADER_FRAME_EM
+
 @Composable
-private fun SurahHeader(surah: Surah?, font: FontFamily, onClick: () -> Unit) {
-    if (surah == null) return
-    val measurer = rememberTextMeasurer()
+private fun SurahHeader(layout: TextLayoutResult, widthPx: Int, onClick: () -> Unit) {
     val density = LocalDensity.current
-    BoxWithConstraints(Modifier.fillMaxWidth()) {
-        val fontPx = constraints.maxWidth * HEADER_WIDTH_RATIO / HEADER_FRAME_EM
-        val fontSize = with(density) { fontPx.toSp() }
-        val layout = remember(surah.id, font, fontSize) {
-            measurer.measure(
-                text = surah.nameGlyph.toString(),
-                style = TextStyle(fontFamily = font, fontSize = fontSize),
-                softWrap = false,
-                maxLines = 1,
-                constraints = Constraints(),
-            )
-        }
-        // Tinggi bingkai bisa melebihi satu baris; requiredHeight membiarkannya meluap ke baris di sekitarnya.
-        Spacer(
-            Modifier
-                .fillMaxWidth()
-                .requiredHeight(with(density) { (fontPx * HEADER_FRAME_HEIGHT_EM).toDp() })
-                .pointerInput(surah.id) { detectTapGestures { onClick() } }
-                .drawBehind {
-                    val frameWidth = HEADER_FRAME_EM * fontPx
-                    val x = (size.width - frameWidth) / 2f - HEADER_FRAME_LEFT_EM * fontPx
-                    drawText(layout, topLeft = Offset(x, size.height / 2f - layout.firstBaseline))
-                },
-        )
-    }
+    val fontPx = headerFontPx(widthPx)
+    // Tinggi bingkai bisa melebihi satu baris; requiredHeight membiarkannya meluap ke baris di sekitarnya.
+    Spacer(
+        Modifier
+            .fillMaxWidth()
+            .requiredHeight(with(density) { (fontPx * HEADER_FRAME_HEIGHT_EM).toDp() })
+            .pointerInput(layout) { detectTapGestures { onClick() } }
+            .drawBehind {
+                val frameWidth = HEADER_FRAME_EM * fontPx
+                val x = (size.width - frameWidth) / 2f - HEADER_FRAME_LEFT_EM * fontPx
+                drawText(layout, topLeft = Offset(x, size.height / 2f - layout.firstBaseline))
+            },
+    )
 }
 
 private fun fitFontSize(
@@ -421,4 +426,18 @@ private fun fitFontSize(
     // Lebar baris penuh ~16 em; halaman tanpa baris penuh (hal. 1) dan halaman dengan satu baris pendek memakai dasar itu.
     val widestEm = if (widest == 0) DEFAULT_LINE_EM else (widest / REFERENCE_PX).coerceIn(MIN_LINE_EM, MAX_LINE_EM)
     return with(density) { (widthPx * FILL_RATIO / widestEm).toSp() }
+}
+
+/** true selama layanan eksplorasi sentuh (TalkBack dan sejenisnya) aktif; ikut berubah saat dinyalakan/dimatikan. */
+@Composable
+private fun rememberTouchExplorationEnabled(): Boolean {
+    val context = LocalContext.current
+    val manager = remember { context.getSystemService(android.view.accessibility.AccessibilityManager::class.java) }
+    var enabled by remember { mutableStateOf(manager.isTouchExplorationEnabled) }
+    DisposableEffect(manager) {
+        val listener = android.view.accessibility.AccessibilityManager.TouchExplorationStateChangeListener { enabled = it }
+        manager.addTouchExplorationStateChangeListener(listener)
+        onDispose { manager.removeTouchExplorationStateChangeListener(listener) }
+    }
+    return enabled
 }

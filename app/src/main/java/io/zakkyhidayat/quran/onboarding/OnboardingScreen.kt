@@ -173,9 +173,11 @@ private fun MushafStep(vm: AppViewModel, settings: AppSettings) {
     // Pratinjau Al-Fatihah; ikut berubah saat sakelar tajwid di bawahnya diubah.
     // Proporsi halaman B5 seperti di layar baca, agar baris tidak berdesakan.
     Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-        Box(Modifier.fillMaxWidth(0.8f).aspectRatio(176f / 250f)) {
+        androidx.compose.foundation.layout.BoxWithConstraints(Modifier.fillMaxWidth(0.8f).aspectRatio(176f / 250f)) {
+            val previewSize = androidx.compose.ui.unit.DpSize(maxWidth, maxHeight)
             lines?.let {
                 MushafPage(
+                    pageSize = previewSize,
                     page = 1,
                     lines = it,
                     ayahTexts = emptyList(),

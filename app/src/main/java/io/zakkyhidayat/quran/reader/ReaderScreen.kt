@@ -1,5 +1,6 @@
 package io.zakkyhidayat.quran.reader
 
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.graphics.luminance
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.Dispatchers
@@ -249,6 +250,15 @@ fun ReaderScreen(
                 ) {
                 // Halaman mushaf selalu kiri-ke-kanan secara tata letak (halaman berikutnya di kiri, nama surah di kiri atas),
                 // juga saat antarmuka berbahasa Arab/Urdu/Persia yang RTL.
+                BoxWithConstraints(Modifier.fillMaxSize()) {
+                // Ukuran blok halaman dihitung sekali di luar pager (sama untuk semua halaman), bukan per halaman.
+                // Blok halaman berproporsi kertas B5 (176 x 250 mm), seperti mushaf cetak; header dan nomor menempel di sekelilingnya.
+                val bleed = if (maxWidth - PageEndPadding < PageMaxWidth) PageStartBleed else 0.dp
+                val available = minOf(maxWidth - PageEndPadding + bleed, PageMaxWidth)
+                val blockWidth = minOf(available, (maxHeight - PageChromeHeight) / PageHeightOverWidth)
+                val blockHeight = blockWidth * PageHeightOverWidth
+                // Di layar sempit blok menempel ke kiri; di layar lebar sisa ruang dibagi dua agar halaman tetap di tengah.
+                val startOffset = ((maxWidth - blockWidth - PageEndPadding) / 2).coerceAtLeast(0.dp) - bleed
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                     HorizontalPager(
                         state = pagerState,
@@ -260,18 +270,11 @@ fun ReaderScreen(
                         val lines by produceState<List<PageLine>?>(null, page) { value = vm.mushaf.page(page) }
                         val ayahTexts by produceState<List<AyahText>>(emptyList(), page) { value = vm.mushaf.pageAyahs(page) }
                         val pageInfo = pageMeta.getOrNull(index)
-                        BoxWithConstraints(
+                        Box(
                             Modifier.fillMaxSize().pointerInput(selected) {
                                 detectTapGestures(onTap = { if (selected != null) vm.clearSelection() })
                             },
                         ) {
-                            // Blok halaman berproporsi kertas B5 (176 x 250 mm), seperti mushaf cetak; header dan nomor menempel di sekelilingnya.
-                            val bleed = if (maxWidth - PageEndPadding < PageMaxWidth) PageStartBleed else 0.dp
-                            val available = minOf(maxWidth - PageEndPadding + bleed, PageMaxWidth)
-                            val blockWidth = minOf(available, (maxHeight - PageChromeHeight) / PageHeightOverWidth)
-                            val blockHeight = blockWidth * PageHeightOverWidth
-                            // Di layar sempit blok menempel ke kiri; di layar lebar sisa ruang dibagi dua agar halaman tetap di tengah.
-                            val startOffset = ((maxWidth - blockWidth - PageEndPadding) / 2).coerceAtLeast(0.dp) - bleed
                             Column(Modifier.align(Alignment.CenterStart).offset(x = startOffset), horizontalAlignment = Alignment.CenterHorizontally) {
                                 Row(Modifier.width(blockWidth).height(HeaderHeight).padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                                     val headSurah = pageInfo?.let { surahs[it.surah] }
@@ -311,6 +314,7 @@ fun ReaderScreen(
                                         LoadingIndicator()
                                     } else {
                                         MushafPage(
+                                            pageSize = DpSize(blockWidth, blockHeight),
                                             page = page,
                                             lines = loaded,
                                             ayahTexts = ayahTexts,
@@ -339,6 +343,7 @@ fun ReaderScreen(
                             }
                         }
                     }
+                }
                 }
             }
                 if (listShown) {
