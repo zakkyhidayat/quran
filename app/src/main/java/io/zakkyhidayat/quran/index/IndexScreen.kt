@@ -1,5 +1,9 @@
 package io.zakkyhidayat.quran.index
 
+import androidx.compose.animation.togetherWith
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.ui.res.stringResource
 import io.zakkyhidayat.quran.R
 import androidx.compose.foundation.layout.Arrangement
@@ -129,14 +133,22 @@ fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit
                         }
                     }
                 }
-                when (tab) {
-                    0 -> BookmarkList(vm, onBack)
-                    1 -> SurahList(vm, onBack, onOpenSurahInfo)
-                    2 -> JuzList(vm, onBack)
-                    3 -> HizbList(vm, onBack)
-                    4 -> RubList(vm, onBack)
-                    5 -> ManzilList(vm, onBack)
-                    else -> RukuList(vm, onBack)
+                // Fade-through M3 antar tab.
+                val motion = MaterialTheme.motionScheme
+                AnimatedContent(
+                    targetState = tab,
+                    transitionSpec = { fadeIn(motion.defaultEffectsSpec()) togetherWith fadeOut(motion.fastEffectsSpec()) },
+                    label = "indexTab",
+                ) { current ->
+                    when (current) {
+                        0 -> BookmarkList(vm, onBack)
+                        1 -> SurahList(vm, onBack, onOpenSurahInfo)
+                        2 -> JuzList(vm, onBack)
+                        3 -> HizbList(vm, onBack)
+                        4 -> RubList(vm, onBack)
+                        5 -> ManzilList(vm, onBack)
+                        else -> RukuList(vm, onBack)
+                    }
                 }
             }
         }

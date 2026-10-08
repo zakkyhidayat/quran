@@ -1,5 +1,19 @@
 package io.zakkyhidayat.quran.reader
 
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.zIndex
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.material3.ToggleButtonDefaults
+import androidx.compose.material3.FilledTonalToggleButton
+import androidx.compose.material3.ButtonGroupDefaults
+import androidx.compose.animation.togetherWith
+import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedContent
 import kotlinx.coroutines.launch
 import io.zakkyhidayat.quran.settings.ReadingMode
 import androidx.compose.ui.semantics.role
@@ -167,6 +181,7 @@ fun ReaderScreen(
     }
 
     var showJump by remember { mutableStateOf(false) }
+    val motion = MaterialTheme.motionScheme
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val commonFont = remember { commonFontFamily(context) }
@@ -202,25 +217,25 @@ fun ReaderScreen(
                     IconButton(onClick = onOpenSettings) { Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.settings)) }
                 },
             )
-            if (listMode) {
-                AyahListReader(
-                    vm = vm,
-                    surahs = surahs,
-                    translationIds = settings.translationIds,
-                    showArabic = mode == ReadingMode.AyahTranslation,
-                    targetPage = listTarget.first,
-                    targetAyah = listTarget.second,
-                    onPageChange = { page, first ->
-                        listPage = page
-                        vm.currentPage.value = page
-                        scope.launch {
-                            vm.settingsRepository.setLastPage(page)
-                            vm.settingsRepository.setLastAyah(first.surah, first.ayah)
-                        }
-                    },
-                    modifier = Modifier.weight(1f).fillMaxWidth(),
-                )
-            } else {
+            // Halaman mushaf dan daftar ayat tetap tersusun berdampingan; berganti mode hanya memudarkan lapisan dan
+            // menaikkan yang aktif ke atas (menerima sentuhan). Menyusun ulang halaman mushaf dari nol (font, ukuran)
+            // memakan ~300 ms dan membuat transisi tersendat.
+            val listAlpha by animateFloatAsState(if (listMode) 1f else 0f, motion.defaultEffectsSpec(), label = "listAlpha")
+            var listShown by remember { mutableStateOf(listMode) }
+            if (listMode) listShown = true
+            // Siapkan daftar ayat di belakang setelah halaman pertama tampil, agar perpindahan pertama tidak tersendat.
+            LaunchedEffect(Unit) {
+                delay(1_500)
+                listShown = true
+            }
+            Box(Modifier.weight(1f).fillMaxWidth()) {
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .zIndex(if (listMode) 0f else 1f)
+                        .graphicsLayer { alpha = 1f - listAlpha }
+                        .then(if (listMode) Modifier.clearAndSetSemantics { } else Modifier),
+                ) {
                 // Halaman mushaf selalu kiri-ke-kanan secara tata letak (halaman berikutnya di kiri, nama surah di kiri atas),
                 // juga saat antarmuka berbahasa Arab/Urdu/Persia yang RTL.
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
@@ -228,7 +243,7 @@ fun ReaderScreen(
                         state = pagerState,
                         reverseLayout = true,
                         beyondViewportPageCount = 1,
-                        modifier = Modifier.weight(1f).fillMaxWidth(),
+                        modifier = Modifier.fillMaxSize(),
                     ) { index ->
                         val page = index + 1
                         val lines by produceState<List<PageLine>?>(null, page) { value = vm.mushaf.page(page) }
@@ -296,32 +311,61 @@ fun ReaderScreen(
                                         )
                                     }
                                 }
-                                val pageSurah = pageInfo?.surah
-                                val previous = pageSurah?.let { surahs[it - 1] }
-                                val next = pageSurah?.let { surahs[it + 1] }
-                                // Mushaf dibaca kanan ke kiri: surah berikutnya di kiri, sebelumnya di kanan.
-                                Row(Modifier.width(blockWidth).height(FooterHeight), verticalAlignment = Alignment.CenterVertically) {
-                                    IconButton(
-                                        onClick = { next?.let { vm.clearSelection(); vm.goToPage(it.firstPage) } },
-                                        enabled = next != null,
-                                        modifier = Modifier.size(32.dp),
-                                    ) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = stringResource(R.string.next_surah_cd, next?.nameLatin.orEmpty()), modifier = Modifier.size(20.dp)) }
-                                    Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                                        Text("$page", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                // Nomor halaman di tengah bawah, di atas kapsul tonal.
+                                Box(Modifier.width(blockWidth).height(FooterHeight), contentAlignment = Alignment.Center) {
+                                    Surface(
+                                        shape = MaterialTheme.shapes.extraLarge,
+                                        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    ) {
+                                        Text(
+                                            "$page",
+                                            style = MaterialTheme.typography.labelLarge,
+                                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 4.dp),
+                                        )
                                     }
-                                    IconButton(
-                                        onClick = { previous?.let { vm.clearSelection(); vm.goToPage(it.firstPage) } },
-                                        enabled = previous != null,
-                                        modifier = Modifier.size(32.dp),
-                                    ) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = stringResource(R.string.previous_surah_cd, previous?.nameLatin.orEmpty()), modifier = Modifier.size(20.dp)) }
                                 }
                             }
                         }
                     }
                 }
             }
-            if (!listMode && !settings.gestureHintDone) {
-                GestureHint { scope.launch { vm.settingsRepository.setGestureHintDone() } }
+                if (listShown) {
+                    Box(
+                        Modifier
+                            .fillMaxSize()
+                            .zIndex(if (listMode) 1f else 0f)
+                            .graphicsLayer { alpha = listAlpha }
+                            .then(if (listMode) Modifier else Modifier.clearAndSetSemantics { }),
+                    ) {
+                AyahListReader(
+                    vm = vm,
+                    surahs = surahs,
+                    translationIds = settings.translationIds,
+                    showArabic = mode == ReadingMode.AyahTranslation,
+                    targetPage = listTarget.first,
+                    targetAyah = listTarget.second,
+                    onPageChange = { page, first ->
+                        listPage = page
+                        vm.currentPage.value = page
+                        scope.launch {
+                            vm.settingsRepository.setLastPage(page)
+                            vm.settingsRepository.setLastAyah(first.surah, first.ayah)
+                        }
+                    },
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
+                }
+                // Petunjuk sekali untuk pengguna baru: mengambang di atas halaman, tidak mengubah ukurannya.
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = !listMode && !settings.gestureHintDone,
+                    enter = fadeIn(motion.defaultEffectsSpec()),
+                    exit = fadeOut(motion.fastEffectsSpec()),
+                    modifier = Modifier.align(Alignment.BottomCenter).zIndex(2f),
+                ) {
+                    GestureHint { scope.launch { vm.settingsRepository.setGestureHintDone() } }
+                }
             }
             // Pill cara baca di barisnya sendiri, jadi tidak menutupi halaman; tinggi halaman menyesuaikan.
             ReadingModeBar(mode) { scope.launch { vm.settingsRepository.setReadingMode(it) } }
@@ -355,6 +399,7 @@ fun ReaderScreen(
 }
 
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun ReadingModeBar(mode: ReadingMode, onSelect: (ReadingMode) -> Unit) {
     val options = listOf(
@@ -362,34 +407,36 @@ private fun ReadingModeBar(mode: ReadingMode, onSelect: (ReadingMode) -> Unit) {
         Triple(ReadingMode.AyahTranslation, R.string.mode_ayah_translation, AppIcons.Translate),
         Triple(ReadingMode.Translation, R.string.mode_translation, AppIcons.Notes),
     )
-    Box(Modifier.fillMaxWidth().padding(vertical = 8.dp), contentAlignment = Alignment.Center) {
-        Surface(shape = CircleShape, color = MaterialTheme.colorScheme.surfaceContainerHigh) {
-            Row(Modifier.padding(4.dp).selectableGroup(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                options.forEach { (value, label, icon) ->
-                    val chosen = mode == value
-                    val name = stringResource(label)
-                    Surface(
-                        selected = chosen,
-                        onClick = { onSelect(value) },
-                        shape = CircleShape,
-                        color = if (chosen) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent,
-                        contentColor = if (chosen) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.semantics {
-                            role = Role.Tab
-                            if (!chosen) contentDescription = name
-                        },
-                    ) {
-                        Row(
-                            Modifier.heightIn(min = 40.dp).padding(horizontal = 14.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Icon(icon, contentDescription = null, modifier = Modifier.size(18.dp))
-                            // Label hanya pada mode aktif, agar pill tetap ringkas di layar sempit.
-                            if (chosen) {
-                                Spacer(Modifier.width(8.dp))
-                                Text(name, style = MaterialTheme.typography.labelLarge, maxLines = 1)
-                            }
-                        }
+    // Button group tersambung: bentuk tombol berubah (morph) dan label muncul saat dipilih.
+    Row(
+        Modifier.fillMaxWidth().padding(vertical = 8.dp).selectableGroup(),
+        horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween, Alignment.CenterHorizontally),
+    ) {
+        options.forEachIndexed { index, (value, label, icon) ->
+            val checked = mode == value
+            val name = stringResource(label)
+            FilledTonalToggleButton(
+                checked = checked,
+                onCheckedChange = { if (!checked) onSelect(value) },
+                shapes = when (index) {
+                    0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
+                    options.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
+                    else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
+                },
+                modifier = Modifier.semantics {
+                    role = Role.RadioButton
+                    if (!checked) contentDescription = name
+                },
+            ) {
+                Icon(icon, contentDescription = null, modifier = Modifier.size(ToggleButtonDefaults.IconSize))
+                AnimatedVisibility(
+                    visible = checked,
+                    enter = expandHorizontally(MaterialTheme.motionScheme.fastSpatialSpec()) + fadeIn(MaterialTheme.motionScheme.fastEffectsSpec()),
+                    exit = shrinkHorizontally(MaterialTheme.motionScheme.fastSpatialSpec()) + fadeOut(MaterialTheme.motionScheme.fastEffectsSpec()),
+                ) {
+                    Row {
+                        Spacer(Modifier.size(ToggleButtonDefaults.IconSpacing))
+                        Text(name, maxLines = 1)
                     }
                 }
             }
@@ -397,13 +444,15 @@ private fun ReadingModeBar(mode: ReadingMode, onSelect: (ReadingMode) -> Unit) {
     }
 }
 
-// Petunjuk sekali untuk pengguna baru, di baris sendiri di atas pill (tidak menutupi halaman).
+// Kartu petunjuk gerakan untuk pengguna baru.
 @Composable
 private fun GestureHint(onDismiss: () -> Unit) {
     Surface(
         shape = MaterialTheme.shapes.large,
         color = MaterialTheme.colorScheme.secondaryContainer,
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+        tonalElevation = 3.dp,
+        shadowElevation = 6.dp, // mengambang di atas teks mushaf
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
     ) {
         Row(Modifier.padding(start = 16.dp, end = 8.dp, top = 12.dp, bottom = 12.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {

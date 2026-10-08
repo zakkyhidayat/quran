@@ -63,6 +63,14 @@ android {
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+        // Seperti rilis (R8, tanpa debuggable) tetapi ditandatangani kunci debug dan ber-ID terpisah, untuk mengukur
+        // kelancaran di perangkat tanpa mengganggu aplikasi terpasang: ./gradlew :app:installGithubBenchmark
+        create("benchmark") {
+            initWith(getByName("release"))
+            signingConfig = signingConfigs.getByName("debug")
+            applicationIdSuffix = ".bench"
+            matchingFallbacks += "release"
+        }
     }
 
     buildFeatures {

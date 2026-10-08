@@ -1,5 +1,7 @@
 package io.zakkyhidayat.quran.onboarding
 
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -69,10 +71,13 @@ private const val STEPS = 4
  * Onboarding untuk pengguna baru: bahasa, tentang mushaf ini, terjemahan, tampilan. Setiap pilihan langsung tersimpan,
  * jadi "Lewati" aman kapan saja. Langkah disimpan dengan rememberSaveable karena ganti bahasa membuat ulang Activity.
  */
+@OptIn(androidx.compose.material3.ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun OnboardingScreen(vm: AppViewModel, settings: AppSettings) {
     var step by rememberSaveable { mutableIntStateOf(0) }
     val scope = rememberCoroutineScope()
+    val motion = MaterialTheme.motionScheme
+    val forward = if (androidx.compose.ui.platform.LocalLayoutDirection.current == androidx.compose.ui.unit.LayoutDirection.Rtl) -1 else 1
     val finish: () -> Unit = { scope.launch { vm.settingsRepository.setOnboardingDone() } }
 
     // Surface agar warna teks bawaan mengikuti tema (onBackground), bukan hitam.
@@ -90,7 +95,12 @@ fun OnboardingScreen(vm: AppViewModel, settings: AppSettings) {
                 }
                 AnimatedContent(
                     targetState = step,
-                    transitionSpec = { fadeIn() togetherWith fadeOut() },
+                    transitionSpec = {
+                        // Shared axis X: maju dari sisi depan, mundur dari belakang (mengikuti arah RTL/LTR).
+                        val dir = (if (targetState > initialState) 1 else -1) * forward
+                        (slideInHorizontally(motion.defaultSpatialSpec()) { dir * it / 6 } + fadeIn(motion.defaultEffectsSpec())) togetherWith
+                            (slideOutHorizontally(motion.defaultSpatialSpec()) { -dir * it / 6 } + fadeOut(motion.fastEffectsSpec()))
+                    },
                     modifier = Modifier.weight(1f),
                     label = "onboarding",
                 ) { current ->

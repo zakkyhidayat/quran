@@ -1,5 +1,7 @@
 package io.zakkyhidayat.quran
 
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
@@ -35,6 +37,7 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
     val nav = rememberNavController()
     val motion = MaterialTheme.motionScheme
     val expanded = LocalConfiguration.current.screenWidthDp >= EXPANDED_WIDTH_DP
+    val forward = if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1 else 1
 
     Row {
         if (expanded) {
@@ -52,10 +55,12 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
             navController = nav,
             startDestination = "reader",
             modifier = Modifier.weight(1f),
-            enterTransition = { slideInHorizontally(motion.defaultSpatialSpec()) { it / 8 } + fadeIn(motion.defaultEffectsSpec()) },
-            exitTransition = { fadeOut(motion.defaultEffectsSpec()) },
-            popEnterTransition = { fadeIn(motion.defaultEffectsSpec()) },
-            popExitTransition = { slideOutHorizontally(motion.defaultSpatialSpec()) { it / 8 } + fadeOut(motion.defaultEffectsSpec()) },
+            // Shared axis X: layar baru masuk dari sisi "maju" (kanan pada LTR, kiri pada RTL), layar lama bergeser ke arah
+            // sebaliknya; kembali membalik arah.
+            enterTransition = { slideInHorizontally(motion.defaultSpatialSpec()) { forward * it / 8 } + fadeIn(motion.defaultEffectsSpec()) },
+            exitTransition = { slideOutHorizontally(motion.defaultSpatialSpec()) { -forward * it / 8 } + fadeOut(motion.fastEffectsSpec()) },
+            popEnterTransition = { slideInHorizontally(motion.defaultSpatialSpec()) { -forward * it / 8 } + fadeIn(motion.defaultEffectsSpec()) },
+            popExitTransition = { slideOutHorizontally(motion.defaultSpatialSpec()) { forward * it / 8 } + fadeOut(motion.fastEffectsSpec()) },
         ) {
             composable("reader") {
                 ReaderScreen(
