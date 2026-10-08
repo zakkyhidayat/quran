@@ -162,6 +162,8 @@ private fun SurahList(vm: AppViewModel, onBack: () -> Unit, onOpenSurahInfo: (In
     val settings by vm.settingsRepository.settings.collectAsStateWithLifecycle(AppSettings())
     val lastSurah = surahs[settings.lastSurah]
     val glyphSize = MaterialTheme.typography.headlineSmall.fontSize
+    // Di layar sempit (< 360dp) kaligrafi nama surah menyempitkan judul sampai terpotong di tengah kata.
+    val showGlyph = androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp >= 360
     Column(Modifier.fillMaxSize()) {
         // Di luar LazyColumn supaya tidak tergulir keluar saat muncul setelah data dimuat.
         if (lastSurah != null && settings.lastAyah > 0) {
@@ -191,7 +193,7 @@ private fun SurahList(vm: AppViewModel, onBack: () -> Unit, onOpenSurahInfo: (In
                 supportingContent = { Text(stringResource(R.string.surah_summary, s.ayahCount, s.firstPage)) },
                 trailingContent = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(s.nameGlyph.toString(), style = TextStyle(fontFamily = font, fontSize = glyphSize, color = MaterialTheme.colorScheme.primary))
+                        if (showGlyph) Text(s.nameGlyph.toString(), style = TextStyle(fontFamily = font, fontSize = glyphSize, color = MaterialTheme.colorScheme.primary))
                         IconButton(onClick = { onOpenSurahInfo(s.id) }) { Icon(Icons.Default.Info, contentDescription = stringResource(R.string.surah_info_cd, s.nameLatin)) }
                     }
                 },

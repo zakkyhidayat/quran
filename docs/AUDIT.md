@@ -23,7 +23,7 @@ Diisi 2026-10-08 berdasarkan kode dan dokumen di repo. Perbarui setiap rilis. `[
       bila satu harakat diubah
 - [x] Tes jumlah: 114 surah, 6.236 ayat, jumlah per surah (Kufi) dari tabel tertulis di skrip
 - [x] Perbandingan dengan sumber: `verify_quran.py --source` membandingkan **seluruh** 6.236 ayat (lokal; butuh data-src)
-- [~] Rendering diuji di satu perangkat (Android 16, 120 Hz). Belum di Android lama dan layar kecil.
+- [x] Rendering diuji di Android 16 (ponsel, 120 Hz) dan Android 8.0 (emulator API 26, 480x800 hdpi)
 - [~] Font sesuai rasm, lisensi KFGQPC tercatat; status "tidak boleh diubah" vs penggantian palet perlu dikonfirmasi
 - [~] Juz/hizb/rub'/manzil/sajdah: jumlah dicek; posisi awal belum dibandingkan dengan sumber kedua
 - n/a Pemetaan audio (belum ada audio)
@@ -54,14 +54,14 @@ Diisi 2026-10-08 berdasarkan kode dan dokumen di repo. Perbarui setiap rilis. `[
 
 ## 5. Tes
 
-- [~] Unit test (9): pembanding versi, rujukan ayat pencarian, tautan ayat, normalisasi teks Arab. Belum: bookmark,
-      pemetaan halaman, cadangan JSON (butuh tes berbasis perangkat atau Robolectric)
+- [x] Unit test (15): pembanding versi, rujukan ayat pencarian, tautan ayat, normalisasi teks Arab; bookmark,
+      cadangan JSON, pemetaan halaman (Robolectric)
 - [x] Tes integritas konten di CI
 - [ ] Tes UI dasar (buka, pilih surah, geser, cari, bookmark)
-- [ ] Diuji di `minSdk` 26, versi terbaru, dan layar kecil
+- [x] Diuji di `minSdk` 26 (emulator, layar kecil 480x800) dan Android 16
 - [~] Mode gelap diuji; ukuran font sistem besar belum
 - [~] Offline: membaca tanpa jaringan berjalan; terjemahan perlu diunduh sekali
-- [ ] Rotasi layar dan kembali dari background: posisi baca belum diuji
+- [x] Rotasi layar: posisi baca tetap; di lanskap ponsel halaman selebar layar dan digulir
 
 ## 6. Privasi dan izin
 
@@ -131,14 +131,16 @@ docs/CONTENT_ERRORS.md.
 | 4 | 4 | Keystore rilis belum ada | Tinggi | Tugas pemilik |
 | 5 | 1 | Sidik jari isi belum dicek otomatis | Tinggi | Selesai (CI) |
 | 6 | 1 | Perbandingan ayat dengan sumber belum ada | Tinggi | Selesai (seluruh ayat, lokal) |
-| 7 | 5 | Tidak ada tes | Tinggi | Sebagian (9 unit test, CI) |
+| 7 | 5 | Tidak ada tes | Tinggi | Selesai (15 unit test, CI); tes UI belum |
 | 8 | 6 | Izin pengingat dideklarasikan padahal fitur disembunyikan | Sedang | Selesai |
 | 9 | 6 | Kebijakan privasi belum ada | Sedang | Selesai |
 | 10 | 11 | ARCHITECTURE, CHANGELOG, THIRD_PARTY_NOTICES, prosedur salah teks belum ada | Sedang | Selesai |
 | 11 | 9 | Ukuran font Arab/terjemahan belum bisa diatur | Sedang | Selesai |
-| 12 | 5 | Belum diuji di Android 8 (API 26), layar kecil, rotasi | Sedang | Belum |
+| 12 | 5 | Belum diuji di Android 8 (API 26), layar kecil, rotasi | Sedang | Selesai |
 | 13 | 3 | `page-fonts.zip` belum diunggah ke rilis `build-assets` | Sedang | Menunggu izin pemilik |
 | 14 | 8 | Linter belum ada; file layar terlalu besar | Rendah | Lint selesai; pemecahan file belum |
 | 15 | 11 | ADR, screenshot README | Rendah | ADR selesai; screenshot belum |
 | 16 | 1 | Pencarian Arab tidak menemukan ejaan mushaf (إبراهيم, الصلاة: 0 hasil) | Tinggi | Selesai (ditemukan unit test) |
 | 17 | 8 | Lint: teks dari LocalContext di komposisi, Locale.getDefault di komponen | Sedang | Selesai |
+| 18 | 5 | Layar kecil: judul surah terpotong di tengah kata di daftar | Sedang | Selesai (kaligrafi disembunyikan < 360dp) |
+| 19 | 5 | Lanskap ponsel: halaman mushaf terlalu kecil/kosong | Sedang | Selesai (selebar layar, digulir) |

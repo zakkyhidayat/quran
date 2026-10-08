@@ -1,5 +1,7 @@
 package io.zakkyhidayat.quran.reader
 
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.unit.DpSize
@@ -256,7 +258,11 @@ fun ReaderScreen(
                 // Blok halaman berproporsi kertas B5 (176 x 250 mm), seperti mushaf cetak; header dan nomor menempel di sekelilingnya.
                 val bleed = if (maxWidth - PageEndPadding < PageMaxWidth) PageStartBleed else 0.dp
                 val available = minOf(maxWidth - PageEndPadding + bleed, PageMaxWidth)
-                val blockWidth = minOf(available, (maxHeight - PageChromeHeight) / PageHeightOverWidth)
+                val fitHeight = (maxHeight - PageChromeHeight) / PageHeightOverWidth
+                // Di layar pendek (lanskap ponsel) halaman yang dimuatkan ke tinggi menjadi terlalu kecil untuk dibaca;
+                // halaman dibuat selebar layar dan digulir vertikal.
+                val scrollPage = fitHeight < available * 0.6f
+                val blockWidth = if (scrollPage) available else minOf(available, fitHeight)
                 val blockHeight = blockWidth * PageHeightOverWidth
                 // Di layar sempit blok menempel ke kiri; di layar lebar sisa ruang dibagi dua agar halaman tetap di tengah.
                 val startOffset = ((maxWidth - blockWidth - PageEndPadding) / 2).coerceAtLeast(0.dp) - bleed
@@ -272,9 +278,11 @@ fun ReaderScreen(
                         val ayahTexts by produceState<List<AyahText>>(emptyList(), page) { value = vm.mushaf.pageAyahs(page) }
                         val pageInfo = pageMeta.getOrNull(index)
                         Box(
-                            Modifier.fillMaxSize().pointerInput(selected) {
-                                detectTapGestures(onTap = { if (selected != null) vm.clearSelection() })
-                            },
+                            Modifier.fillMaxSize()
+                                .then(if (scrollPage) Modifier.verticalScroll(rememberScrollState()) else Modifier)
+                                .pointerInput(selected) {
+                                    detectTapGestures(onTap = { if (selected != null) vm.clearSelection() })
+                                },
                         ) {
                             Column(Modifier.align(Alignment.CenterStart).offset(x = startOffset), horizontalAlignment = Alignment.CenterHorizontally) {
                                 Row(Modifier.width(blockWidth).height(HeaderHeight).padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
