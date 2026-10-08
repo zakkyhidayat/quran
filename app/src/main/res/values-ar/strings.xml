@@ -198,4 +198,10 @@
     <string name="arabic_text_size">حجم النص العربي</string>
     <string name="translation_text_size">حجم نص الترجمة</string>
     <string name="translation_text_sample">بسم الله الرحمن الرحيم.</string>
+    <string name="settings_appearance_sub">السمة: %1$s • الألوان، حجم النص، التجويد</string>
+    <string name="settings_translations_sub">المفعّلة: %1$d</string>
+    <string name="settings_backup_sub">تصدير، استعادة، نسخ تلقائي</string>
+    <string name="settings_backup_on">النسخ التلقائي مفعّل</string>
+    <string name="settings_permissions_sub">ما يمكن للتطبيق الوصول إليه ولماذا</string>
+    <string name="settings_about_sub">الإصدار، مصادر البيانات، الشكر، الدعم</string>
 </resources>

@@ -199,4 +199,10 @@
     <string name="arabic_text_size">Arabic text size</string>
     <string name="translation_text_size">Translation text size</string>
     <string name="translation_text_sample">In the name of Allah, the Entirely Merciful, the Especially Merciful.</string>
+    <string name="settings_appearance_sub">Theme: %1$s • colours, text size, tajweed</string>
+    <string name="settings_translations_sub">Active: %1$d</string>
+    <string name="settings_backup_sub">Export, restore, auto backup</string>
+    <string name="settings_backup_on">Auto backup is on</string>
+    <string name="settings_permissions_sub">What the app may access and why</string>
+    <string name="settings_about_sub">Version, data sources, credits, support</string>
 </resources>

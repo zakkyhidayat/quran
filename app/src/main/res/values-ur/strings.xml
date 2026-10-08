@@ -198,4 +198,10 @@
     <string name="arabic_text_size">عربی متن کا سائز</string>
     <string name="translation_text_size">ترجمے کا سائز</string>
     <string name="translation_text_sample">اللہ کے نام سے جو بڑا مہربان نہایت رحم والا ہے۔</string>
+    <string name="settings_appearance_sub">تھیم: %1$s • رنگ، متن کا سائز، تجوید</string>
+    <string name="settings_translations_sub">فعال: %1$d</string>
+    <string name="settings_backup_sub">برآمد، بحالی، خودکار بیک اپ</string>
+    <string name="settings_backup_on">خودکار بیک اپ فعال ہے</string>
+    <string name="settings_permissions_sub">ایپ کن چیزوں تک رسائی رکھتی ہے اور کیوں</string>
+    <string name="settings_about_sub">ورژن، ڈیٹا کے ماخذ، اعترافات، تعاون</string>
 </resources>

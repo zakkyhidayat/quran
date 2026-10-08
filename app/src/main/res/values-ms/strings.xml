@@ -198,4 +198,10 @@
     <string name="arabic_text_size">Saiz teks Arab</string>
     <string name="translation_text_size">Saiz teks terjemahan</string>
     <string name="translation_text_sample">Dengan nama Allah, Yang Maha Pemurah, lagi Maha Mengasihani.</string>
+    <string name="settings_appearance_sub">Tema: %1$s • warna, saiz teks, tajwid</string>
+    <string name="settings_translations_sub">Aktif: %1$d</string>
+    <string name="settings_backup_sub">Eksport, pulihkan, sandaran automatik</string>
+    <string name="settings_backup_on">Sandaran automatik aktif</string>
+    <string name="settings_permissions_sub">Akses yang digunakan aplikasi dan sebabnya</string>
+    <string name="settings_about_sub">Versi, sumber data, penghargaan, sokongan</string>
 </resources>

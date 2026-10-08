@@ -1,5 +1,7 @@
 package io.zakkyhidayat.quran
 
+import io.zakkyhidayat.quran.settings.SettingsPage
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.animation.fadeIn
@@ -39,21 +41,36 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
     val expanded = LocalConfiguration.current.screenWidthDp >= EXPANDED_WIDTH_DP
     val forward = if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1 else 1
 
+    // Di ponsel, layar awal adalah daftar bertab; layar baca dibuka dari sana. Di layar lebar daftar tampil permanen di
+    // samping, jadi layar baca menjadi layar awal.
+    val start = if (expanded) "reader" else "index"
+    val openReader: () -> Unit = {
+        if (nav.currentDestination?.route != "reader") {
+            nav.navigate("reader") {
+                popUpTo(start) { inclusive = start == "reader" }
+                launchSingleTop = true
+            }
+        }
+    }
+    // Lompatan ke halaman dari mana pun (daftar, pencarian, info surah, notifikasi) membuka layar baca.
+    LaunchedEffect(Unit) {
+        vm.pendingPage.collect { page -> if (page != null) openReader() }
+    }
+
     Row {
         if (expanded) {
             Surface(Modifier.width(360.dp).fillMaxHeight(), color = MaterialTheme.colorScheme.surfaceContainerLow) {
                 IndexScreen(
                     vm = vm,
-                    embedded = true,
-                    onBack = { nav.popBackStack("reader", inclusive = false) },
-                    onOpenSettings = { nav.navigate("settings") },
+                    onOpenReader = openReader,
+                    onOpenSettings = { nav.navigate(SettingsPage.Main.route) },
                     onOpenSurahInfo = { nav.navigate("surah/$it") },
                 )
             }
         }
         NavHost(
             navController = nav,
-            startDestination = "reader",
+            startDestination = start,
             modifier = Modifier.weight(1f),
             // Shared axis X: layar baru masuk dari sisi "maju" (kanan pada LTR, kiri pada RTL), layar lama bergeser ke arah
             // sebaliknya; kembali membalik arah.
@@ -62,30 +79,39 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
             popEnterTransition = { slideInHorizontally(motion.defaultSpatialSpec()) { -forward * it / 8 } + fadeIn(motion.defaultEffectsSpec()) },
             popExitTransition = { slideOutHorizontally(motion.defaultSpatialSpec()) { forward * it / 8 } + fadeOut(motion.fastEffectsSpec()) },
         ) {
+            composable("index") {
+                IndexScreen(
+                    vm = vm,
+                    onOpenReader = openReader,
+                    onOpenSettings = { nav.navigate(SettingsPage.Main.route) },
+                    onOpenSurahInfo = { nav.navigate("surah/$it") },
+                )
+            }
             composable("reader") {
                 ReaderScreen(
                     vm = vm,
                     settings = settings,
-                    onOpenIndex = if (expanded) null else ({ nav.navigate("index") }),
+                    onBack = if (expanded) null else ({ nav.popBackStack() }),
                     onOpenSearch = { nav.navigate("search") },
-                    onOpenSettings = { nav.navigate("settings") },
+                    onOpenSettings = { nav.navigate(SettingsPage.Main.route) },
                     onOpenSurahInfo = { nav.navigate("surah/$it") },
                 )
-            }
-            composable("index") {
-                IndexScreen(vm, onBack = { nav.popBackStack() }, onOpenSettings = { nav.navigate("settings") }, onOpenSurahInfo = { nav.navigate("surah/$it") })
             }
             composable("surah/{id}", arguments = listOf(navArgument("id") { type = NavType.IntType })) { entry ->
                 SurahInfoScreen(
                     vm = vm,
                     surahId = entry.arguments?.getInt("id") ?: 1,
                     onBack = { nav.popBackStack() },
-                    onOpenAyah = { surah, ayah -> vm.goToAyah(surah, ayah); nav.popBackStack("reader", inclusive = false) },
-                    onOpenPage = { page -> vm.clearSelection(); vm.goToPage(page); nav.popBackStack("reader", inclusive = false) },
+                    onOpenAyah = { surah, ayah -> vm.goToAyah(surah, ayah); openReader() },
+                    onOpenPage = { page -> vm.clearSelection(); vm.goToPage(page); openReader() },
                 )
             }
             composable("search") { SearchScreen(vm, settings, onBack = { nav.popBackStack() }) }
-            composable("settings") { SettingsScreen(vm, settings, onBack = { nav.popBackStack() }) }
+            SettingsPage.entries.forEach { page ->
+                composable(page.route) {
+                    SettingsScreen(vm, settings, page = page, onBack = { nav.popBackStack() }, onOpen = { nav.navigate(it.route) })
+                }
+            }
         }
     }
 }

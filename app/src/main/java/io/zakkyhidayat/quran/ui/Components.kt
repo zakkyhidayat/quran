@@ -3,6 +3,7 @@ package io.zakkyhidayat.quran.ui
 import androidx.compose.material3.Icon
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,18 +37,22 @@ fun CenteredContent(
     }
 }
 
+// Bentuk cookie dari poligon M3 Expressive: mahal dibuat, jadi dibuat sekali lalu dipakai semua lencana.
+private var cookieShape: androidx.compose.ui.graphics.Shape? = null
+
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
+private fun rememberCookieShape(): androidx.compose.ui.graphics.Shape =
+    cookieShape ?: MaterialShapes.Cookie9Sided.toShape().also { cookieShape = it }
+
+@Composable
 fun NumberBadge(number: Int, modifier: Modifier = Modifier) {
-    Surface(
-        modifier = modifier.size(48.dp),
-        shape = MaterialShapes.Cookie9Sided.toShape(),
-        color = MaterialTheme.colorScheme.secondaryContainer,
-        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+    // Kotak berlatar bentuk cookie (bukan Surface): dipakai di setiap baris daftar, jadi dibuat seringan mungkin.
+    Box(
+        modifier.size(48.dp).background(MaterialTheme.colorScheme.secondaryContainer, rememberCookieShape()),
+        contentAlignment = Alignment.Center,
     ) {
-        Box(contentAlignment = Alignment.Center) {
-            Text("$number", style = MaterialTheme.typography.labelLarge)
-        }
+        Text("$number", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSecondaryContainer)
     }
 }
 

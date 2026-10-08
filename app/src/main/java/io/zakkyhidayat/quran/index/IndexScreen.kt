@@ -80,7 +80,8 @@ private val ListPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit, onOpenSurahInfo: (Int) -> Unit, embedded: Boolean = false) {
+fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -> Unit, onOpenSurahInfo: (Int) -> Unit) {
+    val onBack = onOpenReader // pilihan di daftar membuka layar baca
     // Bookmark di urutan pertama, tetapi yang dibuka pertama kali tetap Surah.
     var tab by rememberSaveable { mutableIntStateOf(1) }
     var showJump by remember { mutableStateOf(false) }
@@ -89,9 +90,6 @@ fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.index_title)) },
-                navigationIcon = {
-                    if (!embedded) IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back)) }
-                },
                 actions = {
                     IconButton(onClick = { showJump = true }) { Icon(AppIcons.FormatListNumbered, contentDescription = stringResource(R.string.jump_to_ayah)) }
                     IconButton(onClick = { vm.randomAyah(); onBack() }) { Icon(AppIcons.Shuffle, contentDescription = stringResource(R.string.random_ayah)) }

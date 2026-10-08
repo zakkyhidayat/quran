@@ -198,4 +198,10 @@
     <string name="arabic_text_size">Размер арабского текста</string>
     <string name="translation_text_size">Размер текста перевода</string>
     <string name="translation_text_sample">Во имя Аллаха, Милостивого, Милосердного.</string>
+    <string name="settings_appearance_sub">Тема: %1$s • цвета, размер текста, таджвид</string>
+    <string name="settings_translations_sub">Включено: %1$d</string>
+    <string name="settings_backup_sub">Экспорт, восстановление, автокопирование</string>
+    <string name="settings_backup_on">Автокопирование включено</string>
+    <string name="settings_permissions_sub">К чему есть доступ у приложения и зачем</string>
+    <string name="settings_about_sub">Версия, источники данных, благодарности, поддержка</string>
 </resources>

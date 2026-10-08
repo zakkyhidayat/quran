@@ -99,15 +99,13 @@ internal fun prefetchPageFonts(context: Context, center: Int, palette: GlyphPale
 }
 
 // quran-common: glyph kaligrafi basmalah (U+FDFD), judul juz (U+E001..E01E), dan kata pembuka juz (U+E900..E91D).
-internal fun commonFontFamily(context: Context): FontFamily =
-    FontFamily(Font("fonts/quran-common.ttf", context.assets))
+internal fun commonFontFamily(context: Context): FontFamily = PalettedFonts.loadBlocking(context, "quran-common.ttf", 0)
 
 internal fun juzTitleGlyph(juz: Int): String = (0xE001 + juz - 1).toChar().toString()
 
 internal fun juzOpeningGlyph(juz: Int): String = (0xE900 + juz - 1).toChar().toString()
 
-internal fun surahNameFontFamily(context: Context): FontFamily =
-    FontFamily(Font("fonts/surah_names.ttf", context.assets))
+internal fun surahNameFontFamily(context: Context): FontFamily = PalettedFonts.loadBlocking(context, "surah_names.ttf", 0)
 
 internal suspend fun surahHeaderFontFamily(context: Context, dark: Boolean): FontFamily =
     // Mode gelap: palet 1 dengan isian bingkai (warna 18, bawaannya hitam) diganti hijau tua (warna 12) agar serasi dengan nomor ayat.
@@ -115,8 +113,18 @@ internal suspend fun surahHeaderFontFamily(context: Context, dark: Boolean): Fon
     else PalettedFonts.load(context, "QCF_SurahHeader_COLOR-Regular.ttf", 0)
 
 // KFGQPC Hafs Uthmanic Script: font teks Arab Unicode (sheet ayat, basmalah, hasil pencarian).
-internal fun arabicFontFamily(context: Context): FontFamily =
-    FontFamily(Font("fonts/UthmanicHafs_V22.ttf", context.assets))
+internal fun arabicFontFamily(context: Context): FontFamily = PalettedFonts.loadBlocking(context, "UthmanicHafs_V22.ttf", 0)
+
+/**
+ * Font antarmuka (nama surah, judul juz, teks Hafs) dimuat sekali di thread latar belakang saat aplikasi mulai, sehingga
+ * layar daftar dan lembar ayat tidak memuat font dari aset di thread utama setiap kali disusun ulang (dulu membuat
+ * transisi kembali ke daftar kehilangan animasinya).
+ */
+internal fun preloadUiFonts(context: Context) {
+    for (name in listOf("surah_names.ttf", "quran-common.ttf", "UthmanicHafs_V22.ttf")) {
+        runCatching { PalettedFonts.loadBlocking(context, name, 0) }
+    }
+}
 
 @Composable
 fun MushafPage(

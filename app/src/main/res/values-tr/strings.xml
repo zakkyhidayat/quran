@@ -198,4 +198,10 @@
     <string name="arabic_text_size">Arapça metin boyutu</string>
     <string name="translation_text_size">Meal metni boyutu</string>
     <string name="translation_text_sample">Rahmân ve Rahîm olan Allah\'ın adıyla.</string>
+    <string name="settings_appearance_sub">Tema: %1$s • renkler, metin boyutu, tecvid</string>
+    <string name="settings_translations_sub">Etkin: %1$d</string>
+    <string name="settings_backup_sub">Dışa aktar, geri yükle, otomatik yedek</string>
+    <string name="settings_backup_on">Otomatik yedek açık</string>
+    <string name="settings_permissions_sub">Uygulamanın erişimi ve nedeni</string>
+    <string name="settings_about_sub">Sürüm, veri kaynakları, katkılar, destek</string>
 </resources>

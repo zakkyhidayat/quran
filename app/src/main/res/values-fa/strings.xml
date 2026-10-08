@@ -198,4 +198,10 @@
     <string name="arabic_text_size">اندازهٔ متن عربی</string>
     <string name="translation_text_size">اندازهٔ متن ترجمه</string>
     <string name="translation_text_sample">به نام خداوند بخشندهٔ مهربان.</string>
+    <string name="settings_appearance_sub">پوسته: %1$s • رنگ‌ها، اندازهٔ متن، تجوید</string>
+    <string name="settings_translations_sub">فعال: %1$d</string>
+    <string name="settings_backup_sub">برون‌بری، بازیابی، پشتیبان خودکار</string>
+    <string name="settings_backup_on">پشتیبان خودکار روشن است</string>
+    <string name="settings_permissions_sub">دسترسی‌های برنامه و دلیل آن‌ها</string>
+    <string name="settings_about_sub">نسخه، منابع داده، سپاسگزاری، حمایت</string>
 </resources>

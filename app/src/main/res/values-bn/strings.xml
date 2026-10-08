@@ -198,4 +198,10 @@
     <string name="arabic_text_size">আরবি লেখার আকার</string>
     <string name="translation_text_size">অনুবাদের আকার</string>
     <string name="translation_text_sample">পরম করুণাময় অতি দয়ালু আল্লাহর নামে।</string>
+    <string name="settings_appearance_sub">থিম: %1$s • রং, লেখার আকার, তাজবীদ</string>
+    <string name="settings_translations_sub">সক্রিয়: %1$d</string>
+    <string name="settings_backup_sub">রপ্তানি, পুনরুদ্ধার, স্বয়ংক্রিয় ব্যাকআপ</string>
+    <string name="settings_backup_on">স্বয়ংক্রিয় ব্যাকআপ চালু</string>
+    <string name="settings_permissions_sub">অ্যাপ কী ব্যবহার করে এবং কেন</string>
+    <string name="settings_about_sub">সংস্করণ, ডেটার উৎস, কৃতজ্ঞতা, সহায়তা</string>
 </resources>

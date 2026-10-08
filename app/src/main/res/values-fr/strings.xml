@@ -198,4 +198,10 @@
     <string name="arabic_text_size">Taille du texte arabe</string>
     <string name="translation_text_size">Taille du texte de la traduction</string>
     <string name="translation_text_sample">Au nom d\'Allah, le Tout Miséricordieux, le Très Miséricordieux.</string>
+    <string name="settings_appearance_sub">Thème : %1$s • couleurs, taille du texte, tajwid</string>
+    <string name="settings_translations_sub">Actives : %1$d</string>
+    <string name="settings_backup_sub">Exporter, restaurer, sauvegarde automatique</string>
+    <string name="settings_backup_on">Sauvegarde automatique activée</string>
+    <string name="settings_permissions_sub">Ce que l’application utilise et pourquoi</string>
+    <string name="settings_about_sub">Version, sources des données, remerciements, soutien</string>
 </resources>

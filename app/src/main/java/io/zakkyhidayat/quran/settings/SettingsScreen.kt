@@ -1,5 +1,6 @@
 package io.zakkyhidayat.quran.settings
 
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import io.zakkyhidayat.quran.ui.scaled
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
@@ -94,145 +95,193 @@ import kotlinx.coroutines.launch
 // Pengingat membaca disembunyikan sementara sampai fiturnya dimatangkan; kodenya tetap ada (reminder/Reminder.kt).
 private const val REMINDER_VISIBLE = false
 
+/** Halaman Pengaturan: utama (daftar kategori) dan satu halaman per kategori. */
+enum class SettingsPage(val route: String) {
+    Main("settings"),
+    Appearance("settings/appearance"),
+    Translations("settings/translations"),
+    Backup("settings/backup"),
+    Permissions("settings/permissions"),
+    About("settings/about"),
+}
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) {
+fun SettingsScreen(
+    vm: AppViewModel,
+    settings: AppSettings,
+    page: SettingsPage = SettingsPage.Main,
+    onBack: () -> Unit,
+    onOpen: (SettingsPage) -> Unit = {},
+) {
     val repo = vm.settingsRepository
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val version = remember(context) {
         runCatching { context.packageManager.getPackageInfo(context.packageName, 0).versionName }.getOrNull().orEmpty()
     }
-    val dynamicSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-
     val snackbar = remember { SnackbarHostState() }
+    val title = stringResource(
+        when (page) {
+            SettingsPage.Main -> R.string.settings
+            SettingsPage.Appearance -> R.string.appearance
+            SettingsPage.Translations -> R.string.translations
+            SettingsPage.Backup -> R.string.backup
+            SettingsPage.Permissions -> R.string.permissions
+            SettingsPage.About -> R.string.about
+        },
+    )
     Scaffold(
         snackbarHost = { SnackbarHost(snackbar) },
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.settings)) },
+                title = { Text(title) },
                 navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back)) } },
             )
         },
     ) { padding ->
         CenteredContent(Modifier.padding(padding)) {
-            // LazyColumn: hanya bagian yang terlihat yang disusun saat layar dibuka (dulu semua ~40 elemen sekaligus,
-            // membuat transisi masuk tersendat).
-            LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 24.dp)) {
-                item(key = "section0") {
+            LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp)) {
+                item(key = page.route) {
                     Column {
-                        LanguageSection()
-                    }
-                }
-                item(key = "section1") {
-                    Column {
-                        SectionTitle(AppIcons.Palette, stringResource(R.string.appearance))
+                        when (page) {
+                            SettingsPage.Main -> SettingsMain(settings, onOpen)
+                            SettingsPage.Appearance -> {
 
-                        AppearanceControls(vm, settings)
-                TextSizeControls(vm, settings)
+                                AppearanceControls(vm, settings)
+                                                TextSizeControls(vm, settings)
 
-                        Spacer(Modifier.height(8.dp))
-                        Group {
-                            item(
-                                title = stringResource(R.string.amoled),
-                                subtitle = stringResource(R.string.amoled_sub),
-                                onClick = { scope.launch { repo.setAmoled(!settings.amoled) } },
-                                leading = { Icon(AppIcons.DarkMode, contentDescription = null) },
-                                trailing = { IconSwitch(settings.amoled) },
-                            )
-                            item(
-                                title = stringResource(R.string.translit_title),
-                                subtitle = stringResource(R.string.translit_sub),
-                                onClick = { scope.launch { repo.setShowTransliteration(!settings.showTransliteration) } },
-                                leading = { Icon(AppIcons.Translate, contentDescription = null) },
-                                trailing = { IconSwitch(settings.showTransliteration) },
-                            )
-                            item(
-                                title = stringResource(R.string.tajweed_title),
-                                subtitle = stringResource(R.string.tajweed_sub),
-                                onClick = { scope.launch { repo.setTajweed(!settings.tajweed) } },
-                                leading = { Icon(AppIcons.FormatColorText, contentDescription = null) },
-                                trailing = { IconSwitch(settings.tajweed) },
-                            )
-                        }
-                    }
-                }
-                item(key = "section2") {
-                    Column {
-                        SectionTitle(AppIcons.Translate, stringResource(R.string.translations))
-                        TranslationControls(vm, settings)
-                    }
-                }
-                item(key = "section3") {
-                    Column {
-                        if (REMINDER_VISIBLE) {
-                            SectionTitle(AppIcons.Alarm, stringResource(R.string.reminder))
-                            ReminderControls(vm, settings)
-                        }
-                    }
-                }
-                item(key = "section4") {
-                    Column {
-                        SectionTitle(AppIcons.Backup, stringResource(R.string.backup))
-                        BackupControls(vm, settings, snackbar)
-                    }
-                }
-                item(key = "section5") {
-                    Column {
-                        SectionTitle(AppIcons.Shield, stringResource(R.string.permissions))
-                        PermissionControls()
-                    }
-                }
-                item(key = "section6") {
-                    Column {
-                        SectionTitle(Icons.Default.Info, stringResource(R.string.about))
-                        Group {
-                            if (io.zakkyhidayat.quran.BuildConfig.UPDATER_ENABLED) {
-                                val latest = stringResource(R.string.update_latest)
-                                val failedCheck = stringResource(R.string.update_check_failed)
-                                item(
-                                    title = stringResource(R.string.version),
-                                    subtitle = stringResource(R.string.update_check_sub, version),
-                                    onClick = {
-                                        vm.checkForUpdate(manual = true) { found ->
-                                            when (found) {
-                                                false -> scope.launch { snackbar.showSnackbar(latest) }
-                                                null -> scope.launch { snackbar.showSnackbar(failedCheck) }
-                                                true -> Unit // dialog pembaruan tampil
-                                            }
-                                        }
-                                    },
-                                    trailing = { Icon(Icons.Default.Refresh, contentDescription = null) },
-                                )
-                            } else {
-                                item(title = stringResource(R.string.version), subtitle = version)
+                                Spacer(Modifier.height(8.dp))
+                                Group {
+                                    item(
+                                        title = stringResource(R.string.amoled),
+                                        subtitle = stringResource(R.string.amoled_sub),
+                                        onClick = { scope.launch { repo.setAmoled(!settings.amoled) } },
+                                        leading = { Icon(AppIcons.DarkMode, contentDescription = null) },
+                                        trailing = { IconSwitch(settings.amoled) },
+                                    )
+                                    item(
+                                        title = stringResource(R.string.translit_title),
+                                        subtitle = stringResource(R.string.translit_sub),
+                                        onClick = { scope.launch { repo.setShowTransliteration(!settings.showTransliteration) } },
+                                        leading = { Icon(AppIcons.Translate, contentDescription = null) },
+                                        trailing = { IconSwitch(settings.showTransliteration) },
+                                    )
+                                    item(
+                                        title = stringResource(R.string.tajweed_title),
+                                        subtitle = stringResource(R.string.tajweed_sub),
+                                        onClick = { scope.launch { repo.setTajweed(!settings.tajweed) } },
+                                        leading = { Icon(AppIcons.FormatColorText, contentDescription = null) },
+                                        trailing = { IconSwitch(settings.tajweed) },
+                                    )
+                                }
+
                             }
-                            item(
-                                title = stringResource(R.string.data_source),
-                                subtitle = stringResource(R.string.data_source_sub),
-                            )
-                            item(
-                                title = stringResource(R.string.font),
-                                subtitle = stringResource(R.string.font_sub),
-                            )
-                            item(
-                                title = stringResource(R.string.credits),
-                                subtitle = stringResource(R.string.credits_sub),
-                                onClick = { openUrl(context, "https://qul.tarteel.ai/credits") },
-                                trailing = { Icon(AppIcons.OpenInNew, contentDescription = null) },
-                            )
-                            item(
-                                title = stringResource(R.string.support),
-                                subtitle = stringResource(R.string.support_sub),
-                                onClick = { openUrl(context, "https://ko-fi.com/zakkyhidayat") },
-                                leading = { Icon(AppIcons.Favorite, contentDescription = null) },
-                                trailing = { Icon(AppIcons.OpenInNew, contentDescription = null) },
-                            )
+                            SettingsPage.Translations -> TranslationControls(vm, settings)
+                            SettingsPage.Backup -> BackupControls(vm, settings, snackbar)
+                            SettingsPage.Permissions -> PermissionControls()
+                            SettingsPage.About -> {
+                                Group {
+                                    if (io.zakkyhidayat.quran.BuildConfig.UPDATER_ENABLED) {
+                                        val latest = stringResource(R.string.update_latest)
+                                        val failedCheck = stringResource(R.string.update_check_failed)
+                                        item(
+                                            title = stringResource(R.string.version),
+                                            subtitle = stringResource(R.string.update_check_sub, version),
+                                            onClick = {
+                                                vm.checkForUpdate(manual = true) { found ->
+                                                    when (found) {
+                                                        false -> scope.launch { snackbar.showSnackbar(latest) }
+                                                        null -> scope.launch { snackbar.showSnackbar(failedCheck) }
+                                                        true -> Unit // dialog pembaruan tampil
+                                                    }
+                                                }
+                                            },
+                                            trailing = { Icon(Icons.Default.Refresh, contentDescription = null) },
+                                        )
+                                    } else {
+                                        item(title = stringResource(R.string.version), subtitle = version)
+                                    }
+                                    item(
+                                        title = stringResource(R.string.data_source),
+                                        subtitle = stringResource(R.string.data_source_sub),
+                                    )
+                                    item(
+                                        title = stringResource(R.string.font),
+                                        subtitle = stringResource(R.string.font_sub),
+                                    )
+                                    item(
+                                        title = stringResource(R.string.credits),
+                                        subtitle = stringResource(R.string.credits_sub),
+                                        onClick = { openUrl(context, "https://qul.tarteel.ai/credits") },
+                                        trailing = { Icon(AppIcons.OpenInNew, contentDescription = null) },
+                                    )
+                                    item(
+                                        title = stringResource(R.string.support),
+                                        subtitle = stringResource(R.string.support_sub),
+                                        onClick = { openUrl(context, "https://ko-fi.com/zakkyhidayat") },
+                                        leading = { Icon(AppIcons.Favorite, contentDescription = null) },
+                                        trailing = { Icon(AppIcons.OpenInNew, contentDescription = null) },
+                                    )
+                                }
+
+                            }
                         }
                     }
                 }
             }
         }
+    }
+}
+
+/** Halaman utama: bahasa, lalu kategori dengan ringkasan isinya. */
+@Composable
+private fun SettingsMain(settings: AppSettings, onOpen: (SettingsPage) -> Unit) {
+    LanguageSection(showTitle = false)
+    Spacer(Modifier.height(16.dp))
+    val theme = stringResource(
+        when (settings.themeMode) {
+            ThemeMode.System -> R.string.theme_system
+            ThemeMode.Light -> R.string.theme_light
+            ThemeMode.Dark -> R.string.theme_dark
+        },
+    )
+    Group {
+        item(
+            title = stringResource(R.string.appearance),
+            subtitle = stringResource(R.string.settings_appearance_sub, theme),
+            onClick = { onOpen(SettingsPage.Appearance) },
+            leading = { Icon(AppIcons.Palette, contentDescription = null) },
+            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
+        )
+        item(
+            title = stringResource(R.string.translations),
+            subtitle = stringResource(R.string.settings_translations_sub, settings.translationIds.size),
+            onClick = { onOpen(SettingsPage.Translations) },
+            leading = { Icon(AppIcons.Translate, contentDescription = null) },
+            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
+        )
+        item(
+            title = stringResource(R.string.backup),
+            subtitle = stringResource(if (settings.autoBackupUri != null) R.string.settings_backup_on else R.string.settings_backup_sub),
+            onClick = { onOpen(SettingsPage.Backup) },
+            leading = { Icon(AppIcons.Backup, contentDescription = null) },
+            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
+        )
+        item(
+            title = stringResource(R.string.permissions),
+            subtitle = stringResource(R.string.settings_permissions_sub),
+            onClick = { onOpen(SettingsPage.Permissions) },
+            leading = { Icon(AppIcons.Shield, contentDescription = null) },
+            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
+        )
+        item(
+            title = stringResource(R.string.about),
+            subtitle = stringResource(R.string.settings_about_sub),
+            onClick = { onOpen(SettingsPage.About) },
+            leading = { Icon(Icons.Default.Info, contentDescription = null) },
+            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
+        )
     }
 }
 
@@ -410,7 +459,8 @@ internal fun LanguageSection(showTitle: Boolean = true) {
     if (showTitle) SectionTitle(AppIcons.Translate, stringResource(R.string.language))
     Group {
         item(
-            title = options.first { it.first == code }.second,
+            title = stringResource(R.string.language),
+            subtitle = options.first { it.first == code }.second,
             onClick = { open = true },
             leading = { Icon(AppIcons.Translate, contentDescription = null) },
         )

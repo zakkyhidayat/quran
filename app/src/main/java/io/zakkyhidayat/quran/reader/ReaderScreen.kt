@@ -1,5 +1,6 @@
 package io.zakkyhidayat.quran.reader
 
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.graphics.luminance
@@ -129,7 +130,8 @@ private const val PageHeightOverWidth = 250f / 176f
 fun ReaderScreen(
     vm: AppViewModel,
     settings: AppSettings,
-    onOpenIndex: (() -> Unit)?,
+    /** Kembali ke daftar (ponsel); null di layar lebar, karena daftar tampil di samping. */
+    onBack: (() -> Unit)?,
     onOpenSearch: () -> Unit,
     onOpenSettings: () -> Unit,
     onOpenSurahInfo: (Int) -> Unit,
@@ -213,8 +215,8 @@ fun ReaderScreen(
                     }
                 },
                 navigationIcon = {
-                    if (onOpenIndex != null) {
-                        IconButton(onClick = onOpenIndex) { Icon(Icons.Default.Menu, contentDescription = stringResource(R.string.index_cd)) }
+                    if (onBack != null) {
+                        IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back)) }
                     }
                 },
                 actions = {
