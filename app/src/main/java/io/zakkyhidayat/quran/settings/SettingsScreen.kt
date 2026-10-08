@@ -652,6 +652,13 @@ private fun ReminderControls(vm: AppViewModel, settings: AppSettings) {
             leading = { Icon(AppIcons.Alarm, contentDescription = null) },
             trailing = { IconSwitch(settings.reminderEnabled) },
         )
+        // Build debug saja: tampilkan pengingat sekarang untuk menguji isi dan ketukannya.
+        if (settings.reminderEnabled && io.zakkyhidayat.quran.BuildConfig.DEBUG) {
+            item(
+                title = "Kirim pengingat uji",
+                onClick = { scope.launch { io.zakkyhidayat.quran.reminder.Reminder.notify(context) } },
+            )
+        }
         if (settings.reminderEnabled) {
             item(
                 title = stringResource(R.string.reminder_time),
