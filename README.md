@@ -58,6 +58,8 @@ Choices made on purpose:
 - [ ] Ayah actions in the ayah + translation and translation-only modes: tap an ayah to show bookmark, copy, and share
       buttons; tap again to hide them
 - [ ] Animated transitions between the three reading modes
+      - Between ayah + translation and translation only, try animating the Arabic text in and out (expand/collapse)
+        instead of moving the whole page; needs testing first
 - [ ] A counter in the reader's top bar, between search and bookmark: ayah count within the surah, or progress through
       the current juz, hizb, rub', manzil, or ruku (tap to switch)
 - [ ] Remove the page number below the page in the mushaf view
