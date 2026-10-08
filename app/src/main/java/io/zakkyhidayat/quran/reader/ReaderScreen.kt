@@ -11,30 +11,20 @@ import kotlinx.coroutines.Dispatchers
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.zIndex
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.material3.ToggleButtonDefaults
-import androidx.compose.material3.FilledTonalToggleButton
-import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.animation.togetherWith
-import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.fadeIn
-import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedContent
 import kotlinx.coroutines.launch
 import io.zakkyhidayat.quran.settings.ReadingMode
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.material3.Surface
-import androidx.compose.material3.TextButton
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.res.stringResource
 import io.zakkyhidayat.quran.R
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -416,69 +406,3 @@ fun ReaderScreen(
 }
 
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@Composable
-private fun ReadingModeBar(mode: ReadingMode, onSelect: (ReadingMode) -> Unit) {
-    val options = listOf(
-        Triple(ReadingMode.Mushaf, R.string.mode_mushaf, AppIcons.MenuBook),
-        Triple(ReadingMode.AyahTranslation, R.string.mode_ayah_translation, AppIcons.Translate),
-        Triple(ReadingMode.Translation, R.string.mode_translation, AppIcons.Notes),
-    )
-    // Button group tersambung: bentuk tombol berubah (morph) dan label muncul saat dipilih.
-    Row(
-        Modifier.fillMaxWidth().padding(vertical = 8.dp).selectableGroup(),
-        horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween, Alignment.CenterHorizontally),
-    ) {
-        options.forEachIndexed { index, (value, label, icon) ->
-            val checked = mode == value
-            val name = stringResource(label)
-            FilledTonalToggleButton(
-                checked = checked,
-                onCheckedChange = { if (!checked) onSelect(value) },
-                shapes = when (index) {
-                    0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
-                    options.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
-                    else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
-                },
-                modifier = Modifier.semantics {
-                    role = Role.RadioButton
-                    if (!checked) contentDescription = name
-                },
-            ) {
-                Icon(icon, contentDescription = null, modifier = Modifier.size(ToggleButtonDefaults.IconSize))
-                AnimatedVisibility(
-                    visible = checked,
-                    enter = expandHorizontally(MaterialTheme.motionScheme.fastSpatialSpec()) + fadeIn(MaterialTheme.motionScheme.fastEffectsSpec()),
-                    exit = shrinkHorizontally(MaterialTheme.motionScheme.fastSpatialSpec()) + fadeOut(MaterialTheme.motionScheme.fastEffectsSpec()),
-                ) {
-                    Row {
-                        Spacer(Modifier.size(ToggleButtonDefaults.IconSpacing))
-                        Text(name, maxLines = 1)
-                    }
-                }
-            }
-        }
-    }
-}
-
-// Kartu petunjuk gerakan untuk pengguna baru.
-@Composable
-private fun GestureHint(onDismiss: () -> Unit) {
-    Surface(
-        shape = MaterialTheme.shapes.large,
-        color = MaterialTheme.colorScheme.secondaryContainer,
-        tonalElevation = 3.dp,
-        shadowElevation = 6.dp, // mengambang di atas teks mushaf
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
-    ) {
-        Row(Modifier.padding(start = 16.dp, end = 8.dp, top = 12.dp, bottom = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Text(stringResource(R.string.hint_title), style = MaterialTheme.typography.titleSmall)
-                listOf(R.string.hint_swipe, R.string.hint_tap_ayah, R.string.hint_tap_surah).forEach {
-                    Text("• " + stringResource(it), style = MaterialTheme.typography.bodyMedium)
-                }
-            }
-            TextButton(onClick = onDismiss) { Text(stringResource(R.string.hint_ok)) }
-        }
-    }
-}

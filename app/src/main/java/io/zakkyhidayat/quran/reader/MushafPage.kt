@@ -1,9 +1,6 @@
 package io.zakkyhidayat.quran.reader
 
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.unit.DpSize
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.Dispatchers
@@ -14,8 +11,6 @@ import androidx.compose.ui.platform.LocalFontFamilyResolver
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.res.stringResource
-import io.zakkyhidayat.quran.R
-import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
@@ -47,16 +42,11 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.onClick
-import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
@@ -78,53 +68,6 @@ private const val DEFAULT_LINE_EM = 16.2f
 private const val MIN_LINE_EM = 15.5f
 private const val MAX_LINE_EM = 17f
 private const val FILL_RATIO = 0.995f
-
-@Volatile
-private var fontCache: Set<String>? = null
-
-private fun availableFonts(context: Context): Set<String> =
-    fontCache ?: (context.assets.list("fonts")?.toSet() ?: emptySet()).also { fontCache = it }
-
-internal suspend fun pageFontFamily(context: Context, page: Int, palette: GlyphPalette = GlyphPalette.LightTajweed): FontFamily =
-    if ("p$page.ttf" in availableFonts(context)) PalettedFonts.load(context, "p$page.ttf", palette.index) else FontFamily.Default
-
-internal fun cachedPageFont(page: Int, palette: GlyphPalette): FontFamily? = PalettedFonts.cached("p$page.ttf", palette.index)
-
-/** Siapkan font halaman di sekitar posisi baca (di thread latar belakang) agar geser halaman tidak menunggu disk. */
-internal fun prefetchPageFonts(context: Context, center: Int, palette: GlyphPalette) {
-    val available = availableFonts(context)
-    for (page in listOf(center, center - 1, center + 1, center - 2, center + 2)) {
-        if (page in 1..604 && "p$page.ttf" in available) PalettedFonts.loadBlocking(context, "p$page.ttf", palette.index)
-    }
-}
-
-// quran-common: glyph kaligrafi basmalah (U+FDFD), judul juz (U+E001..E01E), dan kata pembuka juz (U+E900..E91D).
-internal fun commonFontFamily(context: Context): FontFamily = PalettedFonts.loadBlocking(context, "quran-common.ttf", 0)
-
-internal fun juzTitleGlyph(juz: Int): String = (0xE001 + juz - 1).toChar().toString()
-
-internal fun juzOpeningGlyph(juz: Int): String = (0xE900 + juz - 1).toChar().toString()
-
-internal fun surahNameFontFamily(context: Context): FontFamily = PalettedFonts.loadBlocking(context, "surah_names.ttf", 0)
-
-internal suspend fun surahHeaderFontFamily(context: Context, dark: Boolean): FontFamily =
-    // Mode gelap: palet 1 dengan isian bingkai (warna 18, bawaannya hitam) diganti hijau tua (warna 12) agar serasi dengan nomor ayat.
-    if (dark) PalettedFonts.load(context, "QCF_SurahHeader_COLOR-Regular.ttf", 1, listOf(18 to 12))
-    else PalettedFonts.load(context, "QCF_SurahHeader_COLOR-Regular.ttf", 0)
-
-// KFGQPC Hafs Uthmanic Script: font teks Arab Unicode (sheet ayat, basmalah, hasil pencarian).
-internal fun arabicFontFamily(context: Context): FontFamily = PalettedFonts.loadBlocking(context, "UthmanicHafs_V22.ttf", 0)
-
-/**
- * Font antarmuka (nama surah, judul juz, teks Hafs) dimuat sekali di thread latar belakang saat aplikasi mulai, sehingga
- * layar daftar dan lembar ayat tidak memuat font dari aset di thread utama setiap kali disusun ulang (dulu membuat
- * transisi kembali ke daftar kehilangan animasinya).
- */
-internal fun preloadUiFonts(context: Context) {
-    for (name in listOf("surah_names.ttf", "quran-common.ttf", "UthmanicHafs_V22.ttf")) {
-        runCatching { PalettedFonts.loadBlocking(context, name, 0) }
-    }
-}
 
 @Composable
 fun MushafPage(
@@ -198,51 +141,6 @@ fun MushafPage(
         }
     }
 }
-
-// Satu simpul aksesibilitas per surah dan per ayat dengan teks Arab Unicode; ketuk dua kali membuka terjemahan.
-@Composable
-private fun ScreenReaderLayer(
-    lines: List<PageLine>,
-    ayahTexts: List<AyahText>,
-    surahs: Map<Int, Surah>,
-    onAyahClick: (AyahRef) -> Unit,
-    onSurahClick: (Int) -> Unit,
-) {
-    val resources = LocalResources.current
-    val byRef = remember(ayahTexts) { ayahTexts.associateBy { AyahRef(it.surah, it.ayah) } }
-    val seen = HashSet<AyahRef>()
-    Column {
-        lines.forEach { line ->
-            when (line.type) {
-                LineType.SurahName -> surahs[line.surah]?.let { surah ->
-                    Box(
-                        Modifier.size(1.dp).semantics {
-                            heading()
-                            contentDescription = resources.getString(R.string.surah_cd, surah.nameLatin)
-                            onClick(label = resources.getString(R.string.open_surah_info)) { onSurahClick(surah.id); true }
-                        },
-                    )
-                }
-                LineType.Ayah -> line.words.forEach { word ->
-                    val ref = AyahRef(word.surah, word.ayah)
-                    val text = byRef[ref]
-                    if (text != null && seen.add(ref)) {
-                        val name = surahs[ref.surah]?.nameLatin.orEmpty()
-                        Box(
-                            Modifier.size(1.dp).semantics {
-                                role = Role.Button
-                                contentDescription = resources.getString(R.string.ayah_cd, name, ref.ayah, text.text)
-                                onClick(label = resources.getString(R.string.show_translation)) { onAyahClick(ref); true }
-                            },
-                        )
-                    }
-                }
-                LineType.Basmallah -> Box(Modifier.size(1.dp).semantics { contentDescription = "Bismillahirrahmanirrahim" })
-            }
-        }
-    }
-}
-
 
 
 // Basmalah memakai glyph ayat 1:1 dari font halaman 1 (U+FC41..FC44 = bismi / Allahi / alrrahmani / alrraheemi),
@@ -435,18 +333,4 @@ private fun fitFontSize(
     // Lebar baris penuh ~16 em; halaman tanpa baris penuh (hal. 1) dan halaman dengan satu baris pendek memakai dasar itu.
     val widestEm = if (widest == 0) DEFAULT_LINE_EM else (widest / REFERENCE_PX).coerceIn(MIN_LINE_EM, MAX_LINE_EM)
     return with(density) { (widthPx * FILL_RATIO / widestEm).toSp() }
-}
-
-/** true selama layanan eksplorasi sentuh (TalkBack dan sejenisnya) aktif; ikut berubah saat dinyalakan/dimatikan. */
-@Composable
-private fun rememberTouchExplorationEnabled(): Boolean {
-    val context = LocalContext.current
-    val manager = remember { context.getSystemService(android.view.accessibility.AccessibilityManager::class.java) }
-    var enabled by remember { mutableStateOf(manager.isTouchExplorationEnabled) }
-    DisposableEffect(manager) {
-        val listener = android.view.accessibility.AccessibilityManager.TouchExplorationStateChangeListener { enabled = it }
-        manager.addTouchExplorationStateChangeListener(listener)
-        onDispose { manager.removeTouchExplorationStateChangeListener(listener) }
-    }
-    return enabled
 }

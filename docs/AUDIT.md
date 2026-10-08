@@ -85,7 +85,7 @@ Diisi 2026-10-08 berdasarkan kode dan dokumen di repo. Perbarui setiap rilis. `[
 - [x] Android Lint di CI (`lint-baseline.xml` untuk 39 peringatan lama; temuan baru menggagalkan build)
 - [x] CI: integritas konten, teks antarmuka, unit test, lint, build debug (`.github/workflows/ci.yml`)
 - [~] R8 aktif; build setara rilis diuji berjalan normal di perangkat
-- [~] File besar: `SettingsScreen.kt`, `ReaderScreen.kt`, `MushafPage.kt` perlu dipecah
+- [x] File layar besar dipecah per bagian (pengaturan, kontrol pembaca, font, aksesibilitas)
 - [x] Tidak ada pelaporan crash (tidak ada data dikirim)
 
 ## 9. Aksesibilitas
@@ -138,7 +138,7 @@ docs/CONTENT_ERRORS.md.
 | 11 | 9 | Ukuran font Arab/terjemahan belum bisa diatur | Sedang | Selesai |
 | 12 | 5 | Belum diuji di Android 8 (API 26), layar kecil, rotasi | Sedang | Selesai |
 | 13 | 3 | `page-fonts.zip` belum diunggah ke rilis `build-assets` | Sedang | Menunggu izin pemilik |
-| 14 | 8 | Linter belum ada; file layar terlalu besar | Rendah | Lint selesai; pemecahan file belum |
+| 14 | 8 | Linter belum ada; file layar terlalu besar | Rendah | Selesai |
 | 15 | 11 | ADR, screenshot README | Rendah | ADR selesai; screenshot belum |
 | 16 | 1 | Pencarian Arab tidak menemukan ejaan mushaf (إبراهيم, الصلاة: 0 hasil) | Tinggi | Selesai (ditemukan unit test) |
 | 17 | 8 | Lint: teks dari LocalContext di komposisi, Locale.getDefault di komponen | Sedang | Selesai |
