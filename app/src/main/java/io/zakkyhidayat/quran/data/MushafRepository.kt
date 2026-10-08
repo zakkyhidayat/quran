@@ -7,6 +7,7 @@ import kotlinx.coroutines.withContext
 
 class MushafRepository(context: Context) {
     private val db = ContentDatabase.get(context)
+    private val packs = TranslationPacks(context)
 
     @Volatile private var surahCache: Map<Int, Surah>? = null
     private val markerCache = java.util.concurrent.ConcurrentHashMap<MarkerKind, List<Marker>>()
@@ -110,7 +111,25 @@ class MushafRepository(context: Context) {
         db.rawQuery("SELECT id, lang, name FROM translations ORDER BY rowid", null).use { c ->
             while (c.moveToNext()) list += TranslationInfo(c.getString(0), c.getString(1), c.getString(2))
         }
+        val bundled = list.map { it.id }.toSet()
+        list += packs.installed().filter { it.id !in bundled }
         list.also { translationCache = it }
+    }
+
+    /** Katalog paket yang bisa diunduh; melempar IOException bila gagal (offline, server, isi tidak valid). */
+    suspend fun catalog(): List<CatalogPack> = packs.catalog()
+
+    suspend fun installPack(pack: CatalogPack, onProgress: (Long, Long) -> Unit = { _, _ -> }) {
+        try {
+            packs.install(pack, onProgress)
+        } finally {
+            translationCache = null
+        }
+    }
+
+    suspend fun deletePack(id: String) = withContext(Dispatchers.IO) {
+        packs.delete(id)
+        translationCache = null
     }
 
     // Ayat yang punya kata di halaman ini (termasuk lanjutan dari halaman sebelumnya), untuk pembaca layar.
@@ -173,15 +192,14 @@ class MushafRepository(context: Context) {
         val infos = translations().associateBy { it.id }
         val texts = translationIds.mapNotNull { id ->
             val info = infos[id] ?: return@mapNotNull null
-            val text = db.rawQuery(
-                "SELECT text FROM translation_texts WHERE tr = ? AND surah = ? AND ayah = ?",
-                arrayOf(id, key[0], key[1]),
-            ).use { if (it.moveToFirst()) it.getString(0) else "" }
+            // Terjemahan bawaan ada di quran.db (kolom tr); paket unduhan punya berkas sendiri tanpa kolom tr.
+            val source = if (info.downloaded) packs.database(id) ?: return@mapNotNull null else db
+            val args = if (info.downloaded) key else arrayOf(id, key[0], key[1])
+            val where = if (info.downloaded) "surah = ? AND ayah = ?" else "tr = ? AND surah = ? AND ayah = ?"
+            val text = source.rawQuery("SELECT text FROM translation_texts WHERE $where", args)
+                .use { if (it.moveToFirst()) it.getString(0) else "" }
             val notes = mutableListOf<Footnote>()
-            db.rawQuery(
-                "SELECT label, text FROM footnotes WHERE tr = ? AND surah = ? AND ayah = ? ORDER BY idx",
-                arrayOf(id, key[0], key[1]),
-            ).use { c -> while (c.moveToNext()) notes += Footnote(if (c.isNull(0)) null else c.getInt(0), c.getString(1)) }
+            source.rawQuery("SELECT label, text FROM footnotes WHERE $where ORDER BY idx", args).use { c -> while (c.moveToNext()) notes += Footnote(if (c.isNull(0)) null else c.getInt(0), c.getString(1)) }
             TranslationText(info, text, notes)
         }
         val transliteration = db.rawQuery("SELECT text FROM transliteration WHERE surah = ? AND ayah = ?", key)
@@ -224,18 +242,32 @@ class MushafRepository(context: Context) {
         withContext(Dispatchers.IO) {
             val needle = query.trim().lowercase()
             if (needle.length < 2) return@withContext emptyList()
-            val names = translations().associate { it.id to it.name }
+            val infos = translations().associateBy { it.id }
             val results = mutableListOf<SearchResult>()
             for (id in translationIds) {
-                db.rawQuery(
-                    "SELECT t.surah, t.ayah, a.page, t.text FROM translation_texts t JOIN ayahs a ON a.surah = t.surah AND a.ayah = t.ayah " +
-                        "WHERE t.tr = ? ORDER BY t.surah, t.ayah",
-                    arrayOf(id),
-                ).use { c -> collect(c, needle, names[id] ?: id, results, limit) }
+                val info = infos[id] ?: continue
+                if (info.downloaded) {
+                    // Paket unduhan tidak punya tabel ayahs; halaman dicari dari quran.db hanya untuk ayat yang cocok.
+                    val pack = packs.database(id) ?: continue
+                    val start = results.size
+                    pack.rawQuery("SELECT surah, ayah, 0, text FROM translation_texts ORDER BY surah, ayah", null)
+                        .use { c -> collect(c, needle, info.name, results, limit) }
+                    for (i in start until results.size) results[i] = results[i].copy(page = ayahPageSync(results[i].surah, results[i].ayah))
+                } else {
+                    db.rawQuery(
+                        "SELECT t.surah, t.ayah, a.page, t.text FROM translation_texts t JOIN ayahs a ON a.surah = t.surah AND a.ayah = t.ayah " +
+                            "WHERE t.tr = ? ORDER BY t.surah, t.ayah",
+                        arrayOf(id),
+                    ).use { c -> collect(c, needle, info.name, results, limit) }
+                }
                 if (results.size >= limit) break
             }
             results
         }
+
+    private fun ayahPageSync(surah: Int, ayah: Int): Int =
+        db.rawQuery("SELECT page FROM ayahs WHERE surah = ? AND ayah = ?", arrayOf(surah.toString(), ayah.toString()))
+            .use { if (it.moveToFirst()) it.getInt(0) else 1 }
 
     private fun collect(c: Cursor, needle: String, source: String, out: MutableList<SearchResult>, limit: Int) {
         while (c.moveToNext() && out.size < limit) {

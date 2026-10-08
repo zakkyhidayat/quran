@@ -63,7 +63,7 @@
     <string name="previous_surah_cd">Previous surah: %1$s</string>
     <string name="search_placeholder">Search ayahs, surahs, or 2:255</string>
     <string name="clear">Clear</string>
-    <string name="search_hint">Type words in Indonesian or English, Arabic text, a surah name, or an ayah reference such as 2:255.</string>
+    <string name="search_hint">Type words from your active translations, Arabic text, a surah name, or an ayah reference such as 2:255.</string>
     <string name="no_results">No results.</string>
     <string name="search_surah_sub">%1$d • %2$d ayahs • p. %3$d</string>
     <string name="open_ayah">Open ayah</string>
@@ -111,4 +111,26 @@
     <string name="source_note">Source: Quranic Universal Library (Tarteel).</string>
     <string name="translation_label">%1$s - %2$s</string>
     <string name="amoled">AMOLED</string>
+    <string name="lang_name_ur">Urdu</string>
+    <string name="lang_name_bn">Bengali</string>
+    <string name="lang_name_tr">Turkish</string>
+    <string name="lang_name_fa">Persian</string>
+    <string name="lang_name_ms">Malay</string>
+    <string name="lang_name_fr">French</string>
+    <string name="lang_name_ru">Russian</string>
+    <string name="lang_name_ar">Arabic</string>
+    <string name="translations_loading_cd">Loading translations</string>
+    <string name="translations_catalog_error">Could not load the list of downloadable translations. Check your connection and try again.</string>
+    <string name="retry">Try again</string>
+    <string name="translation_download_failed">Could not download %1$s. Check your connection and try again.</string>
+    <string name="translation_downloading_cd">Downloading %1$s</string>
+    <string name="translation_size_mb">%1$s MB</string>
+    <string name="translation_download_cd">Download %1$s</string>
+    <string name="delete_downloaded_translation_cd">Delete downloaded file for %1$s</string>
+    <string name="translations_all_added">All available translations have been added.</string>
+    <string name="translations_downloadable">Available to download</string>
+    <string name="credits">Credits</string>
+    <string name="credits_sub">Most QUL resources were created by the community: King Fahd Glorious Quran Printing Complex, Tanzil, Quran.com, the translators, and many others. Tap for the full list.</string>
+    <string name="support">Support development</string>
+    <string name="support_sub">Buy the developer a coffee on Ko-fi</string>
 </resources>

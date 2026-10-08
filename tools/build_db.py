@@ -11,8 +11,6 @@ import sqlite3
 import sys
 from pathlib import Path
 
-from fontTools.ttLib import TTFont
-
 ROOT = Path(__file__).resolve().parent.parent
 SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "data-src"
 OUT = Path(sys.argv[2]) if len(sys.argv) > 2 else ROOT / "app/src/main/assets/quran.db"
@@ -216,6 +214,7 @@ def surah_name_glyphs():
 
     Kode sama untuk font nama surah (daftar) dan font header berwarna (bingkai di halaman).
     """
+    from fontTools.ttLib import TTFont  # diimpor di sini agar modul ini bisa dipakai tanpa fontTools
     cmap = TTFont(next((SRC / "surah-names").glob("*.ttf"))).getBestCmap()
     codes = sorted(c for c in cmap if c >= 0xE000)[:114]
     return {sid: codes[(sid - 22) % 114] for sid in range(1, 115)}
@@ -227,6 +226,36 @@ def clean_note(text: str) -> str:
     return html.unescape(text).strip()
 
 
+def parse_translation_row(tr_id, surah, ayah, raw_text, raw_notes, stats):
+    """Teks bersih (penanda catatan jadi <sup>n</sup>) dan daftar (idx, label, catatan) untuk satu ayat."""
+    text = json.loads(raw_text)
+    notes = json.loads(raw_notes) if raw_notes else {}
+    ids = list(notes)  # urutan id naik = urutan kemunculan
+
+    override = TEXT_OVERRIDES.get((tr_id, surah, ayah))
+    if override is not None:
+        text, labels = override, {i: n + 1 for n, i in enumerate(ids)}
+        stats["overrides"] += 1
+    else:
+        if tr_id == "id-sabiq":
+            for old, new in SABIQ_FIXES:
+                text = text.replace(old, new)
+        labels = {}
+        for note_id, label in SUP.findall(text):
+            labels[note_id] = int(label)
+        text = SUP.sub(lambda m: f"<sup>{m.group(2)}</sup>", text)
+        text = html.unescape(text)
+
+    assert "foot_note" not in text and "&lt;" not in text, (tr_id, surah, ayah, text)
+    parsed = []
+    for idx, note_id in enumerate(ids, 1):
+        label = labels.get(note_id)
+        if label is None:
+            stats["unreferenced"] += 1
+        parsed.append((idx, label, clean_note(notes[note_id])))
+    return text.strip(), parsed
+
+
 def build_translation(db, tr_id, folder):
     src = next((SRC / folder).glob("*.db"))
     rows = sqlite3.connect(src).execute(
@@ -234,34 +263,10 @@ def build_translation(db, tr_id, folder):
     ).fetchall()
     stats = {"overrides": 0, "unreferenced": 0}
     for surah, ayah, raw_text, raw_notes in rows:
-        text = json.loads(raw_text)
-        notes = json.loads(raw_notes) if raw_notes else {}
-        ids = list(notes)  # urutan id naik = urutan kemunculan
-
-        override = TEXT_OVERRIDES.get((tr_id, surah, ayah))
-        if override is not None:
-            text, labels = override, {i: n + 1 for n, i in enumerate(ids)}
-            stats["overrides"] += 1
-        else:
-            if tr_id == "id-sabiq":
-                for old, new in SABIQ_FIXES:
-                    text = text.replace(old, new)
-            labels = {}
-            for note_id, label in SUP.findall(text):
-                labels[note_id] = int(label)
-            text = SUP.sub(lambda m: f"<sup>{m.group(2)}</sup>", text)
-            text = html.unescape(text)
-
-        assert "foot_note" not in text and "&lt;" not in text, (tr_id, surah, ayah, text)
-        db.execute("INSERT INTO translation_texts VALUES (?,?,?,?)", (tr_id, surah, ayah, text.strip()))
-        for idx, note_id in enumerate(ids, 1):
-            label = labels.get(note_id)
-            if label is None:
-                stats["unreferenced"] += 1
-            db.execute(
-                "INSERT INTO footnotes VALUES (?,?,?,?,?,?)",
-                (tr_id, surah, ayah, idx, label, clean_note(notes[note_id])),
-            )
+        text, notes = parse_translation_row(tr_id, surah, ayah, raw_text, raw_notes, stats)
+        db.execute("INSERT INTO translation_texts VALUES (?,?,?,?)", (tr_id, surah, ayah, text))
+        for idx, label, note in notes:
+            db.execute("INSERT INTO footnotes VALUES (?,?,?,?,?,?)", (tr_id, surah, ayah, idx, label, note))
     return len(rows), stats
 
 

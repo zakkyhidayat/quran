@@ -40,6 +40,11 @@ SINGLE_FILES = [
     "fonts-extra/UthmanicHafs_V22.ttf",
     "fonts-extra/quran-common.ttf",
 ]
+# Sumber paket terjemahan unduhan (tools/build_translation_packs.py); boleh belum diunduh.
+OPTIONAL_DIRS = [
+    "en-khattab", "en-yusufali", "ur-jalandhari", "bn-mujibur", "tr-diyanet",
+    "fa-islamhouse", "ms-basmeih", "fr-hamidullah", "ru-kuliev",
+]
 PAGE_FONTS = "ttf"  # p1.ttf .. p604.ttf, dihitung sebagai satu entri gabungan
 
 
@@ -47,11 +52,21 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def is_optional(key: str) -> bool:
+    return key.split("/")[0] in OPTIONAL_DIRS
+
+
 def collect() -> dict:
     entries = {}
     for rel in SINGLE_FILES:
         path = SRC / rel
         entries[rel] = {"sha256": sha256(path), "bytes": path.stat().st_size} if path.exists() else None
+    for folder in OPTIONAL_DIRS:
+        db = next(iter(sorted((SRC / folder).glob("*.db"))), None) if (SRC / folder).is_dir() else None
+        if db is not None:
+            entries[f"{folder}/{db.name}"] = {"sha256": sha256(db), "bytes": db.stat().st_size}
+        else:
+            entries[f"{folder}/*.db"] = None
     fonts = [SRC / PAGE_FONTS / f"p{n}.ttf" for n in range(1, 605)]
     present = [f for f in fonts if f.exists()]
     if len(present) == 604:
@@ -67,10 +82,11 @@ def collect() -> dict:
 def main() -> int:
     current = collect()
     if "--write" in sys.argv:
-        missing = [k for k, v in current.items() if v is None]
+        missing = [k for k, v in current.items() if v is None and not is_optional(k)]
         if missing:
             print("Tidak bisa menulis manifest, berkas belum lengkap:", *missing, sep="\n  ")
             return 2
+        current = {k: v for k, v in current.items() if v is not None}
         MANIFEST.parent.mkdir(parents=True, exist_ok=True)
         MANIFEST.write_text(json.dumps(current, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         print(f"Manifest ditulis: {MANIFEST} ({len(current)} entri)")
@@ -80,7 +96,9 @@ def main() -> int:
     problems = 0
     for key, now in current.items():
         before = recorded.get(key)
-        if now is None:
+        if now is None and is_optional(key) and not any(k.startswith(key.split("/")[0] + "/") for k in recorded):
+            print(f"BELUM DIUNDUH {key}")
+        elif now is None:
             print(f"HILANG   {key}")
             problems += 1
         elif before is None:

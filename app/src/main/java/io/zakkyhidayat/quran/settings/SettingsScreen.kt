@@ -13,6 +13,10 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.RadioButton
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -206,37 +210,27 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
                             title = translationLabel(tr),
                             trailing = {
                                 IconButton(
-                                    enabled = active.size > 1,
                                     onClick = { scope.launch { repo.setTranslations(ordered.filter { it in settings.translationIds && it != tr.id }) } },
                                 ) { Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete_translation_cd, translationLabel(tr))) }
                             },
                         )
                     }
                 }
-                if (inactive.isNotEmpty()) {
-                    FilledTonalButton(onClick = { showAddTranslation = true }, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
-                        Icon(Icons.Default.Add, contentDescription = null)
-                        Text("  " + stringResource(R.string.add_translation))
-                    }
+                FilledTonalButton(onClick = { showAddTranslation = true }, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
+                    Icon(Icons.Default.Add, contentDescription = null)
+                    Text("  " + stringResource(R.string.add_translation))
                 }
                 if (showAddTranslation) {
-                    AlertDialog(
-                        onDismissRequest = { showAddTranslation = false },
-                        title = { Text(stringResource(R.string.add_translation)) },
-                        text = {
-                            Column {
-                                inactive.forEach { tr ->
-                                    TextButton(
-                                        onClick = {
-                                            scope.launch { repo.setTranslations(ordered.filter { it in settings.translationIds || it == tr.id }) }
-                                            showAddTranslation = false
-                                        },
-                                        modifier = Modifier.fillMaxWidth(),
-                                    ) { Text(translationLabel(tr), modifier = Modifier.fillMaxWidth()) }
-                                }
-                            }
+                    AddTranslationDialog(
+                        vm = vm,
+                        inactive = inactive,
+                        onActivate = { id ->
+                            // Urutan mengikuti daftar terjemahan terbaru (paket yang baru diunduh sudah masuk).
+                            val all = vm.translations.value.map { it.id }
+                            scope.launch { repo.setTranslations(all.filter { it in settings.translationIds || it == id }) }
+                            showAddTranslation = false
                         },
-                        confirmButton = { TextButton(onClick = { showAddTranslation = false }) { Text(stringResource(R.string.close)) } },
+                        onDismiss = { showAddTranslation = false },
                     )
                 }
 
@@ -250,6 +244,19 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
                     item(
                         title = stringResource(R.string.font),
                         subtitle = stringResource(R.string.font_sub),
+                    )
+                    item(
+                        title = stringResource(R.string.credits),
+                        subtitle = stringResource(R.string.credits_sub),
+                        onClick = { openUrl(context, "https://qul.tarteel.ai/credits") },
+                        trailing = { Icon(AppIcons.OpenInNew, contentDescription = null) },
+                    )
+                    item(
+                        title = stringResource(R.string.support),
+                        subtitle = stringResource(R.string.support_sub),
+                        onClick = { openUrl(context, "https://ko-fi.com/zakkyhidayat") },
+                        leading = { Icon(AppIcons.Favorite, contentDescription = null) },
+                        trailing = { Icon(AppIcons.OpenInNew, contentDescription = null) },
                     )
                 }
             }
@@ -383,28 +390,71 @@ private fun Labeled(label: String, content: @Composable () -> Unit) {
 }
 
 @Composable
-private fun translationLabel(tr: io.zakkyhidayat.quran.data.TranslationInfo): String {
+internal fun translationLabel(tr: io.zakkyhidayat.quran.data.TranslationInfo): String {
     val language = when (tr.lang) {
         "id" -> stringResource(R.string.lang_name_id)
         "en" -> stringResource(R.string.lang_name_en)
+        "ur" -> stringResource(R.string.lang_name_ur)
+        "bn" -> stringResource(R.string.lang_name_bn)
+        "tr" -> stringResource(R.string.lang_name_tr)
+        "fa" -> stringResource(R.string.lang_name_fa)
+        "ms" -> stringResource(R.string.lang_name_ms)
+        "fr" -> stringResource(R.string.lang_name_fr)
+        "ru" -> stringResource(R.string.lang_name_ru)
+        "ar" -> stringResource(R.string.lang_name_ar)
         else -> tr.lang
     }
     return stringResource(R.string.translation_label, language, tr.name)
+}
+
+private fun openUrl(context: android.content.Context, url: String) {
+    runCatching { context.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url))) }
 }
 
 @Composable
 private fun LanguageSection() {
     val context = LocalContext.current
     var code by remember { mutableStateOf(AppLanguage.saved(context)) }
+    var open by rememberSaveable { mutableStateOf(false) }
+    // Nama bahasa ditulis dalam bahasanya sendiri agar mudah ditemukan apa pun bahasa yang sedang aktif.
+    val systemLabel = stringResource(R.string.language_system)
+    val options = listOf("" to systemLabel) + AppLanguage.supported.map { it to AppLanguage.endonyms.getValue(it) }
     SectionTitle(AppIcons.Translate, stringResource(R.string.language))
-    val options = listOf("" to stringResource(R.string.language_system), "id" to "Indonesia", "en" to "English")
-    SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-        options.forEachIndexed { i, (value, label) ->
-            SegmentedButton(
-                selected = code == value,
-                onClick = { if (code != value) { code = value; AppLanguage.apply(context, value) } },
-                shape = SegmentedButtonDefaults.itemShape(i, options.size),
-            ) { Text(label, maxLines = 1) }
-        }
+    Group {
+        item(
+            title = options.first { it.first == code }.second,
+            onClick = { open = true },
+            leading = { Icon(AppIcons.Translate, contentDescription = null) },
+        )
+    }
+    if (open) {
+        AlertDialog(
+            onDismissRequest = { open = false },
+            title = { Text(stringResource(R.string.language)) },
+            text = {
+                Column(Modifier.verticalScroll(rememberScrollState()).selectableGroup()) {
+                    options.forEach { (value, label) ->
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 48.dp)
+                                .selectable(selected = code == value, role = Role.RadioButton) {
+                                    open = false
+                                    if (code != value) {
+                                        code = value
+                                        AppLanguage.apply(context, value)
+                                    }
+                                },
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            RadioButton(selected = code == value, onClick = null)
+                            Spacer(Modifier.width(16.dp))
+                            Text(label, style = MaterialTheme.typography.bodyLarge)
+                        }
+                    }
+                }
+            },
+            confirmButton = { TextButton(onClick = { open = false }) { Text(stringResource(R.string.close)) } },
+        )
     }
 }

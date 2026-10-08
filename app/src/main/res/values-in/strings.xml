@@ -62,7 +62,7 @@
     <string name="previous_surah_cd">Surah sebelumnya: %1$s</string>
     <string name="search_placeholder">Cari ayat, surah, atau 2:255</string>
     <string name="clear">Bersihkan</string>
-    <string name="search_hint">Ketik kata dalam bahasa Indonesia atau Inggris, teks Arab, nama surah, atau rujukan ayat seperti 2:255.</string>
+    <string name="search_hint">Ketik kata dari terjemahan yang aktif, teks Arab, nama surah, atau rujukan ayat seperti 2:255.</string>
     <string name="no_results">Tidak ada hasil.</string>
     <string name="search_surah_sub">%1$d • %2$d ayat • Hal. %3$d</string>
     <string name="open_ayah">Buka ayat</string>
@@ -110,4 +110,26 @@
     <string name="source_note">Sumber: Quranic Universal Library (Tarteel).</string>
     <string name="translation_label">%1$s - %2$s</string>
     <string name="amoled">AMOLED</string>
+    <string name="lang_name_ur">Urdu</string>
+    <string name="lang_name_bn">Bengali</string>
+    <string name="lang_name_tr">Turki</string>
+    <string name="lang_name_fa">Persia</string>
+    <string name="lang_name_ms">Melayu</string>
+    <string name="lang_name_fr">Prancis</string>
+    <string name="lang_name_ru">Rusia</string>
+    <string name="lang_name_ar">Arab</string>
+    <string name="translations_loading_cd">Memuat terjemahan</string>
+    <string name="translations_catalog_error">Daftar terjemahan yang bisa diunduh tidak dapat dimuat. Periksa koneksi lalu coba lagi.</string>
+    <string name="retry">Coba lagi</string>
+    <string name="translation_download_failed">%1$s gagal diunduh. Periksa koneksi lalu coba lagi.</string>
+    <string name="translation_downloading_cd">Mengunduh %1$s</string>
+    <string name="translation_size_mb">%1$s MB</string>
+    <string name="translation_download_cd">Unduh %1$s</string>
+    <string name="delete_downloaded_translation_cd">Hapus berkas unduhan %1$s</string>
+    <string name="translations_all_added">Semua terjemahan yang tersedia sudah ditambahkan.</string>
+    <string name="translations_downloadable">Tersedia untuk diunduh</string>
+    <string name="credits">Kredit</string>
+    <string name="credits_sub">Sebagian besar sumber di QUL dibuat komunitas: Kompleks Percetakan Al-Qur’an Raja Fahd, Tanzil, Quran.com, para penerjemah, dan banyak lagi. Ketuk untuk daftar lengkap.</string>
+    <string name="support">Dukung pengembangan</string>
+    <string name="support_sub">Traktir kopi pengembang lewat Ko-fi</string>
 </resources>

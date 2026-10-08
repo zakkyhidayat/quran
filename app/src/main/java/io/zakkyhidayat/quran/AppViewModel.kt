@@ -5,12 +5,15 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import io.zakkyhidayat.quran.data.AyahDetail
 import io.zakkyhidayat.quran.data.AyahRef
+import io.zakkyhidayat.quran.data.CatalogPack
 import io.zakkyhidayat.quran.data.Marker
 import io.zakkyhidayat.quran.data.MarkerKind
 import io.zakkyhidayat.quran.data.PageMeta
 import io.zakkyhidayat.quran.data.Surah
 import io.zakkyhidayat.quran.data.TranslationInfo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -61,6 +64,24 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             manzil.value = mushaf.markers(MarkerKind.Manzil)
             sajda.value = mushaf.markers(MarkerKind.Sajda)
             pageMeta.value = mushaf.pageMeta()
+            translations.value = mushaf.translations()
+        }
+    }
+
+    suspend fun catalog(): List<CatalogPack> = mushaf.catalog()
+
+    /** Unduh dan pasang paket, lalu segarkan daftar terjemahan. Melempar IOException bila gagal. */
+    suspend fun installPack(pack: CatalogPack, onProgress: (Long, Long) -> Unit = { _, _ -> }) {
+        try {
+            mushaf.installPack(pack, onProgress)
+        } finally {
+            withContext(NonCancellable) { translations.value = mushaf.translations() }
+        }
+    }
+
+    fun deletePack(id: String) {
+        viewModelScope.launch {
+            mushaf.deletePack(id)
             translations.value = mushaf.translations()
         }
     }

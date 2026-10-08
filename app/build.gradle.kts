@@ -24,6 +24,8 @@ android {
         targetSdk = 37
         versionCode = semver.first * 10000 + semver.second * 100 + semver.third
         versionName = "${semver.first}.${semver.second}.${semver.third}"
+        // Katalog paket terjemahan unduhan; paket diambil relatif terhadap alamat ini (lihat docs/DATA_SOURCES.md).
+        buildConfigField("String", "TRANSLATION_CATALOG_URL", "\"https://github.com/zakkyhidayat/quran/releases/download/translations/catalog.json\"")
     }
 
     buildTypes {
@@ -36,6 +38,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     compileOptions {

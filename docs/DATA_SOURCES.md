@@ -39,6 +39,45 @@ Pilih varian **`with-footnote-tags`** untuk terjemahan (catatan kaki ditandai di
 **tidak dipakai**: `qpc-v4.json` (sama dengan `qpc-v4.db`), `transliteration-simple.db` (kata menempel),
 `pages.zip` (dokumen docx), varian ke-2 `surah_names.ttfv2` (identik dengan yang ada).
 
+## Paket terjemahan unduhan
+
+Selain empat terjemahan yang dibundel di `quran.db`, aplikasi bisa mengunduh terjemahan tambahan. QUL tidak punya API dan
+butuh login, jadi aplikasi tidak mengunduh dari QUL. Pemelihara mengunduh berkas QUL secara manual, mengubahnya jadi paket
+kecil dengan `tools/build_translation_packs.py`, lalu menaruhnya di GitHub Releases (tag `translations`). Aplikasi membaca
+`catalog.json` dari rilis itu (alamatnya `TRANSLATION_CATALOG_URL` di `app/build.gradle.kts`), mengunduh paket, memeriksa
+sha256 dan jumlah ayat (6236), lalu menyimpannya di `filesDir/translations/`.
+
+| Id paket | Bahasa | Terjemahan | Halaman QUL | Simpan ke (di `data-src/`) |
+|----------|--------|------------|-------------|----------------------------|
+| `en-khattab` | en | Dr. Mustafa Khattab, The Clear Quran | [translation/426](https://qul.tarteel.ai/resources/translation/426) | `en-khattab/` |
+| `en-yusufali` | en | Abdullah Yusuf Ali | [translation/124](https://qul.tarteel.ai/resources/translation/124) | `en-yusufali/` |
+| `ur-jalandhari` | ur | Fatah Muhammad Jalandhari | [translation/218](https://qul.tarteel.ai/resources/translation/218) | `ur-jalandhari/` |
+| `bn-mujibur` | bn | Sheikh Mujibur Rahman | [translation/186](https://qul.tarteel.ai/resources/translation/186) | `bn-mujibur/` |
+| `tr-diyanet` | tr | Diyanet | [translation/148](https://qul.tarteel.ai/resources/translation/148) | `tr-diyanet/` |
+| `fa-islamhouse` | fa | IslamHouse.com | [translation/169](https://qul.tarteel.ai/resources/translation/169) | `fa-islamhouse/` |
+| `ms-basmeih` | ms | Abdul Hameed and Kunhi | [translation/130](https://qul.tarteel.ai/resources/translation/130) | `ms-basmeih/` |
+| `fr-hamidullah` | fr | Muhammad Hamidullah | [translation/227](https://qul.tarteel.ai/resources/translation/227) | `fr-hamidullah/` |
+| `ru-kuliev` | ru | Elmir Kuliev | [translation/136](https://qul.tarteel.ai/resources/translation/136) | `ru-kuliev/` |
+
+Simpan berkas SQLite hasil unduhan (satu `.db` per folder, nama bebas). Dua varian QUL dikenali otomatis: `with-footnote-tags`
+(catatan kaki ikut dibaca dengan parser yang sama dengan `build_db.py`) dan `simple` (teks polos, tanpa catatan kaki).
+Sumber yang belum diunduh dilewati dengan pesan, dan `tools/data_manifest.py` menampilkannya sebagai `BELUM DIUNDUH` (bukan galat).
+
+Membangun dan mengunggah:
+
+```bash
+python tools/build_translation_packs.py              # semua yang sumbernya ada; atau sebut id: ... en-khattab ur-jalandhari
+# hasil: build/translation-packs/<id>.db dan catalog.json (tidak masuk git)
+
+# pertama kali: buat rilis (tag translations)
+gh release create translations build/translation-packs/* --title "Paket terjemahan" --notes "Paket terjemahan unduhan untuk aplikasi"
+# pembaruan berikutnya
+gh release upload translations build/translation-packs/* --clobber
+```
+
+Untuk menambah paket baru, tambahkan barisnya di `PACKS` pada `tools/build_translation_packs.py` (dan folder di `OPTIONAL_DIRS`
+pada `tools/data_manifest.py`), bangun, unggah ulang `catalog.json`. Naikkan `PACK_VERSION` bila isi paket yang sama berubah.
+
 ## Kapan harus memperbarui
 
 QUL tidak memberi pemberitahuan. Periksa sendiri:

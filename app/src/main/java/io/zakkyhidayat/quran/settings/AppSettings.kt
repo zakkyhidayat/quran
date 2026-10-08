@@ -59,9 +59,13 @@ class SettingsRepository(private val context: Context) {
         )
     }
 
-    // Terjemahan awal mengikuti bahasa aplikasi; selain Indonesia memakai Inggris.
-    private fun defaultTranslations() =
-        if (io.zakkyhidayat.quran.AppLanguage.effective(context) == "id") listOf("id-kemenag") else listOf("en-sahih")
+    // Terjemahan awal mengikuti bahasa aplikasi: Indonesia memakai Kemenag, Arab tanpa terjemahan, selain itu Inggris.
+    // Daftar kosong yang disimpan pengguna tetap kosong (nilai tersimpan "" bukan null, jadi tidak jatuh ke bawaan).
+    private fun defaultTranslations() = when (io.zakkyhidayat.quran.AppLanguage.effective(context)) {
+        "id" -> listOf("id-kemenag")
+        "ar" -> emptyList()
+        else -> listOf("en-sahih")
+    }
 
     suspend fun setThemeMode(value: ThemeMode) = context.dataStore.edit { it[themeKey] = value.name }
 
