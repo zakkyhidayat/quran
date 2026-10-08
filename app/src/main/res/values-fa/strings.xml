@@ -178,4 +178,14 @@
     <string name="update_check_sub">%1$s • برای بررسی به‌روزرسانی ضربه بزنید</string>
     <string name="update_latest">آخرین نسخه را دارید</string>
     <string name="update_check_failed">بررسی به‌روزرسانی ممکن نشد. اتصال را بررسی کنید.</string>
+    <string name="reminder">یادآور خواندن</string>
+    <string name="reminder_daily">یادآور روزانه</string>
+    <string name="reminder_off_sub">هر روز اعلانی دربارهٔ بخشی که می‌خوانید</string>
+    <string name="reminder_on_sub">هر روز ساعت %1$s</string>
+    <string name="reminder_time">زمان یادآوری</string>
+    <string name="reminder_unit">بخش روزانه</string>
+    <string name="reminder_channel">یادآورهای خواندن</string>
+    <string name="reminder_title">وقت خواندن: %1$s</string>
+    <string name="reminder_text">ادامه از %1$s %2$d:%3$d</string>
+    <string name="ok">تأیید</string>
 </resources>

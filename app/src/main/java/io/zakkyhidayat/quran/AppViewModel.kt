@@ -78,6 +78,13 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             restoreActiveTranslations()
         }
         autoBackup()
+        // Pasang ulang jadwal pengingat setiap kali pengaturannya berubah (termasuk saat aplikasi dibuka).
+        viewModelScope.launch {
+            settingsRepository.settings
+                .map { Triple(it.reminderEnabled, it.reminderMinutes, it.reminderUnit) }
+                .distinctUntilChanged()
+                .collect { io.zakkyhidayat.quran.reminder.Reminder.schedule(getApplication(), settingsRepository.settings.first()) }
+        }
         if (BuildConfig.UPDATER_ENABLED) checkForUpdate(manual = false)
     }
 

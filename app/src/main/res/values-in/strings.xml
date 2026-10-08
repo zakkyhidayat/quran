@@ -178,4 +178,14 @@
     <string name="update_check_sub">%1$s • ketuk untuk cek pembaruan</string>
     <string name="update_latest">Anda memakai versi terbaru</string>
     <string name="update_check_failed">Tidak bisa mengecek pembaruan. Periksa koneksi.</string>
+    <string name="reminder">Pengingat membaca</string>
+    <string name="reminder_daily">Pengingat harian</string>
+    <string name="reminder_off_sub">Notifikasi setiap hari berisi bagian yang sedang Anda baca</string>
+    <string name="reminder_on_sub">Setiap hari pukul %1$s</string>
+    <string name="reminder_time">Jam pengingat</string>
+    <string name="reminder_unit">Bagian harian</string>
+    <string name="reminder_channel">Pengingat membaca</string>
+    <string name="reminder_title">Waktunya membaca: %1$s</string>
+    <string name="reminder_text">Lanjutkan dari %1$s %2$d:%3$d</string>
+    <string name="ok">OK</string>
 </resources>

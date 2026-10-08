@@ -73,6 +73,10 @@ class MushafRepository(context: Context) {
     suspend fun juz(): List<Marker> = markers(MarkerKind.Juz)
 
     // Bagian yang memuat ayat ini: penanda terakhir yang dimulai pada atau sebelum ayat tersebut.
+    /** Nomor bagian (juz/hizb/manzil/...) yang memuat ayat ini. */
+    suspend fun markerContaining(kind: MarkerKind, surah: Int, ayah: Int): Int =
+        withContext(Dispatchers.IO) { containing(kind.table, surah, ayah) }
+
     private fun containing(table: String, surah: Int, ayah: Int): Int =
         db.rawQuery(
             "SELECT id FROM $table WHERE surah < ? OR (surah = ? AND ayah <= ?) ORDER BY surah DESC, ayah DESC LIMIT 1",

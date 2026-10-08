@@ -178,4 +178,14 @@
     <string name="update_check_sub">%1$s • touchez pour rechercher une mise à jour</string>
     <string name="update_latest">Vous avez la dernière version</string>
     <string name="update_check_failed">Impossible de rechercher les mises à jour. Vérifiez votre connexion.</string>
+    <string name="reminder">Rappel de lecture</string>
+    <string name="reminder_daily">Rappel quotidien</string>
+    <string name="reminder_off_sub">Une notification chaque jour avec la partie que vous lisez</string>
+    <string name="reminder_on_sub">Chaque jour à %1$s</string>
+    <string name="reminder_time">Heure du rappel</string>
+    <string name="reminder_unit">Portion quotidienne</string>
+    <string name="reminder_channel">Rappels de lecture</string>
+    <string name="reminder_title">C’est l’heure de lire : %1$s</string>
+    <string name="reminder_text">Reprendre à %1$s %2$d:%3$d</string>
+    <string name="ok">OK</string>
 </resources>

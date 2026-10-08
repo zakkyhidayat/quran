@@ -178,4 +178,14 @@
     <string name="update_check_sub">%1$s • اپ ڈیٹ چیک کرنے کے لیے تھپتھپائیں</string>
     <string name="update_latest">آپ کے پاس تازہ ترین ورژن ہے</string>
     <string name="update_check_failed">اپ ڈیٹ چیک نہیں ہو سکا۔ کنکشن چیک کریں۔</string>
+    <string name="reminder">پڑھنے کی یاد دہانی</string>
+    <string name="reminder_daily">روزانہ یاد دہانی</string>
+    <string name="reminder_off_sub">ہر روز اس حصے کی اطلاع جو آپ پڑھ رہے ہیں</string>
+    <string name="reminder_on_sub">روزانہ %1$s بجے</string>
+    <string name="reminder_time">یاد دہانی کا وقت</string>
+    <string name="reminder_unit">روزانہ حصہ</string>
+    <string name="reminder_channel">پڑھنے کی یاد دہانیاں</string>
+    <string name="reminder_title">پڑھنے کا وقت: %1$s</string>
+    <string name="reminder_text">%1$s %2$d:%3$d سے جاری رکھیں</string>
+    <string name="ok">ٹھیک ہے</string>
 </resources>

@@ -178,4 +178,14 @@
     <string name="update_check_sub">%1$s • нажмите, чтобы проверить обновления</string>
     <string name="update_latest">У вас последняя версия</string>
     <string name="update_check_failed">Не удалось проверить обновления. Проверьте подключение.</string>
+    <string name="reminder">Напоминание о чтении</string>
+    <string name="reminder_daily">Ежедневное напоминание</string>
+    <string name="reminder_off_sub">Каждый день уведомление о части, которую вы читаете</string>
+    <string name="reminder_on_sub">Каждый день в %1$s</string>
+    <string name="reminder_time">Время напоминания</string>
+    <string name="reminder_unit">Ежедневная часть</string>
+    <string name="reminder_channel">Напоминания о чтении</string>
+    <string name="reminder_title">Время читать: %1$s</string>
+    <string name="reminder_text">Продолжить с %1$s %2$d:%3$d</string>
+    <string name="ok">ОК</string>
 </resources>

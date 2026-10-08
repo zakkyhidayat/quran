@@ -178,4 +178,14 @@
     <string name="update_check_sub">%1$s • اضغط للتحقق من التحديثات</string>
     <string name="update_latest">لديك أحدث إصدار</string>
     <string name="update_check_failed">تعذّر التحقق من التحديثات. تحقّق من الاتصال.</string>
+    <string name="reminder">تذكير القراءة</string>
+    <string name="reminder_daily">تذكير يومي</string>
+    <string name="reminder_off_sub">إشعار يومي بالجزء الذي تقرؤه</string>
+    <string name="reminder_on_sub">كل يوم الساعة %1$s</string>
+    <string name="reminder_time">وقت التذكير</string>
+    <string name="reminder_unit">الورد اليومي</string>
+    <string name="reminder_channel">تذكيرات القراءة</string>
+    <string name="reminder_title">حان وقت القراءة: %1$s</string>
+    <string name="reminder_text">تابع من %1$s %2$d:%3$d</string>
+    <string name="ok">حسنًا</string>
 </resources>

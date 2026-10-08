@@ -18,6 +18,9 @@ enum class ColorMode { Original, Dynamic }
 
 enum class ContrastLevel { Standard, Medium, High }
 
+/** Satuan bagian harian untuk pengingat membaca. */
+enum class ReminderUnit { Juz, Hizb, Manzil }
+
 /** Cara baca, berlaku untuk semua surah: halaman mushaf, ayat dengan terjemahan, atau terjemahan saja. */
 enum class ReadingMode { Mushaf, AyahTranslation, Translation }
 
@@ -36,6 +39,10 @@ data class AppSettings(
     val autoBackupUri: String? = null,
     /** Waktu cadangan otomatis terakhir berhasil (ms); -1 = terakhir gagal; 0 = belum pernah. */
     val autoBackupAt: Long = 0,
+    val reminderEnabled: Boolean = false,
+    /** Jam pengingat dalam menit sejak tengah malam (bawaan 20.00). */
+    val reminderMinutes: Int = 20 * 60,
+    val reminderUnit: ReminderUnit = ReminderUnit.Juz,
     val lastPage: Int = 1,
     val lastSurah: Int = 0,
     val lastAyah: Int = 0,
@@ -56,6 +63,9 @@ class SettingsRepository(private val context: Context) {
     private val gestureHintKey = booleanPreferencesKey("gesture_hint_done")
     private val autoBackupUriKey = stringPreferencesKey("auto_backup_uri")
     private val autoBackupAtKey = stringPreferencesKey("auto_backup_at")
+    private val reminderKey = booleanPreferencesKey("reminder_enabled")
+    private val reminderMinutesKey = intPreferencesKey("reminder_minutes")
+    private val reminderUnitKey = stringPreferencesKey("reminder_unit")
 
     // Khusus perangkat ini: tidak ikut diekspor dan tidak ditimpa saat memulihkan cadangan.
     private val deviceOnlyKeys = setOf(autoBackupUriKey.name, autoBackupAtKey.name)
@@ -75,6 +85,9 @@ class SettingsRepository(private val context: Context) {
             readingMode = prefs[readingModeKey].toEnum(ReadingMode.Mushaf),
             autoBackupUri = prefs[autoBackupUriKey],
             autoBackupAt = prefs[autoBackupAtKey]?.toLongOrNull() ?: 0,
+            reminderEnabled = prefs[reminderKey] ?: false,
+            reminderMinutes = prefs[reminderMinutesKey] ?: (20 * 60),
+            reminderUnit = prefs[reminderUnitKey].toEnum(ReminderUnit.Juz),
             // Pengguna lama (sudah pernah membaca) tidak perlu onboarding maupun petunjuk gerakan.
             onboardingDone = prefs[onboardingKey] ?: (prefs[lastPageKey] != null),
             // Pengguna baru: onboarding_done tersimpan, jadi petunjuk tetap tampil walau baca terakhir sudah tercatat.
@@ -132,6 +145,12 @@ class SettingsRepository(private val context: Context) {
     }
 
     suspend fun setAutoBackupAt(time: Long) = context.dataStore.edit { it[autoBackupAtKey] = time.toString() }
+
+    suspend fun setReminder(enabled: Boolean) = context.dataStore.edit { it[reminderKey] = enabled }
+
+    suspend fun setReminderMinutes(minutes: Int) = context.dataStore.edit { it[reminderMinutesKey] = minutes }
+
+    suspend fun setReminderUnit(unit: ReminderUnit) = context.dataStore.edit { it[reminderUnitKey] = unit.name }
 
     suspend fun setOnboardingDone() = context.dataStore.edit { it[onboardingKey] = true }
 

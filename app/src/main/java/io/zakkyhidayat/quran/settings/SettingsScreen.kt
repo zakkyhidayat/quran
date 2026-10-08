@@ -137,6 +137,9 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
                 SectionTitle(AppIcons.Translate, stringResource(R.string.translations))
                 TranslationControls(vm, settings)
 
+                SectionTitle(AppIcons.Alarm, stringResource(R.string.reminder))
+                ReminderControls(vm, settings)
+
                 SectionTitle(AppIcons.Backup, stringResource(R.string.backup))
                 BackupControls(vm, settings)
 
@@ -613,3 +616,83 @@ private fun displayName(context: android.content.Context, uri: String): String =
     context.contentResolver.query(android.net.Uri.parse(uri), arrayOf(android.provider.OpenableColumns.DISPLAY_NAME), null, null, null)
         ?.use { if (it.moveToFirst()) it.getString(0) else null }
 }.getOrNull() ?: uri.substringAfterLast('/')
+
+/** Pengingat membaca harian: sakelar (meminta izin notifikasi di Android 13+), jam, dan satuan bagian. */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ReminderControls(vm: AppViewModel, settings: AppSettings) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val repo = vm.settingsRepository
+    var showTime by rememberSaveable { mutableStateOf(false) }
+    val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        if (granted) scope.launch { repo.setReminder(true) }
+    }
+    val timeText = remember(settings.reminderMinutes) {
+        val cal = java.util.Calendar.getInstance().apply {
+            set(java.util.Calendar.HOUR_OF_DAY, settings.reminderMinutes / 60)
+            set(java.util.Calendar.MINUTE, settings.reminderMinutes % 60)
+        }
+        android.text.format.DateFormat.getTimeFormat(context).format(cal.time)
+    }
+    Group {
+        item(
+            title = stringResource(R.string.reminder_daily),
+            subtitle = if (settings.reminderEnabled) stringResource(R.string.reminder_on_sub, timeText) else stringResource(R.string.reminder_off_sub),
+            onClick = {
+                when {
+                    settings.reminderEnabled -> scope.launch { repo.setReminder(false) }
+                    io.zakkyhidayat.quran.reminder.Reminder.canNotify(context) -> scope.launch { repo.setReminder(true) }
+                    Build.VERSION.SDK_INT >= 33 -> permission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                }
+            },
+            leading = { Icon(AppIcons.Alarm, contentDescription = null) },
+            trailing = { IconSwitch(settings.reminderEnabled) },
+        )
+        if (settings.reminderEnabled) {
+            item(
+                title = stringResource(R.string.reminder_time),
+                subtitle = timeText,
+                onClick = { showTime = true },
+                leading = { Icon(AppIcons.Schedule, contentDescription = null) },
+            )
+        }
+    }
+    if (settings.reminderEnabled) {
+        Labeled(stringResource(R.string.reminder_unit)) {
+            val options = listOf(
+                ReminderUnit.Juz to stringResource(R.string.tab_juz),
+                ReminderUnit.Hizb to stringResource(R.string.tab_hizb),
+                ReminderUnit.Manzil to stringResource(R.string.tab_manzil),
+            )
+            SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+                options.forEachIndexed { i, (unit, label) ->
+                    SegmentedButton(
+                        selected = settings.reminderUnit == unit,
+                        onClick = { scope.launch { repo.setReminderUnit(unit) } },
+                        shape = SegmentedButtonDefaults.itemShape(i, options.size),
+                    ) { Text(label) }
+                }
+            }
+        }
+    }
+    if (showTime) {
+        val state = androidx.compose.material3.rememberTimePickerState(
+            initialHour = settings.reminderMinutes / 60,
+            initialMinute = settings.reminderMinutes % 60,
+            is24Hour = android.text.format.DateFormat.is24HourFormat(context),
+        )
+        AlertDialog(
+            onDismissRequest = { showTime = false },
+            title = { Text(stringResource(R.string.reminder_time)) },
+            text = { androidx.compose.material3.TimePicker(state = state) },
+            confirmButton = {
+                TextButton(onClick = {
+                    scope.launch { repo.setReminderMinutes(state.hour * 60 + state.minute) }
+                    showTime = false
+                }) { Text(stringResource(R.string.ok)) }
+            },
+            dismissButton = { TextButton(onClick = { showTime = false }) { Text(stringResource(R.string.cancel)) } },
+        )
+    }
+}

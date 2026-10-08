@@ -178,4 +178,14 @@
     <string name="update_check_sub">%1$s • güncellemeleri denetlemek için dokunun</string>
     <string name="update_latest">En son sürümü kullanıyorsunuz</string>
     <string name="update_check_failed">Güncellemeler denetlenemedi. Bağlantınızı kontrol edin.</string>
+    <string name="reminder">Okuma hatırlatıcısı</string>
+    <string name="reminder_daily">Günlük hatırlatıcı</string>
+    <string name="reminder_off_sub">Her gün okuduğunuz bölümle ilgili bir bildirim</string>
+    <string name="reminder_on_sub">Her gün %1$s</string>
+    <string name="reminder_time">Hatırlatma saati</string>
+    <string name="reminder_unit">Günlük bölüm</string>
+    <string name="reminder_channel">Okuma hatırlatıcıları</string>
+    <string name="reminder_title">Okuma vakti: %1$s</string>
+    <string name="reminder_text">%1$s %2$d:%3$d ayetinden devam edin</string>
+    <string name="ok">Tamam</string>
 </resources>
