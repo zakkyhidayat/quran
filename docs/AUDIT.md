@@ -54,7 +54,8 @@ Diisi 2026-10-08 berdasarkan kode dan dokumen di repo. Perbarui setiap rilis. `[
 
 ## 5. Tes
 
-- [~] Unit test: baru `UpdaterTest`. Belum: pencarian, bookmark, pemetaan halaman, cadangan JSON
+- [~] Unit test (9): pembanding versi, rujukan ayat pencarian, tautan ayat, normalisasi teks Arab. Belum: bookmark,
+      pemetaan halaman, cadangan JSON (butuh tes berbasis perangkat atau Robolectric)
 - [x] Tes integritas konten di CI
 - [ ] Tes UI dasar (buka, pilih surah, geser, cari, bookmark)
 - [ ] Diuji di `minSdk` 26, versi terbaru, dan layar kecil
@@ -81,15 +82,16 @@ Diisi 2026-10-08 berdasarkan kode dan dokumen di repo. Perbarui setiap rilis. `[
 ## 8. Kualitas kode
 
 - [x] Lapisan UI / ViewModel / repositori; quran.db diakses lewat satu lapisan, read-only
-- [ ] Linter (ktlint/detekt)
-- [x] CI: integritas konten, teks antarmuka, unit test, build debug (`.github/workflows/ci.yml`)
+- [x] Android Lint di CI (`lint-baseline.xml` untuk 39 peringatan lama; temuan baru menggagalkan build)
+- [x] CI: integritas konten, teks antarmuka, unit test, lint, build debug (`.github/workflows/ci.yml`)
 - [~] R8 aktif; build setara rilis diuji berjalan normal di perangkat
 - [~] File besar: `SettingsScreen.kt`, `ReaderScreen.kt`, `MushafPage.kt` perlu dipecah
 - [x] Tidak ada pelaporan crash (tidak ada data dikirim)
 
 ## 9. Aksesibilitas
 
-- [ ] Ukuran font Arab dan terjemahan bisa diatur terpisah
+- [x] Ukuran teks Arab dan terjemahan bisa diatur terpisah (80-160%; daftar ayat dan lembar ayat. Halaman mushaf
+      mengikuti tata letak cetak)
 - [x] RTL Arab / LTR terjemahan tidak bertabrakan (antarmuka RTL juga diuji)
 - [~] contentDescription ada; belum diuji dengan TalkBack sungguhan
 - [x] Target sentuh 48dp (komponen M3)
@@ -108,7 +110,7 @@ Diisi 2026-10-08 berdasarkan kode dan dokumen di repo. Perbarui setiap rilis. `[
 - [~] README: tujuan, cara build, kredit. Belum: screenshot, cara menjalankan tes, sidik jari sertifikat
 - [x] ARCHITECTURE.md
 - [~] Sumber konten: DATA_SOURCES.md + THIRD_PARTY_NOTICES.md (lisensi). Tanggal unduh per berkas belum tercatat
-- [ ] ADR (sumber teks, rasm, framework)
+- [x] ADR: docs/adr/0001 (sumber teks), 0002 (rasm), 0003 (framework)
 - [x] CHANGELOG.md, LICENSE, THIRD_PARTY_NOTICES.md, PRIVACY.md
 - [x] Prosedur salah teks: docs/CONTENT_ERRORS.md
 
@@ -129,12 +131,14 @@ docs/CONTENT_ERRORS.md.
 | 4 | 4 | Keystore rilis belum ada | Tinggi | Tugas pemilik |
 | 5 | 1 | Sidik jari isi belum dicek otomatis | Tinggi | Selesai (CI) |
 | 6 | 1 | Perbandingan ayat dengan sumber belum ada | Tinggi | Selesai (seluruh ayat, lokal) |
-| 7 | 5 | Tidak ada tes | Tinggi | Sebagian (unit test pertama, CI) |
+| 7 | 5 | Tidak ada tes | Tinggi | Sebagian (9 unit test, CI) |
 | 8 | 6 | Izin pengingat dideklarasikan padahal fitur disembunyikan | Sedang | Selesai |
 | 9 | 6 | Kebijakan privasi belum ada | Sedang | Selesai |
 | 10 | 11 | ARCHITECTURE, CHANGELOG, THIRD_PARTY_NOTICES, prosedur salah teks belum ada | Sedang | Selesai |
-| 11 | 9 | Ukuran font Arab/terjemahan belum bisa diatur | Sedang | Belum |
+| 11 | 9 | Ukuran font Arab/terjemahan belum bisa diatur | Sedang | Selesai |
 | 12 | 5 | Belum diuji di Android 8 (API 26), layar kecil, rotasi | Sedang | Belum |
 | 13 | 3 | `page-fonts.zip` belum diunggah ke rilis `build-assets` | Sedang | Menunggu izin pemilik |
-| 14 | 8 | Linter belum ada; file layar terlalu besar | Rendah | Belum |
-| 15 | 11 | ADR, screenshot README | Rendah | Belum |
+| 14 | 8 | Linter belum ada; file layar terlalu besar | Rendah | Lint selesai; pemecahan file belum |
+| 15 | 11 | ADR, screenshot README | Rendah | ADR selesai; screenshot belum |
+| 16 | 1 | Pencarian Arab tidak menemukan ejaan mushaf (إبراهيم, الصلاة: 0 hasil) | Tinggi | Selesai (ditemukan unit test) |
+| 17 | 8 | Lint: teks dari LocalContext di komposisi, Locale.getDefault di komponen | Sedang | Selesai |
