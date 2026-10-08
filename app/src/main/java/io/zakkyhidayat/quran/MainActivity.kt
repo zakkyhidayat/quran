@@ -1,5 +1,7 @@
 package io.zakkyhidayat.quran
 
+import kotlinx.coroutines.flow.distinctUntilChanged
+import androidx.compose.runtime.remember
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -32,7 +34,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null && intent.hasExtra("page")) vm.goToPage(intent.getIntExtra("page", 1))
         setContent {
-            val loaded by vm.settingsRepository.settings.collectAsStateWithLifecycle(null)
+            // Posisi baca berubah setiap ganti halaman; UI tidak memakainya setelah layar dibuka, jadi perubahan yang hanya
+            // menyangkut posisi tidak memicu render ulang seluruh aplikasi.
+            val loaded by remember {
+                vm.settingsRepository.settings.distinctUntilChanged { old, new ->
+                    old.copy(lastPage = 0, lastSurah = 0, lastAyah = 0) == new.copy(lastPage = 0, lastSurah = 0, lastAyah = 0)
+                }
+            }.collectAsStateWithLifecycle(null)
             val settings: AppSettings = loaded ?: return@setContent
             val dark = when (settings.themeMode) {
                 ThemeMode.System -> isSystemInDarkTheme()

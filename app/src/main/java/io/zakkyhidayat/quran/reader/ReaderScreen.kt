@@ -1,5 +1,8 @@
 package io.zakkyhidayat.quran.reader
 
+import androidx.compose.ui.graphics.luminance
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.Dispatchers
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.zIndex
 import androidx.compose.animation.core.animateFloatAsState
@@ -166,6 +169,13 @@ fun ReaderScreen(
             pagerState.scrollToPage(listPage - 1)
         }
     }
+    val prefetchContext = LocalContext.current
+    val prefetchPalette = GlyphPalette.of(settings.tajweed, MaterialTheme.colorScheme.background.luminance() < 0.5f)
+    LaunchedEffect(prefetchPalette) {
+        snapshotFlow { pagerState.currentPage + 1 }.collectLatest { page ->
+            withContext(Dispatchers.IO) { prefetchPageFonts(prefetchContext, page, prefetchPalette) }
+        }
+    }
     LaunchedEffect(listMode) {
         if (listMode) return@LaunchedEffect
         snapshotFlow { pagerState.currentPage }.collectLatest { index ->
@@ -175,12 +185,13 @@ fun ReaderScreen(
             // Baca terakhir per ayat: ayat yang sedang dipilih bila ada di halaman ini, kalau tidak ayat pertama halaman.
             val chosen = vm.selected.value
             val ayah = if (chosen != null && vm.mushaf.ayahPage(chosen.surah, chosen.ayah) == page) chosen else vm.mushaf.firstAyahOnPage(page)
-            vm.settingsRepository.setLastPage(page)
-            vm.settingsRepository.setLastAyah(ayah.surah, ayah.ayah)
+            vm.settingsRepository.setPosition(page, ayah.surah, ayah.ayah)
         }
     }
 
     var showJump by remember { mutableStateOf(false) }
+    // Penulisan posisi dari mode daftar ditunda dan digabung, seperti di mode mushaf.
+    var positionWrite by remember { mutableStateOf<kotlinx.coroutines.Job?>(null) }
     val motion = MaterialTheme.motionScheme
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -346,11 +357,15 @@ fun ReaderScreen(
                     targetPage = listTarget.first,
                     targetAyah = listTarget.second,
                     onPageChange = { page, first ->
-                        listPage = page
-                        vm.currentPage.value = page
-                        scope.launch {
-                            vm.settingsRepository.setLastPage(page)
-                            vm.settingsRepository.setLastAyah(first.surah, first.ayah)
+                        // Lapisan daftar yang tersembunyi (disiapkan di belakang) tidak boleh mengubah posisi baca.
+                        if (listMode) {
+                            listPage = page
+                            vm.currentPage.value = page
+                            positionWrite?.cancel()
+                            positionWrite = scope.launch {
+                                delay(600)
+                                vm.settingsRepository.setPosition(page, first.surah, first.ayah)
+                            }
                         }
                     },
                     modifier = Modifier.fillMaxSize(),

@@ -160,6 +160,13 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setLastPage(page: Int) = context.dataStore.edit { it[lastPageKey] = page }
 
+    /** Halaman dan ayat terakhir dalam satu penulisan (satu emisi, bukan dua). */
+    suspend fun setPosition(page: Int, surah: Int, ayah: Int) = context.dataStore.edit {
+        it[lastPageKey] = page
+        it[lastSurahKey] = surah
+        it[lastAyahKey] = ayah
+    }
+
     suspend fun setLastAyah(surah: Int, ayah: Int) = context.dataStore.edit {
         it[lastSurahKey] = surah
         it[lastAyahKey] = ayah

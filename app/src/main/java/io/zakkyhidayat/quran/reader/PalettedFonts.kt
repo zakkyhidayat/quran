@@ -3,6 +3,8 @@ package io.zakkyhidayat.quran.reader
 import android.content.Context
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.nio.ByteBuffer
 import java.util.concurrent.ConcurrentHashMap
@@ -29,20 +31,38 @@ internal enum class GlyphPalette(val index: Int) {
 internal object PalettedFonts {
     private val cache = ConcurrentHashMap<String, FontFamily>()
 
-    /** Font di assets/fonts/[name] dengan palet CPAL [palette] sebagai palet utama. */
-    fun family(context: Context, name: String, palette: Int, copyColors: List<Pair<Int, Int>> = emptyList()): FontFamily {
-        if (palette == 0 && copyColors.isEmpty()) return FontFamily(Font("fonts/$name", context.assets))
-        return cache.getOrPut("$name#$palette#$copyColors") {
-            val file = File(File(context.cacheDir, "palette").apply { mkdirs() }, "${name.removeSuffix(".ttf")}-$palette${if (copyColors.isEmpty()) "" else "-" + copyColors.joinToString("") { "c${it.first}_${it.second}" }}.ttf")
-            if (!file.exists() || file.length() == 0L) {
-                val original = context.assets.open("fonts/$name").use { it.readBytes() }
-                val tmp = File(file.parentFile, file.name + ".tmp")
-                tmp.writeBytes(withPalette(original, palette, copyColors))
-                if (!tmp.renameTo(file)) tmp.delete()
+    private fun key(name: String, palette: Int, copyColors: List<Pair<Int, Int>>) = "$name#$palette#$copyColors"
+
+    /** Font yang sudah dimuat (tanpa kerja disk); null bila belum. Aman dipanggil di komposisi. */
+    fun cached(name: String, palette: Int, copyColors: List<Pair<Int, Int>> = emptyList()): FontFamily? =
+        cache[key(name, palette, copyColors)]
+
+    /**
+     * Font di assets/fonts/[name] dengan palet CPAL [palette] sebagai palet utama, sebagai typeface yang sudah dimuat.
+     * Membaca aset, menambal palet, menulis salinan, dan memuat typeface semuanya terjadi di thread IO: dulu dikerjakan
+     * di thread utama saat halaman baru muncul dan membuat geser halaman tersendat.
+     */
+    suspend fun load(context: Context, name: String, palette: Int, copyColors: List<Pair<Int, Int>> = emptyList()): FontFamily =
+        cached(name, palette, copyColors) ?: withContext(Dispatchers.IO) { loadBlocking(context, name, palette, copyColors) }
+
+    /** Versi sinkron untuk dipanggil dari thread latar belakang. */
+    fun loadBlocking(context: Context, name: String, palette: Int, copyColors: List<Pair<Int, Int>> = emptyList()): FontFamily =
+        cache.getOrPut(key(name, palette, copyColors)) {
+            val typeface = if (palette == 0 && copyColors.isEmpty()) {
+                android.graphics.Typeface.createFromAsset(context.assets, "fonts/$name")
+            } else {
+                val suffix = if (copyColors.isEmpty()) "" else "-" + copyColors.joinToString("") { "c${it.first}_${it.second}" }
+                val file = File(File(context.cacheDir, "palette").apply { mkdirs() }, "${name.removeSuffix(".ttf")}-$palette$suffix.ttf")
+                if (!file.exists() || file.length() == 0L) {
+                    val original = context.assets.open("fonts/$name").use { it.readBytes() }
+                    val tmp = File(file.parentFile, file.name + "." + Thread.currentThread().id + ".tmp")
+                    tmp.writeBytes(withPalette(original, palette, copyColors))
+                    if (!tmp.renameTo(file)) tmp.delete()
+                }
+                if (file.exists()) android.graphics.Typeface.createFromFile(file) else android.graphics.Typeface.createFromAsset(context.assets, "fonts/$name")
             }
-            if (file.exists()) FontFamily(Font(file)) else FontFamily(Font("fonts/$name", context.assets))
+            FontFamily(androidx.compose.ui.text.font.Typeface(typeface))
         }
-    }
 
     // copyColors: pasangan (tujuan, sumber) indeks warna di palet terpilih; warna sumber disalin ke warna tujuan.
     private fun withPalette(font: ByteArray, palette: Int, copyColors: List<Pair<Int, Int>>): ByteArray {

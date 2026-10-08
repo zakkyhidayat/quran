@@ -1,5 +1,13 @@
 package io.zakkyhidayat.quran.reader
 
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.Dispatchers
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.platform.LocalFontFamilyResolver
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.res.stringResource
 import io.zakkyhidayat.quran.R
 import android.content.Context
@@ -72,8 +80,18 @@ private var fontCache: Set<String>? = null
 private fun availableFonts(context: Context): Set<String> =
     fontCache ?: (context.assets.list("fonts")?.toSet() ?: emptySet()).also { fontCache = it }
 
-internal fun pageFontFamily(context: Context, page: Int, palette: GlyphPalette = GlyphPalette.LightTajweed): FontFamily =
-    if ("p$page.ttf" in availableFonts(context)) PalettedFonts.family(context, "p$page.ttf", palette.index) else FontFamily.Default
+internal suspend fun pageFontFamily(context: Context, page: Int, palette: GlyphPalette = GlyphPalette.LightTajweed): FontFamily =
+    if ("p$page.ttf" in availableFonts(context)) PalettedFonts.load(context, "p$page.ttf", palette.index) else FontFamily.Default
+
+internal fun cachedPageFont(page: Int, palette: GlyphPalette): FontFamily? = PalettedFonts.cached("p$page.ttf", palette.index)
+
+/** Siapkan font halaman di sekitar posisi baca (di thread latar belakang) agar geser halaman tidak menunggu disk. */
+internal fun prefetchPageFonts(context: Context, center: Int, palette: GlyphPalette) {
+    val available = availableFonts(context)
+    for (page in listOf(center, center - 1, center + 1, center - 2, center + 2)) {
+        if (page in 1..604 && "p$page.ttf" in available) PalettedFonts.loadBlocking(context, "p$page.ttf", palette.index)
+    }
+}
 
 // quran-common: glyph kaligrafi basmalah (U+FDFD), judul juz (U+E001..E01E), dan kata pembuka juz (U+E900..E91D).
 internal fun commonFontFamily(context: Context): FontFamily =
@@ -86,10 +104,10 @@ internal fun juzOpeningGlyph(juz: Int): String = (0xE900 + juz - 1).toChar().toS
 internal fun surahNameFontFamily(context: Context): FontFamily =
     FontFamily(Font("fonts/surah_names.ttf", context.assets))
 
-internal fun surahHeaderFontFamily(context: Context, dark: Boolean): FontFamily =
+internal suspend fun surahHeaderFontFamily(context: Context, dark: Boolean): FontFamily =
     // Mode gelap: palet 1 dengan isian bingkai (warna 18, bawaannya hitam) diganti hijau tua (warna 12) agar serasi dengan nomor ayat.
-    if (dark) PalettedFonts.family(context, "QCF_SurahHeader_COLOR-Regular.ttf", 1, listOf(18 to 12))
-    else PalettedFonts.family(context, "QCF_SurahHeader_COLOR-Regular.ttf", 0)
+    if (dark) PalettedFonts.load(context, "QCF_SurahHeader_COLOR-Regular.ttf", 1, listOf(18 to 12))
+    else PalettedFonts.load(context, "QCF_SurahHeader_COLOR-Regular.ttf", 0)
 
 // KFGQPC Hafs Uthmanic Script: font teks Arab Unicode (sheet ayat, basmalah, hasil pencarian).
 internal fun arabicFontFamily(context: Context): FontFamily =
@@ -110,16 +128,31 @@ fun MushafPage(
     val context = LocalContext.current
     val dark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val palette = GlyphPalette.of(tajweed, dark)
-    val pageFont = remember(page, palette) { pageFontFamily(context, page, palette) }
-    val headerFont = remember(dark) { surahHeaderFontFamily(context, dark) }
-    val basmalahFont = remember(palette) { pageFontFamily(context, 1, palette) }
-    val measurer = rememberTextMeasurer()
+    // Semua font dimuat di thread IO; selama belum siap (jarang, karena dipanggil lebih dulu oleh prefetch) halaman kosong.
+    val pageFont by produceState(cachedPageFont(page, palette), page, palette) { value = pageFontFamily(context, page, palette) }
+    val headerFont by produceState<FontFamily?>(null, dark) { value = surahHeaderFontFamily(context, dark) }
+    val basmalahFont by produceState(cachedPageFont(1, palette), palette) { value = pageFontFamily(context, 1, palette) }
+    val font = pageFont
+    val header = headerFont
+    val basmalah = basmalahFont
+    if (font == null || header == null || basmalah == null) {
+        Box(modifier.fillMaxSize())
+        return
+    }
     val density = LocalDensity.current
+    val resolver = LocalFontFamilyResolver.current
 
     BoxWithConstraints(modifier.fillMaxSize()) {
         val widthPx = constraints.maxWidth
         val nominal = maxHeight / LINES_PER_PAGE
-        val glyphSize = remember(page, lines, widthPx) { fitFontSize(measurer, density, lines, pageFont, widthPx) }
+        // Semua pengukuran teks (ukuran glyph, ~130 kata) dikerjakan di thread latar belakang; thread utama hanya
+        // menggambar hasilnya. Halaman tetangga disusun lebih dulu oleh pager, jadi biasanya siap sebelum terlihat.
+        val prepared by produceState<PreparedPage?>(null, page, lines, widthPx, font, basmalah, density) {
+            value = withContext(Dispatchers.Default) {
+                preparePage(TextMeasurer(resolver, density, LayoutDirection.Ltr, cacheSize = 0), density, lines, font, basmalah, widthPx)
+            }
+        }
+        val ready = prepared ?: return@BoxWithConstraints
         // Baris bingkai surah lebih tinggi dari baris ayat (bingkai tidak diubah proporsinya); baris ayat di halaman itu
         // dirapatkan secukupnya agar total tetap seukuran halaman.
         val headerLineHeight = with(density) { (widthPx * HEADER_WIDTH_RATIO * HEADER_FRAME_HEIGHT_EM / HEADER_FRAME_EM * HEADER_LINE_RATIO).toDp() }
@@ -137,9 +170,9 @@ fun MushafPage(
                 val thisHeight = if (line.type == LineType.SurahName) headerLineHeight else lineHeight
                 Box(Modifier.fillMaxWidth().height(thisHeight), contentAlignment = Alignment.Center) {
                     when (line.type) {
-                        LineType.Ayah -> AyahLine(line, pageFont, glyphSize, selected, onAyahClick, thisHeight)
-                        LineType.SurahName -> SurahHeader(surahs[line.surah], headerFont) { onSurahClick(line.surah!!) }
-                        LineType.Basmallah -> BasmalahLine(glyphSize, basmalahFont)
+                        LineType.Ayah -> AyahLine(line, ready.words[line] ?: emptyList(), ready.gapPx, selected, onAyahClick, thisHeight)
+                        LineType.SurahName -> SurahHeader(surahs[line.surah], header) { onSurahClick(line.surah!!) }
+                        LineType.Basmallah -> GlyphRow(ready.basmalah, centered = true, minGapPx = ready.gapPx, bounds = remember { FloatArray(ready.basmalah.size * 2) })
                     }
                 }
             }
@@ -191,126 +224,133 @@ private fun ScreenReaderLayer(
     }
 }
 
-@Composable
-private fun AyahLine(
-    line: PageLine,
-    font: FontFamily,
-    size: TextUnit,
-    selected: AyahRef?,
-    onAyahClick: (AyahRef) -> Unit,
-    cellHeight: Dp,
-) {
-    val style = TextStyle(fontFamily = font, fontSize = size)
-    // Abu-abu netral (warna teks di atas latar), bukan warna tema: warna tajwid (hijau, merah, biru) tetap terbaca.
-    // Terang: 10% (lebih pucat); gelap: 18% (lebih terang).
-    // Buram (sudah dicampur dengan latar) supaya tumpang tindih antar baris tidak tampak sebagai garis lebih gelap.
-    val highlightAlpha = if (MaterialTheme.colorScheme.background.luminance() < 0.5f) 0.18f else 0.10f
-    val highlight = MaterialTheme.colorScheme.onSurface.copy(alpha = highlightAlpha).compositeOver(MaterialTheme.colorScheme.background)
-    val density = LocalDensity.current
-    val gapPx = with(density) { size.toPx() * 0.25f }
-    val pad = with(density) { 2.dp.toPx() }
-    val corner = with(density) { 8.dp.toPx() }
-    // Tinggi sorotan = satu sel baris penuh (tanpa celah antar baris); tumpang tindih 1 px penuh di tiap sisi menutup piksel sambungan sepenuhnya (anti-aliasing setengah piksel meninggalkan garis lebih terang).
-    val highlightHeight = with(density) { cellHeight.toPx() }
-    val words = line.words
-    val isSelected = remember(line, selected) {
-        BooleanArray(words.size) { i -> selected != null && words[i].surah == selected.surah && words[i].ayah == selected.ayah }
-    }
-    // Batas kiri/kanan tiap kata, diisi saat tata letak dan dibaca saat menggambar sorotan.
-    val bounds = remember(line) { FloatArray(words.size * 2) }
 
-    JustifiedRow(
-        centered = line.centered,
-        minGapPx = gapPx,
-        bounds = bounds,
-        modifier = Modifier
-            .fillMaxWidth()
-            .drawBehind {
-                var i = 0
-                while (i < isSelected.size) {
-                    if (!isSelected[i]) { i++; continue }
-                    var j = i
-                    while (j + 1 < isSelected.size && isSelected[j + 1]) j++
-                    // Teks berjalan kanan ke kiri: kata pertama paling kanan.
-                    // Sisi kiri tanpa pad: di sana biasanya kata pertama ayat berikutnya, jangan sampai tertutup sorotan.
-                    val left = bounds[2 * j]
-                    val right = bounds[2 * i + 1] + pad
-                    val height = minOf(highlightHeight, this.size.height)
-                    drawRoundRect(highlight, Offset(left, (this.size.height - height) / 2f - 1f), Size(right - left, height + 2f), CornerRadius(corner))
-                    i = j + 1
-                }
-            }
-            .pointerInput(line) {
-                // Ketuk di mana pun pada baris memilih ayat dari kata terdekat, termasuk di celah antarkata.
-                detectTapGestures { tap ->
-                    var best = -1
-                    var bestDistance = Float.MAX_VALUE
-                    for (i in words.indices) {
-                        val d = if (tap.x < bounds[2 * i]) bounds[2 * i] - tap.x else if (tap.x > bounds[2 * i + 1]) tap.x - bounds[2 * i + 1] else 0f
-                        if (d < bestDistance) { bestDistance = d; best = i }
-                    }
-                    if (best >= 0) onAyahClick(AyahRef(words[best].surah, words[best].ayah))
-                }
-            },
-    ) {
-        words.forEach { word ->
-            Text(
-                text = word.text,
-                style = style,
-                maxLines = 1,
-                softWrap = false,
-            )
-        }
-    }
-}
-
-// Susun kata dari kanan ke kiri. Baris penuh dibagi rata (justifikasi); baris pendek ditengahkan dengan jarak tetap.
-@Composable
-private fun JustifiedRow(
-    centered: Boolean,
-    minGapPx: Float,
-    bounds: FloatArray,
-    modifier: Modifier,
-    content: @Composable () -> Unit,
-) {
-    Layout(content = content, modifier = modifier) { measurables, constraints ->
-        val placeables = measurables.map { it.measure(Constraints()) }
-        val width = constraints.maxWidth
-        val height = placeables.maxOfOrNull { it.height } ?: 0
-        val total = placeables.sumOf { it.width }
-        val count = placeables.size
-        val gap = if (centered || count < 2) minGapPx else ((width - total).toFloat() / (count - 1)).coerceAtLeast(0f)
-        val used = total + gap * (count - 1).coerceAtLeast(0)
-        var x = if (centered) width - (width - used) / 2f else width.toFloat()
-        layout(width, height) {
-            placeables.forEachIndexed { i, placeable ->
-                x -= placeable.width
-                placeable.place(x.roundToInt(), (height - placeable.height) / 2)
-                bounds[2 * i] = x
-                bounds[2 * i + 1] = x + placeable.width
-                x -= gap
-            }
-        }
-    }
-}
 
 // Basmalah memakai glyph ayat 1:1 dari font halaman 1 (U+FC41..FC44 = bismi / Allahi / alrrahmani / alrraheemi),
 // sehingga gaya dan warna tajwidnya sama dengan teks ayat di halaman.
 private const val BASMALAH_GLYPHS = "ﱁﱂﱃﱄ"
 
-@Composable
-private fun BasmalahLine(size: TextUnit, font: FontFamily) {
+
+/** Hasil persiapan satu halaman: tata letak tiap kata per baris ayat, glyph basmalah, dan jarak minimum antarkata. */
+private class PreparedPage(
+    val words: Map<PageLine, List<TextLayoutResult>>,
+    val basmalah: List<TextLayoutResult>,
+    val gapPx: Float,
+)
+
+private fun preparePage(
+    measurer: TextMeasurer,
+    density: Density,
+    lines: List<PageLine>,
+    font: FontFamily,
+    basmalahFont: FontFamily,
+    widthPx: Int,
+): PreparedPage {
+    val size = fitFontSize(measurer, density, lines, font, widthPx)
     val style = TextStyle(fontFamily = font, fontSize = size)
-    val gap = with(LocalDensity.current) { size.toPx() * 0.25f }
-    val bounds = remember { FloatArray(BASMALAH_GLYPHS.length * 2) }
-    JustifiedRow(centered = true, minGapPx = gap, bounds = bounds, modifier = Modifier.fillMaxWidth()) {
-        BASMALAH_GLYPHS.forEach { glyph ->
-            Text(
-                text = glyph.toString(),
-                style = style,
-                maxLines = 1,
-                softWrap = false,
-            )
+    fun measure(text: String, style: TextStyle) =
+        measurer.measure(text = text, style = style, softWrap = false, maxLines = 1, constraints = Constraints())
+    val words = lines.filter { it.type == LineType.Ayah }.associateWith { line -> line.words.map { measure(it.text, style) } }
+    val basmalahStyle = TextStyle(fontFamily = basmalahFont, fontSize = size)
+    val basmalah = BASMALAH_GLYPHS.map { measure(it.toString(), basmalahStyle) }
+    return PreparedPage(words, basmalah, with(density) { size.toPx() * 0.25f })
+}
+
+/**
+ * Satu baris glyph yang digambar langsung di kanvas (bukan satu Text per kata): kanan ke kiri, baris penuh dibagi rata,
+ * baris pendek ditengahkan dengan jarak tetap. [bounds] diisi batas kiri/kanan tiap kata untuk sorotan dan ketukan.
+ */
+@Composable
+private fun GlyphRow(
+    layouts: List<TextLayoutResult>,
+    centered: Boolean,
+    minGapPx: Float,
+    bounds: FloatArray,
+    modifier: Modifier = Modifier,
+    behind: DrawScope.() -> Unit = {},
+) {
+    val height = layouts.maxOfOrNull { it.size.height } ?: 0
+    Spacer(
+        modifier
+            .fillMaxWidth()
+            .height(with(LocalDensity.current) { height.toDp() })
+            .drawBehind {
+                val width = size.width
+                val total = layouts.sumOf { it.size.width }.toFloat()
+                val count = layouts.size
+                val gap = if (centered || count < 2) minGapPx else ((width - total) / (count - 1)).coerceAtLeast(0f)
+                val used = total + gap * (count - 1).coerceAtLeast(0)
+                var x = if (centered) width - (width - used) / 2f else width
+                layouts.forEachIndexed { i, layout ->
+                    x -= layout.size.width
+                    val left = x.roundToInt().toFloat()
+                    bounds[2 * i] = left
+                    bounds[2 * i + 1] = left + layout.size.width
+                    x -= gap
+                }
+                behind()
+                layouts.forEachIndexed { i, layout ->
+                    drawText(layout, topLeft = Offset(bounds[2 * i], (size.height - layout.size.height) / 2f))
+                }
+            },
+    )
+}
+
+@Composable
+private fun AyahLine(
+    line: PageLine,
+    layouts: List<TextLayoutResult>,
+    gapPx: Float,
+    selected: AyahRef?,
+    onAyahClick: (AyahRef) -> Unit,
+    cellHeight: Dp,
+) {
+    // Abu-abu netral (warna teks di atas latar), bukan warna tema: warna tajwid (hijau, merah, biru) tetap terbaca.
+    // Terang: 10% (lebih pucat); gelap: 18% (lebih terang). Buram (sudah dicampur dengan latar) supaya tumpang tindih
+    // antar baris tidak tampak sebagai garis lebih gelap.
+    val highlightAlpha = if (MaterialTheme.colorScheme.background.luminance() < 0.5f) 0.18f else 0.10f
+    val highlight = MaterialTheme.colorScheme.onSurface.copy(alpha = highlightAlpha).compositeOver(MaterialTheme.colorScheme.background)
+    val density = LocalDensity.current
+    val pad = with(density) { 2.dp.toPx() }
+    val corner = with(density) { 8.dp.toPx() }
+    // Tinggi sorotan = satu sel baris penuh; tumpang tindih 1 px di tiap sisi menutup sambungan antarbaris.
+    val highlightHeight = with(density) { cellHeight.toPx() }
+    val words = line.words
+    val isSelected = remember(line, selected) {
+        BooleanArray(words.size) { i -> selected != null && words[i].surah == selected.surah && words[i].ayah == selected.ayah }
+    }
+    val bounds = remember(line) { FloatArray(words.size * 2) }
+
+    GlyphRow(
+        layouts = layouts,
+        centered = line.centered,
+        minGapPx = gapPx,
+        bounds = bounds,
+        modifier = Modifier.pointerInput(line) {
+            // Ketuk di mana pun pada baris memilih ayat dari kata terdekat, termasuk di celah antarkata.
+            detectTapGestures { tap ->
+                var best = -1
+                var bestDistance = Float.MAX_VALUE
+                for (i in words.indices) {
+                    val d = if (tap.x < bounds[2 * i]) bounds[2 * i] - tap.x else if (tap.x > bounds[2 * i + 1]) tap.x - bounds[2 * i + 1] else 0f
+                    if (d < bestDistance) { bestDistance = d; best = i }
+                }
+                if (best >= 0) onAyahClick(AyahRef(words[best].surah, words[best].ayah))
+            }
+        },
+    ) {
+        var i = 0
+        while (i < isSelected.size) {
+            if (!isSelected[i]) { i++; continue }
+            var j = i
+            while (j + 1 < isSelected.size && isSelected[j + 1]) j++
+            // Teks berjalan kanan ke kiri: kata pertama paling kanan. Sisi kiri tanpa pad: di sana biasanya kata pertama
+            // ayat berikutnya, jangan sampai tertutup sorotan.
+            val left = bounds[2 * j]
+            val right = bounds[2 * i + 1] + pad
+            val height = minOf(highlightHeight, size.height)
+            drawRoundRect(highlight, Offset(left, (size.height - height) / 2f - 1f), Size(right - left, height + 2f), CornerRadius(corner))
+            i = j + 1
         }
     }
 }
