@@ -1,5 +1,7 @@
 package io.zakkyhidayat.quran.ui
 
+import androidx.compose.ui.res.stringResource
+import io.zakkyhidayat.quran.R
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -46,7 +48,7 @@ fun JumpToAyahDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Lompat ke ayat") },
+        title = { Text(stringResource(R.string.jump_to_ayah)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = it }) {
@@ -54,7 +56,7 @@ fun JumpToAyahDialog(
                         value = surah?.let { "${it.id}. ${it.nameLatin}" }.orEmpty(),
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Surah") },
+                        label = { Text(stringResource(R.string.surah_label)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
                         modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
                     )
@@ -74,7 +76,7 @@ fun JumpToAyahDialog(
                 OutlinedTextField(
                     value = ayahText,
                     onValueChange = { ayahText = it.filter(Char::isDigit).take(3) },
-                    label = { Text("Ayat") },
+                    label = { Text(stringResource(R.string.ayah_label)) },
                     supportingText = { Text(if (surah != null) "1–${surah.ayahCount}" else "") },
                     isError = ayahText.isNotEmpty() && !valid,
                     singleLine = true,
@@ -84,7 +86,7 @@ fun JumpToAyahDialog(
                 )
             }
         },
-        confirmButton = { TextButton(enabled = valid, onClick = { onJump(surahId, ayah!!) }) { Text("Lompat") } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Batal") } },
+        confirmButton = { TextButton(enabled = valid, onClick = { onJump(surahId, ayah!!) }) { Text(stringResource(R.string.jump)) } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } },
     )
 }

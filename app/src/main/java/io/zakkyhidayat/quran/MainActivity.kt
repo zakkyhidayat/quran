@@ -19,6 +19,10 @@ import io.zakkyhidayat.quran.ui.theme.QuranTheme
 class MainActivity : ComponentActivity() {
     private val vm: AppViewModel by viewModels()
 
+    override fun attachBaseContext(newBase: android.content.Context) {
+        super.attachBaseContext(AppLanguage.wrap(newBase))
+    }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         if (intent.hasExtra("page")) vm.goToPage(intent.getIntExtra("page", 1))

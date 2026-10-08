@@ -1,5 +1,7 @@
 package io.zakkyhidayat.quran.settings
 
+import androidx.compose.ui.res.stringResource
+import io.zakkyhidayat.quran.R
 import android.os.Build
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -65,6 +67,7 @@ import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import io.zakkyhidayat.quran.AppLanguage
 import io.zakkyhidayat.quran.AppViewModel
 import io.zakkyhidayat.quran.ui.AppIcons
 import io.zakkyhidayat.quran.ui.CenteredContent
@@ -91,20 +94,22 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Pengaturan") },
-                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali") } },
+                title = { Text(stringResource(R.string.settings)) },
+                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back)) } },
             )
         },
     ) { padding ->
         CenteredContent(Modifier.padding(padding)) {
             Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp)) {
-                SectionTitle(AppIcons.Palette, "Tampilan")
+                LanguageSection()
 
-                Labeled("Tema") {
+                SectionTitle(AppIcons.Palette, stringResource(R.string.appearance))
+
+                Labeled(stringResource(R.string.theme)) {
                     val options = listOf(
-                        Triple(ThemeMode.System, "Sistem", AppIcons.BrightnessAuto),
-                        Triple(ThemeMode.Light, "Terang", AppIcons.LightMode),
-                        Triple(ThemeMode.Dark, "Gelap", AppIcons.DarkMode),
+                        Triple(ThemeMode.System, stringResource(R.string.theme_system), AppIcons.BrightnessAuto),
+                        Triple(ThemeMode.Light, stringResource(R.string.theme_light), AppIcons.LightMode),
+                        Triple(ThemeMode.Dark, stringResource(R.string.theme_dark), AppIcons.DarkMode),
                     )
                     SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
                         options.forEachIndexed { i, (mode, label, icon) ->
@@ -118,33 +123,33 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
                     }
                 }
 
-                Labeled("Palet warna") {
+                Labeled(stringResource(R.string.color_palette)) {
                     Row(Modifier.fillMaxWidth().height(IntrinsicSize.Max), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         PaletteCard(
                             modifier = Modifier.weight(1f).fillMaxHeight(),
-                            title = "Dinamis",
+                            title = stringResource(R.string.palette_dynamic),
                             icon = AppIcons.AutoAwesome,
                             selected = settings.colorMode == ColorMode.Dynamic && dynamicSupported,
                             enabled = dynamicSupported,
                             scheme = dynamicPreview,
-                            caption = if (dynamicSupported) "Dari wallpaper" else "Butuh Android 12+",
+                            caption = if (dynamicSupported) stringResource(R.string.from_wallpaper) else stringResource(R.string.needs_android12),
                             onClick = { scope.launch { repo.setColorMode(ColorMode.Dynamic) } },
                         )
                         PaletteCard(
                             modifier = Modifier.weight(1f).fillMaxHeight(),
-                            title = "Asli",
+                            title = stringResource(R.string.palette_original),
                             icon = AppIcons.Palette,
                             selected = settings.colorMode == ColorMode.Original || !dynamicSupported,
                             enabled = true,
                             scheme = originalPreview,
-                            caption = "Teal klasik",
+                            caption = stringResource(R.string.classic_teal),
                             onClick = { scope.launch { repo.setColorMode(ColorMode.Original) } },
                         )
                     }
                 }
 
-                Labeled("Kontras warna") {
-                    val options = listOf(ContrastLevel.Standard to "Standar", ContrastLevel.Medium to "Sedang", ContrastLevel.High to "Tinggi")
+                Labeled(stringResource(R.string.contrast)) {
+                    val options = listOf(ContrastLevel.Standard to stringResource(R.string.contrast_standard), ContrastLevel.Medium to stringResource(R.string.contrast_medium), ContrastLevel.High to stringResource(R.string.contrast_high))
                     val usesDynamic = settings.colorMode == ColorMode.Dynamic && dynamicSupported
                     SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
                         options.forEachIndexed { i, (level, label) ->
@@ -158,7 +163,7 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
                     }
                     if (usesDynamic) {
                         Text(
-                            "Kontras berlaku untuk palet Asli.",
+                            stringResource(R.string.contrast_note),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(top = 4.dp),
@@ -169,29 +174,29 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
                 Spacer(Modifier.height(8.dp))
                 Group {
                     item(
-                        title = "AMOLED",
-                        subtitle = "Latar hitam pekat di mode gelap",
+                        title = stringResource(R.string.amoled),
+                        subtitle = stringResource(R.string.amoled_sub),
                         onClick = { scope.launch { repo.setAmoled(!settings.amoled) } },
                         leading = { Icon(AppIcons.DarkMode, contentDescription = null) },
                         trailing = { IconSwitch(settings.amoled) },
                     )
                     item(
-                        title = "Transliterasi Latin",
-                        subtitle = "Tampilkan cara baca Latin di sheet ayat",
+                        title = stringResource(R.string.translit_title),
+                        subtitle = stringResource(R.string.translit_sub),
                         onClick = { scope.launch { repo.setShowTransliteration(!settings.showTransliteration) } },
                         leading = { Icon(AppIcons.Translate, contentDescription = null) },
                         trailing = { IconSwitch(settings.showTransliteration) },
                     )
                     item(
-                        title = "Warna tajwid",
-                        subtitle = "Tampilkan huruf berwarna sesuai hukum tajwid",
+                        title = stringResource(R.string.tajweed_title),
+                        subtitle = stringResource(R.string.tajweed_sub),
                         onClick = { scope.launch { repo.setTajweed(!settings.tajweed) } },
                         leading = { Icon(AppIcons.FormatColorText, contentDescription = null) },
                         trailing = { IconSwitch(settings.tajweed) },
                     )
                 }
 
-                SectionTitle(AppIcons.Translate, "Terjemahan")
+                SectionTitle(AppIcons.Translate, stringResource(R.string.translations))
                 val ordered = translations.map { it.id }
                 val active = translations.filter { it.id in settings.translationIds }
                 val inactive = translations.filter { it.id !in settings.translationIds }
@@ -203,7 +208,7 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
                                 IconButton(
                                     enabled = active.size > 1,
                                     onClick = { scope.launch { repo.setTranslations(ordered.filter { it in settings.translationIds && it != tr.id }) } },
-                                ) { Icon(Icons.Default.Delete, contentDescription = "Hapus terjemahan ${translationLabel(tr)}") }
+                                ) { Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete_translation_cd, translationLabel(tr))) }
                             },
                         )
                     }
@@ -211,13 +216,13 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
                 if (inactive.isNotEmpty()) {
                     FilledTonalButton(onClick = { showAddTranslation = true }, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
                         Icon(Icons.Default.Add, contentDescription = null)
-                        Text("  Tambah terjemahan")
+                        Text("  " + stringResource(R.string.add_translation))
                     }
                 }
                 if (showAddTranslation) {
                     AlertDialog(
                         onDismissRequest = { showAddTranslation = false },
-                        title = { Text("Tambah terjemahan") },
+                        title = { Text(stringResource(R.string.add_translation)) },
                         text = {
                             Column {
                                 inactive.forEach { tr ->
@@ -231,20 +236,20 @@ fun SettingsScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) 
                                 }
                             }
                         },
-                        confirmButton = { TextButton(onClick = { showAddTranslation = false }) { Text("Tutup") } },
+                        confirmButton = { TextButton(onClick = { showAddTranslation = false }) { Text(stringResource(R.string.close)) } },
                     )
                 }
 
-                SectionTitle(Icons.Default.Info, "Tentang")
+                SectionTitle(Icons.Default.Info, stringResource(R.string.about))
                 Group {
-                    item(title = "Versi", subtitle = version)
+                    item(title = stringResource(R.string.version), subtitle = version)
                     item(
-                        title = "Sumber data",
-                        subtitle = "Quranic Universal Library (Tarteel): layout KFGQPC V4, metadata, info surah, transliterasi, dan terjemahan.",
+                        title = stringResource(R.string.data_source),
+                        subtitle = stringResource(R.string.data_source_sub),
                     )
                     item(
-                        title = "Font",
-                        subtitle = "KFGQPC (King Fahd Glorious Quran Printing Complex): font halaman V4 tajwid, header surah, dan Hafs Uthmanic Script. Hak cipta KFGQPC; digunakan tanpa perubahan.",
+                        title = stringResource(R.string.font),
+                        subtitle = stringResource(R.string.font_sub),
                     )
                 }
             }
@@ -292,7 +297,7 @@ private fun PaletteCard(
                 Icon(icon, contentDescription = null, modifier = Modifier.size(20.dp))
                 Spacer(Modifier.width(8.dp))
                 Text(title, style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
-                if (selected) Icon(Icons.Default.Check, contentDescription = "Dipilih", modifier = Modifier.size(20.dp))
+                if (selected) Icon(Icons.Default.Check, contentDescription = stringResource(R.string.selected), modifier = Modifier.size(20.dp))
             }
             if (scheme != null) {
                 PaletteSwatches(scheme)
@@ -344,8 +349,8 @@ private class GroupScope {
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-private fun Group(content: GroupScope.() -> Unit) {
-    val scope = GroupScope().apply(content)
+private fun Group(content: @Composable GroupScope.() -> Unit) {
+    val scope = GroupScope().apply { content() }
     Column(verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
         scope.items.forEachIndexed { index, item ->
             SegmentedListItem(
@@ -377,11 +382,29 @@ private fun Labeled(label: String, content: @Composable () -> Unit) {
     }
 }
 
+@Composable
 private fun translationLabel(tr: io.zakkyhidayat.quran.data.TranslationInfo): String {
     val language = when (tr.lang) {
-        "id" -> "Indonesia"
-        "en" -> "Inggris"
+        "id" -> stringResource(R.string.lang_name_id)
+        "en" -> stringResource(R.string.lang_name_en)
         else -> tr.lang
     }
-    return "$language - ${tr.name}"
+    return stringResource(R.string.translation_label, language, tr.name)
+}
+
+@Composable
+private fun LanguageSection() {
+    val context = LocalContext.current
+    var code by remember { mutableStateOf(AppLanguage.saved(context)) }
+    SectionTitle(AppIcons.Translate, stringResource(R.string.language))
+    val options = listOf("" to stringResource(R.string.language_system), "id" to "Indonesia", "en" to "English")
+    SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+        options.forEachIndexed { i, (value, label) ->
+            SegmentedButton(
+                selected = code == value,
+                onClick = { if (code != value) { code = value; AppLanguage.apply(context, value) } },
+                shape = SegmentedButtonDefaults.itemShape(i, options.size),
+            ) { Text(label, maxLines = 1) }
+        }
+    }
 }

@@ -52,12 +52,16 @@ class SettingsRepository(private val context: Context) {
             contrast = prefs[contrastKey].toEnum(ContrastLevel.Standard),
             tajweed = prefs[tajweedKey] ?: true,
             showTransliteration = prefs[transliterationKey] ?: true,
-            translationIds = prefs[translationsKey]?.split(',')?.filter { it.isNotBlank() } ?: listOf("id-kemenag"),
+            translationIds = prefs[translationsKey]?.split(',')?.filter { it.isNotBlank() } ?: defaultTranslations(),
             lastPage = prefs[lastPageKey] ?: 1,
             lastSurah = prefs[lastSurahKey] ?: 0,
             lastAyah = prefs[lastAyahKey] ?: 0,
         )
     }
+
+    // Terjemahan awal mengikuti bahasa aplikasi; selain Indonesia memakai Inggris.
+    private fun defaultTranslations() =
+        if (io.zakkyhidayat.quran.AppLanguage.effective(context) == "id") listOf("id-kemenag") else listOf("en-sahih")
 
     suspend fun setThemeMode(value: ThemeMode) = context.dataStore.edit { it[themeKey] = value.name }
 

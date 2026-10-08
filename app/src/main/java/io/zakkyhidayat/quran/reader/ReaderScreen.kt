@@ -1,11 +1,14 @@
 package io.zakkyhidayat.quran.reader
 
+import androidx.compose.ui.res.stringResource
+import io.zakkyhidayat.quran.R
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -81,7 +84,8 @@ private val PageEndPadding = 8.dp
 private val PageStartBleed = (-2).dp
 private val HeaderHeight = 32.dp
 private val FooterHeight = 32.dp
-private val PageChromeHeight = HeaderHeight + FooterHeight
+private val HeaderGap = 10.dp
+private val PageChromeHeight = HeaderHeight + HeaderGap + FooterHeight
 // Kertas B5: 176 x 250 mm.
 private const val PageHeightOverWidth = 250f / 176f
 
@@ -141,25 +145,25 @@ fun ReaderScreen(
             TopAppBar(
                 windowInsets = WindowInsets(0, 0, 0, 0),
                 title = {
-                    Column(Modifier.clickable(onClickLabel = "Lompat ke ayat") { showJump = true }) {
+                    Column(Modifier.clickable(onClickLabel = stringResource(R.string.jump_to_ayah)) { showJump = true }) {
                         Text(currentSurah?.nameLatin.orEmpty(), style = MaterialTheme.typography.titleMedium)
-                        Text("Juz ${meta?.juz ?: ""} • Hal. $currentPage", style = MaterialTheme.typography.bodySmall)
+                        Text(stringResource(R.string.juz_page, meta?.juz ?: "", currentPage), style = MaterialTheme.typography.bodySmall)
                     }
                 },
                 navigationIcon = {
                     if (onOpenIndex != null) {
-                        IconButton(onClick = onOpenIndex) { Icon(Icons.Default.Menu, contentDescription = "Daftar surah dan juz") }
+                        IconButton(onClick = onOpenIndex) { Icon(Icons.Default.Menu, contentDescription = stringResource(R.string.index_cd)) }
                     }
                 },
                 actions = {
-                    IconButton(onClick = onOpenSearch) { Icon(Icons.Default.Search, contentDescription = "Cari") }
+                    IconButton(onClick = onOpenSearch) { Icon(Icons.Default.Search, contentDescription = stringResource(R.string.search)) }
                     IconButton(onClick = { vm.togglePageBookmark(currentPage) }) {
                         Icon(
                             if (pageBookmarked) AppIcons.Bookmark else AppIcons.BookmarkBorder,
-                            contentDescription = if (pageBookmarked) "Hapus bookmark halaman" else "Bookmark halaman",
+                            contentDescription = if (pageBookmarked) stringResource(R.string.remove_page_bookmark) else stringResource(R.string.bookmark_page),
                         )
                     }
-                    IconButton(onClick = onOpenSettings) { Icon(Icons.Default.Settings, contentDescription = "Pengaturan") }
+                    IconButton(onClick = onOpenSettings) { Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.settings)) }
                 },
             )
             HorizontalPager(
@@ -203,8 +207,8 @@ fun ReaderScreen(
                                     modifier = Modifier
                                         .height(24.dp)
                                         .wrapContentHeight(Alignment.CenterVertically, unbounded = true)
-                                        .clickable(onClickLabel = "Buka info surah") { onOpenSurahInfo(headSurah.id) }
-                                        .semantics { contentDescription = "Info surah ${headSurah.nameLatin}" },
+                                        .clickable(onClickLabel = stringResource(R.string.open_surah_info)) { onOpenSurahInfo(headSurah.id) }
+                                        .semantics { contentDescription = context.getString(R.string.surah_info_cd, headSurah.nameLatin) },
                                 )
                             }
                             Box(Modifier.weight(1f))
@@ -212,10 +216,11 @@ fun ReaderScreen(
                                 Text(
                                     text = juzTitleGlyph(info.juz),
                                     style = TextStyle(fontFamily = commonFont, fontSize = 18.sp, color = stripColor),
-                                    modifier = Modifier.semantics { contentDescription = "Juz ${info.juz}" },
+                                    modifier = Modifier.semantics { contentDescription = context.getString(R.string.juz_n, info.juz) },
                                 )
                             }
                         }
+                        Spacer(Modifier.height(HeaderGap))
                         Box(Modifier.size(blockWidth, blockHeight), contentAlignment = Alignment.Center) {
                             val loaded = lines
                             if (loaded == null) {
@@ -242,7 +247,7 @@ fun ReaderScreen(
                                 onClick = { next?.let { vm.clearSelection(); vm.goToPage(it.firstPage) } },
                                 enabled = next != null,
                                 modifier = Modifier.size(32.dp),
-                            ) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = "Surah berikutnya: ${next?.nameLatin.orEmpty()}", modifier = Modifier.size(20.dp)) }
+                            ) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = stringResource(R.string.next_surah_cd, next?.nameLatin.orEmpty()), modifier = Modifier.size(20.dp)) }
                             Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
                                 Text("$page", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
@@ -250,7 +255,7 @@ fun ReaderScreen(
                                 onClick = { previous?.let { vm.clearSelection(); vm.goToPage(it.firstPage) } },
                                 enabled = previous != null,
                                 modifier = Modifier.size(32.dp),
-                            ) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = "Surah sebelumnya: ${previous?.nameLatin.orEmpty()}", modifier = Modifier.size(20.dp)) }
+                            ) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = stringResource(R.string.previous_surah_cd, previous?.nameLatin.orEmpty()), modifier = Modifier.size(20.dp)) }
                         }
                     }
                 }

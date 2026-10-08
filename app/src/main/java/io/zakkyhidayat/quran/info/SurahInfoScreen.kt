@@ -1,5 +1,7 @@
 package io.zakkyhidayat.quran.info
 
+import androidx.compose.ui.res.stringResource
+import io.zakkyhidayat.quran.R
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -37,6 +39,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import io.zakkyhidayat.quran.AppLanguage
 import io.zakkyhidayat.quran.AppViewModel
 import io.zakkyhidayat.quran.data.SurahDetails
 import io.zakkyhidayat.quran.reader.surahNameFontFamily
@@ -50,7 +53,8 @@ import io.zakkyhidayat.quran.ui.parseAyahLink
 fun SurahInfoScreen(vm: AppViewModel, surahId: Int, onBack: () -> Unit, onOpenAyah: (Int, Int) -> Unit, onOpenPage: (Int) -> Unit) {
     val surahs by vm.surahs.collectAsStateWithLifecycle()
     val surah = surahs[surahId]
-    var lang by rememberSaveable { mutableStateOf("id") }
+    val appLang = AppLanguage.effective(androidx.compose.ui.platform.LocalContext.current)
+    var lang by rememberSaveable { mutableStateOf(appLang) }
     val details by produceState<SurahDetails?>(null, surahId, lang) { value = vm.mushaf.surahDetails(surahId, lang) }
     val font = remember { surahNameFontFamily(vm.getApplication()) }
 
@@ -58,7 +62,7 @@ fun SurahInfoScreen(vm: AppViewModel, surahId: Int, onBack: () -> Unit, onOpenAy
         topBar = {
             TopAppBar(
                 title = { Text(surah?.nameLatin.orEmpty()) },
-                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali") } },
+                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back)) } },
             )
         },
     ) { padding ->
@@ -73,23 +77,23 @@ fun SurahInfoScreen(vm: AppViewModel, surahId: Int, onBack: () -> Unit, onOpenAy
                 }
                 details?.let { d ->
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(0.dp)) {
-                        d.place?.let { AssistChip(onClick = {}, label = { Text(if (it == "makki") "Makkiyah" else "Madaniyah") }) }
-                        AssistChip(onClick = {}, label = { Text("${d.ayahCount} ayat") })
-                        AssistChip(onClick = {}, label = { Text(if (d.firstPage == d.lastPage) "Hal. ${d.firstPage}" else "Hal. ${d.firstPage}–${d.lastPage}") })
-                        AssistChip(onClick = {}, label = { Text(if (d.juzFrom == d.juzTo) "Juz ${d.juzFrom}" else "Juz ${d.juzFrom}–${d.juzTo}") })
-                        AssistChip(onClick = {}, label = { Text("${d.rukuCount} ruku") })
-                        d.revelationOrder?.let { AssistChip(onClick = {}, label = { Text("Turun ke-$it") }) }
+                        d.place?.let { AssistChip(onClick = {}, label = { Text(stringResource(if (it == "makki") R.string.place_makki else R.string.place_madani)) }) }
+                        AssistChip(onClick = {}, label = { Text(stringResource(R.string.ayah_count, d.ayahCount)) })
+                        AssistChip(onClick = {}, label = { Text(if (d.firstPage == d.lastPage) stringResource(R.string.page_short, d.firstPage) else stringResource(R.string.pages_range, d.firstPage, d.lastPage)) })
+                        AssistChip(onClick = {}, label = { Text(if (d.juzFrom == d.juzTo) stringResource(R.string.juz_n, d.juzFrom) else stringResource(R.string.juz_range, d.juzFrom, d.juzTo)) })
+                        AssistChip(onClick = {}, label = { Text(stringResource(R.string.ruku_count, d.rukuCount)) })
+                        d.revelationOrder?.let { AssistChip(onClick = {}, label = { Text(stringResource(R.string.revelation_order, it)) }) }
                     }
                     FilledTonalButton(
                         onClick = { onOpenPage(d.firstPage) },
                         modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
                     ) {
                         Icon(AppIcons.MenuBook, contentDescription = null)
-                        Text("  Baca surah ini")
+                        Text("  " + stringResource(R.string.read_surah))
                     }
                 }
                 SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth().padding(vertical = 12.dp)) {
-                    listOf("id" to "Indonesia", "en" to "English").forEachIndexed { i, (code, label) ->
+                    listOf("id" to stringResource(R.string.lang_name_id), "en" to stringResource(R.string.lang_name_en)).forEachIndexed { i, (code, label) ->
                         SegmentedButton(
                             selected = lang == code,
                             onClick = { lang = code },
@@ -100,7 +104,7 @@ fun SurahInfoScreen(vm: AppViewModel, surahId: Int, onBack: () -> Unit, onOpenAy
                 }
                 details?.let { d ->
                     if (d.infoHtml.isBlank()) {
-                        Text("Belum ada informasi untuk surah ini.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(stringResource(R.string.no_surah_info), color = MaterialTheme.colorScheme.onSurfaceVariant)
                     } else {
                         HtmlContent(d.infoHtml) { href ->
                             parseAyahLink(href)?.let { (s, a) -> onOpenAyah(s, a) }
@@ -108,7 +112,7 @@ fun SurahInfoScreen(vm: AppViewModel, surahId: Int, onBack: () -> Unit, onOpenAy
                     }
                 }
                 Text(
-                    "Sumber: Quranic Universal Library (Tarteel).",
+                    stringResource(R.string.source_note),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 24.dp, bottom = 16.dp),

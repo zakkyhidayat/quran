@@ -1,5 +1,7 @@
 package io.zakkyhidayat.quran.search
 
+import androidx.compose.ui.res.stringResource
+import io.zakkyhidayat.quran.R
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.rememberTextFieldState
@@ -111,10 +113,10 @@ fun SearchScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) {
                     searchBarState = searchBarState,
                     textFieldState = textState,
                     onSearch = {},
-                    placeholder = { Text("Cari ayat, surah, atau 2:255") },
-                    leadingIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali") } },
+                    placeholder = { Text(stringResource(R.string.search_placeholder)) },
+                    leadingIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back)) } },
                     trailingIcon = {
-                        if (query.isNotEmpty()) IconButton(onClick = { textState.clearText() }) { Icon(Icons.Default.Close, contentDescription = "Bersihkan") }
+                        if (query.isNotEmpty()) IconButton(onClick = { textState.clearText() }) { Icon(Icons.Default.Close, contentDescription = stringResource(R.string.clear)) }
                     },
                     modifier = Modifier.focusRequester(focus),
                 )
@@ -124,9 +126,9 @@ fun SearchScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) {
     ) { padding ->
         CenteredContent(Modifier.padding(padding)) {
             if (query.isBlank()) {
-                Hint("Ketik kata dalam bahasa Indonesia atau Inggris, teks Arab, nama surah, atau rujukan ayat seperti 2:255.")
+                Hint(stringResource(R.string.search_hint))
             } else if (hits.isEmpty()) {
-                Hint("Tidak ada hasil.")
+                Hint(stringResource(R.string.no_results))
             } else {
                 LazyColumn(Modifier.fillMaxSize().imePadding()) {
                     items(hits) { hit -> HitRow(hit, vm, onBack) }
@@ -153,13 +155,13 @@ private fun HitRow(hit: Hit, vm: AppViewModel, onBack: () -> Unit) {
             val s = surahs[hit.surah] ?: return
             ListItem(
                 onClick = { vm.clearSelection(); vm.goToPage(s.firstPage); onBack() },
-                supportingContent = { Text("${s.id} • ${s.ayahCount} ayat • Hal. ${s.firstPage}") },
-            ) { Text("Surah ${s.nameLatin}") }
+                supportingContent = { Text(stringResource(R.string.search_surah_sub, s.id, s.ayahCount, s.firstPage)) },
+            ) { Text(stringResource(R.string.surah_title, s.nameLatin)) }
         }
-        is Hit.PageHit -> ListItem(onClick = { vm.clearSelection(); vm.goToPage(hit.page); onBack() }) { Text("Halaman ${hit.page}") }
+        is Hit.PageHit -> ListItem(onClick = { vm.clearSelection(); vm.goToPage(hit.page); onBack() }) { Text(stringResource(R.string.page_n, hit.page)) }
         is Hit.AyahHit -> ListItem(
             onClick = { vm.goToAyah(hit.surah, hit.ayah, openSheet = true); onBack() },
-            supportingContent = { Text("Buka ayat") },
+            supportingContent = { Text(stringResource(R.string.open_ayah)) },
         ) { Text("${surahs[hit.surah]?.nameLatin.orEmpty()} ${hit.surah}:${hit.ayah}") }
         is Hit.Result -> {
             val r = hit.value

@@ -30,7 +30,7 @@ tombol unduhnya butuh login. Ambil format **SQLite** kecuali dicatat lain.
 | 10 | Info surah Indonesia | [surah-info/454](https://qul.tarteel.ai/resources/surah-info/454) | `surah-info-id/surah-info-id.db` | Layar info surah |
 | 11 | Info surah Inggris | [surah-info/3](https://qul.tarteel.ai/resources/surah-info/3) | `surah-info-en/surah-info-en.db` | Layar info surah |
 | 12 | Transliterasi Latin (tajwid, simple) | [transliteration/469](https://qul.tarteel.ai/resources/transliteration/469), `english-transliteration-tajweed-simple` | `translit-tajweed-simple/` | Kartu transliterasi di sheet ayat |
-| 13 | Terjemahan Indonesia, Kemenag RI (berkas `quran-id-with-footnote-tags`) | [translation/224](https://qul.tarteel.ai/resources/translation/224) (nomor dugaan; cocokkan dengan nama berkas) | `quran-id-with-footnote-tags/` | Terjemahan |
+| 13 | Terjemahan Indonesia, Kemenag RI (berkas `quran-id-with-footnote-tags`) | [translation/224](https://qul.tarteel.ai/resources/translation/224) ("Indonesian Islamic affairs ministry"; berkas unduhannya bernama `quran-id-...`) | `quran-id-with-footnote-tags/` | Terjemahan |
 | 14 | Terjemahan Indonesia, The Sabiq Company | [translation/194](https://qul.tarteel.ai/resources/translation/194) | `the-sabiq-company-with-footnote-tags/` | Terjemahan |
 | 15 | Terjemahan Indonesia, King Fahad Quran Complex | [translation/173](https://qul.tarteel.ai/resources/translation/173) | `king-fahad-quran-complex-with-footnote-tags/` | Terjemahan |
 | 16 | Terjemahan Inggris, Saheeh International | [translation/193](https://qul.tarteel.ai/resources/translation/193) | `en-sahih-international-with-footnote-tags/` | Terjemahan |

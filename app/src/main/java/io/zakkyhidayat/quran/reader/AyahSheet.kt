@@ -1,5 +1,7 @@
 package io.zakkyhidayat.quran.reader
 
+import androidx.compose.ui.res.stringResource
+import io.zakkyhidayat.quran.R
 import android.content.ClipData
 import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
@@ -85,35 +87,35 @@ fun AyahSheetContent(
                 Text(title, style = MaterialTheme.typography.titleLarge)
                 val info = detail.info
                 Text(
-                    "Halaman ${detail.page} • Juz ${info.juz} • Hizb ${info.hizb} (rub' ${info.rubInHizb}/4) • Manzil ${info.manzil} • Ruku ${info.ruku}",
+                    stringResource(R.string.ayah_meta, detail.page, info.juz, info.hizb, info.rubInHizb, info.manzil, info.ruku),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            IconButton(onClick = onPrevious) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = "Ayat sebelumnya") }
-            IconButton(onClick = onNext) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = "Ayat berikutnya") }
+            IconButton(onClick = onPrevious) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = stringResource(R.string.previous_ayah)) }
+            IconButton(onClick = onNext) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = stringResource(R.string.next_ayah)) }
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             FilledTonalIconToggleButton(checked = bookmarked, onCheckedChange = { onToggleBookmark() }) {
                 Icon(
                     if (bookmarked) AppIcons.Bookmark else AppIcons.BookmarkBorder,
-                    contentDescription = if (bookmarked) "Hapus bookmark" else "Bookmark ayat",
+                    contentDescription = if (bookmarked) stringResource(R.string.remove_bookmark) else stringResource(R.string.bookmark_ayah),
                 )
             }
             FilledTonalIconButton(onClick = {
-                scope.launch { clipboard.setClipEntry(ClipData.newPlainText("Ayat", plainText).toClipEntry()) }
-            }) { Icon(AppIcons.ContentCopy, contentDescription = "Salin") }
+                scope.launch { clipboard.setClipEntry(ClipData.newPlainText("Ayah", plainText).toClipEntry()) }
+            }) { Icon(AppIcons.ContentCopy, contentDescription = stringResource(R.string.copy)) }
             FilledTonalIconButton(onClick = {
                 val send = Intent(Intent.ACTION_SEND).apply { type = "text/plain"; putExtra(Intent.EXTRA_TEXT, plainText) }
                 context.startActivity(Intent.createChooser(send, null))
-            }) { Icon(Icons.Default.Share, contentDescription = "Bagikan") }
+            }) { Icon(Icons.Default.Share, contentDescription = stringResource(R.string.share)) }
         }
 
         detail.info.sajda?.let { type ->
             Spacer(Modifier.height(4.dp))
             AssistChip(
                 onClick = {},
-                label = { Text(if (type == "required") "Ayat sajdah tilawah (wajib)" else "Ayat sajdah tilawah (dianjurkan)") },
+                label = { Text(stringResource(if (type == "required") R.string.sajda_ayah_required else R.string.sajda_ayah_recommended)) },
                 leadingIcon = { Icon(Icons.Default.KeyboardArrowDown, contentDescription = null, modifier = Modifier.size(AssistChipDefaults.IconSize)) },
             )
         }
@@ -136,7 +138,7 @@ fun AyahSheetContent(
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
             ) {
                 Column(Modifier.padding(16.dp)) {
-                    Text("Transliterasi", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                    Text(stringResource(R.string.transliteration), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                     Spacer(Modifier.height(4.dp))
                     val body = MaterialTheme.typography.bodyLarge
                     Text(romanized, style = body.copy(fontStyle = androidx.compose.ui.text.font.FontStyle.Italic, lineHeight = body.fontSize * 1.6f))

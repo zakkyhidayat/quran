@@ -1,5 +1,7 @@
 package io.zakkyhidayat.quran.index
 
+import androidx.compose.ui.res.stringResource
+import io.zakkyhidayat.quran.R
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -58,12 +60,12 @@ import io.zakkyhidayat.quran.ui.segmentedItemColors
 import io.zakkyhidayat.quran.ui.NumberBadge
 
 private val TABS = listOf(
-    "Surah" to AppIcons.MenuBook,
-    "Juz" to AppIcons.GridView,
-    "Hizb" to AppIcons.PieChart,
-    "Manzil" to AppIcons.CalendarViewWeek,
-    "Sajdah" to Icons.Default.KeyboardArrowDown,
-    "Bookmark" to AppIcons.BookmarkBorder,
+    R.string.tab_surah to AppIcons.MenuBook,
+    R.string.tab_juz to AppIcons.GridView,
+    R.string.tab_hizb to AppIcons.PieChart,
+    R.string.tab_manzil to AppIcons.CalendarViewWeek,
+    R.string.tab_sajdah to Icons.Default.KeyboardArrowDown,
+    R.string.tab_bookmark to AppIcons.BookmarkBorder,
 )
 private val ListPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
 
@@ -76,14 +78,14 @@ fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Daftar") },
+                title = { Text(stringResource(R.string.index_title)) },
                 navigationIcon = {
-                    if (!embedded) IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali") }
+                    if (!embedded) IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back)) }
                 },
                 actions = {
-                    IconButton(onClick = { showJump = true }) { Icon(AppIcons.FormatListNumbered, contentDescription = "Lompat ke ayat") }
-                    IconButton(onClick = { vm.randomAyah(); onBack() }) { Icon(AppIcons.Shuffle, contentDescription = "Ayat acak") }
-                    IconButton(onClick = onOpenSettings) { Icon(Icons.Default.Settings, contentDescription = "Pengaturan") }
+                    IconButton(onClick = { showJump = true }) { Icon(AppIcons.FormatListNumbered, contentDescription = stringResource(R.string.jump_to_ayah)) }
+                    IconButton(onClick = { vm.randomAyah(); onBack() }) { Icon(AppIcons.Shuffle, contentDescription = stringResource(R.string.random_ayah)) }
+                    IconButton(onClick = onOpenSettings) { Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.settings)) }
                 },
             )
         },
@@ -103,7 +105,7 @@ fun IndexScreen(vm: AppViewModel, onBack: () -> Unit, onOpenSettings: () -> Unit
                         LeadingIconTab(
                             selected = tab == i,
                             onClick = { tab = i },
-                            text = { Text(title) },
+                            text = { Text(stringResource(title)) },
                             icon = { Icon(icon, contentDescription = null) },
                         )
                     }
@@ -142,7 +144,7 @@ private fun SurahList(vm: AppViewModel, onBack: () -> Unit, onOpenSurahInfo: (In
                 Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                     Icon(AppIcons.MenuBook, contentDescription = null)
                     Column(Modifier.padding(start = 16.dp)) {
-                        Text("Lanjutkan membaca", style = MaterialTheme.typography.titleMedium)
+                        Text(stringResource(R.string.continue_reading), style = MaterialTheme.typography.titleMedium)
                         Text("${lastSurah.nameLatin} ${lastSurah.id}:${settings.lastAyah}", style = MaterialTheme.typography.bodyMedium)
                     }
                 }
@@ -156,11 +158,11 @@ private fun SurahList(vm: AppViewModel, onBack: () -> Unit, onOpenSurahInfo: (In
                 shapes = ListItemDefaults.segmentedShapes(index, items.size),
                 colors = segmentedItemColors(),
                 leadingContent = { NumberBadge(s.id) },
-                supportingContent = { Text("${s.ayahCount} ayat • Hal. ${s.firstPage}") },
+                supportingContent = { Text(stringResource(R.string.surah_summary, s.ayahCount, s.firstPage)) },
                 trailingContent = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(s.nameGlyph.toString(), style = TextStyle(fontFamily = font, fontSize = glyphSize, color = MaterialTheme.colorScheme.primary))
-                        IconButton(onClick = { onOpenSurahInfo(s.id) }) { Icon(Icons.Default.Info, contentDescription = "Info surah ${s.nameLatin}") }
+                        IconButton(onClick = { onOpenSurahInfo(s.id) }) { Icon(Icons.Default.Info, contentDescription = stringResource(R.string.surah_info_cd, s.nameLatin)) }
                     }
                 },
             ) { Text(s.nameLatin) }
@@ -182,11 +184,11 @@ private fun JuzList(vm: AppViewModel, onBack: () -> Unit) {
                 shapes = ListItemDefaults.segmentedShapes(index, juz.size),
                 colors = segmentedItemColors(),
                 leadingContent = { NumberBadge(j.id) },
-                supportingContent = { Text("${surahs[j.surah]?.nameLatin.orEmpty()} ${j.surah}:${j.ayah} • Hal. ${j.page}") },
+                supportingContent = { Text(stringResource(R.string.ref_place, surahs[j.surah]?.nameLatin.orEmpty(), j.surah, j.ayah, j.page)) },
                 trailingContent = {
                     Text(juzOpeningGlyph(j.id), style = TextStyle(fontFamily = commonFont, fontSize = 22.sp, color = MaterialTheme.colorScheme.primary))
                 },
-            ) { Text("Juz ${j.id}") }
+            ) { Text(stringResource(R.string.juz_n, j.id)) }
         }
     }
 }
@@ -212,23 +214,23 @@ private fun HizbList(vm: AppViewModel, onBack: () -> Unit) {
     }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = ListPadding, verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
         itemsIndexed(rows, key = { _, r -> if (r.second == null) "h${r.first.id}" else "r${r.first.id}" }) { index, (m, quarter) ->
-            val place = "${surahs[m.surah]?.nameLatin.orEmpty()} ${m.surah}:${m.ayah} • Hal. ${m.page}"
+            val place = stringResource(R.string.ref_place, surahs[m.surah]?.nameLatin.orEmpty(), m.surah, m.ayah, m.page)
             if (quarter == null) {
                 SegmentedListItem(
                     onClick = { vm.goToAyah(m.surah, m.ayah); onBack() },
                     shapes = ListItemDefaults.segmentedShapes(index, rows.size),
                     colors = segmentedItemColors(),
                     leadingContent = { NumberBadge(m.id) },
-                    supportingContent = { Text("Juz ${(m.id - 1) / 2 + 1} • $place") },
+                    supportingContent = { Text(stringResource(R.string.juz_place, (m.id - 1) / 2 + 1, place)) },
                     trailingContent = {
                         IconButton(onClick = { expanded = if (expanded == m.id) 0 else m.id }) {
                             Icon(
                                 if (expanded == m.id) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                                contentDescription = if (expanded == m.id) "Tutup rub'" else "Tampilkan rub'",
+                                contentDescription = if (expanded == m.id) stringResource(R.string.hide_rub) else stringResource(R.string.show_rub),
                             )
                         }
                     },
-                ) { Text("Hizb ${m.id}") }
+                ) { Text(stringResource(R.string.hizb_n, m.id)) }
             } else {
                 SegmentedListItem(
                     onClick = { vm.goToAyah(m.surah, m.ayah); onBack() },
@@ -236,7 +238,7 @@ private fun HizbList(vm: AppViewModel, onBack: () -> Unit) {
                     colors = segmentedItemColors(),
                     supportingContent = { Text(place) },
                     modifier = Modifier.padding(start = 24.dp),
-                ) { Text("Rub' $quarter") }
+                ) { Text(stringResource(R.string.rub_n, quarter)) }
             }
         }
     }
@@ -254,8 +256,8 @@ private fun ManzilList(vm: AppViewModel, onBack: () -> Unit) {
                 shapes = ListItemDefaults.segmentedShapes(index, manzil.size),
                 colors = segmentedItemColors(),
                 leadingContent = { NumberBadge(m.id) },
-                supportingContent = { Text("${surahs[m.surah]?.nameLatin.orEmpty()} ${m.surah}:${m.ayah} • Hal. ${m.page}") },
-            ) { Text("Manzil ${m.id}") }
+                supportingContent = { Text(stringResource(R.string.ref_place, surahs[m.surah]?.nameLatin.orEmpty(), m.surah, m.ayah, m.page)) },
+            ) { Text(stringResource(R.string.manzil_n, m.id)) }
         }
     }
 }
@@ -273,13 +275,14 @@ private fun SajdaList(vm: AppViewModel, onBack: () -> Unit) {
                 colors = segmentedItemColors(),
                 leadingContent = { NumberBadge(m.id) },
                 overlineContent = { Text(sajdaLabel(m.extra)) },
-                supportingContent = { Text("Hal. ${m.page}") },
+                supportingContent = { Text(stringResource(R.string.page_short, m.page)) },
             ) { Text("${surahs[m.surah]?.nameLatin.orEmpty()} ${m.surah}:${m.ayah}") }
         }
     }
 }
 
-internal fun sajdaLabel(type: String): String = if (type == "required") "Sajdah tilawah (wajib)" else "Sajdah tilawah (dianjurkan)"
+@Composable
+internal fun sajdaLabel(type: String): String = stringResource(if (type == "required") R.string.sajda_required else R.string.sajda_recommended)
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -289,17 +292,17 @@ private fun BookmarkList(vm: AppViewModel, onBack: () -> Unit) {
     val pageMeta by vm.pageMeta.collectAsStateWithLifecycle()
     if (bookmarks.isEmpty()) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Belum ada bookmark", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.no_bookmarks), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         return
     }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = ListPadding, verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
         itemsIndexed(bookmarks, key = { _, b -> b.id }) { index, b: Bookmark ->
-            val title = if (b.kind == BookmarkKind.Ayah) "${surahs[b.surah]?.nameLatin.orEmpty()} ${b.surah}:${b.ayah}" else "Halaman ${b.page}"
+            val title = if (b.kind == BookmarkKind.Ayah) "${surahs[b.surah]?.nameLatin.orEmpty()} ${b.surah}:${b.ayah}" else stringResource(R.string.page_n, b.page)
             val subtitle = if (b.kind == BookmarkKind.Ayah) {
-                "Ayat • Hal. ${b.page}"
+                stringResource(R.string.bookmark_ayah_sub, b.page)
             } else {
-                "Halaman • ${surahs[pageMeta.getOrNull(b.page - 1)?.surah]?.nameLatin.orEmpty()}"
+                stringResource(R.string.bookmark_page_sub, surahs[pageMeta.getOrNull(b.page - 1)?.surah]?.nameLatin.orEmpty())
             }
             SegmentedListItem(
                 onClick = {
@@ -310,7 +313,7 @@ private fun BookmarkList(vm: AppViewModel, onBack: () -> Unit) {
                 colors = segmentedItemColors(),
                 supportingContent = { Text(subtitle) },
                 trailingContent = {
-                    IconButton(onClick = { vm.deleteBookmark(b.id) }) { Icon(Icons.Default.Delete, contentDescription = "Hapus") }
+                    IconButton(onClick = { vm.deleteBookmark(b.id) }) { Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete)) }
                 },
             ) { Text(title) }
         }
