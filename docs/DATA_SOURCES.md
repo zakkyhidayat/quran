@@ -98,42 +98,69 @@ Tabel dasar tidak disentuh. Ini juga menaikkan `user_version` ke `DATA_VERSION`.
 
 ## Paket terjemahan unduhan
 
-Selain empat terjemahan yang dibundel di `quran.db`, aplikasi bisa mengunduh terjemahan tambahan. QUL tidak punya API dan
-butuh login, jadi aplikasi tidak mengunduh dari QUL. Pemelihara mengunduh berkas QUL secara manual, mengubahnya jadi paket
-kecil dengan `tools/build_translation_packs.py`, lalu menaruhnya di GitHub Releases (tag `translations`). Aplikasi membaca
-`catalog.json` dari rilis itu (alamatnya `TRANSLATION_CATALOG_URL` di `app/build.gradle.kts`), mengunduh paket, memeriksa
-sha256 dan jumlah ayat (6236), lalu menyimpannya di `filesDir/translations/`.
+Selain empat terjemahan yang dibundel di `quran.db`, aplikasi bisa mengunduh sekitar 170 terjemahan tambahan dalam banyak
+bahasa. QUL tidak punya API dan butuh login, jadi aplikasi tidak mengunduh dari QUL. Pemelihara mengunduh berkas QUL secara
+manual, mengubahnya jadi paket kecil, lalu menaruhnya di GitHub Releases (tag `translations`). Aplikasi membaca `catalog.json`
+dari rilis itu (alamatnya `TRANSLATION_CATALOG_URL` di `app/build.gradle.kts`), mengunduh paket, memeriksa sha256 dan jumlah
+ayat (6236), lalu menyimpannya di `filesDir/translations/`. Dialog "Tambah terjemahan" mengelompokkan paket per bahasa dan
+punya kolom cari (bahasa atau penerjemah).
 
-| Id paket | Bahasa | Terjemahan | Halaman QUL | Simpan ke (di `data-src/`) |
-|----------|--------|------------|-------------|----------------------------|
-| `en-khattab` | en | Dr. Mustafa Khattab, The Clear Quran | [translation/426](https://qul.tarteel.ai/resources/translation/426) | `en-khattab/` |
-| `en-yusufali` | en | Abdullah Yusuf Ali | [translation/124](https://qul.tarteel.ai/resources/translation/124) | `en-yusufali/` |
-| `ur-jalandhari` | ur | Fatah Muhammad Jalandhari | [translation/218](https://qul.tarteel.ai/resources/translation/218) | `ur-jalandhari/` |
-| `bn-mujibur` | bn | Sheikh Mujibur Rahman | [translation/186](https://qul.tarteel.ai/resources/translation/186) | `bn-mujibur/` |
-| `tr-diyanet` | tr | Diyanet | [translation/148](https://qul.tarteel.ai/resources/translation/148) | `tr-diyanet/` |
-| `fa-islamhouse` | fa | IslamHouse.com | [translation/169](https://qul.tarteel.ai/resources/translation/169) | `fa-islamhouse/` |
-| `ms-basmeih` | ms | Abdul Hameed and Kunhi | [translation/130](https://qul.tarteel.ai/resources/translation/130) | `ms-basmeih/` |
-| `fr-hamidullah` | fr | Muhammad Hamidullah | [translation/227](https://qul.tarteel.ai/resources/translation/227) | `fr-hamidullah/` |
-| `ru-kuliev` | ru | Elmir Kuliev | [translation/136](https://qul.tarteel.ai/resources/translation/136) | `ru-kuliev/` |
+Alurnya, semuanya lokal sampai langkah unggah:
 
-Simpan berkas SQLite hasil unduhan (satu `.db` per folder, nama bebas). Dua varian QUL dikenali otomatis: `with-footnote-tags`
-(catatan kaki ikut dibaca dengan parser yang sama dengan `build_db.py`) dan `simple` (teks polos, tanpa catatan kaki).
-Sumber yang belum diunduh dilewati dengan pesan, dan `tools/data_manifest.py` menampilkannya sebagai `BELUM DIUNDUH` (bukan galat).
+```
+qul_catch.py  ->  qul_translation_meta.py  ->  qul_translation_meta.py --footnotes  ->  build_translation_packs.py  ->  unggah
+(tangkap)         (pecah varian simple)         (pecah varian catatan kaki)              (bangun paket)
+```
 
-Membangun dan mengunggah:
+1. **Tangkap unduhan.** Unduh tiap terjemahan dari <https://qul.tarteel.ai/resources/translation> lewat browser (perlu login),
+   varian `simple` ke `data-src/translation/` dan varian `with-footnote-tags` ke `data-src/translation-footnote/`:
+   `python tools/qul_catch.py translation` (lihat `--help`; untuk folder catatan kaki simpan manual atau pindahkan hasilnya).
+2. **Pecah per terjemahan.** Server QUL memberi nama berkas sama untuk terjemahan berjudul sama dan unduhan berikutnya
+   BERISI unduhan sebelumnya (ditambahkan di belakang; contoh: `montada-islamic-foundation-with-footnote-tags-1.db` berisi
+   Prancis dan Spanyol). `python tools/qul_translation_meta.py` memecah tiap berkas menjadi blok, mencocokkan tiap blok ke id
+   resource QUL lewat teks pratinjau (cache halaman di `data-src/.qul-cache/`, `--offline` bila cache sudah lengkap), lalu
+   menulis `data-src/translation-split/<id>-<slug>.db` dan `index.json` (id, judul, bahasa, deskripsi, jumlah baris,
+   `complete`).
+3. **Pecah varian catatan kaki.** `python tools/qul_translation_meta.py --footnotes` (setelah langkah 2) mencocokkan tiap blok
+   di `data-src/translation-footnote/` ke id yang sama dengan membandingkan teksnya (tag catatan kaki dibuang) dengan berkas
+   simple hasil langkah 2, lalu menulis `data-src/translation-footnote-split/<id>-<slug>.db` (kolom `footnotes` dipertahankan)
+   dan `index.json`.
+4. **Katalog kurasi.** `tools/translation_catalog.json` (masuk git) adalah sumber kebenaran: untuk tiap terjemahan ada
+   `pack_id` (`<bahasa>-<slug>`), `lang` (ISO 639-1; 639-3 bila tak punya 639-1, mis. `mos`, `yao`, `luy`, `mdh`), `lang_name`
+   (nama Inggris untuk kode 639-3, dipakai aplikasi bila `Locale` tak mengenalnya), `name`, `author`, `qul`, `variant`
+   (`footnote` bila ada, selain itu `simple`) dan `source`. Bahasa dari daftar QUL sering kosong atau keliru (misalnya "Malay"
+   untuk terjemahan Malayalam, "Turkmen" untuk Cebuano), jadi bahasa ditetapkan manual dari judul dan isi teks.
+   Entri dengan kunci `excluded` (disertai alasan) tidak dibangun: terjemahan tidak lengkap (baris di bawah 6236), terlalu
+   banyak ayat kosong, atau berkas yang tak bisa dicocokkan ke satu id QUL. `skip` menandai yang memang tak bisa diunduh
+   (`en-khattab`, QUL 426). Id paket lama (`id-kemenag`, `id-sabiq`, `id-kfqpc`, `en-sahih`, `en-yusufali`, `ur-jalandhari`,
+   `bn-mujibur`, `tr-diyanet`, `fa-islamhouse`, `ms-basmeih`, `fr-hamidullah`, `ru-kuliev`) TIDAK BOLEH diubah karena pilihan
+   pengguna tersimpan dengan id itu.
+5. **Bangun paket.**
 
 ```bash
-python tools/build_translation_packs.py              # semua yang sumbernya ada; atau sebut id: ... en-khattab ur-jalandhari
+python tools/build_translation_packs.py              # semua paket di katalog; atau sebut id: ... ur-jalandhari id-kemenag
 # hasil: build/translation-packs/<id>.db dan catalog.json (tidak masuk git)
+```
 
+   Sumber dibaca dari folder pecahan (`translation-footnote-split/` untuk varian `footnote`, selain itu `translation-split/`).
+   Skrip memeriksa 6236 ayat unik per paket (kunci ayat dari `ayah_key`, karena kolom `sura`/`ayah` rusak di beberapa
+   berkas), mengizinkan paling banyak 10 ayat kosong di sumber (dicatat sebagai `empty_ayah` di `catalog.json`), dan melaporkan
+   paket yang gagal. Format `catalog.json` tidak berubah (`id`, `lang`, `name`, `source`, `file`, `bytes`, `sha256`, `version`);
+   ditambah `qul`, serta `lang_name` dan `empty_ayah` bila ada (diabaikan aplikasi lama).
+6. **Unggah** (hanya bila sudah siap dirilis):
+
+```bash
 # pertama kali: buat rilis (tag translations)
 gh release create translations build/translation-packs/* --title "Paket terjemahan" --notes "Paket terjemahan unduhan untuk aplikasi"
 # pembaruan berikutnya
 gh release upload translations build/translation-packs/* --clobber
 ```
 
-Untuk menambah paket baru, tambahkan barisnya di `PACKS` pada `tools/build_translation_packs.py` (dan folder di `OPTIONAL_DIRS`
-pada `tools/data_manifest.py`), bangun, unggah ulang `catalog.json`. Naikkan `PACK_VERSION` bila isi paket yang sama berubah.
+Untuk menambah paket baru: unduh dan pecah (langkah 1 sampai 3), tambahkan entrinya di `tools/translation_catalog.json`, bangun,
+lalu unggah ulang `catalog.json`. Naikkan `PACK_VERSION` di `tools/build_translation_packs.py` bila isi paket yang sama berubah.
+
+**Atribusi.** Hak cipta tiap terjemahan ada pada penerbit atau penerjemahnya (tercantum di `author` katalog dan nama paket di
+aplikasi), diambil lewat QUL. Lihat `THIRD_PARTY_NOTICES.md`; izin redistribusi belum dipastikan (lihat `docs/AUDIT.md`).
 
 ## Kapan harus memperbarui
 

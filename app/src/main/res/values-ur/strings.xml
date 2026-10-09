@@ -127,6 +127,8 @@
     <string name="translation_download_cd">%1$s ڈاؤن لوڈ کریں</string>
     <string name="delete_downloaded_translation_cd">%1$s کی ڈاؤن لوڈ فائل حذف کریں</string>
     <string name="translations_all_added">تمام دستیاب ترجمے شامل ہو چکے ہیں۔</string>
+    <string name="translations_search_hint">زبان یا مترجم تلاش کریں</string>
+    <string name="translations_no_match">آپ کی تلاش سے کوئی ترجمہ نہیں ملا۔</string>
     <string name="translations_downloadable">ڈاؤن لوڈ کے لیے دستیاب</string>
     <string name="credits">اعترافات</string>
     <string name="credits_sub">QUL کے زیادہ تر وسائل کمیونٹی نے تیار کیے: شاہ فہد قرآن پرنٹنگ کمپلیکس، تنزیل، Quran.com، مترجمین اور بہت سے دوسرے۔ پوری فہرست کے لیے تھپتھپائیں۔</string>

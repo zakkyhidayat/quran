@@ -127,6 +127,8 @@
     <string name="translation_download_cd">Télécharger %1$s</string>
     <string name="delete_downloaded_translation_cd">Supprimer le fichier téléchargé de %1$s</string>
     <string name="translations_all_added">Toutes les traductions disponibles ont été ajoutées.</string>
+    <string name="translations_search_hint">Rechercher une langue ou un traducteur</string>
+    <string name="translations_no_match">Aucune traduction ne correspond à votre recherche.</string>
     <string name="translations_downloadable">Disponibles au téléchargement</string>
     <string name="credits">Remerciements</string>
     <string name="credits_sub">La plupart des ressources de QUL ont été créées par la communauté : le Complexe du Roi Fahd pour l\'impression du Coran, Tanzil, Quran.com, les traducteurs et bien d\'autres. Touchez pour la liste complète.</string>

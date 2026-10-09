@@ -128,6 +128,8 @@
     <string name="translation_download_cd">Download %1$s</string>
     <string name="delete_downloaded_translation_cd">Delete downloaded file for %1$s</string>
     <string name="translations_all_added">All available translations have been added.</string>
+    <string name="translations_search_hint">Search language or translator</string>
+    <string name="translations_no_match">No translations match your search.</string>
     <string name="translations_downloadable">Available to download</string>
     <string name="credits">Credits</string>
     <string name="credits_sub">Most QUL resources were created by the community: King Fahd Glorious Quran Printing Complex, Tanzil, Quran.com, the translators, and many others. Tap for the full list.</string>

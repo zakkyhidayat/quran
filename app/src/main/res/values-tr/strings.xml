@@ -127,6 +127,8 @@
     <string name="translation_download_cd">%1$s indir</string>
     <string name="delete_downloaded_translation_cd">%1$s için indirilen dosyayı sil</string>
     <string name="translations_all_added">Mevcut tüm mealler eklendi.</string>
+    <string name="translations_search_hint">Dil veya çevirmen ara</string>
+    <string name="translations_no_match">Aramanızla eşleşen meal yok.</string>
     <string name="translations_downloadable">İndirilebilir</string>
     <string name="credits">Katkıda bulunanlar</string>
     <string name="credits_sub">QUL kaynaklarının çoğu topluluk tarafından hazırlandı: Kral Fahd Kur\'an Basım Kompleksi, Tanzil, Quran.com, mütercimler ve daha birçokları. Tam liste için dokunun.</string>

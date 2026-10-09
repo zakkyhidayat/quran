@@ -127,6 +127,8 @@
     <string name="translation_download_cd">%1$s ডাউনলোড করুন</string>
     <string name="delete_downloaded_translation_cd">%1$s-এর ডাউনলোড করা ফাইল মুছুন</string>
     <string name="translations_all_added">সব উপলব্ধ অনুবাদ যোগ করা হয়েছে।</string>
+    <string name="translations_search_hint">ভাষা বা অনুবাদক খুঁজুন</string>
+    <string name="translations_no_match">আপনার অনুসন্ধানের সাথে কোনো অনুবাদ মেলেনি।</string>
     <string name="translations_downloadable">ডাউনলোডের জন্য উপলব্ধ</string>
     <string name="credits">কৃতজ্ঞতা</string>
     <string name="credits_sub">QUL-এর বেশিরভাগ উপকরণ সম্প্রদায়ের তৈরি: বাদশাহ ফাহাদ কুরআন মুদ্রণ কমপ্লেক্স, তানযিল, Quran.com, অনুবাদকগণ ও আরও অনেকে। পূর্ণ তালিকার জন্য ট্যাপ করুন।</string>

@@ -127,6 +127,8 @@
     <string name="translation_download_cd">تنزيل %1$s</string>
     <string name="delete_downloaded_translation_cd">حذف الملف المنزَّل لـ %1$s</string>
     <string name="translations_all_added">أُضيفت كل الترجمات المتاحة.</string>
+    <string name="translations_search_hint">ابحث عن لغة أو مترجم</string>
+    <string name="translations_no_match">لا توجد ترجمات مطابقة لبحثك.</string>
     <string name="translations_downloadable">متاحة للتنزيل</string>
     <string name="credits">شكر وتقدير</string>
     <string name="credits_sub">معظم موارد QUL أعدّها المجتمع: مجمع الملك فهد لطباعة المصحف الشريف، وتنزيل، وQuran.com، والمترجمون، وغيرهم كثير. اضغط لعرض القائمة كاملة.</string>

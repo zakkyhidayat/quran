@@ -17,6 +17,7 @@ SHA-256 checksums are in [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md) and [docs/
 | Surah info (Indonesian, English) | QUL contributors | QUL terms |
 | Transliteration | QUL contributors | QUL terms |
 | Translations: Kemenag RI, The Sabiq Company, King Fahad Quran Complex (Indonesian); Saheeh International (English) | Their publishers, via QUL | Copyright of each publisher. **Permission for redistribution has not been confirmed yet** (see docs/AUDIT.md). |
+| Downloadable translation packs (about 170, many languages; catalogue in `tools/translation_catalog.json`) | The publisher or translator named in each pack and in the app's translation list, via QUL (https://qul.tarteel.ai/resources/translation/<id>) | Copyright of each publisher/translator. Packs are downloaded on demand, not shipped in the APK. **Permission for redistribution has not been confirmed yet.** |
 
 **Font palettes.** The V4 fonts contain six colour palettes (CPAL). Android always uses the first one, so the app writes
 a copy of a font with a different existing palette marked as default (light/dark, with or without tajweed colours). No

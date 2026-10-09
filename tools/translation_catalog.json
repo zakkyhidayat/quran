@@ -1,0 +1,1724 @@
+[
+ {
+  "pack_id": "id-kemenag",
+  "lang": "id",
+  "name": "Kemenag RI",
+  "author": "Kementerian Agama RI",
+  "qul": 224,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/224"
+ },
+ {
+  "pack_id": "id-sabiq",
+  "lang": "id",
+  "name": "The Sabiq Company",
+  "author": "The Sabiq Company",
+  "qul": 194,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/194"
+ },
+ {
+  "pack_id": "id-kfqpc",
+  "lang": "id",
+  "name": "King Fahad Quran Complex",
+  "author": "King Fahad Quran Complex",
+  "qul": 173,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/173"
+ },
+ {
+  "pack_id": "en-sahih",
+  "lang": "en",
+  "name": "Saheeh International",
+  "author": "Saheeh International",
+  "qul": 193,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/193"
+ },
+ {
+  "pack_id": "en-khattab",
+  "lang": "en",
+  "name": "The Clear Quran (Khattab)",
+  "author": "Dr. Mustafa Khattab",
+  "qul": 426,
+  "variant": "simple",
+  "skip": true,
+  "excluded": "tidak bisa diunduh dari QUL (tak ada berkas); id dipertahankan untuk kompatibilitas",
+  "source": "https://qul.tarteel.ai/resources/translation/426"
+ },
+ {
+  "pack_id": "en-yusufali",
+  "lang": "en",
+  "name": "Yusuf Ali",
+  "author": "Abdullah Yusuf Ali",
+  "qul": 124,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/124"
+ },
+ {
+  "pack_id": "ur-jalandhari",
+  "lang": "ur",
+  "name": "Jalandhari",
+  "author": "Fatah Muhammad Jalandhari",
+  "qul": 218,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/218"
+ },
+ {
+  "pack_id": "bn-mujibur",
+  "lang": "bn",
+  "name": "Mujibur Rahman",
+  "author": "Sheikh Mujibur Rahman",
+  "qul": 186,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/186"
+ },
+ {
+  "pack_id": "tr-diyanet",
+  "lang": "tr",
+  "name": "Diyanet",
+  "author": "Diyanet",
+  "qul": 148,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/148"
+ },
+ {
+  "pack_id": "fa-islamhouse",
+  "lang": "fa",
+  "name": "IslamHouse.com",
+  "author": "IslamHouse.com",
+  "qul": 169,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/169"
+ },
+ {
+  "pack_id": "ms-basmeih",
+  "lang": "ms",
+  "name": "Basmeih",
+  "author": "Abdullah Muhammad Basmeih",
+  "qul": 292,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/292"
+ },
+ {
+  "pack_id": "fr-hamidullah",
+  "lang": "fr",
+  "name": "Hamidullah",
+  "author": "Muhammad Hamidullah",
+  "qul": 227,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/227"
+ },
+ {
+  "pack_id": "ru-kuliev",
+  "lang": "ru",
+  "name": "Kuliev",
+  "author": "Elmir Kuliev",
+  "qul": 136,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/136"
+ },
+ {
+  "pack_id": "aa-hamza",
+  "lang": "aa",
+  "name": "Mahmud Abdulkader Hamza",
+  "author": "Shaikh Mahmud Abdulkader Hamza",
+  "qul": 452,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/452"
+ },
+ {
+  "pack_id": "am-sadiq-sani",
+  "lang": "am",
+  "name": "Sadiq and Sani",
+  "author": "Sadiq and Sani",
+  "qul": 234,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/234"
+ },
+ {
+  "pack_id": "am-zain",
+  "lang": "am",
+  "name": "Zain",
+  "author": "Zain",
+  "qul": 438,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/438"
+ },
+ {
+  "pack_id": "as-rafeequl-islam",
+  "lang": "as",
+  "name": "Rafeequl Islam Habibur-Rahman",
+  "author": "Shaykh Rafeequl Islam Habibur-Rahman",
+  "qul": 165,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/165"
+ },
+ {
+  "pack_id": "az-musayev",
+  "lang": "az",
+  "name": "Alikhan Musayev",
+  "author": "Alikhan Musayev",
+  "qul": 147,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/147"
+ },
+ {
+  "pack_id": "az-azerbaijani",
+  "lang": "az",
+  "name": "Azerbaijani",
+  "author": "Azerbaijani translation (QUL)",
+  "qul": 125,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/125"
+ },
+ {
+  "pack_id": "bg-bulgarian",
+  "lang": "bg",
+  "name": "Bulgarian Translation",
+  "author": "Bulgarian translation (QUL)",
+  "qul": 294,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/294"
+ },
+ {
+  "pack_id": "bg-theophanov",
+  "lang": "bg",
+  "name": "Tzvetan Theophanov",
+  "author": "Tzvetan Theophanov",
+  "qul": 221,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/221"
+ },
+ {
+  "pack_id": "bm-jani",
+  "lang": "bm",
+  "name": "Baba Mamady Jani (N'Ko)",
+  "author": "Baba Mamady Jani",
+  "qul": 287,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/287"
+ },
+ {
+  "pack_id": "bm-kanti",
+  "lang": "bm",
+  "name": "Suliman Kanti (N'Ko)",
+  "author": "Fudi Sulaiman Kanti",
+  "qul": 288,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/288"
+ },
+ {
+  "pack_id": "bn-abu-bakr-zakaria",
+  "lang": "bn",
+  "name": "Abu Bakr Muhammad Zakaria",
+  "author": "Dr. Abu Bakr Muhammad Zakaria",
+  "qul": 200,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/200"
+ },
+ {
+  "pack_id": "bn-fathul-majid",
+  "lang": "bn",
+  "name": "Fathul Majid",
+  "author": "Fathul Majid",
+  "qul": 229,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/229"
+ },
+ {
+  "pack_id": "bn-rawai-al-bayan",
+  "lang": "bn",
+  "name": "Rawai Al-bayan",
+  "author": "Rawai Al-bayan",
+  "qul": 185,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/185"
+ },
+ {
+  "pack_id": "bn-taisirul",
+  "lang": "bn",
+  "name": "Taisirul Quran",
+  "author": "Taisirul Quran",
+  "qul": 184,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/184"
+ },
+ {
+  "pack_id": "bs-korkut",
+  "lang": "bs",
+  "name": "Besim Korkut",
+  "author": "Besim Korkut",
+  "qul": 170,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/170"
+ },
+ {
+  "pack_id": "bs-dar-al-salam",
+  "lang": "bs",
+  "name": "Dar Al-Salam Center",
+  "author": "Dar Al-Salam Center",
+  "qul": 201,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/201"
+ },
+ {
+  "pack_id": "bs-mehanovic",
+  "lang": "bs",
+  "name": "Muhamed Mehanovic",
+  "author": "Muhamed Mehanovic",
+  "qul": 190,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/190"
+ },
+ {
+  "pack_id": "ce-magomedov",
+  "lang": "ce",
+  "name": "Magomed Magomedov",
+  "author": "Magomed Magomedov",
+  "qul": 156,
+  "variant": "footnote",
+  "excluded": "tidak lengkap: 6030 dari 6236 ayat",
+  "source": "https://qul.tarteel.ai/resources/translation/156"
+ },
+ {
+  "pack_id": "ceb-ruwwad",
+  "lang": "ceb",
+  "lang_name": "Cebuano",
+  "name": "Ruwwad Center (Bisayan)",
+  "author": "Ruwwad Center",
+  "qul": 443,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/443"
+ },
+ {
+  "pack_id": "cs-czech",
+  "lang": "cs",
+  "name": "Czech",
+  "author": "Czech translation (QUL)",
+  "qul": 120,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/120"
+ },
+ {
+  "pack_id": "dag-gutubu",
+  "lang": "dag",
+  "lang_name": "Dagbani",
+  "name": "Muhammad Baba Gutubu",
+  "author": "Muhammad Baba Gutubu",
+  "qul": 424,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/424"
+ },
+ {
+  "pack_id": "de-abu-reda",
+  "lang": "de",
+  "name": "Abu Reda Muhammad ibn Ahmad",
+  "author": "Abu Reda Muhammad ibn Ahmad",
+  "qul": 197,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/197"
+ },
+ {
+  "pack_id": "de-bubenheim",
+  "lang": "de",
+  "name": "Frank Bubenheim and Nadeem",
+  "author": "Frank Bubenheim and Nadeem",
+  "qul": 191,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/191"
+ },
+ {
+  "pack_id": "de-ruwwad",
+  "lang": "de",
+  "name": "Rowwad Translation Center",
+  "author": "Rowwad Translation Center",
+  "qul": 467,
+  "variant": "simple",
+  "excluded": "tidak lengkap: 4473 dari 6236 ayat",
+  "source": "https://qul.tarteel.ai/resources/translation/467"
+ },
+ {
+  "pack_id": "dv-bakurube",
+  "lang": "dv",
+  "name": "Abu Bakr Ibrahim Ali (Bakurube)",
+  "author": "Abu Bakr Ibrahim Ali (Bakurube)",
+  "qul": 280,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/280"
+ },
+ {
+  "pack_id": "dv-maldives",
+  "lang": "dv",
+  "name": "Office of the President of Maldives",
+  "author": "Office of the President of Maldives",
+  "qul": 226,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/226"
+ },
+ {
+  "pack_id": "el-greek",
+  "lang": "el",
+  "name": "Greek Translation",
+  "author": "Greek translation (QUL)",
+  "qul": 464,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/464"
+ },
+ {
+  "pack_id": "en-arberry",
+  "lang": "en",
+  "name": "A. J. Arberry",
+  "author": "A. J. Arberry",
+  "qul": 278,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/278"
+ },
+ {
+  "pack_id": "en-haleem",
+  "lang": "en",
+  "name": "Abdul Haleem",
+  "author": "Abdul Haleem",
+  "qul": 154,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/154"
+ },
+ {
+  "pack_id": "en-daryabadi",
+  "lang": "en",
+  "name": "Abdul Majid Daryabadi",
+  "author": "Abdul Majid Daryabadi",
+  "qul": 276,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/276"
+ },
+ {
+  "pack_id": "en-ghali",
+  "lang": "en",
+  "name": "Dr. Ghali",
+  "author": "Muhammad Mahmoud Ghali",
+  "qul": 122,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/122"
+ },
+ {
+  "pack_id": "en-bridges",
+  "lang": "en",
+  "name": "Fadel Soliman, Bridges' translation",
+  "author": "Fadel Soliman",
+  "qul": 179,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/179"
+ },
+ {
+  "pack_id": "en-qaribullah",
+  "lang": "en",
+  "name": "Hasan Al-Fatih Qaribullah",
+  "author": "Professor Shaykh Hasan Al-Fatih Qaribullah",
+  "qul": 275,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/275"
+ },
+ {
+  "pack_id": "en-hilali-khan",
+  "lang": "en",
+  "name": "Hilali & Muhsin Khan",
+  "author": "Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan",
+  "qul": 301,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/301"
+ },
+ {
+  "pack_id": "en-maarif",
+  "lang": "en",
+  "name": "Maarif-ul-Quran",
+  "author": "Maarif-ul-Quran",
+  "qul": 187,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/187"
+ },
+ {
+  "pack_id": "en-taqi-usmani",
+  "lang": "en",
+  "name": "Mufti Taqi Usmani",
+  "author": "Mufti Taqi Usmani",
+  "qul": 153,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/153"
+ },
+ {
+  "pack_id": "en-asad",
+  "lang": "en",
+  "name": "Muhammad Asad",
+  "author": "Muhammad Asad",
+  "qul": 277,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/277"
+ },
+ {
+  "pack_id": "en-sarwar",
+  "lang": "en",
+  "name": "Muhammad Sarwar",
+  "author": "Muhammad Sarwar",
+  "qul": 269,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/269"
+ },
+ {
+  "pack_id": "en-muhsin-khan",
+  "lang": "en",
+  "name": "Muhsin Khan",
+  "author": "Muhammad Muhsin Khan",
+  "qul": 121,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/121"
+ },
+ {
+  "pack_id": "en-pickthall",
+  "lang": "en",
+  "name": "Pickthall",
+  "author": "Marmaduke Pickthall",
+  "qul": 145,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/145"
+ },
+ {
+  "pack_id": "en-ruwwad",
+  "lang": "en",
+  "name": "Ruwwad Center",
+  "author": "Ruwwad Center",
+  "qul": 195,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/195"
+ },
+ {
+  "pack_id": "en-shakir",
+  "lang": "en",
+  "name": "Shakir",
+  "author": "Mohammad Habib Shakir",
+  "qul": 123,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/123"
+ },
+ {
+  "pack_id": "en-irving",
+  "lang": "en",
+  "name": "T. B. Irving",
+  "author": "Dr. T. B. Irving",
+  "qul": 300,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/300"
+ },
+ {
+  "pack_id": "en-maududi",
+  "lang": "en",
+  "name": "Tafheem-ul-Quran (Maududi)",
+  "author": "Abul Ala Maududi",
+  "qul": 192,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/192"
+ },
+ {
+  "pack_id": "en-wahiduddin",
+  "lang": "en",
+  "name": "Wahiduddin Khan",
+  "author": "Maulana Wahiduddin Khan",
+  "qul": 282,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/282"
+ },
+ {
+  "pack_id": "en-omary",
+  "lang": "en",
+  "name": "Waleed Bleyhesh Omary",
+  "author": "Dr. Waleed Bleyhesh Omary",
+  "qul": 451,
+  "variant": "simple",
+  "excluded": "tidak lengkap: 2250 dari 6236 ayat",
+  "source": "https://qul.tarteel.ai/resources/translation/451"
+ },
+ {
+  "pack_id": "es-cortes",
+  "lang": "es",
+  "name": "Cortes",
+  "author": "Julio Cortes",
+  "qul": 126,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/126"
+ },
+ {
+  "pack_id": "es-isa-garcia",
+  "lang": "es",
+  "name": "Isa Garcia",
+  "author": "Sheikh Isa Garcia",
+  "qul": 152,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/152"
+ },
+ {
+  "pack_id": "es-montada",
+  "lang": "es",
+  "name": "Montada Islamic Foundation",
+  "author": "Montada Islamic Foundation",
+  "qul": 176,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/176"
+ },
+ {
+  "pack_id": "es-noor",
+  "lang": "es",
+  "name": "Noor International Center",
+  "author": "Noor International Center",
+  "qul": 223,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/223"
+ },
+ {
+  "pack_id": "fa-taji-kal-dari",
+  "lang": "fa",
+  "name": "Hussein Taji Kal Dari",
+  "author": "Hussein Taji Kal Dari",
+  "qul": 188,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/188"
+ },
+ {
+  "pack_id": "ff-fulani",
+  "lang": "ff",
+  "name": "Fulani Translation",
+  "author": "Fulani translation (QUL)",
+  "qul": 435,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/435"
+ },
+ {
+  "pack_id": "fi-finnish",
+  "lang": "fi",
+  "name": "Finnish",
+  "author": "Finnish translation (QUL)",
+  "qul": 127,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/127"
+ },
+ {
+  "pack_id": "fr-montada",
+  "lang": "fr",
+  "name": "Montada Islamic Foundation",
+  "author": "Montada Islamic Foundation",
+  "qul": 174,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/174"
+ },
+ {
+  "pack_id": "fr-rashid-maash",
+  "lang": "fr",
+  "name": "Rashid Maash",
+  "author": "Rashid Maash",
+  "qul": 295,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/295"
+ },
+ {
+  "pack_id": "gu-rabila-al-umry",
+  "lang": "gu",
+  "name": "Rabila Al-Umry",
+  "author": "Rabila Al-Umry",
+  "qul": 211,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/211"
+ },
+ {
+  "pack_id": "ha-abubakar-gumi",
+  "lang": "ha",
+  "name": "Abubakar Gumi (quran-ha-abubakar-simple.db)",
+  "author": "Abubakar Gumi (quran-ha-abubakar-simple.db)",
+  "qul": 128,
+  "variant": "simple",
+  "excluded": "ambigu: teks 73:4 cocok dengan QUL 128 dan 163; 163 sudah tercakup (Jummi, varian catatan kaki), jadi 128 tak bisa dipastikan",
+  "source": "data-src/translation/quran-ha-abubakar-simple.db",
+  "kandidat_qul": [
+   128,
+   163
+  ]
+ },
+ {
+  "pack_id": "ha-jummi",
+  "lang": "ha",
+  "name": "Abubakar Mahmood Jummi",
+  "author": "Abubakar Mahmood Jummi",
+  "qul": 163,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/163"
+ },
+ {
+  "pack_id": "he-dar-al-salam",
+  "lang": "he",
+  "name": "Dar Al-Salam Center",
+  "author": "Dar Al-Salam Center",
+  "qul": 297,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/297"
+ },
+ {
+  "pack_id": "hi-azizul-haque",
+  "lang": "hi",
+  "name": "Azizul Haque al-Umari",
+  "author": "Maulana Azizul Haque al-Umari",
+  "qul": 166,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/166"
+ },
+ {
+  "pack_id": "hr-ruwwad",
+  "lang": "hr",
+  "name": "Ruwwad Center",
+  "author": "Ruwwad Center",
+  "qul": 436,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/436"
+ },
+ {
+  "pack_id": "ilp-iranun",
+  "lang": "ilp",
+  "lang_name": "Iranun",
+  "name": "Iranun Translation",
+  "author": "Filipino Iranionian translation",
+  "qul": 441,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/441"
+ },
+ {
+  "pack_id": "it-piccardo",
+  "lang": "it",
+  "name": "Hamza Roberto Piccardo",
+  "author": "Hamza Roberto Piccardo",
+  "qul": 181,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/181"
+ },
+ {
+  "pack_id": "it-al-sharif",
+  "lang": "it",
+  "name": "Othman al-Sharif",
+  "author": "Othman al-Sharif",
+  "qul": 198,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/198"
+ },
+ {
+  "pack_id": "ja-mita",
+  "lang": "ja",
+  "name": "Ryoichi Mita",
+  "author": "Ryoichi Mita",
+  "qul": 189,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/189"
+ },
+ {
+  "pack_id": "ja-sato",
+  "lang": "ja",
+  "name": "Saeed Sato",
+  "author": "Saeed Sato",
+  "qul": 202,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/202"
+ },
+ {
+  "pack_id": "ka-georgian",
+  "lang": "ka",
+  "name": "Georgian Translation",
+  "author": "Georgian translation (QUL)",
+  "qul": 433,
+  "variant": "simple",
+  "excluded": "tidak lengkap: 899 dari 6236 ayat",
+  "source": "https://qul.tarteel.ai/resources/translation/433"
+ },
+ {
+  "pack_id": "kab-at-mansour",
+  "lang": "kab",
+  "lang_name": "Kabyle",
+  "name": "Ramdane At Mansour",
+  "author": "Ramdane At Mansour",
+  "qul": 220,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/220"
+ },
+ {
+  "pack_id": "kk-altay",
+  "lang": "kk",
+  "name": "Khalifa Altay",
+  "author": "Khalifa Altay",
+  "qul": 208,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/208"
+ },
+ {
+  "pack_id": "km-cambodian",
+  "lang": "km",
+  "name": "Cambodian Muslim Community Development",
+  "author": "Cambodian Muslim Community Development",
+  "qul": 171,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/171"
+ },
+ {
+  "pack_id": "km-ruwwad",
+  "lang": "km",
+  "name": "Ruwwad Translation Center",
+  "author": "Ruwwad Translation Center",
+  "qul": 425,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/425"
+ },
+ {
+  "pack_id": "kmr-kurmanji",
+  "lang": "kmr",
+  "lang_name": "Kurdish (Kurmanji)",
+  "name": "Kurmanji Translation",
+  "author": "Kurdish Kurmanji translation (QUL)",
+  "qul": 434,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/434"
+ },
+ {
+  "pack_id": "kn-bashir-missouri",
+  "lang": "kn",
+  "name": "Bashir Missouri",
+  "author": "Bashir Missouri",
+  "qul": 442,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/442"
+ },
+ {
+  "pack_id": "kn-kannada",
+  "lang": "kn",
+  "name": "Kannada Translation",
+  "author": "Kannada translation (QUL)",
+  "qul": 235,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/235",
+  "excluded": "terlalu banyak ayat kosong di sumber (66 ayat)"
+ },
+ {
+  "pack_id": "kn-battur",
+  "lang": "kn",
+  "name": "Muhammad Hamza Battur",
+  "author": "Muhammad Hamza Battur",
+  "qul": 429,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/429"
+ },
+ {
+  "pack_id": "ko-choi",
+  "lang": "ko",
+  "name": "Hamed Choi",
+  "author": "Hamed Choi",
+  "qul": 204,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/204"
+ },
+ {
+  "pack_id": "ko-korean",
+  "lang": "ko",
+  "name": "Korean",
+  "author": "Korean translation (QUL)",
+  "qul": 129,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/129"
+ },
+ {
+  "pack_id": "ko-ruwwad",
+  "lang": "ko",
+  "name": "Rowwad Translation Center",
+  "author": "Rowwad Translation Center",
+  "qul": 430,
+  "variant": "simple",
+  "excluded": "tidak lengkap: 3691 dari 6236 ayat",
+  "source": "https://qul.tarteel.ai/resources/translation/430"
+ },
+ {
+  "pack_id": "ks-koshur",
+  "lang": "ks",
+  "name": "Bayanul Furqan (Koshur Quran)",
+  "author": "Bayanul Furqan (Koshur Quran)",
+  "qul": 273,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/273"
+ },
+ {
+  "pack_id": "ku-burhan",
+  "lang": "ku",
+  "name": "Burhan Muhammad-Amin",
+  "author": "Burhan Muhammad-Amin",
+  "qul": 144,
+  "variant": "simple",
+  "excluded": "tidak lengkap: 6235 dari 6236 ayat",
+  "source": "https://qul.tarteel.ai/resources/translation/144"
+ },
+ {
+  "pack_id": "ku-bamoki",
+  "lang": "ku",
+  "name": "Muhammad Saleh Bamoki (Sorani)",
+  "author": "Muhammad Saleh Bamoki",
+  "qul": 177,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/177"
+ },
+ {
+  "pack_id": "ku-salahuddin",
+  "lang": "ku",
+  "name": "Salahuddin (Sorani)",
+  "author": "Salahuddin",
+  "qul": 427,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/427"
+ },
+ {
+  "pack_id": "ky-hakimov",
+  "lang": "ky",
+  "name": "Hakimov",
+  "author": "Hakimov",
+  "qul": 448,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/448"
+ },
+ {
+  "pack_id": "lg-adf",
+  "lang": "lg",
+  "name": "African Development Foundation",
+  "author": "African Development Foundation",
+  "qul": 217,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/217"
+ },
+ {
+  "pack_id": "ln-lingala",
+  "lang": "ln",
+  "name": "Lingala Translation",
+  "author": "Lingala translation (QUL)",
+  "qul": 431,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/431"
+ },
+ {
+  "pack_id": "lt-lithuanian",
+  "lang": "lt",
+  "name": "Lithuanian Translation",
+  "author": "Lithuanian translation (QUL)",
+  "qul": 279,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/279"
+ },
+ {
+  "pack_id": "luy-luhya",
+  "lang": "luy",
+  "lang_name": "Luhya",
+  "name": "Luhya Translation",
+  "author": "Luhya translation (QUL)",
+  "qul": 444,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/444"
+ },
+ {
+  "pack_id": "mdh-ruwwad",
+  "lang": "mdh",
+  "lang_name": "Maguindanao",
+  "name": "Ruwwad Center",
+  "author": "Ruwwad Center",
+  "qul": 445,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/445"
+ },
+ {
+  "pack_id": "mg-rowad",
+  "lang": "mg",
+  "name": "Rowad Translation Center",
+  "author": "Rowad Translation Center",
+  "qul": 432,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/432"
+ },
+ {
+  "pack_id": "mk-scholars",
+  "lang": "mk",
+  "name": "Macedonian scholars",
+  "author": "Macedonian scholars",
+  "qul": 289,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/289"
+ },
+ {
+  "pack_id": "ml-abdul-hameed-kunhi",
+  "lang": "ml",
+  "name": "Abdul Hameed and Kunhi",
+  "author": "Abdul Hameed and Kunhi",
+  "qul": 130,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/130"
+ },
+ {
+  "pack_id": "ml-haidar-kanhi",
+  "lang": "ml",
+  "name": "Abdul-Hamid Haidar & Kanhi Muhammad",
+  "author": "Abdul-Hamid Haidar & Kanhi Muhammad",
+  "qul": 209,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/209"
+ },
+ {
+  "pack_id": "ml-karakunnu",
+  "lang": "ml",
+  "name": "Karakunnu and Elayavoor",
+  "author": "Muhammad Karakunnu and Vanidas Elayavoor",
+  "qul": 151,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/151"
+ },
+ {
+  "pack_id": "mos-ruwwad",
+  "lang": "mos",
+  "lang_name": "Moore",
+  "name": "Ruwwad Center",
+  "author": "Ruwwad Center",
+  "qul": 270,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/270"
+ },
+ {
+  "pack_id": "mr-ansari",
+  "lang": "mr",
+  "name": "Muhammad Shafi'i Ansari",
+  "author": "Muhammad Shafi'i Ansari",
+  "qul": 213,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/213"
+ },
+ {
+  "pack_id": "mrw-maranao",
+  "lang": "mrw",
+  "lang_name": "Maranao",
+  "name": "Maranao",
+  "author": "Maranao translation (QUL)",
+  "qul": 131,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/131"
+ },
+ {
+  "pack_id": "mt-maltese",
+  "lang": "mt",
+  "name": "Il-Qoran Imqaddes",
+  "author": "Il-Qoran Imqaddes",
+  "qul": 311,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/311"
+ },
+ {
+  "pack_id": "ne-ahl-hadith",
+  "lang": "ne",
+  "name": "Ahl Al-Hadith Central Society of Nepal",
+  "author": "Ahl Al-Hadith Central Society of Nepal",
+  "qul": 158,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/158"
+ },
+ {
+  "pack_id": "nl-dic",
+  "lang": "nl",
+  "name": "Dutch Islamic Center",
+  "author": "Dutch Islamic Center",
+  "qul": 437,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/437"
+ },
+ {
+  "pack_id": "nl-faris",
+  "lang": "nl",
+  "name": "Malak Faris Abdalsalaam",
+  "author": "Malak Faris Abdalsalaam",
+  "qul": 219,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/219"
+ },
+ {
+  "pack_id": "nl-siregar",
+  "lang": "nl",
+  "name": "Sofian S. Siregar",
+  "author": "Sofian S. Siregar",
+  "qul": 178,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/178"
+ },
+ {
+  "pack_id": "no-norwegian",
+  "lang": "no",
+  "name": "Norwegian",
+  "author": "Norwegian translation (QUL)",
+  "qul": 132,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/132"
+ },
+ {
+  "pack_id": "ny-chewa",
+  "lang": "ny",
+  "name": "Chewa Translation",
+  "author": "Chewa translation (QUL)",
+  "qul": 450,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/450"
+ },
+ {
+  "pack_id": "om-apaghuna",
+  "lang": "om",
+  "name": "Ghali Apapur Apaghuna",
+  "author": "Ghali Apapur Apaghuna",
+  "qul": 160,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/160"
+ },
+ {
+  "pack_id": "pa-arif",
+  "lang": "pa",
+  "name": "Punjabi (Arif)",
+  "author": "Punjabi arif",
+  "qul": 423,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/423"
+ },
+ {
+  "pack_id": "pl-bielawski",
+  "lang": "pl",
+  "name": "Jozef Bielawski",
+  "author": "Jozef Bielawski",
+  "qul": 133,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/133"
+ },
+ {
+  "pack_id": "prs-badkhashani",
+  "lang": "prs",
+  "lang_name": "Dari",
+  "name": "Muhammad Anwar Badkhashani",
+  "author": "Mawlawi Muhammad Anwar Badkhashani",
+  "qul": 291,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/291"
+ },
+ {
+  "pack_id": "ps-ruwwad",
+  "lang": "ps",
+  "name": "Ruwwad Translation Center",
+  "author": "Ruwwad Translation Center",
+  "qul": 449,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/449"
+ },
+ {
+  "pack_id": "ps-sarfaraz",
+  "lang": "ps",
+  "name": "Sarfaraz",
+  "author": "Sarfaraz",
+  "qul": 440,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/440"
+ },
+ {
+  "pack_id": "ps-abulsalam",
+  "lang": "ps",
+  "name": "Zakaria Abulsalam",
+  "author": "Zakaria Abulsalam",
+  "qul": 164,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/164"
+ },
+ {
+  "pack_id": "pt-nasr",
+  "lang": "pt",
+  "name": "Helmi Nasr",
+  "author": "Helmi Nasr",
+  "qul": 228,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/228"
+ },
+ {
+  "pack_id": "pt-samir",
+  "lang": "pt",
+  "name": "Samir El-Hayek",
+  "author": "Samir El-Hayek",
+  "qul": 134,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/134"
+ },
+ {
+  "pack_id": "rn-gehiti",
+  "lang": "rn",
+  "name": "Ikirundi gehiti",
+  "author": "Ikirundi gehiti",
+  "qul": 272,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/272"
+ },
+ {
+  "pack_id": "ro-grigore",
+  "lang": "ro",
+  "name": "Grigore",
+  "author": "Grigore",
+  "qul": 135,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/135"
+ },
+ {
+  "pack_id": "ro-icl",
+  "lang": "ro",
+  "name": "Islamic and Cultural League",
+  "author": "Islamic and Cultural League",
+  "qul": 293,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/293"
+ },
+ {
+  "pack_id": "ro-romanian",
+  "lang": "ro",
+  "name": "Romanian Translation",
+  "author": "Romanian translation (QUL)",
+  "qul": 465,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/465"
+ },
+ {
+  "pack_id": "ru-abu-adel",
+  "lang": "ru",
+  "name": "Abu Adel",
+  "author": "Abu Adel",
+  "qul": 150,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/150"
+ },
+ {
+  "pack_id": "ru-aboadel",
+  "lang": "ru",
+  "name": "Abu Adel",
+  "author": "Aboadel",
+  "qul": 446,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/446"
+ },
+ {
+  "pack_id": "ru-sablukov",
+  "lang": "ru",
+  "name": "Gordy Sablukov",
+  "author": "Gordy Semyonovich Sablukov",
+  "qul": 274,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/274"
+ },
+ {
+  "pack_id": "ru-osmanov",
+  "lang": "ru",
+  "name": "Magomed-Nuri Osmanov",
+  "author": "Magomed-Nuri Osmanovich Osmanov",
+  "qul": 271,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/271"
+ },
+ {
+  "pack_id": "ru-awqaf-egypt",
+  "lang": "ru",
+  "name": "Ministry of Awqaf, Egypt",
+  "author": "Ministry of Awqaf, Egypt",
+  "qul": 149,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/149"
+ },
+ {
+  "pack_id": "rw-rwanda-muslims",
+  "lang": "rw",
+  "name": "Rwanda Muslims Association",
+  "author": "The Rwanda Muslims Association team",
+  "qul": 296,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/296"
+ },
+ {
+  "pack_id": "sd-amroti",
+  "lang": "sd",
+  "name": "Taj Mehmood Amroti",
+  "author": "Taj Mehmood Amroti",
+  "qul": 222,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/222"
+ },
+ {
+  "pack_id": "si-ruwwad",
+  "lang": "si",
+  "name": "Ruwwad Center",
+  "author": "Ruwwad Center",
+  "qul": 212,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/212"
+ },
+ {
+  "pack_id": "sn-dar-ilam",
+  "lang": "sn",
+  "name": "Dar Ilam Institute (sn-dar-ilam-institute-simple.db)",
+  "author": "Dar Ilam Institute (sn-dar-ilam-institute-simple.db)",
+  "qul": null,
+  "variant": "simple",
+  "excluded": "tak terselesaikan: tak ada resource QUL yang cocok",
+  "source": "data-src/translation/sn-dar-ilam-institute-simple.db"
+ },
+ {
+  "pack_id": "so-yacoub",
+  "lang": "so",
+  "name": "Abdullah Hassan Yacoub",
+  "author": "Abdullah Hassan Yacoub",
+  "qul": 290,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/290",
+  "note": "varian catatan kaki di QUL rusak (penanda <sup> bersarang di 72 ayat), jadi dipakai varian simple tanpa catatan kaki"
+ },
+ {
+  "pack_id": "so-abduh",
+  "lang": "so",
+  "name": "Mahmud Muhammad Abduh",
+  "author": "Mahmud Muhammad Abduh",
+  "qul": 231,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/231"
+ },
+ {
+  "pack_id": "sq-al-ahmeti",
+  "lang": "sq",
+  "name": "Al-Ahmeti (quran-al-ahmeti-simple.db)",
+  "author": "Al-Ahmeti (quran-al-ahmeti-simple.db)",
+  "qul": null,
+  "variant": "simple",
+  "excluded": "ambigu: teks 73:4 cocok dengan QUL 137 dan 155 (dua terjemahan Albania), tak bisa dibedakan",
+  "source": "data-src/translation/quran-al-ahmeti-simple.db",
+  "kandidat_qul": [
+   137,
+   155
+  ]
+ },
+ {
+  "pack_id": "sq-unknown",
+  "lang": "sq",
+  "name": "Albanian (sq-unknown-simple.db)",
+  "author": "Albanian (sq-unknown-simple.db)",
+  "qul": null,
+  "variant": "simple",
+  "excluded": "ambigu: pasangan QUL 137/155 yang sama dengan quran-al-ahmeti",
+  "source": "data-src/translation/sq-unknown-simple.db",
+  "kandidat_qul": [
+   137,
+   155
+  ]
+ },
+ {
+  "pack_id": "sq-nahi",
+  "lang": "sq",
+  "name": "Hasan Efendi Nahi",
+  "author": "Hasan Efendi Nahi",
+  "qul": 303,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/303"
+ },
+ {
+  "pack_id": "sr-dar-al-salam",
+  "lang": "sr",
+  "name": "Dar Al-Salam Center",
+  "author": "Dar Al-Salam Center",
+  "qul": 299,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/299"
+ },
+ {
+  "pack_id": "sv-bernstrom",
+  "lang": "sv",
+  "name": "Knut Bernstrom",
+  "author": "Knut Bernstrom",
+  "qul": 138,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/138"
+ },
+ {
+  "pack_id": "sw-abu-bakr-khamis",
+  "lang": "sw",
+  "name": "Abu Bakr Zakaria and Nasir Khamis",
+  "author": "Dr. Abdullah Muhammad Abu Bakr and Sheikh Nasir Khamis",
+  "qul": 216,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/216"
+ },
+ {
+  "pack_id": "sw-barwani",
+  "lang": "sw",
+  "name": "Ali Muhsin Al-Barwani",
+  "author": "Ali Muhsin Al-Barwani",
+  "qul": 139,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/139"
+ },
+ {
+  "pack_id": "sw-rowad",
+  "lang": "sw",
+  "name": "Rowad Translation Center",
+  "author": "Rowad Translation Center",
+  "qul": 466,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/466"
+ },
+ {
+  "pack_id": "ta-baqavi",
+  "lang": "ta",
+  "name": "Abdul Hameed Baqavi",
+  "author": "Abdul Hameed Baqavi",
+  "qul": 172,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/172"
+ },
+ {
+  "pack_id": "ta-jan-trust",
+  "lang": "ta",
+  "name": "Jan Trust Foundation",
+  "author": "Jan Trust Foundation",
+  "qul": 140,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/140"
+ },
+ {
+  "pack_id": "ta-omar-sharif",
+  "lang": "ta",
+  "name": "Omar Sharif bin Abdul Salam",
+  "author": "Sheikh Omar Sharif bin Abdul Salam",
+  "qul": 214,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/214"
+ },
+ {
+  "pack_id": "te-abder-rahim",
+  "lang": "te",
+  "name": "Abder-Rahim ibn Muhammad",
+  "author": "Maulana Abder-Rahim ibn Muhammad",
+  "qul": 210,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/210"
+ },
+ {
+  "pack_id": "tg-mirof",
+  "lang": "tg",
+  "name": "Khawaja Mirof & Khawaja Mir",
+  "author": "Khawaja Mirof & Khawaja Mir",
+  "qul": 175,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/175"
+ },
+ {
+  "pack_id": "tg-pioneers",
+  "lang": "tg",
+  "name": "Pioneers of Translation Center",
+  "author": "Pioneers of Translation Center",
+  "qul": 206,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/206"
+ },
+ {
+  "pack_id": "tg-tajik",
+  "lang": "tg",
+  "name": "Tajik",
+  "author": "Tajik translation (QUL)",
+  "qul": 146,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/146"
+ },
+ {
+  "pack_id": "th-kfqpc",
+  "lang": "th",
+  "name": "King Fahad Quran Complex",
+  "author": "King Fahad Quran Complex",
+  "qul": 232,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/232"
+ },
+ {
+  "pack_id": "th-institutes",
+  "lang": "th",
+  "name": "Society of Institutes and Universities",
+  "author": "Society of Institutes and Universities",
+  "qul": 215,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/215"
+ },
+ {
+  "pack_id": "tk-kurany",
+  "lang": "tk",
+  "name": "Kurany (tk-kurany-simple.db)",
+  "author": "Kurany (tk-kurany-simple.db)",
+  "qul": null,
+  "variant": "simple",
+  "excluded": "tak terselesaikan: tak ada resource QUL yang cocok",
+  "source": "data-src/translation/tk-kurany-simple.db"
+ },
+ {
+  "pack_id": "tl-dar-al-salam",
+  "lang": "tl",
+  "name": "Dar Al-Salam Center",
+  "author": "Dar Al-Salam Center",
+  "qul": 199,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/199"
+ },
+ {
+  "pack_id": "tr-dar-al-salam",
+  "lang": "tr",
+  "name": "Dar Al-Salam Center",
+  "author": "Dar Al-Salam Center",
+  "qul": 196,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/196"
+ },
+ {
+  "pack_id": "tr-elmalili",
+  "lang": "tr",
+  "name": "Elmalili Hamdi Yazir",
+  "author": "Elmalili Hamdi Yazir",
+  "qul": 233,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/233"
+ },
+ {
+  "pack_id": "tr-shahin",
+  "lang": "tr",
+  "name": "Muslim Shahin",
+  "author": "Muslim Shahin",
+  "qul": 157,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/157"
+ },
+ {
+  "pack_id": "tr-britch",
+  "lang": "tr",
+  "name": "Shaban Britch",
+  "author": "Shaban Britch",
+  "qul": 161,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/161"
+ },
+ {
+  "pack_id": "tt-tatar",
+  "lang": "tt",
+  "name": "Tatar",
+  "author": "Tatar translation (QUL)",
+  "qul": 141,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/141"
+ },
+ {
+  "pack_id": "tw-ismaeel",
+  "lang": "tw",
+  "name": "Haroun Ismaeel",
+  "author": "Sheikh Haroun Ismaeel",
+  "qul": 285,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/285"
+ },
+ {
+  "pack_id": "ug-saleh",
+  "lang": "ug",
+  "name": "Muhammad Saleh",
+  "author": "Muhammad Saleh",
+  "qul": 304,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/304"
+ },
+ {
+  "pack_id": "uk-yaqubovic",
+  "lang": "uk",
+  "name": "Mikhailo Yaqubovic",
+  "author": "Dr. Mikhailo Yaqubovic",
+  "qul": 203,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/203"
+ },
+ {
+  "pack_id": "ur-bayan-ul-quran",
+  "lang": "ur",
+  "name": "Bayan-ul-Quran",
+  "author": "Bayan-ul-Quran",
+  "qul": 183,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/183"
+ },
+ {
+  "pack_id": "ur-zilal",
+  "lang": "ur",
+  "name": "Fe Zilal al-Quran",
+  "author": "Fe Zilal al-Quran",
+  "qul": 182,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/182"
+ },
+ {
+  "pack_id": "ur-usmani",
+  "lang": "ur",
+  "name": "Mahmud al-Hasan (Tafsir-e-Usmani)",
+  "author": "Shaykh al-Hind Mahmud al-Hasan",
+  "qul": 180,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/180"
+ },
+ {
+  "pack_id": "ur-maududi-roman",
+  "lang": "ur",
+  "name": "Maududi (Roman Urdu)",
+  "author": "Abul Ala Maududi (Roman Urdu)",
+  "qul": 281,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/281"
+ },
+ {
+  "pack_id": "ur-junagarhi",
+  "lang": "ur",
+  "name": "Muhammad Junagarhi",
+  "author": "Maulana Muhammad Junagarhi",
+  "qul": 305,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/305"
+ },
+ {
+  "pack_id": "ur-maududi",
+  "lang": "ur",
+  "name": "Tafheem-ul-Quran (Maududi)",
+  "author": "Syed Abu Ali Maududi",
+  "qul": 302,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/302"
+ },
+ {
+  "pack_id": "ur-wahiduddin",
+  "lang": "ur",
+  "name": "Wahiduddin Khan",
+  "author": "Maulana Wahiduddin Khan",
+  "qul": 284,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/284"
+ },
+ {
+  "pack_id": "uz-mansour",
+  "lang": "uz",
+  "name": "Alauddin Mansour",
+  "author": "Alauddin Mansour",
+  "qul": 225,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/225"
+ },
+ {
+  "pack_id": "uz-sodik",
+  "lang": "uz",
+  "name": "Muhammad Sodik Muhammad Yusuf",
+  "author": "Muhammad Sodik Muhammad Yusuf",
+  "qul": 168,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/168"
+ },
+ {
+  "pack_id": "uz-sodiq-latin",
+  "lang": "uz",
+  "name": "Muhammad Sodiq Muhammad Yusuf (Latin)",
+  "author": "Muhammad Sodiq Muhammad Yusuf",
+  "qul": 142,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/142"
+ },
+ {
+  "pack_id": "uz-ruwwad",
+  "lang": "uz",
+  "name": "Ruwwad Translation Center",
+  "author": "Ruwwad Translation Center",
+  "qul": 447,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/447"
+ },
+ {
+  "pack_id": "vi-hasan-abdul-karim",
+  "lang": "vi",
+  "name": "Hasan Abdul-Karim",
+  "author": "Hasan Abdul-Karim",
+  "qul": 205,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/205"
+ },
+ {
+  "pack_id": "vi-ruwwad",
+  "lang": "vi",
+  "name": "Ruwwad Center",
+  "author": "Ruwwad Center",
+  "qul": 207,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/207"
+ },
+ {
+  "pack_id": "yao-silika",
+  "lang": "yao",
+  "lang_name": "Yao",
+  "name": "Abdul Hamid Silika",
+  "author": "Abdul Hamid Silika",
+  "qul": 286,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/286"
+ },
+ {
+  "pack_id": "yo-aykyuni",
+  "lang": "yo",
+  "name": "Abu Rahimah Mikael Aykyuni",
+  "author": "Shaykh Abu Rahimah Mikael Aykyuni",
+  "qul": 167,
+  "variant": "footnote",
+  "source": "https://qul.tarteel.ai/resources/translation/167"
+ },
+ {
+  "pack_id": "zh-basair",
+  "lang": "zh",
+  "name": "Basair",
+  "author": "Basair",
+  "qul": 439,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/439"
+ },
+ {
+  "pack_id": "zh-ma-jian",
+  "lang": "zh",
+  "name": "Ma Jian (Simplified)",
+  "author": "Ma Jian",
+  "qul": 143,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/143"
+ },
+ {
+  "pack_id": "zh-makin",
+  "lang": "zh",
+  "name": "Muhammad Makin",
+  "author": "Muhammad Makin",
+  "qul": 159,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/159"
+ },
+ {
+  "pack_id": "zh-suliman",
+  "lang": "zh",
+  "name": "Suliman",
+  "author": "Suliman",
+  "qul": 428,
+  "variant": "simple",
+  "source": "https://qul.tarteel.ai/resources/translation/428"
+ },
+ {
+  "pack_id": "zu-adel-jaffer",
+  "lang": "zu",
+  "name": "Adel Jaffer (zulu-translation-adel-jaffer-simple.db)",
+  "author": "Adel Jaffer (zulu-translation-adel-jaffer-simple.db)",
+  "qul": null,
+  "variant": "simple",
+  "excluded": "tak terselesaikan: tak ada resource QUL yang cocok",
+  "source": "data-src/translation/zulu-translation-adel-jaffer-simple.db"
+ }
+]

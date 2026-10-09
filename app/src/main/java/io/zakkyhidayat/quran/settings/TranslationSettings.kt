@@ -20,12 +20,22 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.zakkyhidayat.quran.AppViewModel
 import io.zakkyhidayat.quran.R
 import kotlinx.coroutines.launch
+
+/**
+ * Nama bahasa untuk kode ISO 639 dalam bahasa tampilan [locale]. Kode yang tidak dikenal Locale (hasilnya kosong atau
+ * sama dengan kodenya, mis. "mos") memakai [fallback] (nama Inggris dari katalog), lalu kodenya sendiri.
+ */
+internal fun languageDisplayName(code: String, fallback: String?, locale: java.util.Locale): String {
+    val name = java.util.Locale.forLanguageTag(code).getDisplayLanguage(locale)
+    return if (name.isBlank() || name.equals(code, ignoreCase = true)) fallback?.takeIf { it.isNotBlank() } ?: code else name
+}
 
 @Composable
 internal fun translationLabel(tr: io.zakkyhidayat.quran.data.TranslationInfo): String {
@@ -40,7 +50,7 @@ internal fun translationLabel(tr: io.zakkyhidayat.quran.data.TranslationInfo): S
         "fr" -> stringResource(R.string.lang_name_fr)
         "ru" -> stringResource(R.string.lang_name_ru)
         "ar" -> stringResource(R.string.lang_name_ar)
-        else -> tr.lang
+        else -> languageDisplayName(tr.lang, tr.langName, LocalConfiguration.current.locales[0])
     }
     return stringResource(R.string.translation_label, language, tr.name)
 }

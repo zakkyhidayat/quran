@@ -127,6 +127,8 @@
     <string name="translation_download_cd">Скачать %1$s</string>
     <string name="delete_downloaded_translation_cd">Удалить скачанный файл %1$s</string>
     <string name="translations_all_added">Все доступные переводы уже добавлены.</string>
+    <string name="translations_search_hint">Поиск по языку или переводчику</string>
+    <string name="translations_no_match">Нет переводов, подходящих под запрос.</string>
     <string name="translations_downloadable">Доступны для скачивания</string>
     <string name="credits">Благодарности</string>
     <string name="credits_sub">Большинство материалов QUL создано сообществом: Комплексом короля Фахда по печати Корана, Tanzil, Quran.com, переводчиками и многими другими. Нажмите, чтобы увидеть полный список.</string>

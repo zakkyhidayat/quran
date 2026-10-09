@@ -127,6 +127,8 @@
     <string name="translation_download_cd">بارگیری %1$s</string>
     <string name="delete_downloaded_translation_cd">حذف فایل بارگیری‌شدهٔ %1$s</string>
     <string name="translations_all_added">همهٔ ترجمه‌های موجود افزوده شده‌اند.</string>
+    <string name="translations_search_hint">جست‌وجوی زبان یا مترجم</string>
+    <string name="translations_no_match">ترجمه‌ای مطابق جست‌وجوی شما نیست.</string>
     <string name="translations_downloadable">قابل بارگیری</string>
     <string name="credits">سپاسگزاری</string>
     <string name="credits_sub">بیشتر منابع QUL را جامعه فراهم کرده است: مجتمع ملک فهد برای چاپ قرآن، تنزیل، Quran.com، مترجمان و بسیاری دیگر. برای فهرست کامل ضربه بزنید.</string>

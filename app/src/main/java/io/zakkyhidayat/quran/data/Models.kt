@@ -30,7 +30,7 @@ data class AyahInfo(val juz: Int, val hizb: Int, val rubInHizb: Int, val manzil:
 
 data class PageMeta(val surah: Int, val juz: Int)
 
-data class TranslationInfo(val id: String, val lang: String, val name: String, val downloaded: Boolean = false)
+data class TranslationInfo(val id: String, val lang: String, val name: String, val downloaded: Boolean = false, val langName: String? = null)
 
 data class Footnote(val label: Int?, val text: String)
 

@@ -127,6 +127,8 @@
     <string name="translation_download_cd">Unduh %1$s</string>
     <string name="delete_downloaded_translation_cd">Hapus berkas unduhan %1$s</string>
     <string name="translations_all_added">Semua terjemahan yang tersedia sudah ditambahkan.</string>
+    <string name="translations_search_hint">Cari bahasa atau penerjemah</string>
+    <string name="translations_no_match">Tidak ada terjemahan yang cocok dengan pencarian.</string>
     <string name="translations_downloadable">Tersedia untuk diunduh</string>
     <string name="credits">Kredit</string>
     <string name="credits_sub">Sebagian besar sumber di QUL dibuat komunitas: Kompleks Percetakan Al-Qur’an Raja Fahd, Tanzil, Quran.com, para penerjemah, dan banyak lagi. Ketuk untuk daftar lengkap.</string>

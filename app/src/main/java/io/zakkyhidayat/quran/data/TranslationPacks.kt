@@ -24,8 +24,10 @@ data class CatalogPack(
     val bytes: Long,
     val sha256: String,
     val version: Int,
+    /** Nama bahasa Inggris untuk kode ISO 639-3 yang tidak dikenal Locale (mis. "mos" -> Moore); kosong untuk kode 639-1. */
+    val langName: String? = null,
 ) {
-    val info get() = TranslationInfo(id, lang, name, downloaded = true)
+    val info get() = TranslationInfo(id, lang, name, downloaded = true, langName = langName)
 }
 
 /**
@@ -45,7 +47,7 @@ class TranslationPacks(context: Context) {
                 val info = db.rawQuery("SELECT key, value FROM info", null).use { c ->
                     buildMap { while (c.moveToNext()) put(c.getString(0), c.getString(1)) }
                 }
-                TranslationInfo(file.nameWithoutExtension, info.getValue("lang"), info.getValue("name"), downloaded = true)
+                TranslationInfo(file.nameWithoutExtension, info.getValue("lang"), info.getValue("name"), downloaded = true, langName = info["lang_name"])
             }.getOrNull()
         }
     }
@@ -81,6 +83,7 @@ class TranslationPacks(context: Context) {
                     id = p.getString("id"), lang = p.getString("lang"), name = p.getString("name"),
                     source = p.optString("source"), file = p.getString("file"), bytes = p.optLong("bytes"),
                     sha256 = p.getString("sha256"), version = p.optInt("version", 1),
+                    langName = p.optString("lang_name").takeIf { it.isNotBlank() },
                 )
             }
         } catch (e: Exception) {
