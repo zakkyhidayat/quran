@@ -69,6 +69,7 @@ import io.zakkyhidayat.quran.ui.NumberBadge
 
 private val TABS = listOf(
     R.string.tab_bookmark to AppIcons.Bookmark,
+    R.string.tab_home to AppIcons.Home,
     R.string.tab_surah to AppIcons.MenuBook,
     R.string.tab_juz to AppIcons.GridView,
     R.string.tab_hizb to AppIcons.PieChart,
@@ -82,9 +83,9 @@ private val ListPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -> Unit, onOpenSurahInfo: (Int) -> Unit, onOpenExplore: () -> Unit = {}) {
+fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -> Unit, onOpenSurahInfo: (Int) -> Unit, onOpenExplore: () -> Unit = {}, onOpenHome: (io.zakkyhidayat.quran.home.HomeTarget) -> Unit = {}) {
     val onBack = onOpenReader // pilihan di daftar membuka layar baca
-    // Bookmark di urutan pertama, tetapi yang dibuka pertama kali tetap Surah.
+    // Bookmark di urutan pertama, tetapi yang dibuka pertama kali adalah Beranda.
     var tab by rememberSaveable { mutableIntStateOf(1) }
     var showJump by remember { mutableStateOf(false) }
     val surahsForJump by vm.surahs.collectAsStateWithLifecycle()
@@ -162,11 +163,12 @@ fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -
                 ) { current ->
                     when (current) {
                         0 -> BookmarkList(vm, onBack)
-                        1 -> SurahList(vm, onBack, onOpenSurahInfo)
-                        2 -> JuzList(vm, onBack)
-                        3 -> HizbList(vm, onBack)
-                        4 -> RubList(vm, onBack)
-                        5 -> ManzilList(vm, onBack)
+                        1 -> io.zakkyhidayat.quran.home.HomeTab(vm, onBack, onOpenHome)
+                        2 -> SurahList(vm, onBack, onOpenSurahInfo)
+                        3 -> JuzList(vm, onBack)
+                        4 -> HizbList(vm, onBack)
+                        5 -> RubList(vm, onBack)
+                        6 -> ManzilList(vm, onBack)
                         else -> RukuList(vm, onBack)
                     }
                 }

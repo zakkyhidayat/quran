@@ -96,6 +96,19 @@ python tools/verify_quran.py
 
 Tabel dasar tidak disentuh. Ini juga menaikkan `user_version` ke `DATA_VERSION`.
 
+## Koleksi ayat (beranda)
+
+`app/src/main/assets/collections.json` berisi rujukan ayat dan judul koleksi doa, solusi, adab, dan dosa besar dari
+[QuranApp](https://github.com/AlfaazPlus/QuranApp) (GPL-3.0). Dibangun ulang dengan:
+
+```bash
+git clone --depth 1 https://github.com/AlfaazPlus/QuranApp.git data-src/QuranApp
+python tools/build_collections.py data-src/QuranApp
+```
+
+"Doa para Nabi" (butir 1 koleksi doa) tidak ikut karena menunjuk ke dataset lain. Bahasa Melayu tidak ada di sumber,
+jadi judulnya memakai bahasa Inggris. "Ayat hari ini" diambil dari potongan 1-4 ayat koleksi solusi, doa, dan adab.
+
 ## Paket terjemahan unduhan
 
 Selain empat terjemahan yang dibundel di `quran.db`, aplikasi bisa mengunduh sekitar 170 terjemahan tambahan dalam banyak
