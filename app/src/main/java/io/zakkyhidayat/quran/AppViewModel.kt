@@ -37,6 +37,10 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     val mushaf = app.mushaf
     val settingsRepository = app.settings
     val bookmarkStore = app.bookmarks
+    val history = app.history
+    // Kumpulan ayat yang sedang dibuka di layar "passage" (dari beranda atau koleksi).
+    val passage = MutableStateFlow<io.zakkyhidayat.quran.home.HomeTarget.Passage?>(null)
+    val collections = app.collections
 
     val surahs = MutableStateFlow<Map<Int, Surah>>(emptyMap())
     val juz = MutableStateFlow<List<Marker>>(emptyList())
@@ -76,6 +80,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             exploreAvailable.value = mushaf.exploreAvailable()
             bookmarkStore.load()
+            history.load()
             surahs.value = mushaf.surahs()
             juz.value = mushaf.markers(MarkerKind.Juz)
             hizb.value = mushaf.markers(MarkerKind.Hizb)
@@ -88,6 +93,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             restoreActiveTranslations()
         }
         autoBackup()
+        recordHistory()
         // Pasang ulang jadwal pengingat setiap kali pengaturannya berubah (termasuk saat aplikasi dibuka).
         viewModelScope.launch {
             settingsRepository.settings
@@ -151,6 +157,20 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
                 }
         }
     }
+
+    /** Setiap posisi baca terakhir yang berubah (jeda 1 detik saat membalik halaman beruntun) masuk ke histori. */
+    @OptIn(kotlinx.coroutines.FlowPreview::class)
+    private fun recordHistory() {
+        viewModelScope.launch {
+            settingsRepository.settings
+                .map { it.lastSurah to it.lastAyah }
+                .distinctUntilChanged()
+                .debounce(1_000)
+                .collect { (surah, ayah) -> history.record(surah, ayah) }
+        }
+    }
+
+    fun clearHistory() = viewModelScope.launch { history.clear() }
 
     /**
      * Terjemahan tidak dibundel: terjemahan aktif yang belum terpasang (bawaan untuk pengguna baru, atau terjemahan yang

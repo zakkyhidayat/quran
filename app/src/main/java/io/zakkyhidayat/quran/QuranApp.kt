@@ -16,6 +16,8 @@ class QuranApp : Application() {
     val mushaf by lazy { MushafRepository(this) }
     val settings by lazy { SettingsRepository(this) }
     val bookmarks by lazy { BookmarkStore(this) }
+    val history by lazy { io.zakkyhidayat.quran.data.ReadingHistory(this) }
+    val collections by lazy { io.zakkyhidayat.quran.data.Collections(this) }
 }
 
 val Context.app: QuranApp get() = applicationContext as QuranApp

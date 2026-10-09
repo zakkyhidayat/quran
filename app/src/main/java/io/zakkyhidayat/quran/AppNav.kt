@@ -2,6 +2,7 @@ package io.zakkyhidayat.quran
 
 import io.zakkyhidayat.quran.settings.SettingsPage
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.animation.fadeIn
@@ -23,7 +24,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import io.zakkyhidayat.quran.data.CollectionKind
 import io.zakkyhidayat.quran.explore.ExploreScreen
+import io.zakkyhidayat.quran.home.CollectionScreen
+import io.zakkyhidayat.quran.home.HomeTarget
+import io.zakkyhidayat.quran.home.PassageScreen
 import io.zakkyhidayat.quran.explore.TopicScreen
 import io.zakkyhidayat.quran.info.SurahInfoScreen
 import io.zakkyhidayat.quran.index.IndexScreen
@@ -54,6 +59,12 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
             }
         }
     }
+    val openHome: (HomeTarget) -> Unit = { target ->
+        when (target) {
+            is HomeTarget.Passage -> { vm.passage.value = target; nav.navigate("passage") }
+            is HomeTarget.Collection -> nav.navigate("collection/${target.kind.name}")
+        }
+    }
     // Lompatan ke halaman dari mana pun (daftar, pencarian, info surah, notifikasi) membuka layar baca.
     LaunchedEffect(Unit) {
         vm.pendingPage.collect { page -> if (page != null) openReader() }
@@ -68,6 +79,7 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
                     onOpenSettings = { nav.navigate(SettingsPage.Main.route) },
                     onOpenSurahInfo = { nav.navigate("surah/$it") },
                     onOpenExplore = { nav.navigate("explore") },
+                    onOpenHome = openHome,
                 )
             }
         }
@@ -89,6 +101,7 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
                     onOpenSettings = { nav.navigate(SettingsPage.Main.route) },
                     onOpenSurahInfo = { nav.navigate("surah/$it") },
                     onOpenExplore = { nav.navigate("explore") },
+                    onOpenHome = openHome,
                 )
             }
             composable("reader") {
@@ -121,6 +134,14 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
                     onOpenTopic = { nav.navigate("topic/$it") },
                     onOpenAyah = { surah, ayah -> vm.goToAyah(surah, ayah); openReader() },
                 )
+            }
+            composable("collection/{kind}") { entry ->
+                val kind = CollectionKind.entries.firstOrNull { it.name == entry.arguments?.getString("kind") } ?: CollectionKind.Dua
+                CollectionScreen(vm, kind, onBack = { nav.popBackStack() }, onOpenPassage = openHome)
+            }
+            composable("passage") {
+                val target = vm.passage.collectAsState().value
+                if (target != null) PassageScreen(vm, target, onBack = { nav.popBackStack() }, onOpenReader = openReader)
             }
             composable("search") { SearchScreen(vm, settings, onBack = { nav.popBackStack() }) }
             SettingsPage.entries.forEach { page ->

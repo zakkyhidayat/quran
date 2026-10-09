@@ -24,6 +24,13 @@ a copy of a font with a different existing palette marked as default (light/dark
 glyph, outline, or colour value is changed. Whether this counts as a modification under KFGQPC's terms is being
 confirmed (see docs/AUDIT.md).
 
+## Ayah collections (via QuranApp)
+
+`app/src/main/assets/collections.json` (duas, solutions, etiquette, and major sins in the Quran: ayah references and
+their titles in 9 languages) is converted by `tools/build_collections.py` from
+[QuranApp](https://github.com/AlfaazPlus/QuranApp) by AlfaazPlus, `app/src/main/assets/verses/`, licensed GPL-3.0 like
+this app. Ayah text and translations are not taken from it.
+
 ## Libraries in the app
 
 | Library | License |
