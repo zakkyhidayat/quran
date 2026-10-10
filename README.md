@@ -9,15 +9,26 @@ King Fahd Complex edition: 604 pages, 15 lines, with tajweed colouring.
 
 ## Download
 
-Two apps, both from the [latest release](https://github.com/zakkyhidayat/quran/releases/latest):
+<p align="center">
+  <a href="https://github.com/zakkyhidayat/quran/releases/latest/download/Quran.apk"><img src="https://img.shields.io/badge/Download-Quran-176B4D?style=for-the-badge&logo=android&logoColor=white" alt="Download Quran"></a>
+  &nbsp;
+  <a href="https://github.com/zakkyhidayat/quran/releases/latest/download/Quran-Lite.apk"><img src="https://img.shields.io/badge/Download-Quran%20Lite-F2C14E?style=for-the-badge&logo=android&logoColor=176B4D&labelColor=176B4D" alt="Download Quran Lite"></a>
+</p>
 
-| App | File | For |
-|-----|------|-----|
-| **Quran** | `quran-vX.Y.Z.apk` | Reading with translations, search, home tab, thematic browsing, reminders, backup |
-| **Quran Lite** | `quran-lite-vX.Y.Z.apk` | Reading the mushaf only, with bookmarks; no internet permission |
+| App | For |
+|-----|-----|
+| **Quran** | Reading with translations, search, home tab, thematic browsing, reminders, backup |
+| **Quran Lite** | Reading the mushaf only, with bookmarks; no internet permission |
 
-Both install side by side. Neither updates itself: download the new APK from the releases page and install it over the
-old one (your bookmarks and settings are kept).
+**How to install (Android 8 or newer):**
+
+1. Tap one of the buttons above on your phone. The APK file downloads.
+2. Open the downloaded file. If Android asks, allow your browser or file manager to **install unknown apps**.
+3. Tap **Install**.
+
+Both apps can be installed side by side. Neither updates itself: to update, download again from the same button and
+install over the old one. Your bookmarks and settings are kept. All versions and release notes:
+[releases page](https://github.com/zakkyhidayat/quran/releases).
 
 ## Who it is for
 
@@ -72,7 +83,7 @@ A second app built from the same code, for people who only want to read the mush
 - **No internet permission** and no notifications, so it cannot send or receive any data.
 
 It is a separate app (`io.zakkyhidayat.quran.lite`) with its own icon, published on the same GitHub release as
-`quran-lite-vX.Y.Z.apk`. Its Qur'an text and page rendering are the same as the full app; its database leaves out the
+`Quran-Lite.apk`. Its Qur'an text and page rendering are the same as the full app; its database leaves out the
 data only the full app uses, so the download is smaller. Details: [docs/FORK_LITE.md](docs/FORK_LITE.md).
 
 ## Roadmap

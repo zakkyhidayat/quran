@@ -10,7 +10,7 @@ First public release candidate.
 - In-app updates (added in 0.2.0). New versions are downloaded from GitHub Releases or Google Play.
 
 ### Added
-- Quran Lite: a separate reading-only app from the same code, without internet access (`quran-lite-vX.Y.Z.apk`).
+- Quran Lite: a separate reading-only app from the same code, without internet access (`Quran-Lite.apk`).
 - Madani mushaf (KFGQPC V4, 604 pages, 15 lines) with tajweed colours, light, dark, and AMOLED themes, dynamic colour,
   and three contrast levels.
 - Reading modes: mushaf page, ayah with translation, translation only, one page at a time.
