@@ -52,10 +52,11 @@ A second app built from the same code, for people who only want to read the mush
   continue reading.
 - Tapping an ayah only offers a bookmark; no translations, search, home tab, or thematic browsing.
 - Settings: light, dark, or system theme.
-- **No internet permission** and no notifications, so it cannot send or receive any data.
+- No notifications, translations, or downloads; the internet is only used to check GitHub Releases for app updates
+  (at most once a day).
 
 It installs alongside the full app (`io.zakkyhidayat.quran.lite`) and is published on the same GitHub release as
-`quran-lite-vX.Y.Z.apk`. It has no in-app updates; download new versions from the releases page. Details:
+`quran-lite-vX.Y.Z.apk`, and updates itself from there like the full GitHub build. Details:
 [docs/FORK_LITE.md](docs/FORK_LITE.md).
 
 ## Roadmap

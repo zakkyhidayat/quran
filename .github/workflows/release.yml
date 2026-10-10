@@ -1,4 +1,4 @@
-# Rilis bertanda tangan saat tag vX.Y.Z di-push: APK GitHub (dengan pembaruan dari dalam aplikasi) dan AAB Play.
+# Rilis bertanda tangan saat tag vX.Y.Z di-push: APK GitHub dan APK Lite (keduanya dengan pembaruan dari dalam aplikasi), dan AAB Play.
 # Kebutuhan sekali saja: lihat docs/RELEASING.md (secret keystore dan rilis `build-assets` berisi font halaman).
 name: Release
 

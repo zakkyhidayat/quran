@@ -10,7 +10,7 @@ itself from inside the app) and keeps a signed AAB of the `play` variant as a wo
 |---------|----------------|-----|
 | `github` | Yes: checks GitHub Releases at most once a day, downloads the APK, opens the system installer | APK on GitHub Releases |
 | `play` | No (Play policy forbids self-updating apps); no `REQUEST_INSTALL_PACKAGES` permission | Google Play |
-| `lite` | No: reading-only app without internet access (`io.zakkyhidayat.quran.lite`) | `quran-lite-vX.Y.Z.apk` on the same GitHub release, signed with the same key |
+| `lite` | Yes, like `github`, from `quran-lite-vX.Y.Z.apk`: reading-only app (`io.zakkyhidayat.quran.lite`) | `quran-lite-vX.Y.Z.apk` on the same GitHub release, signed with the same key |
 
 Local builds: `./gradlew :app:assembleGithubDebug` (or `assemblePlayDebug`).
 

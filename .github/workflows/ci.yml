@@ -33,7 +33,8 @@ jobs:
           java-version: "21"
       - uses: gradle/actions/setup-gradle@v5
       # Font halaman tidak ada di git; build debug tetap berjalan (halaman memakai font bawaan), cukup untuk tes.
-      - run: ./gradlew --no-daemon :app:testGithubDebugUnitTest :app:lintGithubDebug :app:assembleGithubDebug :app:assembleLiteDebug
+      # assembleLiteRelease (tanpa tanda tangan) menguji R8 pada varian lite sebelum workflow rilis.
+      - run: ./gradlew --no-daemon :app:testGithubDebugUnitTest :app:lintGithubDebug :app:assembleGithubDebug :app:assembleLiteDebug :app:assembleLiteRelease
       # Varian lite harus memakai quran.db ramping hasil tools/build_lite_db.py, bukan salinan penuh (sekitar 12 MB).
       - name: quran.db lite ramping
         run: |

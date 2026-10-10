@@ -44,8 +44,9 @@ object Updater {
             if (!isNewer(version, BuildConfig.VERSION_NAME)) return@withContext null
             val assets = json.getJSONArray("assets")
             val apk = (0 until assets.length()).map { assets.getJSONObject(it) }
-                // Rilis juga memuat APK lite (quran-lite-*.apk), aplikasi terpisah; jangan ditawarkan ke versi penuh.
-                .firstOrNull { it.getString("name").let { n -> n.endsWith(".apk") && "-lite-" !in n } } ?: return@withContext null
+                // Satu rilis memuat dua aplikasi: quran-vX.apk (penuh) dan quran-lite-vX.apk; tiap varian mengambil miliknya.
+                .firstOrNull { it.getString("name").let { n -> n.endsWith(".apk") && ("-lite-" in n) == BuildConfig.LITE } }
+                ?: return@withContext null
             UpdateInfo(
                 version = version,
                 notes = json.optString("body"),

@@ -39,7 +39,8 @@ GitHub Releases (`translations`), downloaded into `filesDir/translations/`, and 
 
 The `lite` product flavor (`io.zakkyhidayat.quran.lite`) is a reading-only app built from the same code: mushaf pages,
 the index lists, page and ayah bookmarks, and the theme setting. `BuildConfig.LITE` hides every other entry point, and
-`app/src/lite/AndroidManifest.xml` removes the internet, notification and boot permissions. Its `quran.db` is a
+`app/src/lite/AndroidManifest.xml` removes the notification and boot permissions; internet is used only by the
+updater, which picks `quran-lite-*.apk` from the same GitHub release. Its `quran.db` is a
 slimmed copy built at build time by `tools/build_lite_db.py` (no thematic tables, surah info or transliteration).
 See docs/FORK_LITE.md.
 
