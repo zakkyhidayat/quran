@@ -41,10 +41,10 @@ Pilih varian **`with-footnote-tags`** untuk terjemahan (catatan kaki ditandai di
 
 ## Sumber opsional: penjelajahan tematik
 
-Lima sumber QUL untuk fitur Jelajahi (topik, tema ayat, ayat serupa, mutasyabihat, morfologi). **Opsional dan belum diunduh**:
-tanpa foldernya, `build_db.py` tetap menghasilkan `quran.db` yang sama seperti sebelumnya dan aplikasi menyembunyikan fiturnya.
-Bila diunduh, ambil dari halaman berikut (butuh login), simpan di `data-src/`, lalu jalankan `python tools/build_db.py`.
-`data_manifest.py` menampilkannya sebagai `BELUM DIUNDUH` sampai ada.
+Lima sumber QUL untuk fitur Jelajahi (topik, tema ayat, ayat serupa, mutasyabihat, morfologi). **Opsional**: tanpa foldernya,
+`build_db.py` tetap menghasilkan `quran.db` tanpa tabel ini dan aplikasi menyembunyikan fiturnya. `quran.db` yang di-commit
+**sudah berisi** kelimanya. Untuk memperbarui, ambil dari halaman berikut (butuh login), simpan di `data-src/`, lalu jalankan
+`python tools/build_db.py` (atau `--explore-only`, lihat di bawah). `data_manifest.py` menampilkan yang tidak ada sebagai `BELUM DIUNDUH`.
 
 | # | Data | Halaman QUL | Simpan ke (di `data-src/`) | Tabel di `quran.db` |
 |---|------|-------------|----------------------------|---------------------|
@@ -59,31 +59,22 @@ Bila diunduh, ambil dari halaman berikut (butuh login), simpan di `data-src/`, l
 Folder `morphology/` boleh berisi beberapa berkas (satu per jenis); `build_db.py` mengenali tabelnya dari nama (`roots`/`word_roots`,
 `lemmas`/`word_lemmas`, `stems`/`word_stems`).
 
-Format yang dibaca (dari halaman sumber di atas, dibaca tanpa login; **belum dicoba dengan berkas asli**):
+Skema yang dibaca skrip (dari berkas asli; nama kolom alternatif juga diterima, lihat `tools/build_db.py`):
 
-- **Topik**: kolom `topic_id`, `topic_name`, `arabic_name`, `verse_key` (`2:255`), `is_ontology`, `is_thematic`, `parent_topic_id`,
-  `description`. Nama tabel tidak dicatat di halaman, jadi skrip mencari tabel yang punya kolom `topic_id`, `topic_name`, `verse_key`.
-- **Tema ayat**: kolom `theme`, `surah_number`, `ayah_from` (atau `from_ayah`), `ayah_to` (atau `to_ayah`), `keywords`, `total_ayahs`.
-  Nama kolom rentang tidak pasti di halaman, kedua ejaan diterima.
-- **Ayat serupa**: kolom `verse_key`, `matched_ayah_key`, `matched_words_count`, `coverage` (persen), `score` (0-100),
-  `match_words_range` (`[5, 8]`, posisi kata di ayat yang cocok).
+- **Topik** `topics/topics.db`: tabel `topics` (`topic_id`, `name`, `arabic_name`, `parent_id`, `thematic_parent_id`,
+  `ontology_parent_id`, `description` HTML dengan `<topic data-id>`, `thematic`, `ontology`, `ayahs` berupa daftar `1:1, 1:2`,
+  `related_topics`). Deskripsi disimpan sebagai teks polos; tautan topik masuk ke tabel `topic_links`.
+- **Tema ayat**: kolom `theme`, `surah_number`, `ayah_from`/`from_ayah`, `ayah_to`/`to_ayah`, `keywords`, `total_ayahs`.
+- **Ayat serupa** `similar-ayah/matching-ayah.db`: tabel `similar_ayahs` (`verse_key`, `matched_ayah_key`, `matched_words_count`,
+  `coverage`, `score`, `match_words_range` berbentuk `[[5,8]]`).
 - **Mutasyabihat**: `phrases.json` = objek id frasa, berisi `surahs`, `ayahs`, `count`, `source` (`key`, `from`, `to`) dan `ayah`
   (kunci ayat ke daftar `[awal, akhir]`, indeks kata 1-based inklusif). `phrase_verses.json` (indeks balik) tidak dipakai.
-- **Akar/lema/stem**: tabel `roots`(`id`, `arabic_trilateral`, `english_trilateral`, `words_count`) + `word_roots`(`root_id`,
-  `word_location` `surah:ayah:kata`); `lemmas`/`word_lemmas`(`lemma_id`, `word_location`) dan `stems`/`word_stems`(`stem_id`,
-  `location`) dengan kolom `id`, `text`, `text_clean`, `words_count`.
+- **Akar/lema/stem** `morphology/word-root.db`, `word-lemma.db`, `word-stem.db`: tabel induk (`roots`/`lemmas`/`stems`) dan tabel
+  kata `root_words`/`lemma_words`/`stem_words` (`word_location` `surah:ayah:kata`).
 - **Jenis kata (POS)**: ada di [morphology/78](https://qul.tarteel.ai/resources/morphology/78) ("Word Morphology"), tetapi halaman itu
-  menjawab galat 500 saat dibaca sehingga skemanya belum diketahui. Kolom `word_morph.pos` sengaja dibiarkan kosong; isi
-  setelah berkas diunduh dan skemanya dilihat.
+  menjawab galat 500 saat dibaca sehingga skemanya belum diketahui. Kolom `word_morph.pos` sengaja dibiarkan kosong.
 
 Skrip berhenti dengan galat bila tabel yang diharapkan tidak ada di berkas. Naikkan `DATA_VERSION` setelah menambah data ini.
-
-Skema nyata berkas yang sudah diunduh (menggantikan dugaan di atas): `topics/topics.db` tabel `topics` (`topic_id`, `name`, `arabic_name`,
-`parent_id`, `thematic_parent_id`, `ontology_parent_id`, `description` HTML dengan `<topic data-id>`, `thematic`, `ontology`, `ayahs`
-berupa daftar `1:1, 1:2`, `related_topics`); `similar-ayah/matching-ayah.db` tabel `similar_ayahs` (`match_words_range` berbentuk
-`[[5,8]]`); `morphology/word-root.db`, `word-lemma.db`, `word-stem.db` dengan tabel kata `root_words`/`lemma_words`/`stem_words`
-(`word_location`). Deskripsi topik disimpan sebagai teks polos; tautan topik masuk ke tabel `topic_links`. Tema ayat (`ayah-theme/`)
-belum diunduh.
 
 ### Membangun hanya tabel penjelajahan
 
@@ -98,8 +89,8 @@ Tabel dasar tidak disentuh. Ini juga menaikkan `user_version` ke `DATA_VERSION`.
 
 ## Paket terjemahan unduhan
 
-Selain empat terjemahan yang dibundel di `quran.db`, aplikasi bisa mengunduh sekitar 170 terjemahan tambahan dalam banyak
-bahasa. QUL tidak punya API dan butuh login, jadi aplikasi tidak mengunduh dari QUL. Pemelihara mengunduh berkas QUL secara
+Tidak ada terjemahan yang dibundel (tabel terjemahan di `quran.db` sengaja kosong); aplikasi mengunduh semuanya sebagai paket,
+sekitar 170 terjemahan dalam banyak bahasa (termasuk empat terjemahan bawaan nomor 13 sampai 16). QUL tidak punya API dan butuh login, jadi aplikasi tidak mengunduh dari QUL. Pemelihara mengunduh berkas QUL secara
 manual, mengubahnya jadi paket kecil, lalu menaruhnya di GitHub Releases (tag `translations`). Aplikasi membaca `catalog.json`
 dari rilis itu (alamatnya `TRANSLATION_CATALOG_URL` di `app/build.gradle.kts`), mengunduh paket, memeriksa sha256 dan jumlah
 ayat (6236), lalu menyimpannya di `filesDir/translations/`. Dialog "Tambah terjemahan" mengelompokkan paket per bahasa dan
