@@ -89,13 +89,12 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p out
-          cp app/build/outputs/apk/github/release/app-github-release.apk "out/quran-${TAG}.apk"
+          # Nama APK tanpa versi supaya tautan unduh langsung di README (releases/latest/download/Quran.apk) selalu
+          # mengarah ke versi terbaru.
+          cp app/build/outputs/apk/github/release/app-github-release.apk out/Quran.apk
+          cp app/build/outputs/apk/lite/release/app-lite-release.apk out/Quran-Lite.apk
           cp app/build/outputs/bundle/playRelease/app-play-release.aab "out/quran-${TAG}-play.aab"
-          cp app/build/outputs/apk/lite/release/app-lite-release.apk "out/quran-lite-${TAG}.apk"
-          gh release create "$TAG" out/quran-${TAG}.apk --title "$TAG" --generate-notes
-          # APK lite diunggah sesudahnya agar APK penuh tetap aset pertama: versi 0.2.0 masih punya pembaru dalam aplikasi
-          # yang mengambil APK pertama di rilis tanpa menyaring nama.
-          gh release upload "$TAG" out/quran-lite-${TAG}.apk
+          gh release create "$TAG" out/Quran.apk out/Quran-Lite.apk --title "$TAG" --generate-notes
           # AAB untuk Play Console disimpan sebagai artefak workflow, bukan aset rilis publik.
 
       - uses: actions/upload-artifact@v4

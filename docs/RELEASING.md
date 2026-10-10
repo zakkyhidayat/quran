@@ -9,15 +9,15 @@ None of the variants updates itself; users download new versions from GitHub Rel
 
 | Variant | App | Use |
 |---------|-----|-----|
-| `github` | Full app (`io.zakkyhidayat.quran`) | `quran-vX.Y.Z.apk` on GitHub Releases |
+| `github` | Full app (`io.zakkyhidayat.quran`) | `Quran.apk` on GitHub Releases |
 | `play` | Full app, same code as `github` | AAB for Google Play |
-| `lite` | Reading-only app without internet (`io.zakkyhidayat.quran.lite`) | `quran-lite-vX.Y.Z.apk` on the same GitHub release, signed with the same key |
+| `lite` | Reading-only app without internet (`io.zakkyhidayat.quran.lite`) | `Quran-Lite.apk` on the same GitHub release, signed with the same key |
 
 Local builds: `./gradlew :app:assembleGithubDebug` (or `assemblePlayDebug`, `assembleLiteDebug`).
 
-Version 0.2.0 still has an in-app updater that reads `releases/latest` and takes the first APK asset. Keep the
-`translations` and `build-assets` releases marked as **pre-release**, and keep `quran-vX.Y.Z.apk` as the first asset
-(the workflow uploads the lite APK afterwards), so those installs update to the full app.
+The README links straight to `releases/latest/download/Quran.apk` and `Quran-Lite.apk`, so the APK names carry no
+version. Keep the `translations` and `build-assets` releases marked as **pre-release**: GitHub's "latest release" skips
+pre-releases, and those links would break if one of them became "latest".
 
 ## One-time setup
 
@@ -63,7 +63,7 @@ Update it with `gh release upload build-assets page-fonts.zip --clobber` when th
      git tag v0.3.0
      git push origin v0.3.0
      ```
-3. The workflow creates the GitHub release `v0.3.0` with `quran-v0.3.0.apk`, then adds `quran-lite-v0.3.0.apk`, with
+3. The workflow creates the GitHub release `v0.3.0` with `Quran.apk` and `Quran-Lite.apk`, with
    generated notes. Edit the notes on GitHub if needed.
 4. Download the `play-bundle` artifact from the workflow run for the Play Console.
 
