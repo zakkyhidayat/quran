@@ -44,6 +44,20 @@ Choices made on purpose:
 - Screen reader support: each ayah is read out as Unicode Arabic text.
 - No ads, no account, no tracking. The internet is only used to download translations.
 
+## Quran Lite
+
+A second app built from the same code, for people who only want to read the mushaf:
+
+- Mushaf pages, the index lists (bookmarks, surah, juz, hizb, rub', manzil, ruku), page and ayah bookmarks, and
+  continue reading.
+- Tapping an ayah only offers a bookmark; no translations, search, home tab, or thematic browsing.
+- Settings: light, dark, or system theme.
+- **No internet permission** and no notifications, so it cannot send or receive any data.
+
+It installs alongside the full app (`io.zakkyhidayat.quran.lite`) and is published on the same GitHub release as
+`quran-lite-vX.Y.Z.apk`. It has no in-app updates; download new versions from the releases page. Details:
+[docs/FORK_LITE.md](docs/FORK_LITE.md).
+
 ## Roadmap
 
 - [x] Reading modes for all surahs: mushaf page, ayahs with translation, translation only (switched from a pill at the
@@ -111,7 +125,8 @@ Requires JDK 17+, the Android SDK, and Python 3 with `fonttools`.
    `quran.db` is committed; rebuild it only when the data changes: `python tools/build_db.py`.
 3. Build:
    ```bash
-   ./gradlew :app:assembleGithubDebug
+   ./gradlew :app:assembleGithubDebug   # full app
+   ./gradlew :app:assembleLiteDebug     # Quran Lite (builds a slimmed quran.db with Python; on Windows add -Ppython=python)
    ```
 
 Minimum Android version: 8.0 (API 26).
@@ -143,6 +158,7 @@ Interface text lives in standard Android string resources, one file per language
 - [CHANGELOG.md](CHANGELOG.md), [PRIVACY.md](PRIVACY.md), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 - [docs/AUDIT.md](docs/AUDIT.md): release audit checklist and open findings (in Indonesian).
 - [docs/RELEASING.md](docs/RELEASING.md): signing, CI, and making a release.
+- [docs/FORK_LITE.md](docs/FORK_LITE.md): how Quran Lite is built from the same code (in Indonesian).
 - [docs/UI_UX.md](docs/UI_UX.md) and [docs/LANGUAGE_DATA.md](docs/LANGUAGE_DATA.md): UI/UX decisions and language data
   licensing notes (in Indonesian).
 - [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md): QUL sources, how to update the data, and downloadable translation packs
