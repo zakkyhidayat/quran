@@ -36,8 +36,6 @@ Perlu dicek pemilik sebelum rilis: redaksi hadits di bacaan sunnah, dan tampilan
 
 ## Usulan berikutnya
 
-Status kerja tiap butir ada di Issues: navigasi #8, animasi geser #9, placeholder #10, Beranda #11, redaksi hadits #12,
-aksesibilitas #13.
 
 ### Prioritas 1: navigasi
 

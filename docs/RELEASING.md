@@ -55,13 +55,16 @@ Update it with `gh release upload build-assets page-fonts.zip --clobber` when th
 ## Making a release
 
 1. Make sure `main` builds and the data is up to date (see [DATA_SOURCES.md](DATA_SOURCES.md)).
-2. Tag and push:
-   ```bash
-   git tag v0.2.0
-   git push origin v0.2.0
-   ```
-3. The workflow creates the GitHub release `v0.2.0` with `quran-v0.2.0.apk` and generated notes. Edit the notes on
-   GitHub if needed; the app shows them in its update dialog.
+2. Start the release, either way:
+   - **From GitHub:** Actions → Release → Run workflow (branch `main`), enter the new version, e.g. `v0.3.0`. The
+     workflow tags the latest `main` commit and builds.
+   - **From a computer:**
+     ```bash
+     git tag v0.3.0
+     git push origin v0.3.0
+     ```
+3. The workflow creates the GitHub release `v0.3.0` with `quran-v0.3.0.apk`, then adds `quran-lite-v0.3.0.apk`, with
+   generated notes. Edit the notes on GitHub if needed.
 4. Download the `play-bundle` artifact from the workflow run for the Play Console.
 
 `versionCode` is `X*10000 + Y*100 + Z`, so every new tag must be higher than the previous one.

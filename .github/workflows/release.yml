@@ -1,10 +1,20 @@
-# Rilis bertanda tangan saat tag vX.Y.Z di-push: APK GitHub, APK Lite, dan AAB Play. Tidak ada pembaru dalam aplikasi.
+# Rilis bertanda tangan saat tag vX.Y.Z di-push, atau dari tab Actions ("Run workflow", isi versi): APK GitHub, APK Lite,
+# dan AAB Play. Tidak ada pembaru dalam aplikasi.
 # Kebutuhan sekali saja: lihat docs/RELEASING.md (secret keystore dan rilis `build-assets` berisi font halaman).
 name: Release
 
 on:
   push:
     tags: ["v[0-9]+.[0-9]+.[0-9]+"]
+  # Rilis tanpa push tag dari komputer: workflow membuat tag di commit main terbaru, lalu membangun seperti biasa.
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Versi baru, misalnya v0.3.0"
+        required: true
+
+env:
+  TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
 
 permissions:
   contents: write
@@ -16,6 +26,17 @@ jobs:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0 # git describe --tags menentukan versionName/versionCode
+
+      - name: Buat tag (hanya dari tab Actions)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "::error::Versi harus berbentuk vX.Y.Z, bukan $TAG"; exit 1; }
+          if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then echo "::error::Tag $TAG sudah ada"; exit 1; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "$TAG"
+          # Tag dari GITHUB_TOKEN tidak memicu workflow ini lagi, jadi tidak ada rilis ganda.
+          git push origin "$TAG"
 
       - uses: actions/setup-java@v5
         with:
@@ -55,7 +76,6 @@ jobs:
       - name: Terbitkan rilis
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: ${{ github.ref_name }}
         run: |
           mkdir -p out
           cp app/build/outputs/apk/github/release/app-github-release.apk "out/quran-${TAG}.apk"
