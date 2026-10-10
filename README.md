@@ -62,6 +62,8 @@ Choices made on purpose:
 - [x] A counter in the reader's top bar, between search and bookmark: ayah count within the surah, or progress through
       the current juz, hizb, rub', manzil, or ruku (tap to switch)
 - [x] Remove the page number below the page in the mushaf view
+- [x] Home tab: ayah of the day, Sunnah readings by time of day, reading history, and ayah collections (duas,
+      solutions, etiquette, major sins)
 - [ ] Thematic browsing on the main screen, using QUL resources: topics and concepts in the Quran (2,512 topics with
       semantic relations), ayah themes, similar ayahs, mutashabihat (similar phrases), and grammar/morphology (roots,
       lemmas, parts of speech per word)

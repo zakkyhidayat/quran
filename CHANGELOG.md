@@ -22,6 +22,11 @@ First public release candidate.
 - Daily reading reminder: a notification at a chosen time with the day's juz, hizb, or manzil and its ayah range; tapping
   it opens the start of that portion. Asks for notification permission (Android 13+) and survives reboot and updates.
 
+- Home tab: ayah of the day (a curated 1-4 ayah passage, not a random fragment), Sunnah readings with their hadith
+  (Al-Kahf on Friday, As-Sajdah and Al-Mulk, Ayat al-Kursi, the end of Al-Baqarah, and the three Quls at night, the
+  first ten ayahs of Al-Kahf), reading history, and ayah collections from QuranApp (duas, solutions, etiquette, major
+  sins).
+
 ### Quality
 - Qur'an content checks in CI (counts, pages, SHA-256 fingerprints); all 6,236 ayahs verified against the source.
 - Page rendering prepared off the main thread; Baseline Profile.
