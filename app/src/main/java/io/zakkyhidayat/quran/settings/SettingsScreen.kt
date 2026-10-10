@@ -88,7 +88,7 @@ fun SettingsScreen(
                 item(key = page.route) {
                     Column {
                         when (page) {
-                            SettingsPage.Main -> SettingsMain(settings, onOpen)
+                            SettingsPage.Main -> if (io.zakkyhidayat.quran.BuildConfig.LITE) LiteSettingsMain(vm, settings, onOpen) else SettingsMain(settings, onOpen)
                             SettingsPage.Appearance -> {
 
                                 AppearanceControls(vm, settings)
@@ -126,26 +126,7 @@ fun SettingsScreen(
                             SettingsPage.Permissions -> PermissionControls()
                             SettingsPage.About -> {
                                 Group {
-                                    if (io.zakkyhidayat.quran.BuildConfig.UPDATER_ENABLED) {
-                                        val latest = stringResource(R.string.update_latest)
-                                        val failedCheck = stringResource(R.string.update_check_failed)
-                                        item(
-                                            title = stringResource(R.string.version),
-                                            subtitle = stringResource(R.string.update_check_sub, version),
-                                            onClick = {
-                                                vm.checkForUpdate(manual = true) { found ->
-                                                    when (found) {
-                                                        false -> scope.launch { snackbar.showSnackbar(latest) }
-                                                        null -> scope.launch { snackbar.showSnackbar(failedCheck) }
-                                                        true -> Unit // dialog pembaruan tampil
-                                                    }
-                                                }
-                                            },
-                                            trailing = { Icon(Icons.Default.Refresh, contentDescription = null) },
-                                        )
-                                    } else {
-                                        item(title = stringResource(R.string.version), subtitle = version)
-                                    }
+                                    item(title = stringResource(R.string.version), subtitle = version)
                                     item(
                                         title = stringResource(R.string.data_source),
                                         subtitle = stringResource(R.string.data_source_sub),
@@ -230,6 +211,22 @@ private fun SettingsMain(settings: AppSettings, onOpen: (SettingsPage) -> Unit) 
             leading = { Icon(AppIcons.Shield, contentDescription = null) },
             trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
         )
+        item(
+            title = stringResource(R.string.about),
+            subtitle = stringResource(R.string.settings_about_sub),
+            onClick = { onOpen(SettingsPage.About) },
+            leading = { Icon(Icons.Default.Info, contentDescription = null) },
+            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
+        )
+    }
+}
+
+/** Varian lite: hanya tema, dan Tentang (atribusi font dan data wajib tetap tampil). */
+@Composable
+private fun LiteSettingsMain(vm: AppViewModel, settings: AppSettings, onOpen: (SettingsPage) -> Unit) {
+    ThemeModeRow(vm, settings)
+    Spacer(Modifier.height(16.dp))
+    Group {
         item(
             title = stringResource(R.string.about),
             subtitle = stringResource(R.string.settings_about_sub),

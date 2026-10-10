@@ -58,9 +58,8 @@ class MainActivity : ComponentActivity() {
                     translation = settings.translationTextPercent / 100f,
                 ),
               ) {
-                if (settings.onboardingDone) {
+                if (settings.onboardingDone || BuildConfig.LITE) {
                     AppNav(vm, settings)
-                    io.zakkyhidayat.quran.ui.UpdateDialog(vm)
                 } else {
                     io.zakkyhidayat.quran.onboarding.OnboardingScreen(vm, settings)
                 }

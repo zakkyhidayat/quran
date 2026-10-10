@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.ui.res.stringResource
+import io.zakkyhidayat.quran.BuildConfig
 import io.zakkyhidayat.quran.R
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -86,7 +87,9 @@ private val ListPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, 
 fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -> Unit, onOpenSurahInfo: (Int) -> Unit, onOpenExplore: () -> Unit = {}, onOpenHome: (io.zakkyhidayat.quran.home.HomeTarget) -> Unit = {}) {
     val onBack = onOpenReader // pilihan di daftar membuka layar baca
     // Bookmark di urutan pertama, tetapi yang dibuka pertama kali adalah Beranda.
-    var tab by rememberSaveable { mutableIntStateOf(1) }
+    // Lite tanpa Beranda: tab berisi indeks ke TABS, dan Surah yang dibuka pertama kali.
+    val tabIds = remember { if (BuildConfig.LITE) TABS.indices.filter { it != 1 } else TABS.indices.toList() }
+    var tab by rememberSaveable { mutableIntStateOf(if (BuildConfig.LITE) 2 else 1) }
     var showJump by remember { mutableStateOf(false) }
     val surahsForJump by vm.surahs.collectAsStateWithLifecycle()
     val settings by vm.settingsRepository.settings.collectAsStateWithLifecycle(AppSettings())
@@ -113,9 +116,11 @@ fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -
                 title = { Text(stringResource(R.string.index_title)) },
                 actions = {
                     // Jelajahi (topik tematik) hanya ada bila quran.db dibangun dengan data QUL-nya.
-                    if (exploreAvailable) IconButton(onClick = onOpenExplore) { Icon(AppIcons.GridView, contentDescription = stringResource(R.string.explore_title)) }
-                    IconButton(onClick = { showJump = true }) { Icon(AppIcons.FormatListNumbered, contentDescription = stringResource(R.string.jump_to_ayah)) }
-                    IconButton(onClick = { vm.randomAyah(); onBack() }) { Icon(AppIcons.Shuffle, contentDescription = stringResource(R.string.random_ayah)) }
+                    if (!BuildConfig.LITE) {
+                        if (exploreAvailable) IconButton(onClick = onOpenExplore) { Icon(AppIcons.GridView, contentDescription = stringResource(R.string.explore_title)) }
+                        IconButton(onClick = { showJump = true }) { Icon(AppIcons.FormatListNumbered, contentDescription = stringResource(R.string.jump_to_ayah)) }
+                        IconButton(onClick = { vm.randomAyah(); onBack() }) { Icon(AppIcons.Shuffle, contentDescription = stringResource(R.string.random_ayah)) }
+                    }
                     IconButton(onClick = onOpenSettings) { Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.settings)) }
                 },
             )
@@ -131,8 +136,9 @@ fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -
         }
         CenteredContent(Modifier.padding(padding)) {
             Column(Modifier.fillMaxSize()) {
-                PrimaryScrollableTabRow(selectedTabIndex = tab, edgePadding = 8.dp, minTabWidth = 0.dp) {
-                    TABS.forEachIndexed { i, (title, icon) ->
+                PrimaryScrollableTabRow(selectedTabIndex = tabIds.indexOf(tab).coerceAtLeast(0), edgePadding = 8.dp, minTabWidth = 0.dp) {
+                    tabIds.forEach { i ->
+                        val (title, icon) = TABS[i]
                         if (i == 0) {
                             // Bookmark cukup ikon; namanya tetap dibacakan pembaca layar.
                             // Latar tonal seukuran tab membedakan Bookmark (koleksi pribadi) dari tab daftar isi lainnya.
@@ -198,7 +204,7 @@ private fun SurahList(vm: AppViewModel, onBack: () -> Unit, onOpenSurahInfo: (In
                 trailingContent = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         if (showGlyph) Text(s.nameGlyph.toString(), style = TextStyle(fontFamily = font, fontSize = glyphSize, color = MaterialTheme.colorScheme.primary))
-                        IconButton(onClick = { onOpenSurahInfo(s.id) }) { Icon(Icons.Default.Info, contentDescription = stringResource(R.string.surah_info_cd, s.nameLatin)) }
+                        if (!BuildConfig.LITE) IconButton(onClick = { onOpenSurahInfo(s.id) }) { Icon(Icons.Default.Info, contentDescription = stringResource(R.string.surah_info_cd, s.nameLatin)) }
                     }
                 },
             ) { Text(s.nameLatin) }

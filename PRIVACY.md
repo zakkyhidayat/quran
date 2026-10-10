@@ -14,13 +14,11 @@ backup. This is controlled by your device settings, not by the app.
 
 ## Network use
 
-The app connects to the internet only to:
+The app connects to the internet only to download translations you add, and the list of available translations, from
+the project's GitHub Releases. It does not check for updates; new versions are downloaded by you from GitHub Releases
+or Google Play. **Quran Lite** has no internet permission at all.
 
-- download translations you add, and the list of available translations, from the project's GitHub Releases;
-- check GitHub Releases for a newer version of the app (GitHub build only, at most once a day, or when you tap
-  Settings → Version).
-
-These requests go to GitHub (`github.com`, `api.github.com`, and GitHub's download servers). Like any web server, GitHub
+Translation requests go to GitHub (`github.com`, `api.github.com`, and GitHub's download servers). Like any web server, GitHub
 receives your IP address and basic request information; see GitHub's privacy statement. The app sends no identifiers of
 its own.
 
@@ -28,10 +26,9 @@ its own.
 
 | Permission | Why |
 |------------|-----|
-| Internet | Download translations and check for app updates, as described above |
+| Internet (not in Quran Lite) | Download translations, as described above |
 | Notifications (Android 13+, asked when you turn on the reminder) | Show the optional daily reading reminder |
 | Run at startup | Set the reminder again after the device restarts or the app updates; only used when the reminder is on |
-| Install unknown apps (GitHub build only, asked when you update) | Install an app update you downloaded from GitHub Releases |
 
 ## Contact
 

@@ -172,14 +172,6 @@
     <string name="auto_backup_on_sub">Disimpan ke %1$s • terakhir %2$s</string>
     <string name="auto_backup_pending">belum</string>
     <string name="auto_backup_error">Tidak bisa menyimpan ke berkas yang dipilih. Matikan lalu nyalakan lagi untuk memilih ulang berkasnya.</string>
-    <string name="update_title">Versi %1$s tersedia</string>
-    <string name="update_install">Perbarui</string>
-    <string name="update_later">Nanti</string>
-    <string name="update_skip">Lewati versi ini</string>
-    <string name="update_failed">Unduhan gagal. Periksa koneksi lalu coba lagi.</string>
-    <string name="update_check_sub">%1$s • ketuk untuk cek pembaruan</string>
-    <string name="update_latest">Anda memakai versi terbaru</string>
-    <string name="update_check_failed">Tidak bisa mengecek pembaruan. Periksa koneksi.</string>
     <string name="reminder">Pengingat membaca</string>
     <string name="reminder_daily">Pengingat harian</string>
     <string name="reminder_off_sub">Notifikasi setiap hari berisi bagian yang sedang Anda baca</string>
@@ -196,8 +188,6 @@
     <string name="permissions">Izin</string>
     <string name="perm_notifications">Notifikasi</string>
     <string name="perm_notifications_sub">Dibutuhkan untuk pengingat membaca harian</string>
-    <string name="perm_install">Pasang aplikasi tak dikenal</string>
-    <string name="perm_install_sub">Dibutuhkan untuk memasang pembaruan aplikasi yang diunduh dari GitHub</string>
     <string name="perm_granted">Diizinkan</string>
     <string name="perm_denied">Belum diizinkan</string>
     <string name="arabic_text_size">Ukuran teks Arab</string>

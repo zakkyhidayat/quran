@@ -1,3 +1,5 @@
+import javax.inject.Inject
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -29,20 +31,27 @@ android {
         versionCode = semver.first * 10000 + semver.second * 100 + semver.third
         versionName = "${semver.first}.${semver.second}.${semver.third}"
         // Katalog paket terjemahan unduhan; paket diambil relatif terhadap alamat ini (lihat docs/DATA_SOURCES.md).
-        buildConfigField("String", "GITHUB_REPO", "\"zakkyhidayat/quran\"")
         buildConfigField("String", "TRANSLATION_CATALOG_URL", "\"https://github.com/zakkyhidayat/quran/releases/download/translations/catalog.json\"")
     }
 
-    // github: APK di GitHub Releases dengan pembaruan dari dalam aplikasi. play: tanpa pembaruan sendiri (kebijakan Play).
+    // github: APK di GitHub Releases. play: AAB untuk Play Store. Keduanya sama isinya; dipisah agar nama berkas dan
+    // tugas rilis tetap. Tidak ada pembaru dalam aplikasi: versi baru diunduh dari GitHub Releases atau Play.
+    // lite: aplikasi terpisah yang hanya membaca mushaf per halaman, tanpa internet (lihat docs/FORK_LITE.md). Dibuat di
+    // dimensi yang sama agar nama tugas varian lain (assembleGithubDebug dan seterusnya) tidak berubah.
     flavorDimensions += "distribution"
     productFlavors {
         create("github") {
             dimension = "distribution"
-            buildConfigField("boolean", "UPDATER_ENABLED", "true")
+            buildConfigField("boolean", "LITE", "false")
         }
         create("play") {
             dimension = "distribution"
-            buildConfigField("boolean", "UPDATER_ENABLED", "false")
+            buildConfigField("boolean", "LITE", "false")
+        }
+        create("lite") {
+            dimension = "distribution"
+            applicationIdSuffix = ".lite"
+            buildConfigField("boolean", "LITE", "true")
         }
     }
 
@@ -124,8 +133,33 @@ baselineProfile {
     mergeIntoMain = true
 }
 
+// Varian lite memakai quran.db ramping (tanpa data penjelajahan, info surah, transliterasi) yang dibangun dari
+// quran.db penuh oleh tools/build_lite_db.py saat build. Berkas hasilnya menimpa src/main/assets/quran.db di APK lite.
+abstract class LiteDbTask : DefaultTask() {
+    @get:InputFile abstract val source: RegularFileProperty
+    @get:InputFile abstract val script: RegularFileProperty
+    @get:Input abstract val python: Property<String>
+    @get:OutputDirectory abstract val outputDir: DirectoryProperty
+    @get:Inject abstract val exec: ExecOperations
+
+    @TaskAction
+    fun build() {
+        exec.exec {
+            commandLine(python.get(), script.get().asFile.path, source.get().asFile.path, outputDir.get().file("quran.db").asFile.path)
+        }
+    }
+}
+
+val liteDb = tasks.register<LiteDbTask>("buildLiteDb") {
+    source.set(layout.projectDirectory.file("src/main/assets/quran.db"))
+    script.set(rootProject.layout.projectDirectory.file("tools/build_lite_db.py"))
+    // Di Windows biasanya "python": ./gradlew -Ppython=python ...
+    python.set(providers.gradleProperty("python").orElse("python3"))
+}
+
 androidComponents {
     onVariants { variant ->
+        if (variant.flavorName == "lite") variant.sources.assets?.addGeneratedSourceDirectory(liteDb, LiteDbTask::outputDir)
         val type = variant.buildType.orEmpty()
         if (type.startsWith("benchmark") || type.startsWith("nonMinified")) {
             variant.applicationId.set("io.zakkyhidayat.quran.bench")

@@ -26,6 +26,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.ui.res.stringResource
+import io.zakkyhidayat.quran.BuildConfig
 import io.zakkyhidayat.quran.R
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
@@ -138,7 +139,8 @@ fun ReaderScreen(
 
     val startPage = remember { (vm.pendingPage.value ?: settings.lastPage).coerceIn(1, PAGE_COUNT) }
     val pagerState = rememberPagerState(initialPage = startPage - 1) { PAGE_COUNT }
-    val mode = settings.readingMode
+    // Lite hanya punya mode mushaf.
+    val mode = if (BuildConfig.LITE) ReadingMode.Mushaf else settings.readingMode
     val listMode = mode != ReadingMode.Mushaf
     // Mode daftar terakhir: saat kembali ke mushaf, lapisan daftar masih memudar dan harus tetap tampil seperti sebelumnya
     // (dulu sempat berubah jadi "terjemahan saja" sepersekian detik).
@@ -212,7 +214,7 @@ fun ReaderScreen(
             TopAppBar(
                 windowInsets = WindowInsets(0, 0, 0, 0),
                 title = {
-                    Column(Modifier.clickable(onClickLabel = stringResource(R.string.jump_to_ayah)) { showJump = true }) {
+                    Column(if (BuildConfig.LITE) Modifier else Modifier.clickable(onClickLabel = stringResource(R.string.jump_to_ayah)) { showJump = true }) {
                         Text(currentSurah?.nameLatin.orEmpty(), style = MaterialTheme.typography.titleMedium)
                         Text(stringResource(R.string.juz_page, meta?.juz ?: "", currentPage), style = MaterialTheme.typography.bodySmall)
                     }
@@ -223,13 +225,15 @@ fun ReaderScreen(
                     }
                 },
                 actions = {
-                    counter?.let { c ->
-                        ReaderCounter(c, surahs[c.ayah.surah]) {
-                            val next = CounterMode.entries[(counterMode.ordinal + 1) % CounterMode.entries.size]
-                            scope.launch { vm.settingsRepository.setCounterMode(next) }
+                    if (!BuildConfig.LITE) {
+                        counter?.let { c ->
+                            ReaderCounter(c, surahs[c.ayah.surah]) {
+                                val next = CounterMode.entries[(counterMode.ordinal + 1) % CounterMode.entries.size]
+                                scope.launch { vm.settingsRepository.setCounterMode(next) }
+                            }
                         }
+                        IconButton(onClick = onOpenSearch) { Icon(Icons.Default.Search, contentDescription = stringResource(R.string.search)) }
                     }
-                    IconButton(onClick = onOpenSearch) { Icon(Icons.Default.Search, contentDescription = stringResource(R.string.search)) }
                     IconButton(onClick = { vm.togglePageBookmark(currentPage) }) {
                         Icon(
                             if (pageBookmarked) AppIcons.Bookmark else AppIcons.BookmarkBorder,
@@ -310,8 +314,12 @@ fun ReaderScreen(
                                             modifier = Modifier
                                                 .height(24.dp)
                                                 .wrapContentHeight(Alignment.CenterVertically, unbounded = true)
-                                                .clickable(onClickLabel = stringResource(R.string.open_surah_info)) { onOpenSurahInfo(headSurah.id) }
-                                                .semantics { contentDescription = resources.getString(R.string.surah_info_cd, headSurah.nameLatin) },
+                                                .then(
+                                                    if (BuildConfig.LITE) Modifier.semantics { contentDescription = headSurah.nameLatin }
+                                                    else Modifier
+                                                        .clickable(onClickLabel = stringResource(R.string.open_surah_info)) { onOpenSurahInfo(headSurah.id) }
+                                                        .semantics { contentDescription = resources.getString(R.string.surah_info_cd, headSurah.nameLatin) },
+                                                ),
                                         )
                                     }
                                     Box(Modifier.weight(1f))
@@ -338,7 +346,7 @@ fun ReaderScreen(
                                             selected = selected,
                                             onAyahClick = { vm.selectAyah(it) },
                                             tajweed = settings.tajweed,
-                                            onSurahClick = onOpenSurahInfo,
+                                            onSurahClick = if (BuildConfig.LITE) ({ _: Int -> }) else onOpenSurahInfo,
                                         )
                                     }
                                 }
@@ -348,7 +356,7 @@ fun ReaderScreen(
                 }
                 }
             }
-                if (listShown) {
+                if (listShown && !BuildConfig.LITE) {
                     Box(
                         Modifier
                             .fillMaxSize()
@@ -379,7 +387,7 @@ fun ReaderScreen(
                 }
             }
             // Pill cara baca di barisnya sendiri, jadi tidak menutupi halaman; tinggi halaman menyesuaikan.
-            ReadingModeBar(mode) { scope.launch { vm.settingsRepository.setReadingMode(it) } }
+            if (!BuildConfig.LITE) ReadingModeBar(mode) { scope.launch { vm.settingsRepository.setReadingMode(it) } }
         }
     }
 
@@ -396,18 +404,29 @@ fun ReaderScreen(
     if (sheetVisible && shown != null) {
         val ref = AyahRef(shown.surah, shown.ayah)
         ModalBottomSheet(onDismissRequest = vm::dismissSheet) {
-            AyahSheetContent(
-                detail = shown,
-                surah = surahs[shown.surah],
-                bookmarked = bookmarks.any { it.kind == BookmarkKind.Ayah && it.surah == shown.surah && it.ayah == shown.ayah },
-                onToggleBookmark = { vm.toggleAyahBookmark(ref, shown.page) },
-                onPrevious = { vm.moveSelection(-1) },
-                onNext = { vm.moveSelection(1) },
-                showTransliteration = settings.showTransliteration,
-                extras = extras,
-                onOpenAyah = { s, a -> vm.goToAyah(s, a, openSheet = true) },
-                surahNames = surahs,
-            )
+            if (BuildConfig.LITE) {
+                AyahBookmarkSheet(
+                    detail = shown,
+                    surah = surahs[shown.surah],
+                    bookmarked = bookmarks.any { it.kind == BookmarkKind.Ayah && it.surah == shown.surah && it.ayah == shown.ayah },
+                    onToggleBookmark = { vm.toggleAyahBookmark(ref, shown.page) },
+                    onPrevious = { vm.moveSelection(-1) },
+                    onNext = { vm.moveSelection(1) },
+                )
+            } else {
+                AyahSheetContent(
+                    detail = shown,
+                    surah = surahs[shown.surah],
+                    bookmarked = bookmarks.any { it.kind == BookmarkKind.Ayah && it.surah == shown.surah && it.ayah == shown.ayah },
+                    onToggleBookmark = { vm.toggleAyahBookmark(ref, shown.page) },
+                    onPrevious = { vm.moveSelection(-1) },
+                    onNext = { vm.moveSelection(1) },
+                    showTransliteration = settings.showTransliteration,
+                    extras = extras,
+                    onOpenAyah = { s, a -> vm.goToAyah(s, a, openSheet = true) },
+                    surahNames = surahs,
+                )
+            }
         }
     }
 }

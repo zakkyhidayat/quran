@@ -162,23 +162,7 @@ internal fun AppearanceControls(vm: AppViewModel, settings: AppSettings) {
     val dynamicPreview = if (dynamicSupported) (if (dark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)) else null
     val originalPreview = originalColorScheme(dark, settings.contrast)
     Column {
-        Labeled(stringResource(R.string.theme)) {
-            val options = listOf(
-                Triple(ThemeMode.System, stringResource(R.string.theme_system), AppIcons.BrightnessAuto),
-                Triple(ThemeMode.Light, stringResource(R.string.theme_light), AppIcons.LightMode),
-                Triple(ThemeMode.Dark, stringResource(R.string.theme_dark), AppIcons.DarkMode),
-            )
-            SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-                options.forEachIndexed { i, (mode, label, icon) ->
-                    SegmentedButton(
-                        selected = settings.themeMode == mode,
-                        onClick = { scope.launch { repo.setThemeMode(mode) } },
-                        shape = SegmentedButtonDefaults.itemShape(i, options.size),
-                        icon = { Icon(icon, contentDescription = null, modifier = Modifier.size(SegmentedButtonDefaults.IconSize)) },
-                    ) { Text(label) }
-                }
-            }
-        }
+        ThemeModeRow(vm, settings)
 
         Labeled(stringResource(R.string.color_palette)) {
             Row(Modifier.fillMaxWidth().height(IntrinsicSize.Max), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -225,6 +209,29 @@ internal fun AppearanceControls(vm: AppViewModel, settings: AppSettings) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 4.dp),
                 )
+            }
+        }
+    }
+}
+
+/** Pilihan tema: ikuti sistem, terang, gelap. Juga satu-satunya pengaturan tampilan di varian lite. */
+@Composable
+internal fun ThemeModeRow(vm: AppViewModel, settings: AppSettings) {
+    val scope = rememberCoroutineScope()
+    Labeled(stringResource(R.string.theme)) {
+        val options = listOf(
+            Triple(ThemeMode.System, stringResource(R.string.theme_system), AppIcons.BrightnessAuto),
+            Triple(ThemeMode.Light, stringResource(R.string.theme_light), AppIcons.LightMode),
+            Triple(ThemeMode.Dark, stringResource(R.string.theme_dark), AppIcons.DarkMode),
+        )
+        SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+            options.forEachIndexed { i, (mode, label, icon) ->
+                SegmentedButton(
+                    selected = settings.themeMode == mode,
+                    onClick = { scope.launch { vm.settingsRepository.setThemeMode(mode) } },
+                    shape = SegmentedButtonDefaults.itemShape(i, options.size),
+                    icon = { Icon(icon, contentDescription = null, modifier = Modifier.size(SegmentedButtonDefaults.IconSize)) },
+                ) { Text(label) }
             }
         }
     }

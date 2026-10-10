@@ -6,7 +6,11 @@ Format: [Keep a Changelog](https://keepachangelog.com). Versions follow semantic
 
 First public release candidate.
 
+### Removed
+- In-app updates (added in 0.2.0). New versions are downloaded from GitHub Releases or Google Play.
+
 ### Added
+- Quran Lite: a separate reading-only app from the same code, without internet access (`quran-lite-vX.Y.Z.apk`).
 - Madani mushaf (KFGQPC V4, 604 pages, 15 lines) with tajweed colours, light, dark, and AMOLED themes, dynamic colour,
   and three contrast levels.
 - Reading modes: mushaf page, ayah with translation, translation only, one page at a time.
@@ -18,7 +22,6 @@ First public release candidate.
 - Interface in 10 languages, following the device language.
 - Onboarding for new users.
 - Backup and restore to a JSON file, and auto backup to a chosen file.
-- In-app updates for the GitHub build.
 - Daily reading reminder: a notification at a chosen time with the day's juz, hizb, or manzil and its ayah range; tapping
   it opens the start of that portion. Asks for notification permission (Android 13+) and survives reboot and updates.
 

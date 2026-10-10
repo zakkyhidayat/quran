@@ -7,6 +7,18 @@ King Fahd Complex edition: 604 pages, 15 lines, with tajweed colouring.
 
 [![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-support-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/zakkyhidayat)
 
+## Download
+
+Two apps, both from the [latest release](https://github.com/zakkyhidayat/quran/releases/latest):
+
+| App | File | For |
+|-----|------|-----|
+| **Quran** | `quran-vX.Y.Z.apk` | Reading with translations, search, home tab, thematic browsing, reminders, backup |
+| **Quran Lite** | `quran-lite-vX.Y.Z.apk` | Reading the mushaf only, with bookmarks; no internet permission |
+
+Both install side by side. Neither updates itself: download the new APK from the releases page and install it over the
+old one (your bookmarks and settings are kept).
+
 ## Who it is for
 
 This app focuses on one way of reading, done carefully: the Madani mushaf printed by the King Fahd Glorious Quran Printing
@@ -36,6 +48,9 @@ Choices made on purpose:
   launch. Available now: Indonesian (Kemenag, The Sabiq Company, King Fahad Quran Complex) and English (Saheeh
   International), with more languages to come.
 - Indexes by surah, juz, hizb, rub', manzil, and ruku; surah info; go to ayah; random ayah; continue reading from the last ayah.
+- Home tab: ayah of the day, Sunnah readings with their hadith, reading history, and ayah collections.
+- Thematic browsing: topics, ayah themes, similar ayahs, mutashabihat, and word roots.
+- Optional daily reading reminder by juz, hizb, or manzil.
 - Backup and restore of bookmarks and settings to a file (on the device or any cloud app with a file provider, such as
   Google Drive).
 - Page and ayah bookmarks; search by Arabic text, translation, surah name, or a reference such as `2:255`.
@@ -44,12 +59,25 @@ Choices made on purpose:
 - Screen reader support: each ayah is read out as Unicode Arabic text.
 - No ads, no account, no tracking. The internet is only used to download translations.
 
+## Quran Lite
+
+A second app built from the same code, for people who only want to read the mushaf:
+
+- Mushaf pages, the index lists (bookmarks, surah, juz, hizb, rub', manzil, ruku), page and ayah bookmarks, and
+  continue reading.
+- Tapping an ayah only offers a bookmark; no translations, search, home tab, or thematic browsing.
+- Settings: light, dark, or system theme.
+- **No internet permission** and no notifications, so it cannot send or receive any data.
+
+It is a separate app (`io.zakkyhidayat.quran.lite`) with its own icon, published on the same GitHub release as
+`quran-lite-vX.Y.Z.apk`. Its Qur'an text and page rendering are the same as the full app; its database leaves out the
+data only the full app uses, so the download is smaller. Details: [docs/FORK_LITE.md](docs/FORK_LITE.md).
+
 ## Roadmap
 
 - [x] Reading modes for all surahs: mushaf page, ayahs with translation, translation only (switched from a pill at the
       bottom of the screen)
 - [x] Onboarding for new users: language, about this mushaf, translations, appearance
-- [x] In-app updates for builds from GitHub Releases
 - [x] All translations downloadable, none bundled in the APK
 - [ ] Automatic cloud backup (Google Drive, Dropbox, OneDrive)
 - [x] Reading reminders to keep a daily portion by juz, hizb, or manzil
@@ -64,9 +92,12 @@ Choices made on purpose:
 - [x] Remove the page number below the page in the mushaf view
 - [x] Home tab: ayah of the day, Sunnah readings by time of day, reading history, and ayah collections (duas,
       solutions, etiquette, major sins)
-- [ ] Thematic browsing on the main screen, using QUL resources: topics and concepts in the Quran (2,512 topics with
-      semantic relations), ayah themes, similar ayahs, mutashabihat (similar phrases), and grammar/morphology (roots,
-      lemmas, parts of speech per word)
+- [x] Thematic browsing using QUL resources: topics and concepts (2,512 topics with semantic relations), ayah themes,
+      similar ayahs, mutashabihat (similar phrases), and roots, lemmas, and stems per word
+      - [ ] Parts of speech per word (the QUL source page returns an error, schema unknown)
+- [x] Quran Lite: a reading-only app built from the same code
+
+Detailed plans and open work are tracked in [GitHub Issues](https://github.com/zakkyhidayat/quran/issues).
 
 ### Known issues
 
@@ -108,7 +139,8 @@ Requires JDK 17+, the Android SDK, and Python 3 with `fonttools`.
    `quran.db` is committed; rebuild it only when the data changes: `python tools/build_db.py`.
 3. Build:
    ```bash
-   ./gradlew :app:assembleGithubDebug
+   ./gradlew :app:assembleGithubDebug   # full app
+   ./gradlew :app:assembleLiteDebug     # Quran Lite (builds a slimmed quran.db with Python; on Windows add -Ppython=python)
    ```
 
 Minimum Android version: 8.0 (API 26).
@@ -118,7 +150,8 @@ built and signed by GitHub Actions; see [docs/RELEASING.md](docs/RELEASING.md).
 
 ## Checks
 
-Run these before every release; CI runs the first three on every push.
+Run these before every release. CI runs the first three on every push, and also builds the full app and Quran Lite
+(debug, and an unsigned Lite release to test code shrinking).
 
 ```bash
 python tools/verify_quran.py            # Qur'an: 114 surahs, 6,236 ayahs, pages, SHA-256 content fingerprints
@@ -140,6 +173,8 @@ Interface text lives in standard Android string resources, one file per language
 - [CHANGELOG.md](CHANGELOG.md), [PRIVACY.md](PRIVACY.md), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 - [docs/AUDIT.md](docs/AUDIT.md): release audit checklist and open findings (in Indonesian).
 - [docs/RELEASING.md](docs/RELEASING.md): signing, CI, and making a release.
-
+- [docs/FORK_LITE.md](docs/FORK_LITE.md): how Quran Lite is built from the same code (in Indonesian).
+- [docs/UI_UX.md](docs/UI_UX.md) and [docs/LANGUAGE_DATA.md](docs/LANGUAGE_DATA.md): UI/UX decisions and language data
+  licensing notes (in Indonesian).
 - [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md): QUL sources, how to update the data, and downloadable translation packs
   (written in Indonesian).

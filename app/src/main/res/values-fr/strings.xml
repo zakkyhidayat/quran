@@ -172,14 +172,6 @@
     <string name="auto_backup_on_sub">Enregistrement dans %1$s • dernier : %2$s</string>
     <string name="auto_backup_pending">pas encore</string>
     <string name="auto_backup_error">Impossible d’enregistrer dans le fichier choisi. Désactivez puis réactivez la sauvegarde automatique pour le choisir à nouveau.</string>
-    <string name="update_title">La version %1$s est disponible</string>
-    <string name="update_install">Mettre à jour</string>
-    <string name="update_later">Plus tard</string>
-    <string name="update_skip">Ignorer cette version</string>
-    <string name="update_failed">Le téléchargement a échoué. Vérifiez votre connexion et réessayez.</string>
-    <string name="update_check_sub">%1$s • touchez pour rechercher une mise à jour</string>
-    <string name="update_latest">Vous avez la dernière version</string>
-    <string name="update_check_failed">Impossible de rechercher les mises à jour. Vérifiez votre connexion.</string>
     <string name="reminder">Rappel de lecture</string>
     <string name="reminder_daily">Rappel quotidien</string>
     <string name="reminder_off_sub">Une notification chaque jour avec la partie que vous lisez</string>
@@ -196,8 +188,6 @@
     <string name="permissions">Autorisations</string>
     <string name="perm_notifications">Notifications</string>
     <string name="perm_notifications_sub">Nécessaires pour le rappel de lecture quotidien</string>
-    <string name="perm_install">Installer des applis inconnues</string>
-    <string name="perm_install_sub">Nécessaire pour installer les mises à jour téléchargées depuis GitHub</string>
     <string name="perm_granted">Autorisé</string>
     <string name="perm_denied">Non autorisé</string>
     <string name="arabic_text_size">Taille du texte arabe</string>

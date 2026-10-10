@@ -172,14 +172,6 @@
     <string name="auto_backup_on_sub">Сохраняется в %1$s • последний раз %2$s</string>
     <string name="auto_backup_pending">ещё нет</string>
     <string name="auto_backup_error">Не удалось сохранить в выбранный файл. Выключите и снова включите автокопирование, чтобы выбрать файл заново.</string>
-    <string name="update_title">Доступна версия %1$s</string>
-    <string name="update_install">Обновить</string>
-    <string name="update_later">Позже</string>
-    <string name="update_skip">Пропустить версию</string>
-    <string name="update_failed">Не удалось скачать. Проверьте подключение и повторите попытку.</string>
-    <string name="update_check_sub">%1$s • нажмите, чтобы проверить обновления</string>
-    <string name="update_latest">У вас последняя версия</string>
-    <string name="update_check_failed">Не удалось проверить обновления. Проверьте подключение.</string>
     <string name="reminder">Напоминание о чтении</string>
     <string name="reminder_daily">Ежедневное напоминание</string>
     <string name="reminder_off_sub">Каждый день уведомление о части, которую вы читаете</string>
@@ -196,8 +188,6 @@
     <string name="permissions">Разрешения</string>
     <string name="perm_notifications">Уведомления</string>
     <string name="perm_notifications_sub">Нужны для ежедневного напоминания о чтении</string>
-    <string name="perm_install">Установка неизвестных приложений</string>
-    <string name="perm_install_sub">Нужно для установки обновлений, скачанных с GitHub</string>
     <string name="perm_granted">Разрешено</string>
     <string name="perm_denied">Не разрешено</string>
     <string name="arabic_text_size">Размер арабского текста</string>

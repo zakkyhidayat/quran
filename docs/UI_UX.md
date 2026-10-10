@@ -17,7 +17,7 @@ Dari screenshot [QuranApp](https://github.com/AlfaazPlus/QuranApp) (GPL-3.0, sam
 | Kartu koleksi: doa, solusi, adab, dosa besar | Ditiru | Data rujukan dari repo QuranApp |
 | Kartu Nabi dan Rasul, Doa para Nabi | Ditunda | Dataset terpisah, belum diperiksa |
 | Kartu Quran dan Sains | Tidak diambil | Tafsir ilmi dipersoalkan sebagian ulama; isinya kurasi QuranApp sendiri |
-| Penjelajah Topik | Sudah ada (Jelajahi) | Menunggu data QUL |
+| Penjelajah Topik | Sudah ada (Jelajahi) | Data QUL sudah ada di `quran.db` |
 | Kata per kata, murattal, mini player | Ditunda | Fitur besar, sesi tersendiri |
 | Pilihan skrip mushaf, sumber unduhan | Tidak diambil | Bertentangan dengan prinsip satu gaya halaman (README) |
 | Menu promosi aplikasi lain, beri rating | Tidak diambil | Khusus aplikasi mereka |
@@ -35,6 +35,9 @@ Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pu
 Perlu dicek pemilik sebelum rilis: redaksi hadits di bacaan sunnah, dan tampilan di perangkat.
 
 ## Usulan berikutnya
+
+Status kerja tiap butir ada di Issues: navigasi #8, animasi geser #9, placeholder #10, Beranda #11, redaksi hadits #12,
+aksesibilitas #13.
 
 ### Prioritas 1: navigasi
 

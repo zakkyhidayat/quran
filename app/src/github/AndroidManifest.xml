@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Varian GitHub Releases: boleh memasang APK pembaruan. Varian play tidak punya izin ini (kebijakan Play Store). -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-</manifest>
