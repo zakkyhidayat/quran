@@ -144,7 +144,6 @@
     <string name="mode_ayah_translation">Ayah + translation</string>
     <string name="mode_translation">Translation</string>
     <string name="onb_step">Step %1$d of %2$d</string>
-    <string name="onb_skip">Skip</string>
     <string name="onb_next">Next</string>
     <string name="onb_start">Start reading</string>
     <string name="onb_welcome_title">Assalamu’alaykum</string>
@@ -228,4 +227,45 @@
     <string name="mutashabihat_title">Similar phrases</string>
     <string name="mutashabihat_count">Appears in %1$d ayahs</string>
     <string name="topic_related">Related topics</string>
+    <string name="translation_update_available">Update available</string>
+    <string name="translation_updating_cd">Updating translation %1$s</string>
+    <string name="update_translation_cd">Update translation %1$s</string>
+    <string name="translation_update_failed">Could not update %1$s. Check your connection and try again.</string>
+    <string name="translation_empty_ayah">(no translation for this verse)</string>
+    <string name="reminder_send_test">Send test reminder</string>
+    <string name="state_expanded">Expanded</string>
+    <string name="state_collapsed">Collapsed</string>
+
+    <!-- Layar utama: Jelajahi (carousel, tema, mutasyabihat, ayat serupa, akar kata) -->
+    <string name="explore_section">Explore the Qur\'an</string>
+    <string name="explore_topics">Topics &amp; concepts</string>
+    <string name="explore_themes">Ayah themes</string>
+    <string name="explore_phrases">Mutashabihat</string>
+    <string name="explore_similar">Similar ayahs</string>
+    <string name="explore_roots">Word roots</string>
+    <string name="entries_topics">%1$d topics</string>
+    <string name="entries_themes">%1$d themes</string>
+    <string name="entries_phrases">%1$d phrases</string>
+    <string name="entries_similar">%1$d ayahs</string>
+    <string name="entries_roots">%1$d roots</string>
+    <string name="themes_search">Search themes</string>
+    <string name="themes_count">%1$d themes</string>
+    <string name="themes_open_surah">Themes of %1$s</string>
+    <string name="explore_no_results">No results</string>
+    <string name="open_in_reader">Open in reader</string>
+    <string name="phrases_search">Search phrases (Arabic)</string>
+    <string name="phrases_open">Show ayahs containing this phrase</string>
+    <string name="phrase_title">Phrase</string>
+    <string name="similar_search">Search surah or reference, e.g. 2:255</string>
+    <string name="similar_title">Similar ayahs</string>
+    <string name="similar_source">Ayah</string>
+    <string name="similar_matches">Matches</string>
+    <string name="similar_score">Score %1$d · %2$d%%</string>
+    <string name="matches_count">%1$d matches</string>
+    <string name="roots_search">Search root (Arabic or Latin)</string>
+    <string name="roots_open">Show words and ayahs for this root</string>
+    <string name="words_count">%1$d words</string>
+    <string name="times_count">%1$d×</string>
+    <string name="roots_lemmas">Lemmas</string>
+    <string name="roots_ayahs">Ayahs with this root</string>
 </resources>

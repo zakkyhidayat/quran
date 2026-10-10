@@ -41,10 +41,8 @@ SINGLE_FILES = [
     "fonts-extra/quran-common.ttf",
 ]
 # Sumber paket terjemahan unduhan (tools/build_translation_packs.py); boleh belum diunduh.
-OPTIONAL_DIRS = [
-    "en-khattab", "en-yusufali", "ur-jalandhari", "bn-mujibur", "tr-diyanet",
-    "fa-islamhouse", "ms-basmeih", "fr-hamidullah", "ru-kuliev",
-]
+# Folder terjemahan sumber QUL (tools/build_translation_packs.py); semua berkas .db di foldernya dicatat.
+OPTIONAL_DIRS = ["translation", "translation-footnote", "translation-split", "translation-footnote-split"]
 # Sumber penjelajahan tematik (tools/build_db.py, load_explore); semua berkas .db/.sqlite/.json di foldernya dicatat.
 EXPLORE_DIRS = ["topics", "ayah-theme", "similar-ayah", "mutashabihat", "morphology"]
 PAGE_FONTS = "ttf"  # p1.ttf .. p604.ttf, dihitung sebagai satu entri gabungan
@@ -64,10 +62,10 @@ def collect() -> dict:
         path = SRC / rel
         entries[rel] = {"sha256": sha256(path), "bytes": path.stat().st_size} if path.exists() else None
     for folder in OPTIONAL_DIRS:
-        db = next(iter(sorted((SRC / folder).glob("*.db"))), None) if (SRC / folder).is_dir() else None
-        if db is not None:
-            entries[f"{folder}/{db.name}"] = {"sha256": sha256(db), "bytes": db.stat().st_size}
-        else:
+        files = sorted((SRC / folder).glob("*.db")) if (SRC / folder).is_dir() else []
+        for f in files:
+            entries[f"{folder}/{f.name}"] = {"sha256": sha256(f), "bytes": f.stat().st_size}
+        if not files:
             entries[f"{folder}/*.db"] = None
     for folder in EXPLORE_DIRS:
         files = sorted(p for p in (SRC / folder).iterdir() if p.suffix in (".db", ".sqlite", ".json")) if (SRC / folder).is_dir() else []

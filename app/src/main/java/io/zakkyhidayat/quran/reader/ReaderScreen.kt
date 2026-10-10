@@ -46,6 +46,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.runtime.CompositionLocalProvider
@@ -242,7 +243,11 @@ fun ReaderScreen(
             // Halaman mushaf dan daftar ayat tetap tersusun berdampingan; berganti mode hanya memudarkan lapisan dan
             // menaikkan yang aktif ke atas (menerima sentuhan). Menyusun ulang halaman mushaf dari nol (font, ukuran)
             // memakan ~300 ms dan membuat transisi tersendat.
-            val listAlpha by animateFloatAsState(if (listMode) 1f else 0f, motion.defaultEffectsSpec(), label = "listAlpha")
+            // Pudar berurutan: lapisan yang keluar memudar di paruh pertama, yang masuk muncul di paruh kedua, sehingga
+            // glif mushaf dan teks daftar tidak pernah tampak bertumpuk. Durasi total sama dengan sebelumnya.
+            val modeProgress by animateFloatAsState(if (listMode) 1f else 0f, motion.defaultEffectsSpec(), label = "modeProgress")
+            val listAlpha = (2f * modeProgress - 1f).coerceIn(0f, 1f)
+            val mushafAlpha = (1f - 2f * modeProgress).coerceIn(0f, 1f)
             var listShown by remember { mutableStateOf(listMode) }
             if (listMode) listShown = true
             // Siapkan daftar ayat di belakang setelah halaman pertama tampil, agar perpindahan pertama tidak tersendat.
@@ -255,7 +260,9 @@ fun ReaderScreen(
                     Modifier
                         .fillMaxSize()
                         .zIndex(if (listMode) 0f else 1f)
-                        .graphicsLayer { alpha = 1f - listAlpha }
+                        .graphicsLayer { alpha = mushafAlpha }
+                        // Lapisan tersembunyi (alpha 0) tetap tersusun tapi tidak digambar sama sekali.
+                        .drawWithContent { if (mushafAlpha > 0f) drawContent() }
                         .then(if (listMode) Modifier.clearAndSetSemantics { } else Modifier),
                 ) {
                 // Halaman mushaf selalu kiri-ke-kanan secara tata letak (halaman berikutnya di kiri, nama surah di kiri atas),
@@ -354,6 +361,7 @@ fun ReaderScreen(
                             .fillMaxSize()
                             .zIndex(if (listMode) 1f else 0f)
                             .graphicsLayer { alpha = listAlpha }
+                            .drawWithContent { if (listAlpha > 0f) drawContent() }
                             .then(if (listMode) Modifier else Modifier.clearAndSetSemantics { }),
                     ) {
                 AyahListReader(
@@ -361,6 +369,8 @@ fun ReaderScreen(
                     surahs = surahs,
                     translationIds = settings.translationIds,
                     showArabic = lastListMode == ReadingMode.AyahTranslation,
+                    // Animasi teks Arab hanya saat daftar sudah terlihat; dari mushaf, daftar langsung muncul dalam mode tujuan.
+                    animateArabic = listMode && listAlpha > 0f,
                     state = listPagerState,
                     targetAyah = listTargetAyah,
                     onFirstVisible = { page, ayah -> listFirst = page to ayah },

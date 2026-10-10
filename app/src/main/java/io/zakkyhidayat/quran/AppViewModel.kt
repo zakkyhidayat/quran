@@ -7,6 +7,8 @@ import io.zakkyhidayat.quran.data.AyahDetail
 import io.zakkyhidayat.quran.data.AyahExtras
 import io.zakkyhidayat.quran.data.AyahRef
 import io.zakkyhidayat.quran.data.CatalogPack
+import io.zakkyhidayat.quran.data.ExploreCounts
+import io.zakkyhidayat.quran.data.isPackUpdateAvailable
 import io.zakkyhidayat.quran.data.Marker
 import io.zakkyhidayat.quran.data.MarkerKind
 import io.zakkyhidayat.quran.data.PageMeta
@@ -72,7 +74,12 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     // Pintu masuk Jelajahi hanya tampil bila quran.db memuat data topik.
     val exploreAvailable = MutableStateFlow(false)
 
+    // Hitungan kartu Jelajahi di layar utama; null selama belum dimuat.
+    val exploreCounts = MutableStateFlow<ExploreCounts?>(null)
+
     init {
+        // Hitungan dimuat terpisah agar tidak menunda daftar surah.
+        viewModelScope.launch { exploreCounts.value = mushaf.exploreCounts() }
         viewModelScope.launch {
             exploreAvailable.value = mushaf.exploreAvailable()
             bookmarkStore.load()
@@ -170,6 +177,24 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     suspend fun catalog(): List<CatalogPack> = mushaf.catalog()
+
+    /** Paket terpasang yang punya versi lebih baru di katalog, menurut id. Diisi [checkPackUpdates]. */
+    val packUpdates = MutableStateFlow<Map<String, CatalogPack>>(emptyMap())
+
+    /** Bandingkan versi paket terpasang dengan katalog; gagal (luring) diam-diam dilewati. */
+    suspend fun checkPackUpdates() {
+        val packs = runCatching { mushaf.catalog() }
+            .onFailure { if (it is kotlinx.coroutines.CancellationException) throw it }
+            .getOrNull() ?: return
+        val installed = translations.value.filter { it.downloaded }.associateBy { it.id }
+        packUpdates.value = packs.filter { p -> installed[p.id]?.let { isPackUpdateAvailable(it.version, p.version) } == true }.associateBy { it.id }
+    }
+
+    /** Unduh ulang paket terpasang ke versi katalog; setelah berhasil tanda pembaruannya dihapus. */
+    suspend fun updatePack(pack: CatalogPack, onProgress: (Long, Long) -> Unit = { _, _ -> }) {
+        installPack(pack, onProgress)
+        packUpdates.value = packUpdates.value - pack.id
+    }
 
     /** Unduh dan pasang paket, lalu segarkan daftar terjemahan. Melempar IOException bila gagal. */
     suspend fun installPack(pack: CatalogPack, onProgress: (Long, Long) -> Unit = { _, _ -> }) {

@@ -47,6 +47,10 @@ import io.zakkyhidayat.quran.reader.juzOpeningGlyph
 import io.zakkyhidayat.quran.settings.AppSettings
 import io.zakkyhidayat.quran.ui.JumpToAyahDialog
 import androidx.compose.runtime.Composable
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -54,6 +58,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -82,15 +87,19 @@ private val ListPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -> Unit, onOpenSurahInfo: (Int) -> Unit, onOpenExplore: () -> Unit = {}) {
+fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -> Unit, onOpenSurahInfo: (Int) -> Unit, onOpenExplore: (ExploreEntry) -> Unit = {}) {
     val onBack = onOpenReader // pilihan di daftar membuka layar baca
     // Bookmark di urutan pertama, tetapi yang dibuka pertama kali tetap Surah.
-    var tab by rememberSaveable { mutableIntStateOf(1) }
+    // Pager menyimpan halaman terpilih sendiri (rememberSaveable); kolom tab mengikuti pager.
+    val pagerState = rememberPagerState(initialPage = 1) { TABS.size }
+    val tab = pagerState.currentPage
+    val tabScope = rememberCoroutineScope()
     var showJump by remember { mutableStateOf(false) }
     val surahsForJump by vm.surahs.collectAsStateWithLifecycle()
     val settings by vm.settingsRepository.settings.collectAsStateWithLifecycle(AppSettings())
     val lastSurah = surahsForJump[settings.lastSurah]
-    val exploreAvailable by vm.exploreAvailable.collectAsStateWithLifecycle()
+    val exploreCounts by vm.exploreCounts.collectAsStateWithLifecycle()
+    val header = remember { CollapsingHeaderState() }
     Scaffold(
         // Lanjutkan membaca: FAB diperluas di kanan bawah, tampil di semua tab.
         floatingActionButton = {
@@ -101,7 +110,13 @@ fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -
                     text = {
                         Column {
                             Text(stringResource(R.string.continue_reading), style = MaterialTheme.typography.labelLarge)
-                            Text("${lastSurah.nameLatin} ${lastSurah.id}:${settings.lastAyah}", style = MaterialTheme.typography.labelMedium)
+                            // Label berganti halus (bukan tiba-tiba) saat posisi terakhir berubah sepulang dari pembaca.
+                            val motion = MaterialTheme.motionScheme
+                            AnimatedContent(
+                                targetState = "${lastSurah.nameLatin} ${lastSurah.id}:${settings.lastAyah}",
+                                transitionSpec = { fadeIn(motion.defaultEffectsSpec()) togetherWith fadeOut(motion.fastEffectsSpec()) },
+                                label = "continueLabel",
+                            ) { label -> Text(label, style = MaterialTheme.typography.labelMedium) }
                         }
                     },
                 )
@@ -111,8 +126,6 @@ fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -
             TopAppBar(
                 title = { Text(stringResource(R.string.index_title)) },
                 actions = {
-                    // Jelajahi (topik tematik) hanya ada bila quran.db dibangun dengan data QUL-nya.
-                    if (exploreAvailable) IconButton(onClick = onOpenExplore) { Icon(AppIcons.GridView, contentDescription = stringResource(R.string.explore_title)) }
                     IconButton(onClick = { showJump = true }) { Icon(AppIcons.FormatListNumbered, contentDescription = stringResource(R.string.jump_to_ayah)) }
                     IconButton(onClick = { vm.randomAyah(); onBack() }) { Icon(AppIcons.Shuffle, contentDescription = stringResource(R.string.random_ayah)) }
                     IconButton(onClick = onOpenSettings) { Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.settings)) }
@@ -129,7 +142,11 @@ fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -
             )
         }
         CenteredContent(Modifier.padding(padding)) {
-            Column(Modifier.fillMaxSize()) {
+            Column(Modifier.fillMaxSize().nestedScroll(header.connection)) {
+                // Carousel Jelajahi mengecil saat daftar di bawahnya digulir dan muncul lagi saat daftar kembali ke atas.
+                exploreCounts?.takeIf { it.any }?.let { counts ->
+                    ExploreCarousel(counts, onOpenExplore, Modifier.collapsingHeader(header))
+                }
                 PrimaryScrollableTabRow(selectedTabIndex = tab, edgePadding = 8.dp, minTabWidth = 0.dp) {
                     TABS.forEachIndexed { i, (title, icon) ->
                         if (i == 0) {
@@ -137,7 +154,7 @@ fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -
                             // Latar tonal seukuran tab membedakan Bookmark (koleksi pribadi) dari tab daftar isi lainnya.
                             Tab(
                                 selected = tab == i,
-                                onClick = { tab = i },
+                                onClick = { tabScope.launch { pagerState.animateScrollToPage(i) } },
                                 modifier = Modifier.width(64.dp).background(MaterialTheme.colorScheme.secondaryContainer),
                                 selectedContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                                 unselectedContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -146,20 +163,15 @@ fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -
                         } else {
                             LeadingIconTab(
                                 selected = tab == i,
-                                onClick = { tab = i },
+                                onClick = { tabScope.launch { pagerState.animateScrollToPage(i) } },
                                 text = { Text(stringResource(title)) },
                                 icon = { Icon(icon, contentDescription = null) },
                             )
                         }
                     }
                 }
-                // Fade-through M3 antar tab.
-                val motion = MaterialTheme.motionScheme
-                AnimatedContent(
-                    targetState = tab,
-                    transitionSpec = { fadeIn(motion.defaultEffectsSpec()) togetherWith fadeOut(motion.fastEffectsSpec()) },
-                    label = "indexTab",
-                ) { current ->
+                // Tab digeser (swipe) lewat pager; arah mengikuti layout direction seperti kolom tab-nya.
+                HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize(), key = { it }) { current ->
                     when (current) {
                         0 -> BookmarkList(vm, onBack)
                         1 -> SurahList(vm, onBack, onOpenSurahInfo)

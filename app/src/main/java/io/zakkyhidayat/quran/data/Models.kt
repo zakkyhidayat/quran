@@ -30,7 +30,7 @@ data class AyahInfo(val juz: Int, val hizb: Int, val rubInHizb: Int, val manzil:
 
 data class PageMeta(val surah: Int, val juz: Int)
 
-data class TranslationInfo(val id: String, val lang: String, val name: String, val downloaded: Boolean = false, val langName: String? = null)
+data class TranslationInfo(val id: String, val lang: String, val name: String, val downloaded: Boolean = false, val langName: String? = null, val version: Int = 1)
 
 data class Footnote(val label: Int?, val text: String)
 
@@ -120,3 +120,30 @@ data class WordMorphology(
     val stem: String?,
     val pos: String?,
 )
+
+// Penjelajahan lanjutan di layar utama (data QUL opsional).
+
+/** Jumlah entri tiap fitur Jelajahi di layar utama; null = tabelnya tidak ada sehingga kartunya disembunyikan. */
+data class ExploreCounts(val topics: Int?, val themes: Int?, val phrases: Int?, val similar: Int?, val roots: Int?) {
+    val any get() = topics != null || themes != null || phrases != null || similar != null || roots != null
+}
+
+/** Frasa mutasyabihat: teks [phrase] (kosong bila pemotongan kata tak bisa dipastikan), berapa ayat dan kemunculannya. */
+data class PhraseSummary(val id: Int, val phrase: String, val ayahCount: Int, val occurrences: Int, val surah: Int, val ayah: Int, val fromWord: Int, val toWord: Int)
+
+/** Ayat yang memuat satu frasa; [fromWord]..[toWord] 1-based inklusif. */
+data class PhraseAyah(val surah: Int, val ayah: Int, val fromWord: Int, val toWord: Int)
+
+/** Ayat sumber ayat serupa beserta jumlah kecocokannya. */
+data class SimilarSource(val surah: Int, val ayah: Int, val matches: Int)
+
+/** Akar kata: [arabic] (huruf dipisah spasi tunggal), [latin] transliterasi Buckwalter bila ada, [wordsCount] jumlah kata. */
+data class RootSummary(val id: Int, val arabic: String, val latin: String?, val wordsCount: Int)
+
+data class LemmaCount(val id: Int, val text: String, val count: Int)
+
+/** Satu ayat yang memuat akar kata, dengan posisi kata (1-based) tempat akar itu muncul. */
+data class RootAyah(val surah: Int, val ayah: Int, val words: List<Int>)
+
+/** Kata-kata ayat untuk penyorotan; [words] kosong bila jumlah kata tak cocok dengan data QUL (tampilkan [text] utuh). */
+data class AyahWords(val text: String, val words: List<String>)
