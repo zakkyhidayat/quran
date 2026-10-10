@@ -9,10 +9,12 @@ Yang **ada**:
 - Pembaca mushaf per halaman (604 halaman, font V4, warna tajwid sesuai mode tema).
 - Layar utama berisi tab: Bookmark, Surah, Juz, Hizb, Rub', Manzil, Ruku.
 - Bookmark halaman (tombol yang sudah ada di bar atas pembaca).
+- Bookmark ayat lewat sheet ringkas: tap ayat → sheet berisi nama surah dan nomor ayat, posisi (halaman, juz, hizb), dan
+  satu tombol bookmark. Tanpa terjemahan, transliterasi, salin, bagikan, atau info tambahan.
 - Lanjutkan dari posisi terakhir.
 - Pengaturan: hanya tema terang, gelap, dan ikuti sistem.
 
-Yang **dibuang**: terjemahan dan transliterasi, sheet ayat (tap ayat), mode ayat+terjemahan dan terjemahan saja,
+Yang **dibuang**: terjemahan dan transliterasi, isi sheet ayat selain bookmark (terjemahan, salin, bagikan, ayat serupa, dan lain-lain), mode ayat+terjemahan dan terjemahan saja,
 pencarian, Beranda, Jelajahi/topik, info surah, pengingat, cadangan, updater, onboarding, pilihan bahasa antarmuka di
 dalam aplikasi, dan unduhan apa pun.
 
@@ -45,8 +47,9 @@ mahal.
 3. **Navigasi** (`AppNav.kt`): untuk `LITE`, daftarkan hanya rute `index` dan `reader`, ditambah pengaturan tema.
 4. **Layar utama** (`index/IndexScreen.kt`): sembunyikan tab Beranda dan ikon Jelajahi, Cari, Ayat acak. Tab
    Bookmark, Surah, Juz, dan seterusnya tetap.
-5. **Pembaca** (`reader/ReaderScreen.kt`): kunci ke mode mushaf, sembunyikan pil mode, tombol cari, dan penghitung. Tap
-   ayat tidak membuka `AyahSheet`. Tombol bookmark halaman tetap.
+5. **Pembaca** (`reader/ReaderScreen.kt`): kunci ke mode mushaf, sembunyikan pil mode, tombol cari, dan penghitung.
+   Tombol bookmark halaman tetap. Tap ayat tetap menyorot ayat dan membuka sheet, tetapi isinya `AyahBookmarkSheet`
+   (lihat bagian "Sheet bookmark ayat"), bukan `AyahSheetContent`. Lewati pemuatan `extras` dan terjemahan untuk sheet.
 6. **Pengaturan**: layar ringkas berisi pilihan tema saja (pakai ulang bagian dari `AppearanceSettings.kt`).
 7. **Startup** (`AppViewModel.kt`): lewati onboarding, unduhan terjemahan otomatis, updater, dan cadangan otomatis bila
    `LITE`.
@@ -73,7 +76,8 @@ Bila tetap memilih repo terpisah:
 3. **Hapus paket dan berkas**:
    - Paket utuh: `home/`, `explore/`, `search/`, `info/`, `onboarding/`, `reminder/`.
    - `data/`: `TranslationPacks.kt`, `Backup.kt`, `Updater.kt`, `Collections.kt`, `ReadingHistory.kt`.
-   - `reader/`: `AyahSheet.kt`, `AyahListReader.kt`, `AyahShare.kt`, `ReaderControls.kt` (bagian pil mode).
+   - `reader/`: `AyahListReader.kt`, `AyahShare.kt`, `ReaderControls.kt` (bagian pil mode). `AyahSheet.kt` diganti
+     `AyahBookmarkSheet` (lihat bagian "Sheet bookmark ayat").
    - `settings/`: semua kecuali `AppSettings.kt` dan bagian tema dari `AppearanceSettings.kt`.
    - `ui/`: `HtmlContent.kt`, `UpdateDialog.kt`.
    - `MushafRepository.kt`: fungsi topik, tema, ayat serupa, mutasyabihat, morfologi, info surah, transliterasi.
@@ -86,10 +90,35 @@ Bila tetap memilih repo terpisah:
 6. **CLAUDE.md** baru yang menyatakan lingkup sempit ini sebagai aturan keras: fitur di luar lingkup ditolak, bukan
    ditambahkan.
 
+## Sheet bookmark ayat
+
+Buat composable kecil baru, jangan menambah parameter ke `AyahSheetContent`. Sheet penuh sudah punya banyak cabang
+(transliterasi, extras, salin, bagikan); menambah mode `lite` ke dalamnya membuat keduanya sulit dirawat.
+
+```kotlin
+@Composable
+fun AyahBookmarkSheet(detail: AyahDetail, surah: Surah?, bookmarked: Boolean, onToggleBookmark: () -> Unit,
+                      onPrevious: () -> Unit, onNext: () -> Unit)
+```
+
+Isi, dari atas ke bawah:
+
+1. Baris judul: `Al-Baqarah 2:255`, di bawahnya `ayah_meta` (halaman, juz, hizb, rub', manzil, ruku). Panah ayat
+   sebelum/berikutnya tetap, supaya bisa bookmark ayat tetangga tanpa menutup sheet.
+2. Satu tombol bookmark yang lebar dengan label teks ("Tandai ayat" / "Hapus tanda"), bukan ikon saja, karena hanya
+   ini satu-satunya aksi.
+3. Label sajdah bila ayatnya ayat sajdah (sudah ada di `detail.info.sajda`).
+
+Teks Arab ayat tidak perlu ditampilkan ulang: ayat sudah tersorot di halaman di belakang sheet. String yang dipakai
+sudah ada (`bookmark_ayah`, `remove_bookmark`, `ayah_meta`, `previous_ayah`, `next_ayah`), jadi tidak ada kunci
+terjemahan baru.
+
+Alternatif yang lebih ringan: tekan lama ayat langsung menandai, dengan snackbar "Ayat ditandai · Batal". Lebih cepat,
+tetapi gestur tekan lama sulit ditemukan pengguna dan rawan tertekan tanpa sengaja. Sheet lebih jelas; tekan lama bisa
+ditambahkan nanti sebagai jalan pintas.
+
 ## Hal yang perlu diputuskan
 
 - Jalan A atau B.
-- Bookmark ayat: tanpa sheet ayat, hanya bookmark halaman yang tersisa. Bookmark ayat lama dari aplikasi penuh tidak
-  bisa dibuat di versi lite. Cukupkah bookmark halaman?
 - Bahasa antarmuka: tetap 10 bahasa (ikut bahasa sistem) atau hanya Indonesia dan Inggris.
 - Tab Sajdah saat ini disembunyikan di aplikasi penuh; tetap disembunyikan di lite?
