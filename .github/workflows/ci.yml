@@ -34,3 +34,9 @@ jobs:
       - uses: gradle/actions/setup-gradle@v5
       # Font halaman tidak ada di git; build debug tetap berjalan (halaman memakai font bawaan), cukup untuk tes.
       - run: ./gradlew --no-daemon :app:testGithubDebugUnitTest :app:lintGithubDebug :app:assembleGithubDebug :app:assembleLiteDebug
+      # Varian lite harus memakai quran.db ramping hasil tools/build_lite_db.py, bukan salinan penuh (sekitar 12 MB).
+      - name: quran.db lite ramping
+        run: |
+          size=$(unzip -l app/build/outputs/apk/lite/debug/app-lite-debug.apk assets/quran.db | awk 'NR==4 {print $1}')
+          echo "assets/quran.db di APK lite: $size byte"
+          test "$size" -gt 1000000 && test "$size" -lt 8000000

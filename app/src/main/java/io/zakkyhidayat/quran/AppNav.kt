@@ -114,36 +114,39 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
                     onOpenSurahInfo = { nav.navigate("surah/$it") },
                 )
             }
-            composable("surah/{id}", arguments = listOf(navArgument("id") { type = NavType.IntType })) { entry ->
-                SurahInfoScreen(
-                    vm = vm,
-                    surahId = entry.arguments?.getInt("id") ?: 1,
-                    onBack = { nav.popBackStack() },
-                    onOpenAyah = { surah, ayah -> vm.goToAyah(surah, ayah); openReader() },
-                    onOpenPage = { page -> vm.clearSelection(); vm.goToPage(page); openReader() },
-                )
+            // Lite: hanya daftar, pembaca, dan pengaturan. Rute lain tidak didaftarkan supaya R8 bisa membuang layarnya.
+            if (!BuildConfig.LITE) {
+                composable("surah/{id}", arguments = listOf(navArgument("id") { type = NavType.IntType })) { entry ->
+                    SurahInfoScreen(
+                        vm = vm,
+                        surahId = entry.arguments?.getInt("id") ?: 1,
+                        onBack = { nav.popBackStack() },
+                        onOpenAyah = { surah, ayah -> vm.goToAyah(surah, ayah); openReader() },
+                        onOpenPage = { page -> vm.clearSelection(); vm.goToPage(page); openReader() },
+                    )
+                }
+                composable("explore") {
+                    ExploreScreen(vm, onBack = { nav.popBackStack() }, onOpenTopic = { nav.navigate("topic/$it") })
+                }
+                composable("topic/{id}", arguments = listOf(navArgument("id") { type = NavType.IntType })) { entry ->
+                    TopicScreen(
+                        vm = vm,
+                        topicId = entry.arguments?.getInt("id") ?: 0,
+                        onBack = { nav.popBackStack() },
+                        onOpenTopic = { nav.navigate("topic/$it") },
+                        onOpenAyah = { surah, ayah -> vm.goToAyah(surah, ayah); openReader() },
+                    )
+                }
+                composable("collection/{kind}") { entry ->
+                    val kind = CollectionKind.entries.firstOrNull { it.name == entry.arguments?.getString("kind") } ?: CollectionKind.Dua
+                    CollectionScreen(vm, kind, onBack = { nav.popBackStack() }, onOpenPassage = openHome)
+                }
+                composable("passage") {
+                    val target = vm.passage.collectAsState().value
+                    if (target != null) PassageScreen(vm, target, onBack = { nav.popBackStack() }, onOpenReader = openReader)
+                }
+                composable("search") { SearchScreen(vm, settings, onBack = { nav.popBackStack() }) }
             }
-            composable("explore") {
-                ExploreScreen(vm, onBack = { nav.popBackStack() }, onOpenTopic = { nav.navigate("topic/$it") })
-            }
-            composable("topic/{id}", arguments = listOf(navArgument("id") { type = NavType.IntType })) { entry ->
-                TopicScreen(
-                    vm = vm,
-                    topicId = entry.arguments?.getInt("id") ?: 0,
-                    onBack = { nav.popBackStack() },
-                    onOpenTopic = { nav.navigate("topic/$it") },
-                    onOpenAyah = { surah, ayah -> vm.goToAyah(surah, ayah); openReader() },
-                )
-            }
-            composable("collection/{kind}") { entry ->
-                val kind = CollectionKind.entries.firstOrNull { it.name == entry.arguments?.getString("kind") } ?: CollectionKind.Dua
-                CollectionScreen(vm, kind, onBack = { nav.popBackStack() }, onOpenPassage = openHome)
-            }
-            composable("passage") {
-                val target = vm.passage.collectAsState().value
-                if (target != null) PassageScreen(vm, target, onBack = { nav.popBackStack() }, onOpenReader = openReader)
-            }
-            composable("search") { SearchScreen(vm, settings, onBack = { nav.popBackStack() }) }
             SettingsPage.entries.forEach { page ->
                 composable(page.route) {
                     SettingsScreen(vm, settings, page = page, onBack = { nav.popBackStack() }, onOpen = { nav.navigate(it.route) })

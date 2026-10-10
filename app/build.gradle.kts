@@ -1,3 +1,5 @@
+import javax.inject.Inject
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -134,8 +136,33 @@ baselineProfile {
     mergeIntoMain = true
 }
 
+// Varian lite memakai quran.db ramping (tanpa data penjelajahan, info surah, transliterasi) yang dibangun dari
+// quran.db penuh oleh tools/build_lite_db.py saat build. Berkas hasilnya menimpa src/main/assets/quran.db di APK lite.
+abstract class LiteDbTask : DefaultTask() {
+    @get:InputFile abstract val source: RegularFileProperty
+    @get:InputFile abstract val script: RegularFileProperty
+    @get:Input abstract val python: Property<String>
+    @get:OutputDirectory abstract val outputDir: DirectoryProperty
+    @get:Inject abstract val exec: ExecOperations
+
+    @TaskAction
+    fun build() {
+        exec.exec {
+            commandLine(python.get(), script.get().asFile.path, source.get().asFile.path, outputDir.get().file("quran.db").asFile.path)
+        }
+    }
+}
+
+val liteDb = tasks.register<LiteDbTask>("buildLiteDb") {
+    source.set(layout.projectDirectory.file("src/main/assets/quran.db"))
+    script.set(rootProject.layout.projectDirectory.file("tools/build_lite_db.py"))
+    // Di Windows biasanya "python": ./gradlew -Ppython=python ...
+    python.set(providers.gradleProperty("python").orElse("python3"))
+}
+
 androidComponents {
     onVariants { variant ->
+        if (variant.flavorName == "lite") variant.sources.assets?.addGeneratedSourceDirectory(liteDb, LiteDbTask::outputDir)
         val type = variant.buildType.orEmpty()
         if (type.startsWith("benchmark") || type.startsWith("nonMinified")) {
             variant.applicationId.set("io.zakkyhidayat.quran.bench")

@@ -404,29 +404,29 @@ fun ReaderScreen(
     if (sheetVisible && shown != null) {
         val ref = AyahRef(shown.surah, shown.ayah)
         ModalBottomSheet(onDismissRequest = vm::dismissSheet) {
-          if (BuildConfig.LITE) {
-            AyahBookmarkSheet(
-                detail = shown,
-                surah = surahs[shown.surah],
-                bookmarked = bookmarks.any { it.kind == BookmarkKind.Ayah && it.surah == shown.surah && it.ayah == shown.ayah },
-                onToggleBookmark = { vm.toggleAyahBookmark(ref, shown.page) },
-                onPrevious = { vm.moveSelection(-1) },
-                onNext = { vm.moveSelection(1) },
-            )
-          } else {
-            AyahSheetContent(
-                detail = shown,
-                surah = surahs[shown.surah],
-                bookmarked = bookmarks.any { it.kind == BookmarkKind.Ayah && it.surah == shown.surah && it.ayah == shown.ayah },
-                onToggleBookmark = { vm.toggleAyahBookmark(ref, shown.page) },
-                onPrevious = { vm.moveSelection(-1) },
-                onNext = { vm.moveSelection(1) },
-                showTransliteration = settings.showTransliteration,
-                extras = extras,
-                onOpenAyah = { s, a -> vm.goToAyah(s, a, openSheet = true) },
-                surahNames = surahs,
-            )
-          }
+            if (BuildConfig.LITE) {
+                AyahBookmarkSheet(
+                    detail = shown,
+                    surah = surahs[shown.surah],
+                    bookmarked = bookmarks.any { it.kind == BookmarkKind.Ayah && it.surah == shown.surah && it.ayah == shown.ayah },
+                    onToggleBookmark = { vm.toggleAyahBookmark(ref, shown.page) },
+                    onPrevious = { vm.moveSelection(-1) },
+                    onNext = { vm.moveSelection(1) },
+                )
+            } else {
+                AyahSheetContent(
+                    detail = shown,
+                    surah = surahs[shown.surah],
+                    bookmarked = bookmarks.any { it.kind == BookmarkKind.Ayah && it.surah == shown.surah && it.ayah == shown.ayah },
+                    onToggleBookmark = { vm.toggleAyahBookmark(ref, shown.page) },
+                    onPrevious = { vm.moveSelection(-1) },
+                    onNext = { vm.moveSelection(1) },
+                    showTransliteration = settings.showTransliteration,
+                    extras = extras,
+                    onOpenAyah = { s, a -> vm.goToAyah(s, a, openSheet = true) },
+                    surahNames = surahs,
+                )
+            }
         }
     }
 }

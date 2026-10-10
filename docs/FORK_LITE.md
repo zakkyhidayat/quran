@@ -6,6 +6,17 @@ Implementasi: flavor `lite` di dimensi `distribution` (bukan dimensi baru, supay
 berubah), `BuildConfig.LITE` untuk menyembunyikan fitur, `app/src/lite/AndroidManifest.xml` untuk membuang izin, dan
 `reader/AyahBookmarkSheet.kt`. Rute fitur lain tetap terdaftar di `AppNav`, tetapi tidak ada jalan masuk ke sana.
 
+## Ukuran
+
+- `quran.db` lite dibangun saat build oleh `tools/build_lite_db.py` dari `quran.db` penuh (Gradle `buildLiteDb`, hasil di
+  `app/build/`, tidak masuk git): tabel penjelajahan dibuang, isi `surah_info` dan `transliteration` dikosongkan, tabel
+  teks Qur'an dan pembagian disalin utuh dan jumlah barisnya dicek. 12,8 MB menjadi 5,0 MB (terkompresi di APK
+  4,3 MB menjadi 1,5 MB). Salinan di perangkat juga ikut turun karena aplikasi menyalin `quran.db` ke penyimpanan.
+- Rute layar lain tidak didaftarkan di `AppNav` untuk lite, sehingga R8 (rilis) bisa membuang kodenya.
+- CI memeriksa ukuran `assets/quran.db` di APK lite (1–8 MB) supaya salinan penuh tidak ikut tanpa sadar.
+- Yang tidak bisa dikecilkan: 604 font halaman V4 (lisensi KFGQPC melarang modifikasi), ikut di APK rilis seperti
+  versi penuh.
+
 ## Lingkup
 
 Yang **ada**:
