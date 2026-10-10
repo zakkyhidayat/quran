@@ -17,8 +17,8 @@ Artinya: berasal dari QUL **tidak** sama dengan boleh diredistribusi. Izin harus
 
 Hanya **paket terjemahan**. Data lain dibundel di `quran.db` di dalam APK.
 
-- Katalog: `tools/translation_catalog.json`, 187 entri, 1 `skip`, jadi 186 kandidat. Commit `82376e0` menyebut 173
-  terjemahan dalam 88 bahasa. Selisih sekitar 13 entri belum dicek.
+- Katalog: `tools/translation_catalog.json`, 187 entri; 14 ditandai `excluded` beserta alasannya (termasuk 1 `skip`, `en-khattab`), sehingga
+  173 terjemahan dalam 88 bahasa yang dibangun.
 - Build: `tools/build_translation_packs.py` menghasilkan `build/translation-packs/<id>.db` dan `catalog.json`.
 - Distribusi: GitHub Release `translations`. URL katalog tertanam di `app/build.gradle.kts`
   (`TRANSLATION_CATALOG_URL`).
@@ -44,8 +44,8 @@ Data penjelajahan tematik ikut ke `quran.db` hanya bila sumbernya ada di `data-s
 | Topik (2.512) | `topics`, `topic_ayahs`, `topic_links` | Sudah |
 | Ayat serupa | `similar_ayahs` | Sudah |
 | Morfologi akar/lema/stem | `morph_*`, `word_morph` | Sudah |
-| Mutasyabihat | `mutashabihat*` | Belum jelas |
-| Tema ayat | `ayah_themes` | Belum |
+| Mutasyabihat | `mutashabihat*` | Sudah (814 frasa) |
+| Tema ayat | `ayah_themes` | Sudah (2.098 tema) |
 | Jenis kata (POS) | `word_morph.pos` | Belum, halaman QUL galat 500 |
 
 ## Inventaris data berbahasa dan status lisensi

@@ -17,7 +17,7 @@ Dari screenshot [QuranApp](https://github.com/AlfaazPlus/QuranApp) (GPL-3.0, sam
 | Kartu koleksi: doa, solusi, adab, dosa besar | Ditiru | Data rujukan dari repo QuranApp |
 | Kartu Nabi dan Rasul, Doa para Nabi | Ditunda | Dataset terpisah, belum diperiksa |
 | Kartu Quran dan Sains | Tidak diambil | Tafsir ilmi dipersoalkan sebagian ulama; isinya kurasi QuranApp sendiri |
-| Penjelajah Topik | Sudah ada (Jelajahi) | Menunggu data QUL |
+| Penjelajah Topik | Sudah ada (Jelajahi) | Data QUL sudah ada di `quran.db` |
 | Kata per kata, murattal, mini player | Ditunda | Fitur besar, sesi tersendiri |
 | Pilihan skrip mushaf, sumber unduhan | Tidak diambil | Bertentangan dengan prinsip satu gaya halaman (README) |
 | Menu promosi aplikasi lain, beri rating | Tidak diambil | Khusus aplikasi mereka |

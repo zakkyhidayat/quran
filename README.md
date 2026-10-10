@@ -64,9 +64,12 @@ Choices made on purpose:
 - [x] Remove the page number below the page in the mushaf view
 - [x] Home tab: ayah of the day, Sunnah readings by time of day, reading history, and ayah collections (duas,
       solutions, etiquette, major sins)
-- [ ] Thematic browsing on the main screen, using QUL resources: topics and concepts in the Quran (2,512 topics with
-      semantic relations), ayah themes, similar ayahs, mutashabihat (similar phrases), and grammar/morphology (roots,
-      lemmas, parts of speech per word)
+- [x] Thematic browsing using QUL resources: topics and concepts (2,512 topics with semantic relations), ayah themes,
+      similar ayahs, mutashabihat (similar phrases), and roots, lemmas, and stems per word
+      - [ ] Parts of speech per word (the QUL source page returns an error, schema unknown)
+- [x] Home tab: ayah of the day, sunnah readings with their evidence, reading history, and ayah collections
+
+Detailed plans and open work are tracked in [GitHub Issues](https://github.com/zakkyhidayat/quran/issues).
 
 ### Known issues
 
@@ -140,6 +143,7 @@ Interface text lives in standard Android string resources, one file per language
 - [CHANGELOG.md](CHANGELOG.md), [PRIVACY.md](PRIVACY.md), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 - [docs/AUDIT.md](docs/AUDIT.md): release audit checklist and open findings (in Indonesian).
 - [docs/RELEASING.md](docs/RELEASING.md): signing, CI, and making a release.
-
+- [docs/UI_UX.md](docs/UI_UX.md) and [docs/LANGUAGE_DATA.md](docs/LANGUAGE_DATA.md): UI/UX decisions and language data
+  licensing notes (in Indonesian).
 - [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md): QUL sources, how to update the data, and downloadable translation packs
   (written in Indonesian).
