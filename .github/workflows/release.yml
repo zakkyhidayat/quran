@@ -29,9 +29,20 @@ jobs:
 
       - name: Buat tag (hanya dari tab Actions)
         if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "::error::Versi harus berbentuk vX.Y.Z, bukan $TAG"; exit 1; }
-          if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then echo "::error::Tag $TAG sudah ada"; exit 1; fi
+          if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+            # Tag dari percobaan sebelumnya yang gagal (misalnya secret belum diisi) dipakai ulang selama rilisnya belum
+            # ada: kode yang dibangun adalah commit bertanda itu, bukan main terbaru.
+            if ! gh release view "$TAG" >/dev/null 2>&1; then
+              echo "Tag $TAG sudah ada tanpa rilis; membangun commit $(git rev-list -n1 "$TAG")."
+              git checkout -q "$TAG"
+              exit 0
+            fi
+            echo "::error::Tag $TAG sudah ada"; exit 1
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git tag -a "$TAG" -m "$TAG"
