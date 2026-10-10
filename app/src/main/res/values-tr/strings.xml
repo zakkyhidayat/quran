@@ -172,14 +172,6 @@
     <string name="auto_backup_on_sub">%1$s dosyasına kaydediliyor • son: %2$s</string>
     <string name="auto_backup_pending">henüz yok</string>
     <string name="auto_backup_error">Seçilen dosyaya kaydedilemedi. Dosyayı yeniden seçmek için otomatik yedeklemeyi kapatıp açın.</string>
-    <string name="update_title">Sürüm %1$s mevcut</string>
-    <string name="update_install">Güncelle</string>
-    <string name="update_later">Sonra</string>
-    <string name="update_skip">Bu sürümü atla</string>
-    <string name="update_failed">İndirme başarısız. Bağlantınızı kontrol edip tekrar deneyin.</string>
-    <string name="update_check_sub">%1$s • güncellemeleri denetlemek için dokunun</string>
-    <string name="update_latest">En son sürümü kullanıyorsunuz</string>
-    <string name="update_check_failed">Güncellemeler denetlenemedi. Bağlantınızı kontrol edin.</string>
     <string name="reminder">Okuma hatırlatıcısı</string>
     <string name="reminder_daily">Günlük hatırlatıcı</string>
     <string name="reminder_off_sub">Her gün okuduğunuz bölümle ilgili bir bildirim</string>
@@ -196,8 +188,6 @@
     <string name="permissions">İzinler</string>
     <string name="perm_notifications">Bildirimler</string>
     <string name="perm_notifications_sub">Günlük okuma hatırlatıcısı için gerekli</string>
-    <string name="perm_install">Bilinmeyen uygulamaları yükle</string>
-    <string name="perm_install_sub">GitHub’dan indirilen güncellemeleri yüklemek için gerekli</string>
     <string name="perm_granted">İzin verildi</string>
     <string name="perm_denied">İzin yok</string>
     <string name="arabic_text_size">Arapça metin boyutu</string>

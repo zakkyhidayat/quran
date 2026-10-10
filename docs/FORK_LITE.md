@@ -33,9 +33,7 @@ Yang **dibuang**: terjemahan dan transliterasi, isi sheet ayat selain bookmark (
 pencarian, Beranda, Jelajahi/topik, info surah, pengingat, cadangan, updater, onboarding, pilihan bahasa antarmuka di
 dalam aplikasi, dan unduhan apa pun.
 
-Internet hanya dipakai pembaru dalam aplikasi (cek GitHub Releases paling sering sekali sehari, mengambil
-`quran-lite-*.apk`); tanpa notifikasi. Rencana awal tanpa internet sama sekali diganti karena APK GitHub perlu pembaruan.
-Rencana awal:
+Konsekuensi yang menguntungkan: aplikasi **tanpa izin internet dan notifikasi**, sehingga kebijakan privasinya menjadi
 "tidak mengumpulkan dan tidak mengirim data apa pun".
 
 ## Keputusan utama: repo terpisah atau flavor di repo ini

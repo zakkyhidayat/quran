@@ -60,7 +60,6 @@ class MainActivity : ComponentActivity() {
               ) {
                 if (settings.onboardingDone || BuildConfig.LITE) {
                     AppNav(vm, settings)
-                    io.zakkyhidayat.quran.ui.UpdateDialog(vm)
                 } else {
                     io.zakkyhidayat.quran.onboarding.OnboardingScreen(vm, settings)
                 }

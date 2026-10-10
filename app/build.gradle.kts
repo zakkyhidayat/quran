@@ -31,30 +31,26 @@ android {
         versionCode = semver.first * 10000 + semver.second * 100 + semver.third
         versionName = "${semver.first}.${semver.second}.${semver.third}"
         // Katalog paket terjemahan unduhan; paket diambil relatif terhadap alamat ini (lihat docs/DATA_SOURCES.md).
-        buildConfigField("String", "GITHUB_REPO", "\"zakkyhidayat/quran\"")
         buildConfigField("String", "TRANSLATION_CATALOG_URL", "\"https://github.com/zakkyhidayat/quran/releases/download/translations/catalog.json\"")
     }
 
-    // github: APK di GitHub Releases dengan pembaruan dari dalam aplikasi. play: tanpa pembaruan sendiri (kebijakan Play).
-    // lite: aplikasi terpisah yang hanya membaca mushaf per halaman, dengan pembaru dari GitHub Releases (lihat
-    // docs/FORK_LITE.md). Dibuat di
+    // github: APK di GitHub Releases. play: AAB untuk Play Store. Keduanya sama isinya; dipisah agar nama berkas dan
+    // tugas rilis tetap. Tidak ada pembaru dalam aplikasi: versi baru diunduh dari GitHub Releases atau Play.
+    // lite: aplikasi terpisah yang hanya membaca mushaf per halaman, tanpa internet (lihat docs/FORK_LITE.md). Dibuat di
     // dimensi yang sama agar nama tugas varian lain (assembleGithubDebug dan seterusnya) tidak berubah.
     flavorDimensions += "distribution"
     productFlavors {
         create("github") {
             dimension = "distribution"
-            buildConfigField("boolean", "UPDATER_ENABLED", "true")
             buildConfigField("boolean", "LITE", "false")
         }
         create("play") {
             dimension = "distribution"
-            buildConfigField("boolean", "UPDATER_ENABLED", "false")
             buildConfigField("boolean", "LITE", "false")
         }
         create("lite") {
             dimension = "distribution"
             applicationIdSuffix = ".lite"
-            buildConfigField("boolean", "UPDATER_ENABLED", "true")
             buildConfigField("boolean", "LITE", "true")
         }
     }

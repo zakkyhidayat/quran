@@ -172,14 +172,6 @@
     <string name="auto_backup_on_sub">%1$s-এ সংরক্ষণ • সর্বশেষ %2$s</string>
     <string name="auto_backup_pending">এখনো নয়</string>
     <string name="auto_backup_error">বেছে নেওয়া ফাইলে সংরক্ষণ করা যায়নি। আবার ফাইল বাছতে স্বয়ংক্রিয় ব্যাকআপ বন্ধ করে চালু করুন।</string>
-    <string name="update_title">সংস্করণ %1$s উপলব্ধ</string>
-    <string name="update_install">আপডেট</string>
-    <string name="update_later">পরে</string>
-    <string name="update_skip">এই সংস্করণ এড়িয়ে যান</string>
-    <string name="update_failed">ডাউনলোড ব্যর্থ। সংযোগ দেখে আবার চেষ্টা করুন।</string>
-    <string name="update_check_sub">%1$s • আপডেট দেখতে ট্যাপ করুন</string>
-    <string name="update_latest">আপনার কাছে সর্বশেষ সংস্করণ আছে</string>
-    <string name="update_check_failed">আপডেট দেখা যায়নি। সংযোগ পরীক্ষা করুন।</string>
     <string name="reminder">পড়ার অনুস্মারক</string>
     <string name="reminder_daily">দৈনিক অনুস্মারক</string>
     <string name="reminder_off_sub">প্রতিদিন আপনি যে অংশ পড়ছেন তার বিজ্ঞপ্তি</string>
@@ -196,8 +188,6 @@
     <string name="permissions">অনুমতি</string>
     <string name="perm_notifications">বিজ্ঞপ্তি</string>
     <string name="perm_notifications_sub">দৈনিক পড়ার অনুস্মারকের জন্য প্রয়োজন</string>
-    <string name="perm_install">অজানা অ্যাপ ইনস্টল</string>
-    <string name="perm_install_sub">GitHub থেকে ডাউনলোড করা আপডেট ইনস্টল করতে প্রয়োজন</string>
     <string name="perm_granted">অনুমোদিত</string>
     <string name="perm_denied">অনুমোদিত নয়</string>
     <string name="arabic_text_size">আরবি লেখার আকার</string>

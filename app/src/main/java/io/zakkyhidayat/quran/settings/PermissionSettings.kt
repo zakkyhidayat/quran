@@ -23,17 +23,14 @@ import io.zakkyhidayat.quran.R
 import io.zakkyhidayat.quran.ui.AppIcons
 
 /**
- * Status izin yang dibutuhkan aplikasi: notifikasi (pengingat membaca) dan, di varian GitHub, memasang aplikasi
- * (pembaruan). Diperiksa ulang setiap kali layar kembali aktif, karena izin diubah di Pengaturan Android.
+ * Status izin yang dibutuhkan aplikasi: notifikasi (pengingat membaca). Diperiksa ulang setiap kali layar kembali aktif, karena izin diubah di Pengaturan Android.
  */
 @Composable
 internal fun PermissionControls() {
     val context = LocalContext.current
     var notifications by remember { mutableStateOf(io.zakkyhidayat.quran.reminder.Reminder.canNotify(context)) }
-    var install by remember { mutableStateOf(io.zakkyhidayat.quran.data.Updater.canInstall(context)) }
     androidx.lifecycle.compose.LifecycleResumeEffect(Unit) {
         notifications = io.zakkyhidayat.quran.reminder.Reminder.canNotify(context)
-        install = io.zakkyhidayat.quran.data.Updater.canInstall(context)
         onPauseOrDispose { }
     }
     Group {
@@ -49,15 +46,6 @@ internal fun PermissionControls() {
             leading = { Icon(AppIcons.Alarm, contentDescription = null) },
             trailing = { PermissionStatus(notifications) },
         )
-        if (io.zakkyhidayat.quran.BuildConfig.UPDATER_ENABLED) {
-            item(
-                title = stringResource(R.string.perm_install),
-                subtitle = stringResource(R.string.perm_install_sub),
-                onClick = { io.zakkyhidayat.quran.data.Updater.openInstallPermissionSettings(context) },
-                leading = { Icon(AppIcons.Download, contentDescription = null) },
-                trailing = { PermissionStatus(install) },
-            )
-        }
     }
 }
 

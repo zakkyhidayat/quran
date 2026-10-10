@@ -27,8 +27,6 @@ import kotlinx.coroutines.flow.first
 import io.zakkyhidayat.quran.data.Backup
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.collectLatest
-import io.zakkyhidayat.quran.data.UpdateInfo
-import io.zakkyhidayat.quran.data.Updater
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -105,35 +103,6 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
                     .collect { io.zakkyhidayat.quran.reminder.Reminder.schedule(getApplication(), settingsRepository.settings.first()) }
             }
         }
-        if (BuildConfig.UPDATER_ENABLED) checkForUpdate(manual = false)
-    }
-
-    /** Rilis yang lebih baru dari GitHub; dialog pembaruan tampil selama nilainya tidak null. */
-    val update = MutableStateFlow<UpdateInfo?>(null)
-
-    private val updaterPrefs get() = getApplication<Application>().getSharedPreferences("updater", android.content.Context.MODE_PRIVATE)
-
-    /**
-     * Cek pembaruan. Otomatis: paling sering sekali sehari, dan versi yang dilewati pengguna tidak ditawarkan lagi.
-     * Manual (dari Pengaturan): selalu cek; hasil dilaporkan lewat [onResult] (true = ada, false = terbaru, null = gagal).
-     */
-    fun checkForUpdate(manual: Boolean, onResult: (Boolean?) -> Unit = {}) {
-        val now = System.currentTimeMillis()
-        if (!manual && now - updaterPrefs.getLong("checked_at", 0) < 24 * 60 * 60 * 1000L) return
-        viewModelScope.launch {
-            val result = runCatching { Updater.check() }
-                .onFailure { android.util.Log.w("Updater", "Cek pembaruan gagal: $it") }
-            updaterPrefs.edit().putLong("checked_at", now).apply()
-            val info = result.getOrNull()
-            val skipped = updaterPrefs.getString("skipped", null)
-            if (info != null && (manual || info.version != skipped)) update.value = info
-            onResult(if (result.isFailure) null else info != null)
-        }
-    }
-
-    fun dismissUpdate(skip: Boolean) {
-        if (skip) update.value?.let { updaterPrefs.edit().putString("skipped", it.version).apply() }
-        update.value = null
     }
 
     /**

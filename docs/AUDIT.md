@@ -65,7 +65,8 @@ Diisi 2026-10-08 berdasarkan kode dan dokumen di repo. Perbarui setiap rilis. `[
 
 ## 6. Privasi dan izin
 
-- [x] Izin diaudit: INTERNET (terjemahan, cek pembaruan), REQUEST_INSTALL_PACKAGES (hanya varian github). Izin
+- [x] Izin diaudit: INTERNET (hanya terjemahan; tidak ada di varian lite). Pembaru dalam aplikasi dan
+      REQUEST_INSTALL_PACKAGES dihapus. Izin
       pengingat dilepas selama fiturnya disembunyikan.
 - n/a Lokasi
 - [x] Tidak ada SDK pelacak/iklan; tidak ada Google Play Services. (Belum dipindai Exodus.)

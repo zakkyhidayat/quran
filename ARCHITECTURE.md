@@ -24,7 +24,7 @@ GitHub Releases (`translations`), downloaded into `filesDir/translations/`, and 
 
 | Package | Responsibility |
 |---------|----------------|
-| `data/` | `ContentDatabase`, `MushafRepository`, `TranslationPacks`, `BookmarkStore` (user.db), `Backup` (JSON export/import), `Updater` (GitHub Releases), `Collections` (curated ayah collections), `ReadingHistory` (history.db), models |
+| `data/` | `ContentDatabase`, `MushafRepository`, `TranslationPacks`, `BookmarkStore` (user.db), `Backup` (JSON export/import), `Collections` (curated ayah collections), `ReadingHistory` (history.db), models |
 | `reader/` | `ReaderScreen` (top bar, mode pill, pager), `MushafPage` (page rendering), `PalettedFonts` (font palettes), `AyahListReader` (ayah + translation modes), `AyahSheet` |
 | `home/` | Home tab (`HomeTab`: ayah of the day, sunnah readings, reading history, collections) and `PassageScreen` |
 | `explore/` | Thematic browsing: topic list and topic screen |
@@ -39,8 +39,7 @@ GitHub Releases (`translations`), downloaded into `filesDir/translations/`, and 
 
 The `lite` product flavor (`io.zakkyhidayat.quran.lite`) is a reading-only app built from the same code: mushaf pages,
 the index lists, page and ayah bookmarks, and the theme setting. `BuildConfig.LITE` hides every other entry point, and
-`app/src/lite/AndroidManifest.xml` removes the notification and boot permissions; internet is used only by the
-updater, which picks `quran-lite-*.apk` from the same GitHub release. Its `quran.db` is a
+`app/src/lite/AndroidManifest.xml` removes the internet, notification and boot permissions. Its `quran.db` is a
 slimmed copy built at build time by `tools/build_lite_db.py` (no thematic tables, surah info or transliteration).
 See docs/FORK_LITE.md.
 

@@ -52,11 +52,10 @@ A second app built from the same code, for people who only want to read the mush
   continue reading.
 - Tapping an ayah only offers a bookmark; no translations, search, home tab, or thematic browsing.
 - Settings: light, dark, or system theme.
-- No notifications, translations, or downloads; the internet is only used to check GitHub Releases for app updates
-  (at most once a day).
+- **No internet permission** and no notifications, so it cannot send or receive any data.
 
 It installs alongside the full app (`io.zakkyhidayat.quran.lite`) and is published on the same GitHub release as
-`quran-lite-vX.Y.Z.apk`, and updates itself from there like the full GitHub build. Details:
+`quran-lite-vX.Y.Z.apk`. Details:
 [docs/FORK_LITE.md](docs/FORK_LITE.md).
 
 ## Roadmap
@@ -64,7 +63,6 @@ It installs alongside the full app (`io.zakkyhidayat.quran.lite`) and is publish
 - [x] Reading modes for all surahs: mushaf page, ayahs with translation, translation only (switched from a pill at the
       bottom of the screen)
 - [x] Onboarding for new users: language, about this mushaf, translations, appearance
-- [x] In-app updates for builds from GitHub Releases
 - [x] All translations downloadable, none bundled in the APK
 - [ ] Automatic cloud backup (Google Drive, Dropbox, OneDrive)
 - [x] Reading reminders to keep a daily portion by juz, hizb, or manzil

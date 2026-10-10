@@ -126,26 +126,7 @@ fun SettingsScreen(
                             SettingsPage.Permissions -> PermissionControls()
                             SettingsPage.About -> {
                                 Group {
-                                    if (io.zakkyhidayat.quran.BuildConfig.UPDATER_ENABLED) {
-                                        val latest = stringResource(R.string.update_latest)
-                                        val failedCheck = stringResource(R.string.update_check_failed)
-                                        item(
-                                            title = stringResource(R.string.version),
-                                            subtitle = stringResource(R.string.update_check_sub, version),
-                                            onClick = {
-                                                vm.checkForUpdate(manual = true) { found ->
-                                                    when (found) {
-                                                        false -> scope.launch { snackbar.showSnackbar(latest) }
-                                                        null -> scope.launch { snackbar.showSnackbar(failedCheck) }
-                                                        true -> Unit // dialog pembaruan tampil
-                                                    }
-                                                }
-                                            },
-                                            trailing = { Icon(Icons.Default.Refresh, contentDescription = null) },
-                                        )
-                                    } else {
-                                        item(title = stringResource(R.string.version), subtitle = version)
-                                    }
+                                    item(title = stringResource(R.string.version), subtitle = version)
                                     item(
                                         title = stringResource(R.string.data_source),
                                         subtitle = stringResource(R.string.data_source_sub),

@@ -1,21 +1,23 @@
 # Releasing
 
 Releases are built by GitHub Actions ([`.github/workflows/release.yml`](../.github/workflows/release.yml)) when a tag
-`vX.Y.Z` is pushed. The workflow publishes a signed APK to GitHub Releases (the `github` variant, which can update
-itself from inside the app) and keeps a signed AAB of the `play` variant as a workflow artifact for the Play Console.
+`vX.Y.Z` is pushed. The workflow publishes signed APKs to GitHub Releases (the `github` variant and Quran Lite) and keeps a signed AAB of the `play` variant as a workflow artifact for the Play Console.
 
 ## Build variants
 
-| Variant | In-app updates | Use |
-|---------|----------------|-----|
-| `github` | Yes: checks GitHub Releases at most once a day, downloads the APK, opens the system installer | APK on GitHub Releases |
-| `play` | No (Play policy forbids self-updating apps); no `REQUEST_INSTALL_PACKAGES` permission | Google Play |
-| `lite` | Yes, like `github`, from `quran-lite-vX.Y.Z.apk`: reading-only app (`io.zakkyhidayat.quran.lite`) | `quran-lite-vX.Y.Z.apk` on the same GitHub release, signed with the same key |
+None of the variants updates itself; users download new versions from GitHub Releases or get them from Google Play.
 
-Local builds: `./gradlew :app:assembleGithubDebug` (or `assemblePlayDebug`).
+| Variant | App | Use |
+|---------|-----|-----|
+| `github` | Full app (`io.zakkyhidayat.quran`) | `quran-vX.Y.Z.apk` on GitHub Releases |
+| `play` | Full app, same code as `github` | AAB for Google Play |
+| `lite` | Reading-only app without internet (`io.zakkyhidayat.quran.lite`) | `quran-lite-vX.Y.Z.apk` on the same GitHub release, signed with the same key |
 
-The updater reads `releases/latest`, which skips pre-releases. Keep the `translations` and `build-assets` releases marked
-as **pre-release** so they are never offered as app updates.
+Local builds: `./gradlew :app:assembleGithubDebug` (or `assemblePlayDebug`, `assembleLiteDebug`).
+
+Version 0.2.0 still has an in-app updater that reads `releases/latest` and takes the first APK asset. Keep the
+`translations` and `build-assets` releases marked as **pre-release**, and keep `quran-vX.Y.Z.apk` as the first asset
+(the workflow uploads the lite APK afterwards), so those installs update to the full app.
 
 ## One-time setup
 

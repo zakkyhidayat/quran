@@ -172,14 +172,6 @@
     <string name="auto_backup_on_sub">ذخیره در %1$s • آخرین بار %2$s</string>
     <string name="auto_backup_pending">هنوز نه</string>
     <string name="auto_backup_error">ذخیره در فایل انتخاب‌شده ممکن نشد. برای انتخاب دوبارهٔ فایل، پشتیبان‌گیری خودکار را خاموش و روشن کنید.</string>
-    <string name="update_title">نسخهٔ %1$s موجود است</string>
-    <string name="update_install">به‌روزرسانی</string>
-    <string name="update_later">بعدًا</string>
-    <string name="update_skip">رد شدن از این نسخه</string>
-    <string name="update_failed">بارگیری ناموفق بود. اتصال را بررسی کنید و دوباره تلاش کنید.</string>
-    <string name="update_check_sub">%1$s • برای بررسی به‌روزرسانی ضربه بزنید</string>
-    <string name="update_latest">آخرین نسخه را دارید</string>
-    <string name="update_check_failed">بررسی به‌روزرسانی ممکن نشد. اتصال را بررسی کنید.</string>
     <string name="reminder">یادآور خواندن</string>
     <string name="reminder_daily">یادآور روزانه</string>
     <string name="reminder_off_sub">هر روز اعلانی دربارهٔ بخشی که می‌خوانید</string>
@@ -196,8 +188,6 @@
     <string name="permissions">مجوزها</string>
     <string name="perm_notifications">اعلان‌ها</string>
     <string name="perm_notifications_sub">برای یادآور خواندن روزانه لازم است</string>
-    <string name="perm_install">نصب برنامه‌های ناشناس</string>
-    <string name="perm_install_sub">برای نصب به‌روزرسانی‌های بارگیری‌شده از GitHub لازم است</string>
     <string name="perm_granted">مجاز</string>
     <string name="perm_denied">غیرمجاز</string>
     <string name="arabic_text_size">اندازهٔ متن عربی</string>
