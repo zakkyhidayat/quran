@@ -35,6 +35,12 @@ GitHub Releases (`translations`), downloaded into `filesDir/translations/`, and 
 | `ui/` | Theme, shared components, icons, HTML renderer for surah info, update dialog |
 | `AppLanguage.kt` | Interface language (system per-app locales on Android 13+) |
 
+## Lite variant
+
+The `lite` product flavor (`io.zakkyhidayat.quran.lite`) is a reading-only app built from the same code: mushaf pages,
+the index lists, page and ayah bookmarks, and the theme setting. `BuildConfig.LITE` hides every other entry point, and
+`app/src/lite/AndroidManifest.xml` removes the internet, notification and boot permissions. See docs/FORK_LITE.md.
+
 ## Database (`quran.db`, read-only)
 
 | Table | Content |

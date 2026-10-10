@@ -34,15 +34,25 @@ android {
     }
 
     // github: APK di GitHub Releases dengan pembaruan dari dalam aplikasi. play: tanpa pembaruan sendiri (kebijakan Play).
+    // lite: aplikasi terpisah yang hanya membaca mushaf per halaman, tanpa internet (lihat docs/FORK_LITE.md). Dibuat di
+    // dimensi yang sama agar nama tugas varian lain (assembleGithubDebug dan seterusnya) tidak berubah.
     flavorDimensions += "distribution"
     productFlavors {
         create("github") {
             dimension = "distribution"
             buildConfigField("boolean", "UPDATER_ENABLED", "true")
+            buildConfigField("boolean", "LITE", "false")
         }
         create("play") {
             dimension = "distribution"
             buildConfigField("boolean", "UPDATER_ENABLED", "false")
+            buildConfigField("boolean", "LITE", "false")
+        }
+        create("lite") {
+            dimension = "distribution"
+            applicationIdSuffix = ".lite"
+            buildConfigField("boolean", "UPDATER_ENABLED", "false")
+            buildConfigField("boolean", "LITE", "true")
         }
     }
 

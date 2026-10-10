@@ -1,6 +1,10 @@
 # Rencana varian "Mushaf Lite": hanya membaca per halaman
 
-Status: usulan, belum dikerjakan.
+Status: jalan A (flavor `lite`) sudah dikerjakan; build `./gradlew :app:assembleLiteDebug`. Belum diuji di perangkat.
+
+Implementasi: flavor `lite` di dimensi `distribution` (bukan dimensi baru, supaya nama tugas varian lain tidak
+berubah), `BuildConfig.LITE` untuk menyembunyikan fitur, `app/src/lite/AndroidManifest.xml` untuk membuang izin, dan
+`reader/AyahBookmarkSheet.kt`. Rute fitur lain tetap terdaftar di `AppNav`, tetapi tidak ada jalan masuk ke sana.
 
 ## Lingkup
 

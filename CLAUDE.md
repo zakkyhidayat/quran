@@ -22,6 +22,8 @@ yang sudah ada; baca hanya yang relevan dengan tugas:
   berkas QUL; koreksi hanya lewat `TEXT_OVERRIDES` (terjemahan) dan prosedur `docs/CONTENT_ERRORS.md`.
 - `data-src/` dan font halaman `p1..p604.ttf` tidak ada di git. Build debug tetap jalan dengan font bawaan.
 - Id paket terjemahan lama di `tools/translation_catalog.json` tidak boleh diubah (pilihan pengguna tersimpan dengan id itu).
+- Varian `lite` (`BuildConfig.LITE`) hanya membaca: fitur baru harus disembunyikan di sana, dan izin baru dibuang di
+  `app/src/lite/AndroidManifest.xml`. Lihat `docs/FORK_LITE.md`.
 - Teks antarmuka hanya lewat string resource; setiap kunci baru harus ada di semua bahasa (`check_strings.py`).
 
 ## Pemeriksaan sebelum push (sama dengan CI)

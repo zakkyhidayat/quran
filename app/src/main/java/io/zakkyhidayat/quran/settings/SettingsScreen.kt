@@ -88,7 +88,7 @@ fun SettingsScreen(
                 item(key = page.route) {
                     Column {
                         when (page) {
-                            SettingsPage.Main -> SettingsMain(settings, onOpen)
+                            SettingsPage.Main -> if (io.zakkyhidayat.quran.BuildConfig.LITE) LiteSettingsMain(vm, settings, onOpen) else SettingsMain(settings, onOpen)
                             SettingsPage.Appearance -> {
 
                                 AppearanceControls(vm, settings)
@@ -230,6 +230,22 @@ private fun SettingsMain(settings: AppSettings, onOpen: (SettingsPage) -> Unit) 
             leading = { Icon(AppIcons.Shield, contentDescription = null) },
             trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
         )
+        item(
+            title = stringResource(R.string.about),
+            subtitle = stringResource(R.string.settings_about_sub),
+            onClick = { onOpen(SettingsPage.About) },
+            leading = { Icon(Icons.Default.Info, contentDescription = null) },
+            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
+        )
+    }
+}
+
+/** Varian lite: hanya tema, dan Tentang (atribusi font dan data wajib tetap tampil). */
+@Composable
+private fun LiteSettingsMain(vm: AppViewModel, settings: AppSettings, onOpen: (SettingsPage) -> Unit) {
+    ThemeModeRow(vm, settings)
+    Spacer(Modifier.height(16.dp))
+    Group {
         item(
             title = stringResource(R.string.about),
             subtitle = stringResource(R.string.settings_about_sub),
