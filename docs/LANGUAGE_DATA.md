@@ -122,7 +122,6 @@ baru **[perlu verifikasi]**.
 
 ## Langkah berikutnya
 
-Status kerja ada di Issues: pembaruan paket #4, atribusi #5, asal dan lisensi #6, izin tertulis #7, POS #15.
 
 1. Tambah kolom `origin` (`quranenc` / `tanzil` / `publisher` / `unknown`) dan `license_note` di
    `tools/translation_catalog.json`, lalu isi dari halaman QUL tiap entri. Ini butuh akses ke qul.tarteel.ai.

@@ -1,4 +1,4 @@
-<p align="center"><img src="docs/icon.png" width="128" alt="Quran app icon"></p>
+<p align="center"><img src="docs/icon.png" width="128" alt="Quran app icon">&nbsp;&nbsp;&nbsp;<img src="docs/icon-lite.png" width="128" alt="Quran Lite app icon"></p>
 
 # Quran
 
@@ -61,6 +61,8 @@ Choices made on purpose:
 
 ## Quran Lite
 
+<img src="docs/icon-lite.png" width="72" alt="Quran Lite app icon" align="right">
+
 A second app built from the same code, for people who only want to read the mushaf:
 
 - Mushaf pages, the index lists (bookmarks, surah, juz, hizb, rub', manzil, ruku), page and ayah bookmarks, and
@@ -97,7 +99,7 @@ data only the full app uses, so the download is smaller. Details: [docs/FORK_LIT
       - [ ] Parts of speech per word (the QUL source page returns an error, schema unknown)
 - [x] Quran Lite: a reading-only app built from the same code
 
-Detailed plans and open work are tracked in [GitHub Issues](https://github.com/zakkyhidayat/quran/issues).
+Bug reports and suggestions: [GitHub Issues](https://github.com/zakkyhidayat/quran/issues).
 
 ### Known issues
 
