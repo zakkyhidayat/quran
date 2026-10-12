@@ -2,12 +2,9 @@
 
 # Quran
 
-An Android app for reading the Qur'an in the **Uthmani script of the Madani mushaf**, page for page like the printed
-King Fahd Complex edition: 604 pages, 15 lines, with tajweed colouring.
-
-It comes in two editions: **Quran**, with translations and additional reading tools, and **Quran Lite**, focused on
-reading the mushaf with bookmarks. Both share the same mushaf pages and tajweed display; the differences are described
-below.
+An Android app for reading the Qur'an in the **Uthmani script of the Madani mushaf**, matching the 604-page, 15-line
+King Fahd Complex edition, with optional tajweed colouring. Choose **Quran Full** for translations and additional
+reading tools, or **Quran Lite** for a focused mushaf-reading experience. Both editions share the same page rendering.
 
 [![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-support-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/zakkyhidayat)
 
@@ -19,10 +16,13 @@ below.
   <a href="https://github.com/zakkyhidayat/quran/releases/latest/download/Quran-Lite.apk"><img src="https://img.shields.io/badge/Download-Quran%20Lite-F2C14E?style=for-the-badge&logo=android&logoColor=176B4D&labelColor=176B4D" alt="Download Quran Lite"></a>
 </p>
 
-| App | For |
-|-----|-----|
-| **Quran** | Reading with translations, search, home tab, thematic browsing, reminders, backup |
-| **Quran Lite** | Reading the mushaf only, with bookmarks; internet is used once to download its required database and page fonts |
+| Edition | Includes |
+|---------|----------|
+| **Quran Full** | The complete reading app; see [features](#quran-full-features) below. |
+| **Quran Lite** | A focused mushaf reader with page/ayah bookmarks and no translations, search, home content, or thematic browsing. |
+
+Both are separate apps and can be installed side by side. Quran Lite has its own package ID (`io.zakkyhidayat.quran.lite`)
+and icon. See [docs/FORK_LITE.md](docs/FORK_LITE.md) for a detailed comparison.
 
 **How to install (Android 8 or newer):**
 
@@ -30,11 +30,35 @@ below.
 2. Open the downloaded file. If Android asks, allow your browser or file manager to **install unknown apps**.
 3. Tap **Install**.
 
-Both apps can be installed side by side. Neither updates itself: to update, download again from the same button and
-install over the old one. Your bookmarks and settings are kept. On first launch, choose the app language and download
-the required Qur'an database and page fonts; they are stored privately on the device so reading works offline afterward.
-You can redownload or update these files from Settings if needed. All versions and release notes:
+Neither app updates itself: download the new APK from the same button and install over the existing app. Bookmarks and
+settings are kept. On first launch, choose a language; Quran Full also offers translation and appearance setup.
+
+All versions and release notes:
 [releases page](https://github.com/zakkyhidayat/quran/releases).
+
+## Shared details
+
+- First-run setup downloads the Qur'an database and all 604 page fonts from the stable `quran-data` release; these are
+  not bundled in the APK. Reading works offline after setup. Data can be updated or downloaded again from Settings.
+- Bookmarks and settings can be exported to a file. Both editions can share a backup folder for bookmarks and reading
+  position; automatic backup keeps up to three snapshots. Use Android's file picker to choose local or cloud storage.
+- Interface in 10 languages: English, Indonesian, Arabic, Urdu, Bengali, Turkish, Persian, Malay, French, and Russian.
+- Screen readers announce each ayah as Unicode Arabic text.
+- No ads, account, or tracking. Internet is used for required setup, optional data updates, and Full translation downloads.
+
+## Quran Full features
+
+- Reading modes: fixed mushaf page, ayahs with translation, or translation only; tajweed colours can be toggled.
+- Tap an ayah to view translations with footnotes, transliteration, and its juz, hizb, rub', manzil, ruku, and sajdah
+  positions. Ayah actions include bookmark, copy, and share.
+- Search by Arabic text, translation, surah name, or reference; navigate by surah and divisions, go to an ayah, or open
+  a random ayah.
+- Home features: ayah of the day, Sunnah readings with hadith, reading history, and ayah collections.
+- Thematic tools: topics, ayah themes, similar ayahs, mutashabihat, and word roots, lemmas, and stems.
+- Optional daily reading reminders by juz, hizb, or manzil.
+- Light, dark, and AMOLED themes; dynamic colour (Android 12+) or original palette; three contrast levels.
+- Translation packs are downloaded on demand in many languages, including Indonesian and English; none are bundled in
+  the APK.
 
 ## Who it is for
 
@@ -55,72 +79,11 @@ Choices made on purpose:
 | Tajweed | V4 font colours (can be turned off) | Same colour source as the printed tajweed mushaf |
 | Page style | One style only | Fewer settings, a consistent page |
 
-## Features
-
-- Mushaf pages in B5 paper proportions, with calligraphic surah and juz titles above each page.
-- Light, dark, and AMOLED themes; dynamic colour (Android 12+) or the original palette; three contrast levels.
-- Tap an ayah for its translations (with footnotes), Latin transliteration, and position (juz, hizb, rub', manzil, ruku,
-  sajdah).
-- Translation packs are downloaded on demand in the full app, so the APK carries none. Packs are available in many
-  languages, including Indonesian and English; browse and choose them in the app.
-- The Qur'an database and all 604 page fonts are downloaded during first-run setup from the stable `quran-data` release;
-  neither is bundled in the APK. You can manually redownload/update them in Settings, and reading works offline.
-- Indexes by surah, juz, hizb, rub', manzil, and ruku; surah info; go to ayah; random ayah; continue reading from the last ayah.
-- Home tab: ayah of the day, Sunnah readings with their hadith, reading history, and ayah collections.
-- Thematic browsing: topics, ayah themes, similar ayahs, mutashabihat, and word roots.
-- Optional daily reading reminder by juz, hizb, or manzil.
-- Backup and restore of bookmarks and settings to a file (on the device or any cloud app with a file provider, such as
-  Google Drive). Quran and Quran Lite can share one backup file, so saved pages and ayahs follow you between editions.
-- Optional automatic backup to a user-selected folder; it keeps the three newest snapshots.
-- Page and ayah bookmarks; search by Arabic text, translation, surah name, or a reference such as `2:255`.
-- Reading modes for the mushaf page, ayahs with translation, or translation only; tajweed colours can be switched
-  on or off, with a compact guide to the colour rules.
-- Interface in 10 languages, following the device language by default: English, Indonesian, Arabic, Urdu, Bengali,
-  Turkish, Persian, Malay, French, and Russian.
-- Screen reader support: each ayah is read out as Unicode Arabic text.
-- No ads, no account, no tracking. The internet is used for the required first-run Qur'an database and page-font download and,
-  in the full app, translation downloads.
-
-## Quran Lite
-
-<img src="docs/icon-lite.png" width="72" alt="Quran Lite app icon" align="right">
-
-Quran Lite is the reading-focused edition for people who only want to read the mushaf:
-
-- Mushaf pages; the home screen is limited to Bookmark and Surah, with page and ayah bookmarks and continue reading.
-- Tapping an ayah only offers a bookmark; no translations, search, home tab, or thematic browsing.
-- First-run setup asks for the app language and downloads the required Qur'an database and page fonts, then opens the
-  reader without the Full app's translation and appearance setup steps.
-- Settings include the theme, Qur'an data maintenance, and app information.
-- Internet is used only for the required first-run download or optional manual update of the Lite Qur'an database and page fonts; no notifications or other
-  network features are included. Reading works offline after setup.
-
-It is a separate app (`io.zakkyhidayat.quran.lite`) with its own icon, published on the same GitHub release as
-`Quran-Lite.apk`. Its Qur'an text and page rendering are the same as the full app; its separately downloaded database
-leaves out data only the full app uses. Details: [docs/FORK_LITE.md](docs/FORK_LITE.md).
-
 ## Roadmap
 
-- [x] Reading modes for all surahs: mushaf page, ayahs with translation, or translation only
-- [x] Onboarding for new users: language and required Qur'an database/page-font download, mushaf preview, translations (full), appearance
-- [x] All translations downloadable, none bundled in the APK
-- [ ] Automatic cloud backup (Google Drive, Dropbox, OneDrive)
-- [x] Reading reminders to keep a daily portion by juz, hizb, or manzil
 - [ ] Word-by-word meaning (tap a word to see its translation)
 - [ ] Audio recitation
-- [x] Ayah actions in the ayah + translation and translation-only modes: tap an ayah to show bookmark, copy, and share
-      buttons; tap again to hide them
-- [x] Animated transitions between the three reading modes
-      - Between ayah + translation and translation only, the Arabic text expands/collapses instead of moving the page
-- [x] A counter in the reader's top bar, between search and bookmark: ayah count within the surah, or progress through
-      the current juz, hizb, rub', manzil, or ruku (tap to switch)
-- [x] Remove the page number below the page in the mushaf view
-- [x] Home tab: ayah of the day, Sunnah readings by time of day, reading history, and ayah collections (duas,
-      solutions, etiquette, major sins)
-- [x] Thematic browsing using QUL resources: topics and concepts (2,512 topics with semantic relations), ayah themes,
-      similar ayahs, mutashabihat (similar phrases), and roots, lemmas, and stems per word
-      - [ ] Parts of speech per word (the QUL source page returns an error, schema unknown)
-- [x] Quran Lite: a reading-only app built from the same code
+- [ ] Parts of speech per word (the QUL source page returns an error, schema unknown)
 
 Bug reports and suggestions: [GitHub Issues](https://github.com/zakkyhidayat/quran/issues).
 
@@ -148,11 +111,6 @@ the About section in the app. Font copyright remains with KFGQPC; each translati
 
 The app's source code is licensed under [GPL-3.0](LICENSE). That licence does not cover the third-party fonts and data
 listed above.
-
-## Support
-
-The app is free and has no ads. If it helps you, you can support its development on
-[Ko-fi](https://ko-fi.com/zakkyhidayat).
 
 ## Building from source
 
