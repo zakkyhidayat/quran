@@ -9,7 +9,10 @@ diunduh; [API-nya](https://qul.tarteel.ai/docs/api) masih ditandai "Coming soon"
 > langkah unduh manual di bawah bisa diganti skrip.
 
 Berkas mentah disimpan di `data-src/` (tidak masuk git). Yang masuk git: `tools/build_db.py` (pembangun database),
-`app/src/main/assets/quran.db` (hasilnya), dan `docs/data-manifest.json` (hash berkas sumber yang dipakai).
+`app/src/main/assets/quran.db` (hasil build, menjadi sumber build dan tidak dimasukkan ke APK), dan
+`docs/data-manifest.json` (hash berkas sumber yang dipakai). Workflow rilis menerbitkan database full dan Lite sebagai
+aset gzip bersama `quran-data.json`; onboarding mengunduh varian yang sesuai, memeriksa ukuran, SHA-256, integritas SQLite,
+versi skema, dan jumlah data Qur'an, lalu memasangnya ke penyimpanan lokal. Setelahnya mushaf dapat dibaca luring.
 
 ## Daftar sumber
 
@@ -199,7 +202,7 @@ QUL tidak memberi pemberitahuan. Periksa sendiri:
    ```bash
    python tools/data_manifest.py --write
    ```
-7. Rilis dengan tag `vX.Y.Z` (data baru butuh rilis baru karena database dibundel di APK).
+7. Rilis dengan tag `vX.Y.Z`; workflow menerbitkan database full/Lite terkompresi dan manifest sebagai aset rilis.
 
 ## Hal yang perlu diwaspadai
 

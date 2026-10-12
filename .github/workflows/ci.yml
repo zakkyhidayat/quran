@@ -34,16 +34,17 @@ jobs:
       - uses: gradle/actions/setup-gradle@v5
       # Jalankan suite JVM dan lint pada kedua flavor agar kode bersama dinilai setara; fitur eksklusif full tetap diuji di flavor github.
       # assembleLiteRelease (tanpa tanda tangan) menguji R8 pada varian lite sebelum workflow rilis.
-      - run: ./gradlew --no-daemon :app:testGithubDebugUnitTest :app:testLiteDebugUnitTest :app:lintGithubDebug :app:lintLiteDebug :app:assembleGithubDebug :app:assembleLiteDebug :app:assembleLiteRelease
-      - name: Integritas database di APK Lite
+      - run: ./gradlew --no-daemon :app:testGithubDebugUnitTest :app:testLiteDebugUnitTest :app:lintGithubDebug :app:lintLiteDebug :app:assembleGithubDebug :app:assembleLiteDebug :app:assembleLiteRelease :app:buildLiteDb
+      - name: Integritas database full dan Lite
         run: |
-          lite_db=$(mktemp)
-          trap 'rm -f "$lite_db"' EXIT
-          unzip -p app/build/outputs/apk/lite/debug/app-lite-debug.apk assets/quran.db > "$lite_db"
-          python tools/verify_quran.py --db "$lite_db"
-      # Varian lite harus memakai quran.db ramping hasil tools/build_lite_db.py, bukan salinan penuh (sekitar 12 MB).
-      - name: quran.db lite ramping
+          python tools/verify_quran.py --db app/src/main/assets/quran.db
+          python tools/verify_quran.py --db app/build/quran-data/lite/quran.db
+      - name: Pastikan database tidak dibundel di APK
         run: |
-          size=$(unzip -l app/build/outputs/apk/lite/debug/app-lite-debug.apk assets/quran.db | awk 'NR==4 {print $1}')
-          echo "assets/quran.db di APK lite: $size byte"
-          test "$size" -gt 1000000 && test "$size" -lt 8000000
+          ! unzip -Z1 app/build/outputs/apk/github/debug/app-github-debug.apk | grep -Fx 'assets/quran.db'
+          ! unzip -Z1 app/build/outputs/apk/lite/debug/app-lite-debug.apk | grep -Fx 'assets/quran.db'
+      - name: Manifest database rilis
+        run: |
+          gzip -n -c app/src/main/assets/quran.db > "$RUNNER_TEMP/quran-full.db.gz"
+          gzip -n -c app/build/quran-data/lite/quran.db > "$RUNNER_TEMP/quran-lite.db.gz"
+          python tools/create_quran_manifest.py --full "$RUNNER_TEMP/quran-full.db.gz" --lite "$RUNNER_TEMP/quran-lite.db.gz" --output "$RUNNER_TEMP/quran-data.json"

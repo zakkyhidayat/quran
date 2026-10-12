@@ -147,6 +147,13 @@
     <string name="onb_start">Mula membaca</string>
     <string name="onb_welcome_title">Assalamu’alaykum</string>
     <string name="onb_welcome_body">Selamat datang. Aplikasi ini untuk membaca al-Quran dengan mushaf Madinah. Mula-mula, pilih bahasa aplikasi.</string>
+    <string name="onb_download_title">Muat turun data al-Quran</string>
+    <string name="onb_download_body">Data perlu dimuat turun sekali sebelum membaca. Data disimpan pada peranti ini; selepas itu, anda boleh membaca di luar talian.</string>
+    <string name="onb_download_size">Saiz muat turun: %1$s</string>
+    <string name="onb_download_start">Muat turun dan teruskan</string>
+    <string name="onb_downloading">Memuat turun %1$s daripada %2$s</string>
+    <string name="onb_download_error">Data al-Quran tidak dapat dimuat turun. Semak sambungan dan cuba lagi.</string>
+    <string name="onb_download_full_features">Edisi penuh turut menyertakan maklumat topik dan surah.</string>
     <string name="onb_mushaf_title">Tentang mushaf ini</string>
     <string name="onb_mushaf_body">Halaman mengikut mushaf Madinah cetakan Kompleks Raja Fahd: rasm Uthmani, riwayat Hafs, 604 halaman 15 baris. Gaya halaman lain seperti IndoPak atau Shamarly tidak disertakan, jadi jika anda biasa dengan salah satunya, bentuk huruf dan susun atur halaman akan kelihatan berbeza.</string>
     <string name="onb_translation_title">Terjemahan</string>

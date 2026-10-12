@@ -3,18 +3,31 @@ package io.zakkyhidayat.quran.data
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
 import kotlinx.coroutines.runBlocking
+import org.junit.Before
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import java.io.File
 
 // Pemetaan ayat <-> halaman mushaf Madinah, dibaca dari quran.db yang sebenarnya.
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], application = Application::class)
 class PageMappingTest {
-    private val repo = MushafRepository(ApplicationProvider.getApplicationContext())
+    private val context: Application = ApplicationProvider.getApplicationContext()
+    private lateinit var repo: MushafRepository
+
+    @Before
+    fun installTestDatabase() {
+        val source = File("src/main/assets/quran.db")
+        check(source.isFile) { "Test database source is missing: ${source.absolutePath}" }
+        val target = QuranDatabaseInstaller.databaseFile(context)
+        target.parentFile?.mkdirs()
+        source.copyTo(target, overwrite = true)
+        repo = MushafRepository(context)
+    }
 
     @Test
     fun knownPagesOfTheMadaniMushaf() = runBlocking {

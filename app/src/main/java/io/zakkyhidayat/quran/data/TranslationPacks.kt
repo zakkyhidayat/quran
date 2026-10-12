@@ -10,8 +10,6 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.File
 import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
 import java.security.MessageDigest
 
 /** True bila katalog menawarkan versi paket yang lebih baru daripada yang terpasang. */
@@ -73,7 +71,7 @@ class TranslationPacks(context: Context) {
 
     /** Ambil catalog.json. Melempar IOException bila tidak ada jaringan, status bukan 200, atau isinya tidak valid. */
     suspend fun catalog(): List<CatalogPack> = withContext(Dispatchers.IO) {
-        val body = open(BuildConfig.TRANSLATION_CATALOG_URL).let { conn ->
+        val body = openHttpsDownload(BuildConfig.TRANSLATION_CATALOG_URL).let { conn ->
             try { conn.inputStream.bufferedReader().use { it.readText() } } finally { conn.disconnect() }
         }
         try {
@@ -104,7 +102,7 @@ class TranslationPacks(context: Context) {
         try {
             val url = BuildConfig.TRANSLATION_CATALOG_URL.substringBeforeLast('/') + "/" + pack.file
             val digest = MessageDigest.getInstance("SHA-256")
-            val conn = open(url)
+            val conn = openHttpsDownload(url)
             try {
                 val total = conn.contentLengthLong.takeIf { it > 0 } ?: pack.bytes
                 var done = 0L
@@ -155,28 +153,4 @@ class TranslationPacks(context: Context) {
         }
     }
 
-    // GET dengan pengalihan manual (GitHub mengalihkan aset rilis ke host lain); hanya https.
-    private fun open(start: String): HttpURLConnection {
-        var url = URL(start)
-        repeat(6) {
-            val conn = url.openConnection() as HttpURLConnection
-            conn.connectTimeout = 15_000
-            conn.readTimeout = 30_000
-            conn.instanceFollowRedirects = false
-            val code = conn.responseCode
-            if (code in 300..399) {
-                val location = conn.getHeaderField("Location")
-                conn.disconnect()
-                if (location == null) throw IOException("Pengalihan tanpa tujuan")
-                url = URL(url, location)
-                if (url.protocol != "https") throw IOException("Pengalihan ke alamat tidak aman")
-            } else if (code == HttpURLConnection.HTTP_OK) {
-                return conn
-            } else {
-                conn.disconnect()
-                throw IOException("Server menjawab $code")
-            }
-        }
-        throw IOException("Terlalu banyak pengalihan")
-    }
 }

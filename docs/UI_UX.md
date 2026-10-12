@@ -1,6 +1,6 @@
 # Catatan UI/UX
 
-Ringkasan diskusi UI/UX (Oktober 2026). Bahasa dan database dibahas di dokumen/sesi terpisah.
+Ringkasan diskusi UI/UX (Oktober 2026).
 
 **Batasan analisis:** catatan ini disusun dari membaca kode dan screenshot aplikasi pembanding, belum dari aplikasi ini
 yang berjalan di perangkat. Setiap butir perlu dicek di perangkat sebelum dan sesudah dikerjakan.
@@ -23,6 +23,14 @@ Dari screenshot [QuranApp](https://github.com/AlfaazPlus/QuranApp) (GPL-3.0, sam
 | Menu promosi aplikasi lain, beri rating | Tidak diambil | Khusus aplikasi mereka |
 
 ## Sudah dikerjakan
+
+### Onboarding dan database
+
+- Pemakaian pertama di kedua varian dimulai dengan salam, pilihan bahasa antarmuka, dan unduhan wajib database mushaf
+  dari GitHub Releases. Ukuran, progres, kegagalan, dan coba lagi ditampilkan; database diverifikasi sebelum mushaf
+  dibuka. Setelah terpasang di perangkat, membaca dapat dilakukan luring.
+- Langkah setelah unduhan sama-sama menampilkan pratinjau mushaf dan sakelar tajwid. Varian penuh juga menawarkan
+  pilihan paket terjemahan; kedua varian berakhir pada pengaturan tampilan. Lite tidak menampilkan pilihan terjemahan.
 
 ### Navigasi dan pengaturan
 

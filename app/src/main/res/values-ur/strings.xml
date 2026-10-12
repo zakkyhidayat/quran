@@ -147,6 +147,13 @@
     <string name="onb_start">پڑھنا شروع کریں</string>
     <string name="onb_welcome_title">السلام علیکم</string>
     <string name="onb_welcome_body">خوش آمدید۔ یہ ایپ مدنی مصحف میں قرآن مجید پڑھنے کے لیے ہے۔ پہلے ایپ کی زبان منتخب کریں۔</string>
+    <string name="onb_download_title">قرآن کا ڈیٹا ڈاؤن لوڈ کریں</string>
+    <string name="onb_download_body">پڑھنے سے پہلے ڈیٹا ایک بار ڈاؤن لوڈ کرنا ضروری ہے۔ یہ اسی آلے پر محفوظ رہے گا؛ اس کے بعد آپ آف لائن پڑھ سکتے ہیں۔</string>
+    <string name="onb_download_size">ڈاؤن لوڈ کا حجم: %1$s</string>
+    <string name="onb_download_start">ڈاؤن لوڈ کرکے جاری رکھیں</string>
+    <string name="onb_downloading">%1$s از %2$s ڈاؤن لوڈ ہو رہا ہے</string>
+    <string name="onb_download_error">قرآن کا ڈیٹا ڈاؤن لوڈ نہیں ہو سکا۔ کنکشن چیک کرکے دوبارہ کوشش کریں۔</string>
+    <string name="onb_download_full_features">مکمل ورژن میں موضوعات اور سورتوں کی معلومات بھی شامل ہیں۔</string>
     <string name="onb_mushaf_title">اس مصحف کے بارے میں</string>
     <string name="onb_mushaf_body">صفحات شاہ فہد کمپلیکس کے چھاپے ہوئے مدنی مصحف کے مطابق ہیں: رسمِ عثمانی، روایتِ حفص، 15 سطروں کے 604 صفحات۔ دوسرے انداز، جیسے انڈو پاک یا شمرلی، شامل نہیں، اس لیے اگر آپ ان میں سے کسی کے عادی ہیں تو حروف اور صفحات کی ترتیب مختلف نظر آئے گی۔</string>
     <string name="onb_translation_title">ترجمے</string>

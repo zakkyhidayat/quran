@@ -82,7 +82,7 @@ jobs:
           RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
           RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
-        run: ./gradlew --no-daemon :app:assembleGithubRelease :app:bundlePlayRelease :app:assembleLiteRelease
+        run: ./gradlew --no-daemon :app:assembleGithubRelease :app:bundlePlayRelease :app:assembleLiteRelease :app:buildLiteDb
 
       - name: Terbitkan rilis
         env:
@@ -94,7 +94,10 @@ jobs:
           cp app/build/outputs/apk/github/release/app-github-release.apk out/Quran.apk
           cp app/build/outputs/apk/lite/release/app-lite-release.apk out/Quran-Lite.apk
           cp app/build/outputs/bundle/playRelease/app-play-release.aab "out/quran-${TAG}-play.aab"
-          gh release create "$TAG" out/Quran.apk out/Quran-Lite.apk --title "$TAG" --generate-notes
+          gzip -n -c app/src/main/assets/quran.db > out/quran-full.db.gz
+          gzip -n -c app/build/quran-data/lite/quran.db > out/quran-lite.db.gz
+          python tools/create_quran_manifest.py --full out/quran-full.db.gz --lite out/quran-lite.db.gz --output out/quran-data.json
+          gh release create "$TAG" out/Quran.apk out/Quran-Lite.apk out/quran-full.db.gz out/quran-lite.db.gz out/quran-data.json --title "$TAG" --generate-notes
           # AAB untuk Play Console disimpan sebagai artefak workflow, bukan aset rilis publik.
 
       - uses: actions/upload-artifact@v4

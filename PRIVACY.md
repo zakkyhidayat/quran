@@ -14,19 +14,20 @@ backup. This is controlled by your device settings, not by the app.
 
 ## Network use
 
-The app connects to the internet only to download translations you add, and the list of available translations, from
-the project's GitHub Releases. It does not check for updates; new versions are downloaded by you from GitHub Releases
-or Google Play. **Quran Lite** has no internet permission at all.
+On first launch, both apps download the required Qur'an database from the project's GitHub Releases. In the full app,
+the internet is also used to download translations you add and the list of available translations. Quran Lite has no
+other network features. After the database is installed, reading works offline. The app does not check for updates;
+new versions are downloaded by you from GitHub Releases or Google Play.
 
-Translation requests go to GitHub (`github.com`, `api.github.com`, and GitHub's download servers). Like any web server, GitHub
-receives your IP address and basic request information; see GitHub's privacy statement. The app sends no identifiers of
-its own.
+Database and translation downloads go to GitHub (`github.com`, `api.github.com`, and GitHub's download servers). Like
+any web server, GitHub receives your IP address and basic request information; see GitHub's privacy statement. The app
+sends no identifiers of its own.
 
 ## Permissions
 
 | Permission | Why |
 |------------|-----|
-| Internet (not in Quran Lite) | Download translations, as described above |
+| Internet | Required first-run Qur'an database download in both apps; translations and their catalogue in the full app |
 | Notifications (Android 13+, asked when you turn on the reminder) | Show the optional daily reading reminder |
 | Run at startup | Set the reminder again after the device restarts or the app updates; only used when the reminder is on |
 
@@ -34,4 +35,4 @@ its own.
 
 Questions or concerns: open an issue at https://github.com/zakkyhidayat/quran/issues.
 
-Last updated: 2026-10-09.
+Last updated: 2026-10-12.

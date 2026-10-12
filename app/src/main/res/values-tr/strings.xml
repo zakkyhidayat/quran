@@ -147,6 +147,13 @@
     <string name="onb_start">Okumaya başla</string>
     <string name="onb_welcome_title">Esselâmü aleyküm</string>
     <string name="onb_welcome_body">Hoş geldiniz. Bu uygulama Kur’an’ı Medine mushafıyla okumak içindir. Önce uygulamanın dilini seçin.</string>
+    <string name="onb_download_title">Kur’an verilerini indir</string>
+    <string name="onb_download_body">Okumadan önce verilerin bir kez indirilmesi gerekir. Veriler bu cihazda saklanır; sonrasında çevrimdışı okuyabilirsiniz.</string>
+    <string name="onb_download_size">İndirme boyutu: %1$s</string>
+    <string name="onb_download_start">İndir ve devam et</string>
+    <string name="onb_downloading">%1$s / %2$s indiriliyor</string>
+    <string name="onb_download_error">Kur’an verileri indirilemedi. Bağlantınızı kontrol edip tekrar deneyin.</string>
+    <string name="onb_download_full_features">Tam sürüm ayrıca konu ve sure bilgilerini içerir.</string>
     <string name="onb_mushaf_title">Bu mushaf hakkında</string>
     <string name="onb_mushaf_body">Sayfalar Kral Fahd Kompleksi’nin bastığı Medine mushafını izler: Osmanlı hattı, Hafs rivayeti, 15 satırlık 604 sayfa. Hint-Pakistan veya Şemerli gibi diğer sayfa düzenleri yoktur; bunlardan birine alışkınsanız harfler ve sayfa düzeni farklı görünecektir.</string>
     <string name="onb_translation_title">Mealler</string>
