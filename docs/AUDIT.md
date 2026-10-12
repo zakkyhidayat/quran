@@ -40,8 +40,8 @@ Diisi 2026-10-08 berdasarkan kode dan dokumen di repo. Perbarui setiap rilis. `[
 ## 3. Build yang bisa diulang
 
 - [x] Git dengan commit bermakna; wrapper Gradle di-commit; versi dikunci di `libs.versions.toml`
-- [~] Clone bersih: build debug berhasil tanpa font halaman (halaman memakai font bawaan); build lengkap butuh
-      `page-fonts.zip` (rilis `build-assets`, belum diunggah) atau data-src
+- [x] Clone bersih: build debug berhasil tanpa font halaman (halaman memakai font bawaan); font untuk membaca diunduh
+      dari rilis stabil `quran-data`
 - [x] `build/`, `.gradle/`, `local.properties`, keystore di `.gitignore`
 
 ## 4. Kunci penandatanganan
@@ -138,7 +138,7 @@ docs/CONTENT_ERRORS.md.
 | 10 | 11 | ARCHITECTURE, CHANGELOG, THIRD_PARTY_NOTICES, prosedur salah teks belum ada | Sedang | Selesai |
 | 11 | 9 | Ukuran font Arab/terjemahan belum bisa diatur | Sedang | Selesai |
 | 12 | 5 | Belum diuji di Android 8 (API 26), layar kecil, rotasi | Sedang | Selesai |
-| 13 | 3 | `page-fonts.zip` belum diunggah ke rilis `build-assets` | Sedang | Menunggu izin pemilik |
+| 13 | 3 | `page-fonts.zip` untuk unduhan font mushaf | Sedang | Selesai (rilis stabil `quran-data`) |
 | 14 | 8 | Linter belum ada; file layar terlalu besar | Rendah | Selesai |
 | 15 | 11 | ADR, screenshot README | Rendah | ADR selesai; screenshot belum |
 | 16 | 1 | Pencarian Arab tidak menemukan ejaan mushaf (إبراهيم, الصلاة: 0 hasil) | Tinggi | Selesai (ditemukan unit test) |

@@ -6,6 +6,9 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   content:
     name: Qur'an content and strings
@@ -32,6 +35,10 @@ jobs:
           distribution: temurin
           java-version: "21"
       - uses: gradle/actions/setup-gradle@v5
+      - name: Ambil paket font mushaf
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download quran-data --pattern page-fonts.zip --dir "$RUNNER_TEMP"
       # Jalankan suite JVM dan lint pada kedua flavor agar kode bersama dinilai setara; fitur eksklusif full tetap diuji di flavor github.
       # assembleLiteRelease (tanpa tanda tangan) menguji R8 pada varian lite sebelum workflow rilis.
       - run: ./gradlew --no-daemon :app:testGithubDebugUnitTest :app:testLiteDebugUnitTest :app:lintGithubDebug :app:lintLiteDebug :app:assembleGithubDebug :app:assembleLiteDebug :app:assembleLiteRelease :app:buildLiteDb
@@ -43,8 +50,10 @@ jobs:
         run: |
           ! unzip -Z1 app/build/outputs/apk/github/debug/app-github-debug.apk | grep -Fx 'assets/quran.db'
           ! unzip -Z1 app/build/outputs/apk/lite/debug/app-lite-debug.apk | grep -Fx 'assets/quran.db'
+          ! unzip -Z1 app/build/outputs/apk/github/debug/app-github-debug.apk | grep -E '^assets/fonts/p[0-9]+\.ttf$'
+          ! unzip -Z1 app/build/outputs/apk/lite/debug/app-lite-debug.apk | grep -E '^assets/fonts/p[0-9]+\.ttf$'
       - name: Manifest database rilis
         run: |
           gzip -n -c app/src/main/assets/quran.db > "$RUNNER_TEMP/quran-full.db.gz"
           gzip -n -c app/build/quran-data/lite/quran.db > "$RUNNER_TEMP/quran-lite.db.gz"
-          python tools/create_quran_manifest.py --full "$RUNNER_TEMP/quran-full.db.gz" --lite "$RUNNER_TEMP/quran-lite.db.gz" --output "$RUNNER_TEMP/quran-data.json"
+          python tools/create_quran_manifest.py --full "$RUNNER_TEMP/quran-full.db.gz" --lite "$RUNNER_TEMP/quran-lite.db.gz" --fonts "$RUNNER_TEMP/page-fonts.zip" --output "$RUNNER_TEMP/quran-data.json"

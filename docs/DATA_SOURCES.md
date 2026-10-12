@@ -11,8 +11,9 @@ diunduh; [API-nya](https://qul.tarteel.ai/docs/api) masih ditandai "Coming soon"
 Berkas mentah disimpan di `data-src/` (tidak masuk git). Yang masuk git: `tools/build_db.py` (pembangun database),
 `app/src/main/assets/quran.db` (hasil build, menjadi sumber build dan tidak dimasukkan ke APK), dan
 `docs/data-manifest.json` (hash berkas sumber yang dipakai). Workflow rilis menerbitkan database full dan Lite sebagai
-aset gzip bersama `quran-data.json`; onboarding mengunduh varian yang sesuai, memeriksa ukuran, SHA-256, integritas SQLite,
-versi skema, dan jumlah data Qur'an, lalu memasangnya ke penyimpanan lokal. Setelahnya mushaf dapat dibaca luring.
+aset gzip di rilis stabil `quran-data` bersama `quran-data.json`; onboarding mengunduh varian yang sesuai, memeriksa ukuran, SHA-256, integritas SQLite,
+versi skema, dan jumlah data Qur'an. Paket `page-fonts.zip` berisi 604 font mushaf yang juga diunduh dan diverifikasi;
+aplikasi baru mengizinkan membaca setelah database dan seluruh font terpasang. Setelahnya mushaf dapat dibaca luring.
 
 ## Daftar sumber
 
@@ -24,7 +25,7 @@ tombol unduhnya butuh login. Ambil format **SQLite** kecuali dicatat lain.
 | 1 | Layout mushaf KFGQPC V4 tajwid, 15 baris | [mushaf-layout/19](https://qul.tarteel.ai/resources/mushaf-layout/19) | `layout/qpc-v4-tajweed-15-lines.db` | Tabel `page_lines` (baris dan rentang kata tiap halaman) |
 | 2 | Teks kata V4 (kode glyph) | [quran-script](https://qul.tarteel.ai/resources/quran-script) "V4 Glyphs (With Tajweed) - Word by word" ([47](https://qul.tarteel.ai/resources/quran-script/47)) | `qpc-v4/db/qpc-v4.db` | Tabel `words` |
 | 3 | Teks Arab Unicode per ayat (QPC Hafs) | [quran-script](https://qul.tarteel.ai/resources/quran-script), berkas `qpc-hafs.db` (tabel `verses`) | `qpc-hafs/qpc-hafs.db` | Tabel `ayahs` (pencarian, salin, bagikan, TalkBack) |
-| 4 | Font halaman V4 tajwid (604 berkas `p1.ttf`..`p604.ttf`) | [font](https://qul.tarteel.ai/resources/font) "V4 tajweed" | `ttf/` | Disalin ke `app/src/main/assets/fonts/` (tidak masuk git) |
+| 4 | Font halaman V4 tajwid (604 berkas `p1.ttf`..`p604.ttf`) | [font](https://qul.tarteel.ai/resources/font) "V4 tajweed" | `ttf/` | `page-fonts.zip` di rilis stabil `quran-data`; tidak masuk APK atau git |
 | 5 | Font nama surah | [font](https://qul.tarteel.ai/resources/font) `surah_names.ttf` | `surah-names/surah_names.ttf` | Daftar surah |
 | 6 | Font header surah berwarna | [font](https://qul.tarteel.ai/resources/font) `QCF_SurahHeader_COLOR-Regular.ttf` | `fonts-extra/` | Bingkai judul surah di halaman |
 | 7 | Font Hafs Uthmanic (KFGQPC V22) | [font](https://qul.tarteel.ai/resources/font) `UthmanicHafs_V22.ttf` | `fonts-extra/` | Teks Arab di sheet ayat dan hasil pencarian |
