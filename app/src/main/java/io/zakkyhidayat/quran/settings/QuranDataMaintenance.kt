@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.zakkyhidayat.quran.R
+import io.zakkyhidayat.quran.data.QuranDataCheck
 import io.zakkyhidayat.quran.data.QuranDatabaseInstaller
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
@@ -32,28 +33,41 @@ internal fun QuranDataMaintenance(installer: QuranDatabaseInstaller) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val progress by installer.progress.collectAsState()
-    var downloadSize by remember { mutableStateOf<Long?>(null) }
+    var dataCheck by remember { mutableStateOf<QuranDataCheck?>(null) }
+    var checking by remember { mutableStateOf(true) }
+    var checkFailed by remember { mutableStateOf(false) }
     var confirmation by remember { mutableStateOf(false) }
     var downloading by remember { mutableStateOf(false) }
     var failed by remember { mutableStateOf(false) }
     var complete by remember { mutableStateOf(false) }
 
     LaunchedEffect(installer) {
+        checking = true
         try {
-            downloadSize = installer.downloadSize()
+            dataCheck = installer.checkForUpdate()
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
-            android.util.Log.w("QuranDatabase", "Gagal memuat ukuran data terbaru", e)
-            failed = true
+            android.util.Log.w("QuranDatabase", "Gagal memeriksa versi data terbaru", e)
+            checkFailed = true
+        } finally {
+            checking = false
         }
     }
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(stringResource(R.string.quran_data_maintenance_body))
-        downloadSize?.let {
+        if (checking) {
+            LinearProgressIndicator(Modifier.fillMaxWidth())
+        }
+        dataCheck?.let { check ->
             Text(
-                stringResource(R.string.onb_download_size, Formatter.formatShortFileSize(context, it)),
+                if (check.current) stringResource(R.string.quran_data_current, check.latestVersion)
+                else stringResource(
+                    R.string.quran_data_update_available,
+                    check.latestVersion,
+                    Formatter.formatShortFileSize(context, check.downloadBytes),
+                ),
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.labelLarge,
             )
@@ -77,7 +91,7 @@ internal fun QuranDataMaintenance(installer: QuranDatabaseInstaller) {
                 )
             }
         }
-        if (failed) {
+        if (failed || checkFailed) {
             Text(stringResource(R.string.onb_download_error), color = MaterialTheme.colorScheme.error)
         }
         if (complete) {
@@ -85,11 +99,38 @@ internal fun QuranDataMaintenance(installer: QuranDatabaseInstaller) {
             Text(stringResource(R.string.quran_data_restart_required), style = MaterialTheme.typography.bodySmall)
         }
         Button(
-            onClick = { confirmation = true },
-            enabled = !downloading,
+            onClick = {
+                if (checkFailed) {
+                    scope.launch {
+                        checking = true
+                        checkFailed = false
+                        try {
+                            dataCheck = installer.checkForUpdate()
+                        } catch (e: CancellationException) {
+                            throw e
+                        } catch (e: Exception) {
+                            android.util.Log.w("QuranDatabase", "Gagal memeriksa versi data terbaru", e)
+                            checkFailed = true
+                        } finally {
+                            checking = false
+                        }
+                    }
+                } else {
+                    confirmation = true
+                }
+            },
+            enabled = !downloading && !checking && (checkFailed || dataCheck?.current == false),
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(stringResource(if (failed) R.string.retry else R.string.quran_data_refresh))
+            Text(
+                stringResource(
+                    when {
+                        checkFailed || failed -> R.string.retry
+                        dataCheck?.current == true -> R.string.quran_data_current_button
+                        else -> R.string.quran_data_refresh
+                    },
+                ),
+            )
         }
     }
 
@@ -101,7 +142,7 @@ internal fun QuranDataMaintenance(installer: QuranDatabaseInstaller) {
                 Text(
                     stringResource(
                         R.string.quran_data_confirm_body,
-                        downloadSize?.let { Formatter.formatShortFileSize(context, it) } ?: "—",
+                        dataCheck?.downloadBytes?.let { Formatter.formatShortFileSize(context, it) } ?: "—",
                     ),
                 )
             },
@@ -115,7 +156,8 @@ internal fun QuranDataMaintenance(installer: QuranDatabaseInstaller) {
                             complete = false
                             try {
                                 installer.install()
-                                complete = true
+                                dataCheck = installer.checkForUpdate()
+                                complete = dataCheck?.current == true
                             } catch (e: CancellationException) {
                                 throw e
                             } catch (e: Exception) {

@@ -1,141 +1,81 @@
-# Rencana varian "Mushaf Lite": hanya membaca per halaman
+# Varian Full dan Quran Lite
 
-Status: jalan A (flavor `lite`) sudah dikerjakan. Build lokal: `./gradlew :app:assembleLiteDebug`.
+Quran Full dan Quran Lite adalah dua jenis output dari satu modul Android, `:app`. Keduanya memakai sumber mushaf,
+render halaman, dan tajwid yang sama; Lite bukan fork dan tidak memiliki salinan kode pembaca sendiri. Pemisahan
+perilaku dilakukan melalui flavor Gradle, `BuildConfig.LITE`, manifest Lite, dan resource khusus Lite.
 
-Implementasi: flavor `lite` di dimensi `distribution` (bukan dimensi baru, supaya nama tugas varian lain tidak
-berubah), `BuildConfig.LITE` untuk menyembunyikan fitur, `app/src/lite/AndroidManifest.xml` untuk membuang izin, dan
-`reader/AyahBookmarkSheet.kt`. Rute fitur lain tetap terdaftar di `AppNav`, tetapi tidak ada jalan masuk ke sana.
+## Perbedaan produk
 
-## Ukuran
+| Area | Quran Full | Quran Lite |
+|------|------------|------------|
+| Tujuan | Membaca mushaf dan fitur pendamping | Membaca mushaf dengan fitur minimal |
+| Halaman utama | Beranda, bookmark, indeks, Jelajahi, dan fitur Full lainnya | Bookmark dan daftar surah |
+| Pembaca | Mushaf, ayat + terjemahan, atau terjemahan saja | Mushaf saja; toggle warna tajwid tetap tersedia |
+| Fitur ayat | Terjemahan, transliterasi, pencarian, berbagi, dan fitur terkait | Bookmark ayat |
+| Pengaturan | Bahasa, tema, data, terjemahan, cadangan, pengingat, dan pengaturan Full lain | Tema, pemeliharaan data, cadangan, dan informasi aplikasi |
+| Data Qur'an | Database Full | Database Lite yang lebih kecil; teks mushaf sama |
+| Jaringan | Unduh database/font, paket terjemahan, dan fitur Full tertentu | Hanya unduh atau perbarui database/font |
+| Izin | Izin yang diperlukan fitur Full | Izin notifikasi dan boot tidak disertakan |
 
-- `quran.db` Lite dibuat oleh `tools/build_lite_db.py` dari sumber full: tabel penjelajahan dibuang, isi `surah_info`
-  dan `transliteration` dikosongkan, sementara teks Qur'an dan pembagian disalin utuh. Database full dan Lite dikirim
-  sebagai aset gzip di GitHub Release; APK tidak membundel database. Onboarding mengunduh varian sesuai aplikasi,
-  memverifikasi ukuran, SHA-256, skema, dan isi sebelum memasang database lokal untuk membaca luring.
-- Rute layar lain tidak didaftarkan di `AppNav` untuk lite, sehingga R8 (rilis) bisa membuang kodenya.
-- CI memverifikasi database full dan Lite, lalu memastikan `assets/quran.db` tidak masuk ke kedua APK.
-- Kedua varian mengunduh paket 604 font halaman V4 yang sama saat onboarding (font tidak dimodifikasi); font halaman
-  tidak ikut di APK. Onboarding menahan akses membaca sampai database dan seluruh font terpasang. Pengguna dapat
-  mengunduh ulang atau memperbarui data dari Pengaturan → Data Al-Qur’an.
+Saat pertama dibuka, kedua aplikasi meminta bahasa dan mengunduh database serta 604 font halaman. Di Full, penyiapan
+dilanjutkan dengan pratinjau mushaf, pilihan terjemahan, dan tampilan. Lite langsung masuk ke aplikasi setelah bahasa
+dan data siap. Setelah data siap, keduanya dapat membaca secara luring. Lite menyimpan bookmark dan pengaturan di
+ruang data aplikasinya sendiri.
 
-## Lingkup
+## Cadangan bersama Full dan Lite
 
-Yang **ada**:
+Kedua aplikasi punya `applicationId` berbeda, jadi data lokalnya terpisah. Bookmark berpindah lewat berkas cadangan
+JSON v2 yang netral edisi:
 
-- Pembaca mushaf per halaman (604 halaman, font V4, warna tajwid sesuai mode tema).
-- Layar utama berisi tab: Bookmark, Surah, Juz, Hizb, Rub', Manzil, Ruku.
-- Bookmark halaman (tombol yang sudah ada di bar atas pembaca).
-- Bookmark ayat lewat sheet ringkas: tap ayat → sheet berisi nama surah dan nomor ayat, posisi (halaman, juz, hizb), dan
-  satu tombol bookmark. Tanpa terjemahan, transliterasi, salin, bagikan, atau info tambahan.
-- Lanjutkan dari posisi terakhir.
-- Pengaturan: hanya tema terang, gelap, dan ikuti sistem.
+- Bookmark, penanda hapus (tombstone), dan posisi baca dipakai bersama. Gabungan berbasis waktu: yang terbaru menang,
+  sehingga bookmark yang dihapus di satu edisi tidak muncul lagi dari berkas.
+- Pengaturan disimpan per profil (`full`, `lite`). Tiap edisi hanya menerapkan profilnya sendiri dan mempertahankan
+  profil edisi lain saat menulis ulang berkas.
+- Berkas v1 lama tetap bisa diimpor (di Lite hanya bookmark dan posisi baca).
+- Cadangan otomatis aktif di kedua edisi. Pilih folder yang sama di keduanya melalui pemilih folder Android; setiap
+  perubahan tersimpan sebagai snapshot baru bernama `quran-autobackup-<timestamp>.json`. Folder mempertahankan maksimal
+  tiga snapshot terbaru dan menghapus yang lebih lama.
+- Data dari snapshot yang ada digabungkan sebelum snapshot baru dibuat, agar perubahan dari Full dan Lite ikut terbawa.
+  Snapshot tetap bisa dipulihkan melalui menu Impor dengan memilih salah satu berkas JSON di folder tersebut.
+- Jika sebelumnya auto-backup memakai satu berkas dari versi lama, matikan auto-backup lalu pilih folder. Berkas lama
+  tidak dihapus dan masih dapat dipulihkan lewat Impor manual.
+- Impor manual selalu memulihkan bookmark aktif di berkas, meski pernah dihapus secara lokal.
 
-Yang **dibuang**: terjemahan dan transliterasi, isi sheet ayat selain bookmark (terjemahan, salin, bagikan, ayat serupa, dan lain-lain), mode ayat+terjemahan dan terjemahan saja,
-pencarian, Beranda, Jelajahi/topik, info surah, pengingat, cadangan, updater, dan langkah pilihan terjemahan di onboarding.
-Onboarding Lite tetap mencakup pemilihan bahasa, unduhan wajib database dan font halaman, pratinjau mushaf, dan
-pengaturan tampilan.
+## Struktur kode dan flavor
 
-Lite memerlukan izin internet untuk unduhan wajib saat penggunaan pertama dan bila pengguna memilih unduh ulang/perbarui
-data di Pengaturan. Setelah itu aplikasi membaca data lokal secara luring, tanpa fitur jaringan otomatis atau notifikasi.
+- `app/src/main`: implementasi bersama, termasuk pembaca mushaf, model/data inti, tajwid, dan string umum.
+- `app/src/lite`: manifest, nama aplikasi, dan ikon khusus Lite.
+- `BuildConfig.LITE`: mengatur titik perilaku yang berbeda, seperti tab/fitur yang tersedia dan mode pembacaan.
+- `github`: Full APK untuk GitHub Releases, dengan ID `io.zakkyhidayat.quran`.
+- `play`: Full AAB untuk Play Store, dengan kode aplikasi yang sama dengan Full.
+- `lite`: Quran Lite APK dengan ID `io.zakkyhidayat.quran.lite`.
 
-## Keputusan utama: repo terpisah atau flavor di repo ini
+Semua flavor memakai satu modul dan berbagi implementasi mushaf. Perubahan fitur baru perlu ditinjau terhadap Full dan
+Lite: fitur pembacaan yang sama sebaiknya tetap di jalur bersama, sedangkan fitur Full harus disembunyikan atau tidak
+diaktifkan di Lite. Jangan menambahkan izin Lite tanpa memastikan izin tersebut memang diperlukan.
 
-Ada dua jalan. Saya sarankan **flavor di repo ini**, kecuali Anda memang ingin keduanya berkembang terpisah.
+Database Full berasal dari `app/src/main/assets/quran.db`. `tools/build_lite_db.py` membuat database Lite tanpa tabel
+penjelajahan, info surah, dan transliterasi. Database dan font halaman diunduh saat penyiapan, bukan dibundel di APK.
+Katalog unduhan memilih database berdasarkan flavor; kedua aplikasi memakai arsip font halaman yang sama. Lihat
+[`DATA_SOURCES.md`](DATA_SOURCES.md) untuk sumber dan proses pembaruan data.
 
-| | Flavor `lite` di repo ini (disarankan) | Fork ke repo baru |
-|---|---|---|
-| Perbaikan pembaca (mis. animasi geser, issue #9) | Otomatis berlaku di kedua aplikasi | Harus di-port manual, mudah tertinggal |
-| Data `quran.db`, font, verifikasi teks Qur'an | Satu sumber, satu CI | Dua salinan yang harus disinkronkan |
-| Kerumitan kode | Ada percabangan per flavor (`BuildConfig.LITE`) | Kode lebih bersih, hanya yang dipakai |
-| Ukuran APK | Database full/Lite dirilis sebagai aset unduhan; APK tidak memuat database | Bebas memangkas `quran.db` |
-| Rilis | Dua `applicationId` dari satu tag | Siklus rilis sendiri |
+## Memilih output lokal
 
-Risiko terbesar fork: **teks Qur'an dan perbaikan pembaca bercabang**. Kalau suatu saat ditemukan galat konten
-(`docs/CONTENT_ERRORS.md`), Anda harus memperbaikinya di dua tempat. Untuk aplikasi Qur'an, ini risiko yang paling
-mahal.
+Dari root repositori, gunakan task Gradle berikut:
 
-## Jalan A: flavor `lite` (disarankan)
+| Perintah | Output |
+|----------|--------|
+| `./gradlew :app:assembleFullDebug` | APK Full debug |
+| `./gradlew :app:assembleLiteDebug` | APK Lite debug |
+| `./gradlew :app:assembleBothDebug` | Kedua APK debug |
+| `./gradlew :app:assembleFullRelease` | APK Full release |
+| `./gradlew :app:assembleLiteRelease` | APK Lite release |
+| `./gradlew :app:assembleBothRelease` | Kedua APK release |
+| `./gradlew :app:bundleFullPlayRelease` | AAB Full untuk Google Play |
 
-1. **Dimensi flavor baru** di `app/build.gradle.kts`: `edition` = `full` / `lite`, berdampingan dengan `github` / `play`.
-   `lite` memakai `applicationIdSuffix = ".lite"` (atau id sendiri), nama aplikasi dan ikon sendiri, dan
-   `buildConfigField("boolean", "LITE", "true")`.
-2. **Manifest khusus `lite`** (`app/src/lite/AndroidManifest.xml`) dengan `tools:node="remove"` untuk izin `INTERNET`,
-   `POST_NOTIFICATIONS`, `RECEIVE_BOOT_COMPLETED` dan `ReminderReceiver`.
-3. **Navigasi** (`AppNav.kt`): untuk `LITE`, daftarkan hanya rute `index` dan `reader`, ditambah pengaturan tema.
-4. **Layar utama** (`index/IndexScreen.kt`): sembunyikan tab Beranda dan ikon Jelajahi, Cari, Ayat acak. Tab
-   Bookmark, Surah, Juz, dan seterusnya tetap.
-5. **Pembaca** (`reader/ReaderScreen.kt`): kunci ke mode mushaf, sembunyikan pil mode, tombol cari, dan penghitung.
-   Tombol bookmark halaman tetap. Tap ayat tetap menyorot ayat dan membuka sheet, tetapi isinya `AyahBookmarkSheet`
-   (lihat bagian "Sheet bookmark ayat"), bukan `AyahSheetContent`. Lewati pemuatan `extras` dan terjemahan untuk sheet.
-6. **Pengaturan**: layar ringkas berisi pilihan tema saja (pakai ulang bagian dari `AppearanceSettings.kt`).
-7. **Startup** (`AppViewModel.kt`): lewati onboarding, unduhan terjemahan otomatis, updater, dan cadangan otomatis bila
-   `LITE`.
-8. **CI**: tambah `:app:assembleGithubLiteDebug` (nama tugas mengikuti urutan dimensi) ke `ci.yml`.
-9. **Dokumen**: tambah baris di `ARCHITECTURE.md` dan `CLAUDE.md` bahwa fitur baru harus dicek dampaknya ke `lite`.
+APK ada di `app/build/outputs/apk/<flavor>/<build-type>/`; AAB Play ada di
+`app/build/outputs/bundle/playRelease/`. Task alias mempertahankan nama task flavor standar, jadi CI dan workflow rilis
+tetap dapat memilih `github`, `play`, dan `lite` secara eksplisit. Pada build beberapa target, `--parallel` dapat
+diaktifkan bila didukung oleh Gradle dan lingkungan build.
 
-Perkiraan: perubahan di sekitar 8–10 berkas, tanpa menyentuh logika render halaman.
-
-## Jalan B: fork ke repo baru
-
-Bila tetap memilih repo terpisah:
-
-1. **Buat repo dengan riwayat**, bukan salin berkas, supaya perbaikan dari repo induk bisa di-cherry-pick:
-   ```bash
-   git clone https://github.com/zakkyhidayat/quran quran-lite
-   cd quran-lite
-   git remote rename origin upstream
-   git remote add origin https://github.com/zakkyhidayat/quran-lite
-   git push -u origin main
-   ```
-   Untuk menarik perbaikan: `git fetch upstream && git cherry-pick <commit>`.
-2. **Ganti identitas**: `applicationId`, nama aplikasi, ikon, `GITHUB_REPO`. Hapus `TRANSLATION_CATALOG_URL` dan
-   flavor updater.
-3. **Hapus paket dan berkas**:
-   - Paket utuh: `home/`, `explore/`, `search/`, `info/`, `onboarding/`, `reminder/`.
-   - `data/`: `TranslationPacks.kt`, `Backup.kt`, `Updater.kt`, `Collections.kt`, `ReadingHistory.kt`.
-   - `reader/`: `AyahListReader.kt`, `AyahShare.kt`, `ReaderControls.kt` (bagian pil mode). `AyahSheet.kt` diganti
-     `AyahBookmarkSheet` (lihat bagian "Sheet bookmark ayat").
-   - `settings/`: semua kecuali `AppSettings.kt` dan bagian tema dari `AppearanceSettings.kt`.
-   - `ui/`: `HtmlContent.kt`, `UpdateDialog.kt`.
-   - `MushafRepository.kt`: fungsi topik, tema, ayat serupa, mutasyabihat, morfologi, info surah, transliterasi.
-   - Izin dan receiver di `AndroidManifest.xml`; string yang tidak terpakai (lint `UnusedResources` membantu).
-4. **Ramping-kan `quran.db`**: di `tools/build_db.py`, lewati tabel `surah_info`, `transliteration`, tabel terjemahan,
-   dan semua tabel penjelajahan. Tabel yang tetap: `surahs`, `ayahs` (dipakai TalkBack), `words`, `page_lines`, `juz`,
-   `hizb`, `rub`, `manzil`, `ruku`, `sajda`. Jalankan `tools/verify_quran.py` setelahnya.
-5. **Dokumen**: tulis ulang README, `PRIVACY.md` (tanpa data, tanpa internet), dan `THIRD_PARTY_NOTICES.md` (cukup
-   KFGQPC dan QUL untuk teks dan metadata; bagian terjemahan dihapus). Lisensi tetap **GPL-3.0** karena turunan.
-6. **CLAUDE.md** baru yang menyatakan lingkup sempit ini sebagai aturan keras: fitur di luar lingkup ditolak, bukan
-   ditambahkan.
-
-## Sheet bookmark ayat
-
-Buat composable kecil baru, jangan menambah parameter ke `AyahSheetContent`. Sheet penuh sudah punya banyak cabang
-(transliterasi, extras, salin, bagikan); menambah mode `lite` ke dalamnya membuat keduanya sulit dirawat.
-
-```kotlin
-@Composable
-fun AyahBookmarkSheet(detail: AyahDetail, surah: Surah?, bookmarked: Boolean, onToggleBookmark: () -> Unit,
-                      onPrevious: () -> Unit, onNext: () -> Unit)
-```
-
-Isi, dari atas ke bawah:
-
-1. Baris judul: `Al-Baqarah 2:255`, di bawahnya `ayah_meta` (halaman, juz, hizb, rub', manzil, ruku). Panah ayat
-   sebelum/berikutnya tetap, supaya bisa bookmark ayat tetangga tanpa menutup sheet.
-2. Satu tombol bookmark yang lebar dengan label teks ("Tandai ayat" / "Hapus tanda"), bukan ikon saja, karena hanya
-   ini satu-satunya aksi.
-3. Label sajdah bila ayatnya ayat sajdah (sudah ada di `detail.info.sajda`).
-
-Teks Arab ayat tidak perlu ditampilkan ulang: ayat sudah tersorot di halaman di belakang sheet. String yang dipakai
-sudah ada (`bookmark_ayah`, `remove_bookmark`, `ayah_meta`, `previous_ayah`, `next_ayah`), jadi tidak ada kunci
-terjemahan baru.
-
-Alternatif yang lebih ringan: tekan lama ayat langsung menandai, dengan snackbar "Ayat ditandai · Batal". Lebih cepat,
-tetapi gestur tekan lama sulit ditemukan pengguna dan rawan tertekan tanpa sengaja. Sheet lebih jelas; tekan lama bisa
-ditambahkan nanti sebagai jalan pintas.
-
-## Hal yang perlu diputuskan
-
-- Jalan A atau B.
-- Bahasa antarmuka: tetap 10 bahasa (ikut bahasa sistem) atau hanya Indonesia dan Inggris.
-- Tab Sajdah saat ini disembunyikan di aplikasi penuh; tetap disembunyikan di lite?
+Detail artefak rilis dan penandatanganan: [`RELEASING.md`](RELEASING.md).

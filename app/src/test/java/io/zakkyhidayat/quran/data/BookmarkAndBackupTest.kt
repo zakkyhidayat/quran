@@ -70,4 +70,70 @@ class BookmarkAndBackupTest {
         assertEquals(77, restored.lastPage)
         assertEquals(4, restored.lastSurah)
     }
+
+    @Test
+    fun sharedFileKeepsOtherEditionProfileAndSyncsDeletions() = runBlocking {
+        val store = BookmarkStore(context)
+        val settings = SettingsRepository(context)
+        store.load()
+        val file = File(context.cacheDir, "shared-test.json")
+        // Berkas dari edisi lain: profil lite, satu bookmark, dan satu penanda hapus.
+        val other0 = if (io.zakkyhidayat.quran.BuildConfig.LITE) "full" else "lite"
+        file.writeText(
+            """{"format":"io.zakkyhidayat.quran.backup","version":2,"app":"$other0",
+            "profiles":{"$other0":{"settings":{"tajweed":true}}},
+            "bookmarks":[{"kind":"Page","page":9,"surah":0,"ayah":0,"createdAt":100}],
+            "deleted":[{"kind":"Page","page":8,"surah":0,"ayah":0,"deletedAt":500}]}""",
+        )
+        store.togglePage(8) // dibuat sekarang (> 500), jadi tidak terhapus
+        Backup.export(context, Uri.fromFile(file), settings, store)
+
+        val json = org.json.JSONObject(file.readText())
+        val own = if (io.zakkyhidayat.quran.BuildConfig.LITE) "lite" else "full"
+        val other = if (io.zakkyhidayat.quran.BuildConfig.LITE) "full" else "lite"
+        assertTrue(json.getJSONObject("profiles").has(own))
+        assertTrue(json.getJSONObject("profiles").has(other))
+        assertEquals(setOf(8, 9), store.bookmarks.value.map { it.page }.toSet())
+        assertEquals(2, json.getJSONArray("bookmarks").length())
+    }
+
+    @Test
+    fun deletionPropagatesThroughTombstone() = runBlocking {
+        val store = BookmarkStore(context)
+        store.load()
+        store.merge(listOf(Bookmark(0, BookmarkKind.Page, 12, 0, 0, 100L)))
+        val result = store.merge(emptyList(), listOf(BookmarkStore.Deletion(BookmarkKind.Page, 12, 0, 0, 200L)))
+        assertEquals(1, result.removed)
+        assertTrue(store.bookmarks.value.isEmpty())
+        // Bookmark lama dari berkas tidak muncul lagi setelah dihapus.
+        assertEquals(0, store.merge(listOf(Bookmark(0, BookmarkKind.Page, 12, 0, 0, 100L))).added)
+    }
+
+    @Test
+    fun v1FileRestoresBookmarksAndPosition() = runBlocking {
+        val store = BookmarkStore(context)
+        val settings = SettingsRepository(context)
+        store.load()
+        val file = File(context.cacheDir, "v1-test.json")
+        file.writeText(
+            """{"format":"io.zakkyhidayat.quran.backup","version":1,"settings":{"last_page":42,"last_surah":3,"last_ayah":1},
+            "bookmarks":[{"kind":"Page","page":42,"surah":0,"ayah":0,"createdAt":1}]}""",
+        )
+        assertEquals(1, Backup.import(context, Uri.fromFile(file), settings, store).bookmarksAdded)
+        assertEquals(42, settings.settings.first().lastPage)
+    }
+
+    @Test
+    fun autoBackupRetentionKeepsOnlyThreeNewestSnapshots() {
+        val removed = Backup.autoBackupNamesToDelete(
+            listOf(
+                "quran-autobackup-1.json" to 10L,
+                "quran-autobackup-2.json" to 20L,
+                "quran-autobackup-3.json" to 30L,
+                "quran-autobackup-4.json" to 40L,
+                "quran-autobackup-5.json" to 50L,
+            ),
+        )
+        assertEquals(listOf("quran-autobackup-2.json", "quran-autobackup-1.json"), removed)
+    }
 }

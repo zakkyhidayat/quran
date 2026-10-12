@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.zakkyhidayat.quran.BuildConfig
 import io.zakkyhidayat.quran.R
+import io.zakkyhidayat.quran.data.QuranDataCheck
 import io.zakkyhidayat.quran.data.QuranDatabaseInstaller
 import io.zakkyhidayat.quran.settings.LanguageSection
 import io.zakkyhidayat.quran.ui.CenteredContent
@@ -48,7 +49,7 @@ fun DatabaseSetupScreen(installer: QuranDatabaseInstaller, onInstalled: () -> Un
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val progress by installer.progress.collectAsStateWithLifecycle()
-    var downloadSize by remember { mutableStateOf<Long?>(null) }
+    var dataCheck by remember { mutableStateOf<QuranDataCheck?>(null) }
     var loadingCatalog by remember { mutableStateOf(true) }
     var downloading by remember { mutableStateOf(false) }
     var failed by remember { mutableStateOf(false) }
@@ -56,8 +57,7 @@ fun DatabaseSetupScreen(installer: QuranDatabaseInstaller, onInstalled: () -> Un
     LaunchedEffect(installer) {
         loadingCatalog = true
         try {
-            downloadSize = installer.downloadSize()
-            failed = downloadSize == null
+            dataCheck = installer.checkForUpdate()
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
@@ -79,7 +79,7 @@ fun DatabaseSetupScreen(installer: QuranDatabaseInstaller, onInstalled: () -> Un
                 verticalArrangement = Arrangement.Center,
             ) {
                 Text(
-                    stringResource(R.string.onb_step, 1, if (BuildConfig.LITE) 3 else 4),
+                    stringResource(R.string.onb_step, 1, if (BuildConfig.LITE) 1 else 4),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -125,10 +125,14 @@ fun DatabaseSetupScreen(installer: QuranDatabaseInstaller, onInstalled: () -> Un
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                 )
-                downloadSize?.let {
+                dataCheck?.let { check ->
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        stringResource(R.string.onb_download_size, Formatter.formatShortFileSize(context, it)),
+                        if (check.current) stringResource(R.string.quran_data_current, check.latestVersion)
+                        else stringResource(
+                            R.string.onb_download_size,
+                            Formatter.formatShortFileSize(context, check.downloadBytes),
+                        ),
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.primary,
                     )

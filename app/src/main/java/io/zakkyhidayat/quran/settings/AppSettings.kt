@@ -153,6 +153,18 @@ class SettingsRepository(private val context: Context) {
         }
     }
 
+    /** Timpa kunci tertentu tanpa menghapus pengaturan lain. */
+    suspend fun mergeValues(values: Map<String, Any?>) = context.dataStore.edit { prefs ->
+        values.filterKeys { it !in deviceOnlyKeys }.forEach { (name, value) ->
+            when (value) {
+                is Boolean -> prefs[booleanPreferencesKey(name)] = value
+                is Int -> prefs[intPreferencesKey(name)] = value
+                is String -> prefs[stringPreferencesKey(name)] = value
+                else -> Unit
+            }
+        }
+    }
+
     suspend fun setAutoBackup(uri: String?) = context.dataStore.edit {
         if (uri == null) it.remove(autoBackupUriKey) else it[autoBackupUriKey] = uri
         it[autoBackupAtKey] = "0"

@@ -98,8 +98,8 @@ fun IndexScreen(
     onOpenHome: (io.zakkyhidayat.quran.home.HomeTarget) -> Unit = {},
 ) {
     val onBack = onOpenReader // pilihan di daftar membuka layar baca
-    // Lite tidak menampilkan Beranda; pager memetakan indeks halaman ke indeks tab aslinya.
-    val tabIds = remember { if (BuildConfig.LITE) TABS.indices.filter { it != 1 } else TABS.indices.toList() }
+    // Lite hanya menampilkan Bookmark dan Surah; pager memetakan indeks halaman ke indeks tab aslinya.
+    val tabIds = remember { if (BuildConfig.LITE) listOf(0, 2) else TABS.indices.toList() }
     val initialTab = if (BuildConfig.LITE) 2 else 1
     val pagerState = rememberPagerState(initialPage = tabIds.indexOf(initialTab)) { tabIds.size }
     val tab = tabIds[pagerState.currentPage]

@@ -30,7 +30,8 @@ Diisi 2026-10-08 berdasarkan kode dan dokumen di repo. Perbarui setiap rilis. `[
 
 ## 2. Legalitas
 
-- [ ] Izin redistribusi terjemahan (Kemenag, Sabiq, KFQC, Saheeh) **— tugas pemilik**
+- [x] Pemilik proyek mengonfirmasi izin redistribusi paket terjemahan yang diterbitkan pada 2026-10-12
+      (167 paket; hak cipta tetap pada penerbit/penerjemah). Konfirmasi ulang untuk paket baru.
 - n/a Tafsir, audio
 - [ ] Tashih LPMQ: perlu atau tidak untuk aplikasi ini **— tugas pemilik (hubungi LPMQ)**
 - [~] Lisensi KFGQPC: font dikirim apa adanya; salinan dengan palet bawaan lain dibuat saat berjalan. Konfirmasi ke
@@ -126,7 +127,7 @@ docs/CONTENT_ERRORS.md.
 
 | No | Bagian | Temuan | Prioritas | Status |
 |----|--------|--------|-----------|--------|
-| 1 | 2 | Izin redistribusi terjemahan belum dikonfirmasi | Tinggi | Tugas pemilik |
+| 1 | 2 | Izin redistribusi terjemahan | Tinggi | Selesai untuk 167 paket yang diterbitkan (konfirmasi pemilik proyek, 2026-10-12); konfirmasi ulang untuk paket baru |
 | 2 | 2 | Tashih LPMQ belum diketahui perlu/tidak | Tinggi | Tugas pemilik |
 | 3 | 2 | Penggantian palet font KFGQPC perlu dikonfirmasi | Tinggi | Tugas pemilik |
 | 4 | 4 | Keystore rilis belum ada | Tinggi | Tugas pemilik |

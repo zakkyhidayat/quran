@@ -8,6 +8,7 @@ import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
+import org.json.JSONException
 import org.json.JSONObject
 import java.io.File
 import java.io.IOException
@@ -16,6 +17,11 @@ import java.util.zip.GZIPInputStream
 import java.util.zip.ZipInputStream
 
 data class QuranDatabaseDownloadProgress(val downloaded: Long, val total: Long)
+data class QuranDataCheck(
+    val current: Boolean,
+    val latestVersion: Int,
+    val downloadBytes: Long,
+)
 
 private data class QuranDatabaseAsset(val file: String, val bytes: Long, val sha256: String)
 private data class QuranFontAsset(val file: String, val bytes: Long, val sha256: String)
@@ -29,13 +35,14 @@ private data class QuranDatabaseCatalog(
 )
 
 /**
- * Installs the flavor-specific SQLite database from the latest GitHub Release before the app opens its repository.
- * The compressed download is hash-checked, unpacked to a temporary file, validated, then atomically installed.
+ * Checks the installed database and fonts against the latest GitHub Release, downloading and atomically replacing them
+ * only when the local installation is missing, damaged, or out of date.
  */
 class QuranDatabaseInstaller(context: Context) {
     private val appContext = context.applicationContext
     private val target = databaseFile(appContext)
     private val fontsTarget = fontsDirectory(appContext)
+    private val installManifest = File(appContext.noBackupFilesDir, "quran-data-install.json")
     val progress = MutableStateFlow<QuranDatabaseDownloadProgress?>(null)
 
     suspend fun hasInstalledDatabase(): Boolean = withContext(Dispatchers.IO) {
@@ -55,16 +62,22 @@ class QuranDatabaseInstaller(context: Context) {
         false
     }
 
-    suspend fun downloadSize(): Long? = withContext(Dispatchers.IO) {
+    suspend fun checkForUpdate(): QuranDataCheck = withContext(Dispatchers.IO) {
         val metadata = catalog()
-        metadata.assets[flavorKey()]?.bytes?.plus(metadata.fonts.bytes)
+        val asset = metadata.assets[flavorKey()]
             ?: throw IOException("Database untuk varian ini tidak tersedia")
+        QuranDataCheck(
+            current = isCurrentInstall(metadata, asset),
+            latestVersion = metadata.databaseVersion,
+            downloadBytes = asset.bytes + metadata.fonts.bytes,
+        )
     }
 
-    suspend fun install() = withContext(Dispatchers.IO) {
+    suspend fun install(): Boolean = withContext(Dispatchers.IO) {
         progress.value = null
         val metadata = catalog()
         val asset = metadata.assets[flavorKey()] ?: throw IOException("Database untuk varian ini tidak tersedia")
+        if (isCurrentInstall(metadata, asset)) return@withContext false
         val archive = File(target.parentFile, "${target.name}.gz.tmp")
         val database = File(target.parentFile, "${target.name}.tmp")
         val backup = File(target.parentFile, "${target.name}.old")
@@ -117,6 +130,8 @@ class QuranDatabaseInstaller(context: Context) {
             }
             backup.delete()
             fontsBackup.deleteRecursively()
+            writeInstallManifest(metadata, asset)
+            true
         } finally {
             archive.delete()
             database.delete()
@@ -124,6 +139,88 @@ class QuranDatabaseInstaller(context: Context) {
             fontsStage.deleteRecursively()
             progress.value = null
         }
+    }
+
+    private suspend fun isCurrentInstall(metadata: QuranDatabaseCatalog, asset: QuranDatabaseAsset): Boolean {
+        if (!installManifest.isFile) {
+            val legacyInstallIsCurrent =
+                isValidDatabase(target, metadata.databaseVersion) && hasInstalledFonts()
+            if (!legacyInstallIsCurrent) return false
+            writeInstallManifest(metadata, asset)
+            return true
+        }
+        val recorded = try {
+            JSONObject(installManifest.readText())
+        } catch (_: JSONException) {
+            return false
+        }
+        val matchesRelease =
+            recorded.optInt("database_version") == metadata.databaseVersion &&
+                recorded.optString("database_sha256").equals(asset.sha256, ignoreCase = true) &&
+                recorded.optString("fonts_sha256").equals(metadata.fonts.sha256, ignoreCase = true)
+        if (!matchesRelease || !isValidDatabase(target, metadata.databaseVersion) || !hasInstalledFonts()) return false
+        if (!recorded.optString("installed_database_sha256").equals(sha256(target), ignoreCase = true)) return false
+        val expectedFonts = recorded.optJSONObject("font_files") ?: return false
+        val fontFiles = fontsTarget.listFiles()
+            ?.filter { it.isFile && pageFontName.matches(it.name) }
+            ?.sortedBy { it.name }
+            .orEmpty()
+        if (fontFiles.size != 604) return false
+        for (file in fontFiles) {
+            currentCoroutineContext().ensureActive()
+            if (!expectedFonts.optString(file.name).equals(sha256(file), ignoreCase = true)) return false
+        }
+        return true
+    }
+
+    private suspend fun writeInstallManifest(metadata: QuranDatabaseCatalog, asset: QuranDatabaseAsset) {
+        val temp = File(installManifest.parentFile, "${installManifest.name}.tmp")
+        val backup = File(installManifest.parentFile, "${installManifest.name}.old")
+        try {
+            val fontHashes = JSONObject()
+            fontsTarget.listFiles()
+                ?.filter { it.isFile && pageFontName.matches(it.name) }
+                ?.sortedBy { it.name }
+                .orEmpty()
+                .forEach { file ->
+                    currentCoroutineContext().ensureActive()
+                    fontHashes.put(file.name, sha256(file))
+                }
+            temp.writeText(
+                JSONObject()
+                    .put("database_version", metadata.databaseVersion)
+                    .put("database_sha256", asset.sha256)
+                    .put("fonts_sha256", metadata.fonts.sha256)
+                    .put("installed_database_sha256", sha256(target))
+                    .put("font_files", fontHashes)
+                    .toString(),
+            )
+            if (backup.exists() && !backup.delete()) throw IOException("Gagal membersihkan versi data sementara")
+            if (installManifest.exists() && !installManifest.renameTo(backup)) {
+                throw IOException("Gagal mengganti versi data mushaf")
+            }
+            if (!temp.renameTo(installManifest)) {
+                if (backup.exists()) backup.renameTo(installManifest)
+                throw IOException("Gagal menyimpan versi data mushaf")
+            }
+            backup.delete()
+        } finally {
+            temp.delete()
+        }
+    }
+
+    private suspend fun sha256(file: File): String {
+        val digest = MessageDigest.getInstance("SHA-256")
+        file.inputStream().buffered().use { input ->
+            val buffer = ByteArray(64 * 1024)
+            while (true) {
+                currentCoroutineContext().ensureActive()
+                val count = input.read(buffer)
+                if (count < 0) break
+                digest.update(buffer, 0, count)
+            }
+        }
+        return digest.digest().joinToString("") { "%02x".format(it) }
     }
 
     private suspend fun download(file: String, bytes: Long, sha256: String, destination: File, offset: Long, total: Long) {

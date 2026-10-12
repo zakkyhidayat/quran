@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.foundation.lazy.LazyColumn
@@ -65,7 +66,11 @@ internal fun SettingsMainSheet(
     onDismiss: () -> Unit,
     onOpen: (SettingsPage) -> Unit,
 ) {
-    ModalBottomSheet(onDismissRequest = onDismiss) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+        shape = RoundedCornerShape(28.dp),
+    ) {
         Column(Modifier.fillMaxWidth().heightIn(max = 640.dp)) {
             Row(
                 Modifier.fillMaxWidth().padding(start = 24.dp, end = 16.dp, top = 4.dp, bottom = 8.dp),
@@ -289,6 +294,13 @@ private fun LiteSettingsMain(vm: AppViewModel, settings: AppSettings, onOpen: (S
             subtitle = stringResource(R.string.quran_data_sub),
             onClick = { onOpen(SettingsPage.QuranData) },
             leading = { Icon(AppIcons.Download, contentDescription = null) },
+            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
+        )
+        item(
+            title = stringResource(R.string.backup),
+            subtitle = stringResource(if (settings.autoBackupUri != null) R.string.settings_backup_on else R.string.settings_backup_sub),
+            onClick = { onOpen(SettingsPage.Backup) },
+            leading = { Icon(AppIcons.Backup, contentDescription = null) },
             trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
         )
         item(

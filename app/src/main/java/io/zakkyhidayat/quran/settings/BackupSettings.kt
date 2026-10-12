@@ -42,12 +42,17 @@ internal fun BackupControls(vm: AppViewModel, settings: AppSettings, snackbar: S
                 .onFailure { toast(failed.format(it.message.orEmpty())) }
         }
     }
-    // Cadangan otomatis: pilih berkas sekali, izin aksesnya disimpan permanen.
-    val autoLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+    // Cadangan otomatis memakai folder agar Full dan Lite dapat menulis snapshot pada lokasi yang sama.
+    val autoLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
         if (uri != null) scope.launch {
             val flags = android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION or android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-            runCatching { context.contentResolver.takePersistableUriPermission(uri, flags) }
-            vm.settingsRepository.setAutoBackup(uri.toString())
+            runCatching {
+                context.contentResolver.takePersistableUriPermission(uri, flags)
+                vm.settingsRepository.setAutoBackup(uri.toString())
+            }.onFailure {
+                vm.settingsRepository.setAutoBackupAt(-1)
+                toast(failed.format(it.message.orEmpty()))
+            }
         }
     }
     val autoUri = settings.autoBackupUri
@@ -70,7 +75,7 @@ internal fun BackupControls(vm: AppViewModel, settings: AppSettings, snackbar: S
             subtitle = autoSubtitle,
             onClick = {
                 if (autoUri == null) {
-                    autoLauncher.launch("quran-autobackup.json")
+                    autoLauncher.launch(null)
                 } else {
                     runCatching {
                         context.contentResolver.releasePersistableUriPermission(
@@ -104,6 +109,21 @@ internal fun BackupControls(vm: AppViewModel, settings: AppSettings, snackbar: S
 
 // Nama berkas yang ditampilkan untuk URI SAF; cadangan ke ujung URI bila penyedia tidak memberi nama.
 private fun displayName(context: android.content.Context, uri: String): String = runCatching {
-    context.contentResolver.query(android.net.Uri.parse(uri), arrayOf(android.provider.OpenableColumns.DISPLAY_NAME), null, null, null)
+    val parsed = android.net.Uri.parse(uri)
+    val isTree = android.provider.DocumentsContract.isTreeUri(parsed)
+    val queryUri = if (isTree) {
+        android.provider.DocumentsContract.buildDocumentUriUsingTree(
+            parsed,
+            android.provider.DocumentsContract.getTreeDocumentId(parsed),
+        )
+    } else {
+        parsed
+    }
+    val projection = if (isTree) {
+        arrayOf(android.provider.DocumentsContract.Document.COLUMN_DISPLAY_NAME)
+    } else {
+        arrayOf(android.provider.OpenableColumns.DISPLAY_NAME)
+    }
+    context.contentResolver.query(queryUri, projection, null, null, null)
         ?.use { if (it.moveToFirst()) it.getString(0) else null }
 }.getOrNull() ?: uri.substringAfterLast('/')

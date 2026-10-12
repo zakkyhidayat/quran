@@ -12,8 +12,11 @@ Berkas mentah disimpan di `data-src/` (tidak masuk git). Yang masuk git: `tools/
 `app/src/main/assets/quran.db` (hasil build, menjadi sumber build dan tidak dimasukkan ke APK), dan
 `docs/data-manifest.json` (hash berkas sumber yang dipakai). Workflow rilis menerbitkan database full dan Lite sebagai
 aset gzip di rilis stabil `quran-data` bersama `quran-data.json`; onboarding mengunduh varian yang sesuai, memeriksa ukuran, SHA-256, integritas SQLite,
-versi skema, dan jumlah data Qur'an. Paket `page-fonts.zip` berisi 604 font mushaf yang juga diunduh dan diverifikasi;
-aplikasi baru mengizinkan membaca setelah database dan seluruh font terpasang. Setelahnya mushaf dapat dibaca luring.
+versi skema, dan jumlah data Qur'an. Sebelum mengunduh atau memperbarui, aplikasi membandingkan versi serta checksum pada
+katalog GitHub dengan manifest instalasi lokal, lalu memeriksa integritas database dan checksum berkas font yang terpasang;
+unduhan dilewati bila data lokal sama dengan rilis. Instalasi lama tanpa manifest yang versi database-nya cocok dan memiliki
+604 font valid akan diadopsi dan diberi checksum lokal tanpa mengunduh ulang. Paket `page-fonts.zip` berisi 604 font mushaf yang juga diunduh dan
+diverifikasi; aplikasi baru mengizinkan membaca setelah database dan seluruh font terpasang. Setelahnya mushaf dapat dibaca luring.
 
 ## Daftar sumber
 
@@ -168,7 +171,8 @@ Untuk menambah paket baru: unduh dan pecah (langkah 1 sampai 3), tambahkan entri
 lalu unggah ulang `catalog.json`. Naikkan `PACK_VERSION` di `tools/build_translation_packs.py` bila isi paket yang sama berubah.
 
 **Atribusi.** Hak cipta tiap terjemahan ada pada penerbit atau penerjemahnya (tercantum di `author` katalog dan nama paket di
-aplikasi), diambil lewat QUL. Lihat `THIRD_PARTY_NOTICES.md`; izin redistribusi belum dipastikan (lihat `docs/AUDIT.md`).
+aplikasi), diambil lewat QUL. Pemilik proyek telah mengonfirmasi izin redistribusi untuk 167 paket yang diterbitkan pada
+2026-10-12; konfirmasi ulang sebelum menerbitkan paket tambahan. Lihat `THIRD_PARTY_NOTICES.md`.
 
 ## Kapan harus memperbarui
 

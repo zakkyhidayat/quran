@@ -5,6 +5,10 @@
 An Android app for reading the Qur'an in the **Uthmani script of the Madani mushaf**, page for page like the printed
 King Fahd Complex edition: 604 pages, 15 lines, with tajweed colouring.
 
+It comes in two editions: **Quran**, with translations and additional reading tools, and **Quran Lite**, focused on
+reading the mushaf with bookmarks. Both share the same mushaf pages and tajweed display; the differences are described
+below.
+
 [![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-support-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/zakkyhidayat)
 
 ## Download
@@ -37,9 +41,9 @@ You can redownload or update these files from Settings if needed. All versions a
 This app focuses on one way of reading, done carefully: the Madani mushaf printed by the King Fahd Glorious Quran Printing
 Complex (KFGQPC). If that is the mushaf you read, memorise from, or want to get used to, this app is made for you.
 
-Many readers, especially in Indonesia and South Asia, grew up with the **IndoPak** script or the **Indonesian Standard
-Mushaf** (Mushaf Standar Indonesia). Those editions differ in letter shapes, vowel marks, pause signs, and page layout.
-Both are valid traditions; this app simply does not cover them, and there are good apps that do.
+Other mushaf traditions include **IndoPak** and **Maghribi** scripts, as well as editions following other riwayat such
+as **Warsh** or **Qalun**. They differ in letter shapes, recitation notation, pause signs, or page layout. These are
+valid traditions; this app focuses on the Madani mushaf in Hafs 'an 'Asim and does not cover those alternatives.
 
 Choices made on purpose:
 
@@ -57,9 +61,8 @@ Choices made on purpose:
 - Light, dark, and AMOLED themes; dynamic colour (Android 12+) or the original palette; three contrast levels.
 - Tap an ayah for its translations (with footnotes), Latin transliteration, and position (juz, hizb, rub', manzil, ruku,
   sajdah).
-- Translations are downloaded in the app, so the APK carries none; the active ones download automatically on first
-  launch. Available now: Indonesian (Kemenag, The Sabiq Company, King Fahad Quran Complex) and English (Saheeh
-  International), with more languages to come.
+- Translation packs are downloaded on demand in the full app, so the APK carries none. Packs are available in many
+  languages, including Indonesian and English; browse and choose them in the app.
 - The Qur'an database and all 604 page fonts are downloaded during first-run setup from the stable `quran-data` release;
   neither is bundled in the APK. You can manually redownload/update them in Settings, and reading works offline.
 - Indexes by surah, juz, hizb, rub', manzil, and ruku; surah info; go to ayah; random ayah; continue reading from the last ayah.
@@ -67,8 +70,11 @@ Choices made on purpose:
 - Thematic browsing: topics, ayah themes, similar ayahs, mutashabihat, and word roots.
 - Optional daily reading reminder by juz, hizb, or manzil.
 - Backup and restore of bookmarks and settings to a file (on the device or any cloud app with a file provider, such as
-  Google Drive).
+  Google Drive). Quran and Quran Lite can share one backup file, so saved pages and ayahs follow you between editions.
+- Optional automatic backup to a user-selected folder; it keeps the three newest snapshots.
 - Page and ayah bookmarks; search by Arabic text, translation, surah name, or a reference such as `2:255`.
+- Reading modes for the mushaf page, ayahs with translation, or translation only; tajweed colours can be switched
+  on or off, with a compact guide to the colour rules.
 - Interface in 10 languages, following the device language by default: English, Indonesian, Arabic, Urdu, Bengali,
   Turkish, Persian, Malay, French, and Russian.
 - Screen reader support: each ayah is read out as Unicode Arabic text.
@@ -79,12 +85,13 @@ Choices made on purpose:
 
 <img src="docs/icon-lite.png" width="72" alt="Quran Lite app icon" align="right">
 
-A second app built from the same code, for people who only want to read the mushaf:
+Quran Lite is the reading-focused edition for people who only want to read the mushaf:
 
-- Mushaf pages, the index lists (bookmarks, surah, juz, hizb, rub', manzil, ruku), page and ayah bookmarks, and
-  continue reading.
+- Mushaf pages; the home screen is limited to Bookmark and Surah, with page and ayah bookmarks and continue reading.
 - Tapping an ayah only offers a bookmark; no translations, search, home tab, or thematic browsing.
-- Settings: light, dark, or system theme.
+- First-run setup asks for the app language and downloads the required Qur'an database and page fonts, then opens the
+  reader without the Full app's translation and appearance setup steps.
+- Settings include the theme, Qur'an data maintenance, and app information.
 - Internet is used only for the required first-run download or optional manual update of the Lite Qur'an database and page fonts; no notifications or other
   network features are included. Reading works offline after setup.
 
@@ -94,8 +101,7 @@ leaves out data only the full app uses. Details: [docs/FORK_LITE.md](docs/FORK_L
 
 ## Roadmap
 
-- [x] Reading modes for all surahs: mushaf page, ayahs with translation, translation only (switched from a pill at the
-      bottom of the screen)
+- [x] Reading modes for all surahs: mushaf page, ayahs with translation, or translation only
 - [x] Onboarding for new users: language and required Qur'an database/page-font download, mushaf preview, translations (full), appearance
 - [x] All translations downloadable, none bundled in the APK
 - [ ] Automatic cloud backup (Google Drive, Dropbox, OneDrive)
@@ -157,11 +163,17 @@ Requires JDK 17+, the Android SDK, and Python 3 with `fonttools`.
 2. Copy the page fonts `data-src/ttf/p1.ttf` to `p604.ttf` into `app/src/main/assets/fonts/` (too large for git; excluded from APKs).
    `quran.db` is committed as build input and is excluded from APKs; rebuild it only when the data changes:
    `python tools/build_db.py`.
-3. Build:
+3. Choose the target:
    ```bash
-   ./gradlew :app:assembleGithubDebug   # full app
-   ./gradlew :app:assembleLiteDebug     # Quran Lite; release workflow separately builds its slim database asset
+   ./gradlew :app:assembleFullDebug       # Full APK
+   ./gradlew :app:assembleLiteDebug       # Quran Lite APK
+   ./gradlew :app:assembleBothDebug       # both APKs
+   ./gradlew :app:bundleFullPlayRelease   # Full app bundle for Google Play
    ```
+
+The `assembleBothDebug` task can be run with `--parallel` to enable Gradle's parallel execution where supported.
+Outputs are under `app/build/outputs/`; Full and Lite use separate package IDs and can be installed side by side.
+For release builds and the exact output mapping, see [docs/RELEASING.md](docs/RELEASING.md).
 
 Minimum Android version: 8.0 (API 26).
 
