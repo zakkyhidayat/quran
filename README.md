@@ -163,13 +163,16 @@ built and signed by GitHub Actions; see [docs/RELEASING.md](docs/RELEASING.md).
 
 ## Checks
 
-Run these before every release. CI runs the first three on every push, and also builds the full app and Quran Lite
-(debug, and an unsigned Lite release to test code shrinking).
+Run these before every release. CI checks Qur'an data and interface strings, runs the same JVM unit-test suite and
+Android lint for both the full and Lite variants, and builds the full app and Quran Lite (debug, plus an unsigned Lite
+release to test code shrinking). It also verifies that the Qur'an text and page data inside the Lite APK match the
+full database.
 
 ```bash
 python tools/verify_quran.py            # Qur'an: 114 surahs, 6,236 ayahs, pages, SHA-256 content fingerprints
 python tools/check_strings.py           # interface translations
-./gradlew :app:testGithubDebugUnitTest  # unit tests
+./gradlew :app:testGithubDebugUnitTest :app:testLiteDebugUnitTest
+./gradlew :app:lintGithubDebug :app:lintLiteDebug
 python tools/verify_quran.py --source   # compare every ayah with the original QUL file (needs data-src/)
 ```
 

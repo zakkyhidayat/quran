@@ -71,5 +71,6 @@ in advance, so swiping only draws ready-made layouts.
 - `tools/verify_quran.py`: Qur'an structure and content fingerprints (CI); `--source` compares every ayah with the
   original file.
 - `tools/check_strings.py`: interface translations (CI).
-- `app/src/test`: JVM unit tests (CI).
+- `app/src/test`: the same JVM unit-test suite and Android lint run for both full (`github`) and `lite` debug variants
+  in CI; the Lite APK's embedded database is also checked against the Qur'an content fingerprints and structure.
 - `baselineprofile/`: generates the Baseline Profile on a device.

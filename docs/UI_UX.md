@@ -24,6 +24,13 @@ Dari screenshot [QuranApp](https://github.com/AlfaazPlus/QuranApp) (GPL-3.0, sam
 
 ## Sudah dikerjakan
 
+### Navigasi dan pengaturan
+
+- Layar daftar memakai tab yang dapat dipilih atau digeser; keduanya menggerakkan pager yang sama.
+- Perpindahan antar-rute memakai shared-axis X dan dukungan back prediktif, berlaku untuk full dan Lite melalui `AppNav`.
+- Menu utama Pengaturan tampil sebagai modal bottom sheet di atas layar aktif. Memilih kategori membuka layar penuh; tombol
+  kembali menutup submenu dan kembali ke layar asal.
+
 Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pull/1)):
 
 - Ayat hari ini: sama untuk semua pengguna per hari, berganti tengah malam.
