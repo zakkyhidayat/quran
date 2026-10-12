@@ -462,6 +462,137 @@ class MushafRepository(context: Context) {
         list
     }
 
+    // ---- Layar utama Jelajahi: hitungan, tema, mutasyabihat, ayat serupa, akar kata ----
+
+    @Volatile private var countsCache: ExploreCounts? = null
+    @Volatile private var phraseCache: List<PhraseSummary>? = null
+    @Volatile private var rootCache: List<RootSummary>? = null
+    @Volatile private var themeCache: List<AyahTheme>? = null
+    @Volatile private var similarCache: List<SimilarSource>? = null
+
+    private fun scalar(sql: String): Int = db.rawQuery(sql, null).use { if (it.moveToFirst()) it.getInt(0) else 0 }
+
+    /** Hitungan untuk kartu Jelajahi; entri null bila tabelnya tidak ada. Di-cache karena data tidak berubah. */
+    suspend fun exploreCounts(): ExploreCounts = countsCache ?: withContext(Dispatchers.IO) {
+        ExploreCounts(
+            topics = if (hasTopics) scalar("SELECT COUNT(*) FROM topics") else null,
+            themes = if ("ayah_themes" in optionalTables) allThemes().size else null,
+            phrases = if ("mutashabihat" in optionalTables && "mutashabihat_ayahs" in optionalTables) scalar("SELECT COUNT(*) FROM mutashabihat") else null,
+            similar = if ("similar_ayahs" in optionalTables) similarSources().size else null,
+            roots = if (hasMorphology && "morph_roots" in optionalTables) scalar("SELECT COUNT(*) FROM morph_roots") else null,
+        ).also { countsCache = it }
+    }
+
+    /** Semua tema tanpa duplikat (QUL menyimpan satu tema per ayat-rentang berulang), urut surah lalu ayat. */
+    suspend fun allThemes(): List<AyahTheme> = themeCache ?: withContext(Dispatchers.IO) {
+        if ("ayah_themes" !in optionalTables) return@withContext emptyList()
+        val list = mutableListOf<AyahTheme>()
+        db.rawQuery(
+            "SELECT surah, ayah_from, ayah_to, theme, MIN(keywords) FROM ayah_themes GROUP BY surah, ayah_from, ayah_to, theme ORDER BY surah, ayah_from, ayah_to",
+            null,
+        ).use { c -> while (c.moveToNext()) list += AyahTheme(c.getInt(0), c.getInt(1), c.getInt(2), c.getString(3), c.getString(4)) }
+        list.also { themeCache = it }
+    }
+
+    /** Semua frasa mutasyabihat, urut jumlah ayat terbanyak. Teks frasa dipotong dari ayat sumber (lihat [phraseWords]). */
+    suspend fun phrases(): List<PhraseSummary> = phraseCache ?: withContext(Dispatchers.IO) {
+        if ("mutashabihat" !in optionalTables || "mutashabihat_ayahs" !in optionalTables) return@withContext emptyList()
+        val rows = mutableListOf<IntArray>()
+        db.rawQuery(
+            "SELECT id, source_surah, source_ayah, from_word, to_word, COALESCE(ayah_count, 0), COALESCE(occurrences, 0) FROM mutashabihat ORDER BY ayah_count DESC, id",
+            null,
+        ).use { c -> while (c.moveToNext()) rows += IntArray(7) { c.getInt(it) } }
+        val wordsOf = HashMap<Int, List<String>>()
+        rows.map { r ->
+            val words = wordsOf.getOrPut(r[1] * 1000 + r[2]) { ayahWordsSync(r[1], r[2]).words }
+            PhraseSummary(r[0], phraseWords(words, r[3], r[4]), r[5], r[6], r[1], r[2], r[3], r[4])
+        }.also { phraseCache = it }
+    }
+
+    suspend fun phraseAyahs(id: Int): List<PhraseAyah> = withContext(Dispatchers.IO) {
+        if ("mutashabihat_ayahs" !in optionalTables) return@withContext emptyList()
+        val list = mutableListOf<PhraseAyah>()
+        db.rawQuery(
+            "SELECT surah, ayah, MIN(from_word), MAX(to_word) FROM mutashabihat_ayahs WHERE phrase_id = ? GROUP BY surah, ayah ORDER BY surah, ayah",
+            arrayOf(id.toString()),
+        ).use { c -> while (c.moveToNext()) list += PhraseAyah(c.getInt(0), c.getInt(1), c.getInt(2), c.getInt(3)) }
+        list
+    }
+
+    /** Teks Arab ayat plus kata-katanya untuk penyorotan; kata kosong bila jumlahnya tak cocok dengan tabel words. */
+    suspend fun ayahWords(surah: Int, ayah: Int): AyahWords = withContext(Dispatchers.IO) { ayahWordsSync(surah, ayah) }
+
+    private fun ayahWordsSync(surah: Int, ayah: Int): AyahWords {
+        val args = arrayOf(surah.toString(), ayah.toString())
+        val text = db.rawQuery("SELECT text_ar FROM ayahs WHERE surah = ? AND ayah = ?", args).use { if (it.moveToFirst()) it.getString(0) else "" }
+        val tokens = arabicWords(text)
+        val expected = db.rawQuery("SELECT COUNT(*) FROM words WHERE surah = ? AND ayah = ? AND is_end = 0", args).use { if (it.moveToFirst()) it.getInt(0) else 0 }
+        return AyahWords(text, if (tokens.size == expected) tokens else emptyList())
+    }
+
+    /** Ayat yang punya kecocokan, urut kecocokan terbanyak lalu letaknya. */
+    suspend fun similarSources(): List<SimilarSource> = similarCache ?: withContext(Dispatchers.IO) {
+        if ("similar_ayahs" !in optionalTables) return@withContext emptyList()
+        val list = mutableListOf<SimilarSource>()
+        db.rawQuery("SELECT surah, ayah, COUNT(*) AS n FROM similar_ayahs GROUP BY surah, ayah ORDER BY n DESC, surah, ayah", null)
+            .use { c -> while (c.moveToNext()) list += SimilarSource(c.getInt(0), c.getInt(1), c.getInt(2)) }
+        list.also { similarCache = it }
+    }
+
+    /** Semua kecocokan satu ayat (tanpa batas 30 seperti di lembar ayat). */
+    suspend fun similarOf(surah: Int, ayah: Int): List<SimilarAyah> = withContext(Dispatchers.IO) {
+        if ("similar_ayahs" !in optionalTables) return@withContext emptyList()
+        val list = mutableListOf<SimilarAyah>()
+        db.rawQuery(
+            "SELECT sim_surah, sim_ayah, score, coverage, from_word, to_word FROM similar_ayahs WHERE surah = ? AND ayah = ? ORDER BY score DESC, sim_surah, sim_ayah",
+            arrayOf(surah.toString(), ayah.toString()),
+        ).use { c ->
+            while (c.moveToNext()) {
+                list += SimilarAyah(c.getInt(0), c.getInt(1), c.getInt(2), c.getInt(3), if (c.isNull(4)) null else c.getInt(4), if (c.isNull(5)) null else c.getInt(5))
+            }
+        }
+        list
+    }
+
+    /** Semua akar kata, terbanyak dulu. Huruf pada data dipisah beberapa spasi; dirapikan menjadi satu spasi. */
+    suspend fun roots(): List<RootSummary> = rootCache ?: withContext(Dispatchers.IO) {
+        if (!hasMorphology || "morph_roots" !in optionalTables) return@withContext emptyList()
+        val list = mutableListOf<RootSummary>()
+        db.rawQuery("SELECT id, text_ar, text_en, COALESCE(words_count, 0) FROM morph_roots ORDER BY words_count DESC, id", null)
+            .use { c -> while (c.moveToNext()) list += RootSummary(c.getInt(0), c.getString(1).trim().replace(Regex("\\s+"), " "), c.getString(2), c.getInt(3)) }
+        list.also { rootCache = it }
+    }
+
+    suspend fun rootLemmas(rootId: Int): List<LemmaCount> = withContext(Dispatchers.IO) {
+        if (!hasMorphology) return@withContext emptyList()
+        val list = mutableListOf<LemmaCount>()
+        db.rawQuery(
+            "SELECT l.id, l.text, COUNT(*) AS n FROM word_morph m JOIN morph_lemmas l ON l.id = m.lemma_id WHERE m.root_id = ? GROUP BY l.id ORDER BY n DESC, l.id",
+            arrayOf(rootId.toString()),
+        ).use { c -> while (c.moveToNext()) list += LemmaCount(c.getInt(0), c.getString(1), c.getInt(2)) }
+        list
+    }
+
+    /** Ayat-ayat tempat akar muncul, urut mushaf; tiap ayat memuat posisi kata-katanya. */
+    suspend fun rootAyahs(rootId: Int): List<RootAyah> = withContext(Dispatchers.IO) {
+        if (!hasMorphology) return@withContext emptyList()
+        val list = mutableListOf<RootAyah>()
+        var cur: Triple<Int, Int, MutableList<Int>>? = null
+        db.rawQuery("SELECT surah, ayah, word FROM word_morph WHERE root_id = ? ORDER BY surah, ayah, word", arrayOf(rootId.toString())).use { c ->
+            while (c.moveToNext()) {
+                val s = c.getInt(0); val a = c.getInt(1)
+                val open = cur
+                if (open != null && open.first == s && open.second == a) open.third += c.getInt(2)
+                else {
+                    open?.let { list += RootAyah(it.first, it.second, it.third) }
+                    cur = Triple(s, a, mutableListOf(c.getInt(2)))
+                }
+            }
+        }
+        cur?.let { list += RootAyah(it.first, it.second, it.third) }
+        list
+    }
+
     private companion object {
         val SUP = Regex("<sup>\\d+</sup>")
     }
@@ -482,3 +613,7 @@ internal fun arabicWords(text: String): List<String> {
     return out
 }
 
+
+/** Frasa dari kata [from]..[to] (1-based inklusif); kosong bila [words] kosong (jumlah kata tak terpastikan). */
+internal fun phraseWords(words: List<String>, from: Int, to: Int): String =
+    if (words.isEmpty()) "" else words.subList((from - 1).coerceIn(0, words.size), to.coerceIn(0, words.size)).joinToString(" ")

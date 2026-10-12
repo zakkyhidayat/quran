@@ -55,17 +55,35 @@ private sealed interface CatalogState {
     data class Loaded(val packs: List<CatalogPack>) : CatalogState
 }
 
-/**
- * Dialog tambah terjemahan: terjemahan terpasang yang belum aktif (bundel atau unduhan), lalu paket katalog yang belum
- * terpasang, dikelompokkan per bahasa dan bisa dicari (bahasa atau penerjemah). Katalog diambil saat dialog dibuka; gagal (misalnya luring) hanya menampilkan pesan dan tombol coba lagi.
- */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+/** Dialog tambah terjemahan (Pengaturan): pembungkus tipis di sekitar [TranslationCatalogList]. */
 @Composable
 internal fun AddTranslationDialog(
     vm: AppViewModel,
     inactive: List<TranslationInfo>,
     onActivate: (String) -> Unit,
     onDismiss: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.add_translation)) },
+        text = { TranslationCatalogList(vm, inactive, onActivate) },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.close)) } },
+    )
+}
+
+/**
+ * Isi tambah terjemahan tanpa kerangka dialog: terjemahan terpasang yang belum aktif (bundel atau unduhan), lalu paket
+ * katalog yang belum terpasang, dikelompokkan per bahasa dan bisa dicari (bahasa atau penerjemah). Katalog diambil saat
+ * komposabel masuk; gagal (misalnya luring) hanya menampilkan pesan dan tombol coba lagi. Tinggi dibatasi lewat [modifier]
+ * (daftarnya LazyColumn, jadi tidak boleh tinggi tak terbatas di dalam kolom yang bisa digulir).
+ */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+internal fun TranslationCatalogList(
+    vm: AppViewModel,
+    inactive: List<TranslationInfo>,
+    onActivate: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val scope = rememberCoroutineScope()
     val installedIds = vm.translations.collectAsStateWithLifecycle().value.map { it.id }.toSet()
@@ -109,145 +127,138 @@ internal fun AddTranslationDialog(
         inactive.filter { q.isEmpty() || it.name.lowercase().contains(q) || it.lang.lowercase().contains(q) || it.langName.orEmpty().lowercase().contains(q) }
     }
 
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.add_translation)) },
-        text = {
-            Column {
-                if (state is CatalogState.Loaded) {
-                    OutlinedTextField(
-                        value = query,
-                        onValueChange = { query = it },
-                        placeholder = { Text(stringResource(R.string.translations_search_hint)) },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
-                    )
+    Column(modifier) {
+        if (state is CatalogState.Loaded) {
+            OutlinedTextField(
+                value = query,
+                onValueChange = { query = it },
+                placeholder = { Text(stringResource(R.string.translations_search_hint)) },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+            )
+        }
+        LazyColumn(Modifier.weight(1f, fill = false)) {
+            items(inactiveShown, key = { "inactive-${it.id}" }) { tr ->
+                ListItem(
+                    headlineContent = { Text(translationLabel(tr)) },
+                    trailingContent = if (tr.downloaded) {
+                        {
+                            IconButton(onClick = { vm.deletePack(tr.id) }) {
+                                Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete_downloaded_translation_cd, translationLabel(tr)))
+                            }
+                        }
+                    } else {
+                        null
+                    },
+                    colors = dialogItemColors(),
+                    modifier = Modifier.clickable { onActivate(tr.id) },
+                )
+            }
+
+            when (state) {
+                CatalogState.Loading -> item {
+                    Box(Modifier.fillMaxWidth().padding(vertical = 16.dp), contentAlignment = Alignment.Center) {
+                        LoadingIndicator(Modifier.semantics { contentDescription = loadingCd })
+                    }
                 }
-                LazyColumn(Modifier.weight(1f, fill = false)) {
-                    items(inactiveShown, key = { "inactive-${it.id}" }) { tr ->
-                        ListItem(
-                            headlineContent = { Text(translationLabel(tr)) },
-                            trailingContent = if (tr.downloaded) {
-                                {
-                                    IconButton(onClick = { vm.deletePack(tr.id) }) {
-                                        Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete_downloaded_translation_cd, translationLabel(tr)))
-                                    }
-                                }
-                            } else {
-                                null
-                            },
-                            colors = dialogItemColors(),
-                            modifier = Modifier.clickable { onActivate(tr.id) },
-                        )
+                CatalogState.Failed -> item {
+                    Column(
+                        Modifier.fillMaxWidth().padding(top = 8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        Text(stringResource(R.string.translations_catalog_error), style = MaterialTheme.typography.bodyMedium)
+                        FilledTonalButton(onClick = { attempt++ }) { Text(stringResource(R.string.retry)) }
                     }
-
-                    when (state) {
-                        CatalogState.Loading -> item {
-                            Box(Modifier.fillMaxWidth().padding(vertical = 16.dp), contentAlignment = Alignment.Center) {
-                                LoadingIndicator(Modifier.semantics { contentDescription = loadingCd })
+                }
+                is CatalogState.Loaded -> {
+                    if (groups.isEmpty()) {
+                        item {
+                            // Tanpa hasil: katalog kosong dan tak ada yang tersisa, atau pencarian tak cocok.
+                            if (query.isNotBlank()) {
+                                Text(stringResource(R.string.translations_no_match), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 8.dp))
+                            } else if (inactive.isEmpty()) {
+                                Text(stringResource(R.string.translations_all_added), style = MaterialTheme.typography.bodyMedium)
                             }
                         }
-                        CatalogState.Failed -> item {
-                            Column(
-                                Modifier.fillMaxWidth().padding(top = 8.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.spacedBy(8.dp),
-                            ) {
-                                Text(stringResource(R.string.translations_catalog_error), style = MaterialTheme.typography.bodyMedium)
-                                FilledTonalButton(onClick = { attempt++ }) { Text(stringResource(R.string.retry)) }
-                            }
-                        }
-                        is CatalogState.Loaded -> {
-                            if (groups.isEmpty()) {
-                                item {
-                                    // Tanpa hasil: katalog kosong dan tak ada yang tersisa, atau pencarian tak cocok.
-                                    if (query.isNotBlank()) {
-                                        Text(stringResource(R.string.translations_no_match), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 8.dp))
-                                    } else if (inactive.isEmpty()) {
-                                        Text(stringResource(R.string.translations_all_added), style = MaterialTheme.typography.bodyMedium)
-                                    }
-                                }
-                            } else {
-                                item {
-                                    Text(
-                                        stringResource(R.string.translations_downloadable),
-                                        style = MaterialTheme.typography.titleSmall,
-                                        color = MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 4.dp),
-                                    )
-                                }
-                                groups.forEach { (language, packs) ->
-                                    item(key = "lang-$language") {
-                                        Text(
-                                            language,
-                                            style = MaterialTheme.typography.labelLarge,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                            modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 2.dp),
-                                        )
-                                    }
-                                    items(packs, key = { it.id }) { pack ->
-                                        val label = translationLabel(pack.info)
-                                        val busy = downloading == pack.id
-                                        ListItem(
-                                            headlineContent = { Text(pack.name) },
-                                            trailingContent = {
-                                                if (busy) {
-                                                    val cd = stringResource(R.string.translation_downloading_cd, label)
-                                                    CircularProgressIndicator(
-                                                        progress = { progress },
-                                                        modifier = Modifier.size(24.dp).semantics { contentDescription = cd },
-                                                    )
-                                                } else if (pack.bytes > 0) {
-                                                    Text(
-                                                        stringResource(R.string.translation_size_mb, String.format(locale, "%.1f", pack.bytes / 1_000_000.0)),
-                                                        style = MaterialTheme.typography.labelMedium,
-                                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                                    )
-                                                }
-                                            },
-                                            colors = dialogItemColors(),
-                                            modifier = Modifier.clickable(enabled = downloading == null) {
-                                                scope.launch {
-                                                    downloading = pack.id
-                                                    progress = 0f
-                                                    failedLabel = null
-                                                    try {
-                                                        vm.installPack(pack) { done, total -> progress = if (total > 0) done.toFloat() / total else 0f }
-                                                        onActivate(pack.id)
-                                                    } catch (e: CancellationException) {
-                                                        throw e
-                                                    } catch (e: Exception) {
-                                                        android.util.Log.w("TranslationPacks", "Gagal mengunduh ${pack.id}", e)
-                                                        failedLabel = label
-                                                    } finally {
-                                                        downloading = null
-                                                    }
-                                                }
-                                            },
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    failedLabel?.let {
+                    } else {
                         item {
                             Text(
-                                stringResource(R.string.translation_download_failed, it),
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.error,
-                                modifier = Modifier.padding(top = 8.dp),
+                                stringResource(R.string.translations_downloadable),
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 4.dp),
                             )
+                        }
+                        groups.forEach { (language, packs) ->
+                            item(key = "lang-$language") {
+                                Text(
+                                    language,
+                                    style = MaterialTheme.typography.labelLarge,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 2.dp),
+                                )
+                            }
+                            items(packs, key = { it.id }) { pack ->
+                                val label = translationLabel(pack.info)
+                                val busy = downloading == pack.id
+                                ListItem(
+                                    headlineContent = { Text(pack.name) },
+                                    trailingContent = {
+                                        if (busy) {
+                                            val cd = stringResource(R.string.translation_downloading_cd, label)
+                                            CircularProgressIndicator(
+                                                progress = { progress },
+                                                modifier = Modifier.size(24.dp).semantics { contentDescription = cd },
+                                            )
+                                        } else if (pack.bytes > 0) {
+                                            Text(
+                                                stringResource(R.string.translation_size_mb, String.format(locale, "%.1f", pack.bytes / 1_000_000.0)),
+                                                style = MaterialTheme.typography.labelMedium,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            )
+                                        }
+                                    },
+                                    colors = dialogItemColors(),
+                                    modifier = Modifier.clickable(enabled = downloading == null) {
+                                        scope.launch {
+                                            downloading = pack.id
+                                            progress = 0f
+                                            failedLabel = null
+                                            try {
+                                                vm.installPack(pack) { done, total -> progress = if (total > 0) done.toFloat() / total else 0f }
+                                                onActivate(pack.id)
+                                            } catch (e: CancellationException) {
+                                                throw e
+                                            } catch (e: Exception) {
+                                                android.util.Log.w("TranslationPacks", "Gagal mengunduh ${pack.id}", e)
+                                                failedLabel = label
+                                            } finally {
+                                                downloading = null
+                                            }
+                                        }
+                                    },
+                                )
+                            }
                         }
                     }
                 }
             }
-        },
-        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.close)) } },
-    )
+
+            failedLabel?.let {
+                item {
+                    Text(
+                        stringResource(R.string.translation_download_failed, it),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.padding(top = 8.dp),
+                    )
+                }
+            }
+        }
+    }
 }
 
-// Baris daftar di dalam dialog: latar mengikuti dialog, bukan permukaan daftar.
+// Baris daftar: latar mengikuti wadah (dialog atau halaman), bukan permukaan daftar.
 @Composable
 private fun dialogItemColors() = ListItemDefaults.colors(containerColor = androidx.compose.ui.graphics.Color.Transparent)

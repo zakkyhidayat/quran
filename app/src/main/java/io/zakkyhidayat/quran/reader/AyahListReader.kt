@@ -1,6 +1,8 @@
 package io.zakkyhidayat.quran.reader
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -86,6 +88,7 @@ internal fun AyahListReader(
     surahs: Map<Int, Surah>,
     translationIds: List<String>,
     showArabic: Boolean,
+    animateArabic: Boolean = true,
     state: PagerState,
     targetAyah: AyahRef?,
     modifier: Modifier = Modifier,
@@ -124,7 +127,7 @@ internal fun AyahListReader(
         HorizontalPager(state = state, reverseLayout = true, beyondViewportPageCount = 1, modifier = modifier.fillMaxSize()) { index ->
             CompositionLocalProvider(LocalLayoutDirection provides contentDirection) {
                 PageAyahs(
-                    vm, index + 1, pages[index + 1].orEmpty(), surahs, translationIds, showArabic, targetAyah,
+                    vm, index + 1, pages[index + 1].orEmpty(), surahs, translationIds, showArabic, animateArabic, targetAyah,
                     isCurrent = state.currentPage == index,
                     openAyah = openAyah,
                     onToggleAyah = { ref -> openAyah = if (openAyah == ref) null else ref },
@@ -144,6 +147,7 @@ private fun PageAyahs(
     surahs: Map<Int, Surah>,
     translationIds: List<String>,
     showArabic: Boolean,
+    animateArabic: Boolean,
     targetAyah: AyahRef?,
     isCurrent: Boolean,
     openAyah: AyahRef?,
@@ -170,7 +174,7 @@ private fun PageAyahs(
                 if (pos.ayah == 1) SurahTitle(surahs[pos.surah])
                 val ref = AyahRef(pos.surah, pos.ayah)
                 AyahRow(
-                    vm, pos, surahs[pos.surah], translationIds, showArabic,
+                    vm, pos, surahs[pos.surah], translationIds, showArabic, animateArabic,
                     actionsOpen = openAyah == ref,
                     bookmarked = ref in bookmarkedAyahs,
                     onToggle = { onToggleAyah(ref) },
@@ -216,6 +220,7 @@ private fun AyahRow(
     surah: Surah?,
     translationIds: List<String>,
     showArabic: Boolean,
+    animateArabic: Boolean,
     actionsOpen: Boolean,
     bookmarked: Boolean,
     onToggle: () -> Unit,
@@ -233,6 +238,7 @@ private fun AyahRow(
             .clickable(onClickLabel = stringResource(if (actionsOpen) R.string.ayah_actions_hide else R.string.ayah_actions_show), onClick = onToggle)
             .padding(horizontal = 16.dp, vertical = 12.dp),
     ) {
+        val motion = MaterialTheme.motionScheme
         val d = detail
         if (d == null) {
             Spacer(Modifier.height(48.dp))
@@ -241,8 +247,9 @@ private fun AyahRow(
         // Teks Arab muncul/hilang dengan animasi saat berganti antara "ayat + terjemahan" dan "terjemahan saja".
         AnimatedVisibility(
             visible = showArabic,
-            enter = expandVertically() + fadeIn(),
-            exit = shrinkVertically() + fadeOut(),
+            // Tanpa animasi (snap) bila daftar belum terlihat, agar tidak ada lompatan tata letak saat memudar masuk.
+            enter = if (animateArabic) expandVertically(motion.defaultSpatialSpec()) + fadeIn(motion.defaultEffectsSpec()) else EnterTransition.None,
+            exit = if (animateArabic) shrinkVertically(motion.defaultSpatialSpec()) + fadeOut(motion.defaultEffectsSpec()) else ExitTransition.None,
         ) {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                 val style = MaterialTheme.typography.headlineSmall.scaled(LocalReadingTextScale.current.arabic, 1.9f)
@@ -264,7 +271,7 @@ private fun AyahRow(
                 Text(
                     buildAnnotatedString {
                         withStyle(SpanStyle(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)) { append("${pos.ayah}. ") }
-                        append(translationText(tr.text, MaterialTheme.colorScheme.primary, MaterialTheme.typography.labelSmall.fontSize))
+                        append(translationTextOrPlaceholder(tr.text, MaterialTheme.colorScheme.primary, MaterialTheme.typography.labelSmall.fontSize))
                     },
                     style = body,
                 )
@@ -272,8 +279,8 @@ private fun AyahRow(
         }
         AnimatedVisibility(
             visible = actionsOpen,
-            enter = expandVertically() + fadeIn(),
-            exit = shrinkVertically() + fadeOut(),
+            enter = expandVertically(motion.defaultSpatialSpec()) + fadeIn(motion.defaultEffectsSpec()),
+            exit = shrinkVertically(motion.defaultSpatialSpec()) + fadeOut(motion.defaultEffectsSpec()),
         ) {
             val plainText = remember(d) { ayahShareText(d, "${surah?.nameLatin ?: ""} ${pos.surah}:${pos.ayah}") }
             Row(Modifier.padding(top = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
