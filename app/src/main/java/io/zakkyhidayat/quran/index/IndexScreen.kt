@@ -48,6 +48,10 @@ import io.zakkyhidayat.quran.reader.juzOpeningGlyph
 import io.zakkyhidayat.quran.settings.AppSettings
 import io.zakkyhidayat.quran.ui.JumpToAyahDialog
 import androidx.compose.runtime.Composable
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -55,6 +59,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -84,17 +89,27 @@ private val ListPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -> Unit, onOpenSurahInfo: (Int) -> Unit, onOpenExplore: () -> Unit = {}, onOpenHome: (io.zakkyhidayat.quran.home.HomeTarget) -> Unit = {}) {
+fun IndexScreen(
+    vm: AppViewModel,
+    onOpenReader: () -> Unit,
+    onOpenSettings: () -> Unit,
+    onOpenSurahInfo: (Int) -> Unit,
+    onOpenExplore: (ExploreEntry) -> Unit = {},
+    onOpenHome: (io.zakkyhidayat.quran.home.HomeTarget) -> Unit = {},
+) {
     val onBack = onOpenReader // pilihan di daftar membuka layar baca
-    // Bookmark di urutan pertama, tetapi yang dibuka pertama kali adalah Beranda.
-    // Lite tanpa Beranda: tab berisi indeks ke TABS, dan Surah yang dibuka pertama kali.
+    // Lite tidak menampilkan Beranda; pager memetakan indeks halaman ke indeks tab aslinya.
     val tabIds = remember { if (BuildConfig.LITE) TABS.indices.filter { it != 1 } else TABS.indices.toList() }
-    var tab by rememberSaveable { mutableIntStateOf(if (BuildConfig.LITE) 2 else 1) }
+    val initialTab = if (BuildConfig.LITE) 2 else 1
+    val pagerState = rememberPagerState(initialPage = tabIds.indexOf(initialTab)) { tabIds.size }
+    val tab = tabIds[pagerState.currentPage]
+    val tabScope = rememberCoroutineScope()
     var showJump by remember { mutableStateOf(false) }
     val surahsForJump by vm.surahs.collectAsStateWithLifecycle()
     val settings by vm.settingsRepository.settings.collectAsStateWithLifecycle(AppSettings())
     val lastSurah = surahsForJump[settings.lastSurah]
-    val exploreAvailable by vm.exploreAvailable.collectAsStateWithLifecycle()
+    val exploreCounts by vm.exploreCounts.collectAsStateWithLifecycle()
+    val header = remember { CollapsingHeaderState() }
     Scaffold(
         // Lanjutkan membaca: FAB diperluas di kanan bawah, tampil di semua tab.
         floatingActionButton = {
@@ -105,7 +120,13 @@ fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -
                     text = {
                         Column {
                             Text(stringResource(R.string.continue_reading), style = MaterialTheme.typography.labelLarge)
-                            Text("${lastSurah.nameLatin} ${lastSurah.id}:${settings.lastAyah}", style = MaterialTheme.typography.labelMedium)
+                            // Label berganti halus (bukan tiba-tiba) saat posisi terakhir berubah sepulang dari pembaca.
+                            val motion = MaterialTheme.motionScheme
+                            AnimatedContent(
+                                targetState = "${lastSurah.nameLatin} ${lastSurah.id}:${settings.lastAyah}",
+                                transitionSpec = { fadeIn(motion.defaultEffectsSpec()) togetherWith fadeOut(motion.fastEffectsSpec()) },
+                                label = "continueLabel",
+                            ) { label -> Text(label, style = MaterialTheme.typography.labelMedium) }
                         }
                     },
                 )
@@ -115,9 +136,7 @@ fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -
             TopAppBar(
                 title = { Text(stringResource(R.string.index_title)) },
                 actions = {
-                    // Jelajahi (topik tematik) hanya ada bila quran.db dibangun dengan data QUL-nya.
                     if (!BuildConfig.LITE) {
-                        if (exploreAvailable) IconButton(onClick = onOpenExplore) { Icon(AppIcons.GridView, contentDescription = stringResource(R.string.explore_title)) }
                         IconButton(onClick = { showJump = true }) { Icon(AppIcons.FormatListNumbered, contentDescription = stringResource(R.string.jump_to_ayah)) }
                         IconButton(onClick = { vm.randomAyah(); onBack() }) { Icon(AppIcons.Shuffle, contentDescription = stringResource(R.string.random_ayah)) }
                     }
@@ -135,8 +154,12 @@ fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -
             )
         }
         CenteredContent(Modifier.padding(padding)) {
-            Column(Modifier.fillMaxSize()) {
-                PrimaryScrollableTabRow(selectedTabIndex = tabIds.indexOf(tab).coerceAtLeast(0), edgePadding = 8.dp, minTabWidth = 0.dp) {
+            Column(Modifier.fillMaxSize().nestedScroll(header.connection)) {
+                // Carousel Jelajahi mengecil saat daftar di bawahnya digulir dan muncul lagi saat daftar kembali ke atas.
+                if (!BuildConfig.LITE) exploreCounts?.takeIf { it.any }?.let { counts ->
+                    ExploreCarousel(counts, onOpenExplore, Modifier.collapsingHeader(header))
+                }
+                PrimaryScrollableTabRow(selectedTabIndex = pagerState.currentPage, edgePadding = 8.dp, minTabWidth = 0.dp) {
                     tabIds.forEach { i ->
                         val (title, icon) = TABS[i]
                         if (i == 0) {
@@ -144,7 +167,7 @@ fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -
                             // Latar tonal seukuran tab membedakan Bookmark (koleksi pribadi) dari tab daftar isi lainnya.
                             Tab(
                                 selected = tab == i,
-                                onClick = { tab = i },
+                                onClick = { tabScope.launch { pagerState.animateScrollToPage(tabIds.indexOf(i)) } },
                                 modifier = Modifier.width(64.dp).background(MaterialTheme.colorScheme.secondaryContainer),
                                 selectedContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                                 unselectedContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -153,21 +176,16 @@ fun IndexScreen(vm: AppViewModel, onOpenReader: () -> Unit, onOpenSettings: () -
                         } else {
                             LeadingIconTab(
                                 selected = tab == i,
-                                onClick = { tab = i },
+                                onClick = { tabScope.launch { pagerState.animateScrollToPage(tabIds.indexOf(i)) } },
                                 text = { Text(stringResource(title)) },
                                 icon = { Icon(icon, contentDescription = null) },
                             )
                         }
                     }
                 }
-                // Fade-through M3 antar tab.
-                val motion = MaterialTheme.motionScheme
-                AnimatedContent(
-                    targetState = tab,
-                    transitionSpec = { fadeIn(motion.defaultEffectsSpec()) togetherWith fadeOut(motion.fastEffectsSpec()) },
-                    label = "indexTab",
-                ) { current ->
-                    when (current) {
+                // Tab digeser (swipe) lewat pager; arah mengikuti layout direction seperti kolom tab-nya.
+                HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize(), key = { tabIds[it] }) { current ->
+                    when (tabIds[current]) {
                         0 -> BookmarkList(vm, onBack)
                         1 -> io.zakkyhidayat.quran.home.HomeTab(vm, onBack, onOpenHome)
                         2 -> SurahList(vm, onBack, onOpenSurahInfo)

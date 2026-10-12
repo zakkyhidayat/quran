@@ -1,6 +1,17 @@
 package io.zakkyhidayat.quran.onboarding
 
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.CubicBezierEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
@@ -63,6 +74,13 @@ import io.zakkyhidayat.quran.settings.LanguageSection
 import io.zakkyhidayat.quran.settings.TajweedToggle
 import io.zakkyhidayat.quran.settings.TranslationControls
 import io.zakkyhidayat.quran.ui.CenteredContent
+import io.zakkyhidayat.quran.ui.FADE_IN_MS
+import io.zakkyhidayat.quran.ui.FADE_OUT_MS
+import io.zakkyhidayat.quran.ui.STEP_MS
+import io.zakkyhidayat.quran.ui.StepEasing
+import io.zakkyhidayat.quran.ui.StepSlide
+import io.zakkyhidayat.quran.ui.sharedAxisXEnter
+import io.zakkyhidayat.quran.ui.sharedAxisXExit
 import kotlinx.coroutines.launch
 
 private const val STEPS = 4
@@ -76,7 +94,7 @@ private const val STEPS = 4
 fun OnboardingScreen(vm: AppViewModel, settings: AppSettings) {
     var step by rememberSaveable { mutableIntStateOf(0) }
     val scope = rememberCoroutineScope()
-    val motion = MaterialTheme.motionScheme
+    val slidePx = with(LocalDensity.current) { StepSlide.roundToPx() }
     val forward = if (androidx.compose.ui.platform.LocalLayoutDirection.current == androidx.compose.ui.unit.LayoutDirection.Rtl) -1 else 1
     val finish: () -> Unit = { scope.launch { vm.settingsRepository.setOnboardingDone() } }
 
@@ -85,21 +103,30 @@ fun OnboardingScreen(vm: AppViewModel, settings: AppSettings) {
         CenteredContent(Modifier.windowInsetsPadding(WindowInsets.systemBars)) {
             Column(Modifier.fillMaxSize()) {
                 Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        stringResource(R.string.onb_step, step + 1, STEPS),
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    // Label langkah berganti sinkron dengan konten: pudar keluar 90 ms, pudar masuk tertunda.
+                    AnimatedContent(
+                        targetState = step,
+                        transitionSpec = {
+                            fadeIn(tween(FADE_IN_MS, delayMillis = FADE_OUT_MS, easing = LinearEasing)) togetherWith
+                                fadeOut(tween(FADE_OUT_MS, easing = LinearEasing)) using SizeTransform(clip = false) { _, _ -> tween(STEP_MS, easing = StepEasing) }
+                        },
                         modifier = Modifier.padding(start = 16.dp).weight(1f),
-                    )
-                    if (step < STEPS - 1) TextButton(onClick = finish) { Text(stringResource(R.string.onb_skip)) }
+                        label = "onboardingStepLabel",
+                    ) { n ->
+                        Text(
+                            stringResource(R.string.onb_step, n + 1, STEPS),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
                 }
                 AnimatedContent(
                     targetState = step,
                     transitionSpec = {
-                        // Shared axis X: maju dari sisi depan, mundur dari belakang (mengikuti arah RTL/LTR).
+                        // Shared axis X tanpa tumpang tindih: keluar geser 30dp + pudar cepat (90 ms pertama),
+                        // masuk geser dari 30dp + pudar baru setelah itu (tertunda 90 ms). Durasi/easing sama di kedua arah.
                         val dir = (if (targetState > initialState) 1 else -1) * forward
-                        (slideInHorizontally(motion.defaultSpatialSpec()) { dir * it / 6 } + fadeIn(motion.defaultEffectsSpec())) togetherWith
-                            (slideOutHorizontally(motion.defaultSpatialSpec()) { -dir * it / 6 } + fadeOut(motion.fastEffectsSpec()))
+                        sharedAxisXEnter(dir, slidePx) togetherWith sharedAxisXExit(dir, slidePx)
                     },
                     modifier = Modifier.weight(1f),
                     label = "onboarding",
@@ -115,10 +142,18 @@ fun OnboardingScreen(vm: AppViewModel, settings: AppSettings) {
                 }
                 StepDots(step)
                 Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-                    if (step > 0) TextButton(onClick = { step-- }) { Text(stringResource(R.string.back)) }
+                    FadingButton(visible = step > 0, onClick = { step-- }) { Text(stringResource(R.string.back)) }
                     Spacer(Modifier.weight(1f))
                     Button(onClick = { if (step < STEPS - 1) step++ else finish() }) {
-                        Text(stringResource(if (step < STEPS - 1) R.string.onb_next else R.string.onb_start))
+                        // Label tombol berganti dengan crossfade, bukan langsung.
+                        AnimatedContent(
+                            targetState = step < STEPS - 1,
+                            transitionSpec = {
+                                fadeIn(tween(FADE_IN_MS, delayMillis = FADE_OUT_MS, easing = LinearEasing)) togetherWith
+                                    fadeOut(tween(FADE_OUT_MS, easing = LinearEasing)) using SizeTransform(clip = false) { _, _ -> tween(STEP_MS, easing = StepEasing) }
+                            },
+                            label = "onboardingNext",
+                        ) { notLast -> Text(stringResource(if (notLast) R.string.onb_next else R.string.onb_start)) }
                     }
                 }
             }
@@ -197,7 +232,7 @@ private fun MushafStep(vm: AppViewModel, settings: AppSettings) {
 @Composable
 private fun TranslationStep(vm: AppViewModel, settings: AppSettings) {
     StepTitle(stringResource(R.string.onb_translation_title), stringResource(R.string.onb_translation_body))
-    TranslationControls(vm, settings)
+    TranslationControls(vm, settings, inlineCatalog = true)
 }
 
 @Composable
@@ -206,16 +241,30 @@ private fun AppearanceStep(vm: AppViewModel, settings: AppSettings) {
     AppearanceControls(vm, settings)
 }
 
+/** Tombol teks yang memudar masuk/keluar dengan slot tetap; saat tidak terlihat tidak bisa difokus, diklik, atau dibaca TalkBack. */
+@Composable
+private fun FadingButton(visible: Boolean, onClick: () -> Unit, content: @Composable () -> Unit) {
+    val alpha by animateFloatAsState(if (visible) 1f else 0f, tween(STEP_MS, easing = StepEasing), label = "fadingButton")
+    TextButton(
+        onClick = { if (visible) onClick() },
+        modifier = Modifier
+            .alpha(alpha)
+            .focusProperties { canFocus = visible }
+            .then(if (visible) Modifier else Modifier.clearAndSetSemantics { }),
+    ) { content() }
+}
+
 @Composable
 private fun StepDots(step: Int) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)) {
         repeat(STEPS) { i ->
-            Box(
-                Modifier
-                    .size(width = if (i == step) 24.dp else 8.dp, height = 8.dp)
-                    .clip(CircleShape)
-                    .background(if (i == step) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant),
+            val active = i == step
+            val width by animateDpAsState(if (active) 24.dp else 8.dp, tween(STEP_MS, easing = StepEasing), label = "dotWidth")
+            val color by animateColorAsState(
+                if (active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant,
+                tween(STEP_MS, easing = StepEasing), label = "dotColor",
             )
+            Box(Modifier.size(width = width, height = 8.dp).clip(CircleShape).background(color))
         }
     }
 }

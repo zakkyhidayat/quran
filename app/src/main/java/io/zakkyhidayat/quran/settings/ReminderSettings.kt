@@ -59,7 +59,7 @@ internal fun ReminderControls(vm: AppViewModel, settings: AppSettings) {
         // Build debug saja: tampilkan pengingat sekarang untuk menguji isi dan ketukannya.
         if (settings.reminderEnabled && io.zakkyhidayat.quran.BuildConfig.DEBUG) {
             item(
-                title = "Kirim pengingat uji",
+                title = stringResource(R.string.reminder_send_test),
                 onClick = { scope.launch { io.zakkyhidayat.quran.reminder.Reminder.notify(context) } },
             )
         }

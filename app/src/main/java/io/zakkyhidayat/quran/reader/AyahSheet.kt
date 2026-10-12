@@ -160,7 +160,7 @@ fun AyahSheetContent(
                     Spacer(Modifier.height(4.dp))
                     val body = MaterialTheme.typography.bodyLarge.scaled(LocalReadingTextScale.current.translation, 1.6f)
                     Text(
-                        text = translationText(tr.text, MaterialTheme.colorScheme.primary, MaterialTheme.typography.labelSmall.fontSize),
+                        text = translationTextOrPlaceholder(tr.text, MaterialTheme.colorScheme.primary, MaterialTheme.typography.labelSmall.fontSize),
                         style = body,
                     )
                     if (tr.footnotes.isNotEmpty()) {
@@ -260,3 +260,19 @@ internal fun translationText(raw: String, markerColor: Color, markerSize: TextUn
     }
     append(raw.substring(last))
 }
+
+/**
+ * Seperti [translationText], tetapi teks kosong (beberapa paket punya ayat tanpa terjemahan di sumbernya) diganti
+ * keterangan singkat yang redup dan miring, agar tidak tampil "84. " tanpa isi.
+ */
+@androidx.compose.runtime.Composable
+internal fun translationTextOrPlaceholder(raw: String, markerColor: Color, markerSize: TextUnit): AnnotatedString =
+    if (raw.isBlank()) {
+        buildAnnotatedString {
+            withStyle(SpanStyle(fontStyle = androidx.compose.ui.text.font.FontStyle.Italic, color = MaterialTheme.colorScheme.onSurfaceVariant)) {
+                append(stringResource(R.string.translation_empty_ayah))
+            }
+        }
+    } else {
+        translationText(raw, markerColor, markerSize)
+    }

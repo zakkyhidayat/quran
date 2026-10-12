@@ -14,6 +14,9 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.security.MessageDigest
 
+/** True bila katalog menawarkan versi paket yang lebih baru daripada yang terpasang. */
+fun isPackUpdateAvailable(installedVersion: Int, catalogVersion: Int): Boolean = catalogVersion > installedVersion
+
 /** Satu entri di catalog.json: paket terjemahan yang bisa diunduh. */
 data class CatalogPack(
     val id: String,
@@ -47,7 +50,7 @@ class TranslationPacks(context: Context) {
                 val info = db.rawQuery("SELECT key, value FROM info", null).use { c ->
                     buildMap { while (c.moveToNext()) put(c.getString(0), c.getString(1)) }
                 }
-                TranslationInfo(file.nameWithoutExtension, info.getValue("lang"), info.getValue("name"), downloaded = true, langName = info["lang_name"])
+                TranslationInfo(file.nameWithoutExtension, info.getValue("lang"), info.getValue("name"), downloaded = true, langName = info["lang_name"], version = info["version"]?.toIntOrNull() ?: 1)
             }.getOrNull()
         }
     }
@@ -128,8 +131,11 @@ class TranslationPacks(context: Context) {
             // Tutup handle lama (bila memperbarui paket yang sudah ada) sebelum menimpa berkasnya.
             synchronized(this@TranslationPacks) { handles.remove(pack.id)?.close() }
             val target = File(dir, "${pack.id}.db")
-            target.delete()
-            if (!tmp.renameTo(target)) throw IOException("Gagal menyimpan paket")
+            // rename menimpa berkas lama secara atomik; hapus dulu hanya sebagai cadangan bila rename gagal.
+            if (!tmp.renameTo(target)) {
+                target.delete()
+                if (!tmp.renameTo(target)) throw IOException("Gagal menyimpan paket")
+            }
         } finally {
             tmp.delete()
         }
