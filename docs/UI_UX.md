@@ -43,7 +43,7 @@ Dari screenshot [QuranApp](https://github.com/AlfaazPlus/QuranApp) (GPL-3.0, sam
 
 - Layar daftar memakai tab yang dapat dipilih atau digeser; keduanya menggerakkan pager yang sama.
 - Perpindahan antar-rute memakai shared-axis X dan dukungan back prediktif, berlaku untuk full dan Lite melalui `AppNav`.
-- Menu utama Pengaturan tampil sebagai modal bottom sheet mengambang dengan jarak di kiri, kanan, dan bawah layar aktif.
+- Menu utama Pengaturan tampil sebagai dialog melayang di tengah (margin 16dp, lebar maks 560dp, sudut 28dp), bukan bottom sheet. Evaluasi Material 3: bottom sheet cocok untuk aksi kontekstual singkat; daftar pengaturan bertingkat dengan navigasi ke halaman lain lebih sesuai dialog/layar penuh, dan dialog yang diperkecil menjaga konteks pembaca tetap terlihat. Tombol Tajwid selalu di kiri bawah; kartu legenda selebar layar dengan margin 16dp senilai tombol.
   Memilih kategori membuka layar penuh; tombol kembali menutup submenu dan kembali ke layar asal.
 
 Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pull/1)):

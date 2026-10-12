@@ -9,7 +9,7 @@ perilaku dilakukan melalui flavor Gradle, `BuildConfig.LITE`, manifest Lite, dan
 | Area | Quran Full | Quran Lite |
 |------|------------|------------|
 | Tujuan | Membaca mushaf dan fitur pendamping | Membaca mushaf dengan fitur minimal |
-| Halaman utama | Beranda, bookmark, indeks, Jelajahi, dan fitur Full lainnya | Bookmark dan daftar surah |
+| Halaman utama | Beranda, bookmark, indeks, Jelajahi, dan fitur Full lainnya | Bookmark, Surah, Juz, Hizb, Rub', Manzil, dan Ruku (tanpa Beranda) |
 | Pembaca | Mushaf, ayat + terjemahan, atau terjemahan saja | Mushaf saja; toggle warna tajwid tetap tersedia |
 | Fitur ayat | Terjemahan, transliterasi, pencarian, berbagi, dan fitur terkait | Bookmark ayat |
 | Pengaturan | Bahasa, tema, data, terjemahan, cadangan, pengingat, dan pengaturan Full lain | Tema, pemeliharaan data, cadangan, dan informasi aplikasi |

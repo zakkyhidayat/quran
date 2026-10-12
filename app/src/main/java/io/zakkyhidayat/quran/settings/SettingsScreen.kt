@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -24,7 +25,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -66,12 +66,18 @@ internal fun SettingsMainSheet(
     onDismiss: () -> Unit,
     onOpen: (SettingsPage) -> Unit,
 ) {
-    ModalBottomSheet(
+    // Dialog melayang di tengah dengan margin 16dp, bukan sheet dari bawah.
+    androidx.compose.ui.window.Dialog(
         onDismissRequest = onDismiss,
-        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-        shape = RoundedCornerShape(28.dp),
+        properties = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false),
     ) {
-        Column(Modifier.fillMaxWidth().heightIn(max = 640.dp)) {
+        androidx.compose.material3.Surface(
+            shape = RoundedCornerShape(28.dp),
+            color = androidx.compose.material3.MaterialTheme.colorScheme.surfaceContainerHigh,
+            tonalElevation = 6.dp,
+            modifier = Modifier.padding(16.dp).widthIn(max = 560.dp).fillMaxWidth(),
+        ) {
+        Column(Modifier.fillMaxWidth().heightIn(max = 560.dp).padding(top = 12.dp)) {
             Row(
                 Modifier.fillMaxWidth().padding(start = 24.dp, end = 16.dp, top = 4.dp, bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -84,7 +90,7 @@ internal fun SettingsMainSheet(
             }
             Column(
                 Modifier
-                    .heightIn(max = 560.dp)
+                    .weight(1f, fill = false)
                     .verticalScroll(rememberScrollState())
                     .padding(horizontal = 16.dp)
                     .padding(bottom = 24.dp),
@@ -95,6 +101,7 @@ internal fun SettingsMainSheet(
                     SettingsMain(settings, onOpen)
                 }
             }
+        }
         }
     }
 }
