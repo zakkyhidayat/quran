@@ -32,7 +32,7 @@ android {
         versionName = "${semver.first}.${semver.second}.${semver.third}"
         // Katalog paket terjemahan unduhan; paket diambil relatif terhadap alamat ini (lihat docs/DATA_SOURCES.md).
         buildConfigField("String", "TRANSLATION_CATALOG_URL", "\"https://github.com/zakkyhidayat/quran/releases/download/translations/catalog.json\"")
-        buildConfigField("String", "QURAN_DATA_CATALOG_URL", "\"https://github.com/zakkyhidayat/quran/releases/latest/download/quran-data.json\"")
+        buildConfigField("String", "QURAN_DATA_CATALOG_URL", "\"https://github.com/zakkyhidayat/quran/releases/download/quran-data/quran-data.json\"")
     }
 
     // github: APK di GitHub Releases. play: AAB untuk Play Store. Keduanya sama isinya; dipisah agar nama berkas dan

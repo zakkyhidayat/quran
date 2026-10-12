@@ -154,6 +154,15 @@
     <string name="onb_downloading">جارٍ تنزيل %1$s من %2$s</string>
     <string name="onb_download_error">تعذر تنزيل بيانات القرآن أو خطوط الصفحات كاملة أو التحقق منها. تحقق من الاتصال ومساحة التخزين ثم حاول مجدداً.</string>
     <string name="onb_download_full_features">يتضمن الإصدار الكامل أيضًا معلومات الموضوعات والسور.</string>
+    <string name="quran_data_title">بيانات القرآن</string>
+    <string name="quran_data_sub">تنزيل ملفات القرآن دون اتصال أو إصلاحها</string>
+    <string name="quran_data_maintenance_body">نزّل أحدث قاعدة بيانات للقرآن وجميع خطوط الصفحات الـ604 وتحقق منها. تُحفظ الملفات في مساحة التطبيق الخاصة ولا تُضمّن في النسخ الاحتياطية للجهاز.</string>
+    <string name="quran_data_confirm_title">تنزيل أحدث بيانات القرآن؟</string>
+    <string name="quran_data_confirm_body">سيتم استبدال قاعدة البيانات والخطوط المحلية بعد التحقق من الملفات الجديدة. حجم التنزيل نحو %1$s. أبقِ التطبيق مفتوحاً حتى يكتمل.</string>
+    <string name="quran_data_refresh">تنزيل البيانات أو تحديثها</string>
+    <string name="quran_data_refresh_confirm">تنزيل واستبدال</string>
+    <string name="quran_data_refresh_success">تم تثبيت أحدث بيانات القرآن.</string>
+    <string name="quran_data_restart_required">أغلق التطبيق ثم افتحه لاستخدام البيانات المحدّثة. إذا حُذفت الملفات عند مسح بيانات التطبيق أو إعادة تثبيته، فنزّلها مجدداً من هنا.</string>
     <string name="onb_mushaf_title">عن هذا المصحف</string>
     <string name="onb_mushaf_body">تتبع الصفحات مصحف المدينة المطبوع في مجمع الملك فهد: الرسم العثماني، رواية حفص، 604 صفحات في كل منها 15 سطرًا. لا تتوفر أنماط صفحات أخرى مثل الهندي أو الشمرلي، فإن كنت معتادًا على أحدها فستبدو الحروف وتخطيط الصفحات مختلفة.</string>
     <string name="onb_translation_title">الترجمات</string>

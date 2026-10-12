@@ -154,6 +154,15 @@
     <string name="onb_downloading">Téléchargement : %1$s sur %2$s</string>
     <string name="onb_download_error">Impossible de télécharger ou de vérifier toutes les données du Coran et les polices. Vérifiez la connexion et l’espace de stockage, puis réessayez.</string>
     <string name="onb_download_full_features">La version complète inclut aussi les thèmes et les informations sur les sourates.</string>
+    <string name="quran_data_title">Données du Coran</string>
+    <string name="quran_data_sub">Télécharger ou réparer les fichiers hors ligne</string>
+    <string name="quran_data_maintenance_body">Téléchargez et vérifiez la dernière base de données du Coran et les 604 polices de page. Les fichiers sont conservés dans l’espace privé de l’application et ne sont pas inclus dans les sauvegardes de l’appareil.</string>
+    <string name="quran_data_confirm_title">Télécharger les dernières données du Coran ?</string>
+    <string name="quran_data_confirm_body">La base locale et les polices seront remplacées après vérification des nouveaux fichiers. Téléchargement d’environ %1$s. Gardez l’application ouverte jusqu’à la fin.</string>
+    <string name="quran_data_refresh">Télécharger ou mettre à jour</string>
+    <string name="quran_data_refresh_confirm">Télécharger et remplacer</string>
+    <string name="quran_data_refresh_success">Les dernières données du Coran sont installées.</string>
+    <string name="quran_data_restart_required">Fermez puis rouvrez l’application pour utiliser les données mises à jour. Si les fichiers sont supprimés en effaçant le stockage de l’application ou en la réinstallant, téléchargez-les à nouveau ici.</string>
     <string name="onb_mushaf_title">À propos de ce mushaf</string>
     <string name="onb_mushaf_body">Les pages suivent le mushaf de Médine imprimé par le Complexe du Roi Fahd : écriture uthmanie, lecture de Hafs, 604 pages de 15 lignes. Les autres styles de page, comme l’indo-pakistanais ou le Shamarly, ne sont pas inclus ; si vous êtes habitué à l’un d’eux, les lettres et la mise en page paraîtront différentes.</string>
     <string name="onb_translation_title">Traductions</string>

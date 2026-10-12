@@ -154,6 +154,15 @@
     <string name="onb_downloading">Mengunduh %1$s dari %2$s</string>
     <string name="onb_download_error">Data Al-Qur’an atau font halaman gagal diunduh atau diverifikasi. Periksa koneksi dan ruang penyimpanan, lalu coba lagi.</string>
     <string name="onb_download_full_features">Edisi penuh juga memuat informasi topik dan surah.</string>
+    <string name="quran_data_title">Data Al-Qur’an</string>
+    <string name="quran_data_sub">Unduh atau pulihkan berkas Al-Qur’an luring</string>
+    <string name="quran_data_maintenance_body">Unduh dan verifikasi database Al-Qur’an terbaru beserta seluruh 604 font halaman. Berkas disimpan di penyimpanan privat aplikasi dan tidak disertakan dalam cadangan perangkat.</string>
+    <string name="quran_data_confirm_title">Unduh data Al-Qur’an terbaru?</string>
+    <string name="quran_data_confirm_body">Database dan font halaman lokal akan diganti setelah berkas baru terverifikasi. Ukuran unduhan sekitar %1$s. Biarkan aplikasi tetap terbuka hingga selesai.</string>
+    <string name="quran_data_refresh">Unduh atau perbarui data</string>
+    <string name="quran_data_refresh_confirm">Unduh dan ganti</string>
+    <string name="quran_data_refresh_success">Data Al-Qur’an terbaru berhasil dipasang.</string>
+    <string name="quran_data_restart_required">Tutup lalu buka kembali aplikasi untuk memakai data terbaru. Jika berkas terhapus karena penyimpanan aplikasi dihapus atau aplikasi dipasang ulang, unduh kembali dari sini.</string>
     <string name="onb_mushaf_title">Tentang mushaf ini</string>
     <string name="onb_mushaf_body">Halamannya mengikuti mushaf Madinah cetakan Kompleks Raja Fahd: rasm Utsmani, riwayat Hafs, 604 halaman, 15 baris. Gaya halaman lain, seperti IndoPak atau Shamarly, tidak disertakan, jadi bila Anda terbiasa dengan salah satunya, bentuk huruf dan letak halamannya akan terlihat berbeda.</string>
     <string name="onb_translation_title">Terjemahan</string>

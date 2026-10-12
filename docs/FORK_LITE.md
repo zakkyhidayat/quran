@@ -15,7 +15,8 @@ berubah), `BuildConfig.LITE` untuk menyembunyikan fitur, `app/src/lite/AndroidMa
 - Rute layar lain tidak didaftarkan di `AppNav` untuk lite, sehingga R8 (rilis) bisa membuang kodenya.
 - CI memverifikasi database full dan Lite, lalu memastikan `assets/quran.db` tidak masuk ke kedua APK.
 - Kedua varian mengunduh paket 604 font halaman V4 yang sama saat onboarding (font tidak dimodifikasi); font halaman
-  tidak ikut di APK. Onboarding menahan akses membaca sampai database dan seluruh font terpasang.
+  tidak ikut di APK. Onboarding menahan akses membaca sampai database dan seluruh font terpasang. Pengguna dapat
+  mengunduh ulang atau memperbarui data dari Pengaturan → Data Al-Qur’an.
 
 ## Lingkup
 
@@ -34,8 +35,8 @@ pencarian, Beranda, Jelajahi/topik, info surah, pengingat, cadangan, updater, da
 Onboarding Lite tetap mencakup pemilihan bahasa, unduhan wajib database dan font halaman, pratinjau mushaf, dan
 pengaturan tampilan.
 
-Lite memerlukan izin internet hanya untuk unduhan database dan font halaman wajib saat penggunaan pertama. Setelah itu
-aplikasi membaca data lokal secara luring, tanpa fitur jaringan lain atau notifikasi.
+Lite memerlukan izin internet untuk unduhan wajib saat penggunaan pertama dan bila pengguna memilih unduh ulang/perbarui
+data di Pengaturan. Setelah itu aplikasi membaca data lokal secara luring, tanpa fitur jaringan otomatis atau notifikasi.
 
 ## Keputusan utama: repo terpisah atau flavor di repo ini
 

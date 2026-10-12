@@ -38,7 +38,7 @@ jobs:
       - name: Ambil paket font mushaf
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release download build-assets --pattern page-fonts.zip --dir "$RUNNER_TEMP"
+        run: gh release download quran-data --pattern page-fonts.zip --dir "$RUNNER_TEMP"
       # Jalankan suite JVM dan lint pada kedua flavor agar kode bersama dinilai setara; fitur eksklusif full tetap diuji di flavor github.
       # assembleLiteRelease (tanpa tanda tangan) menguji R8 pada varian lite sebelum workflow rilis.
       - run: ./gradlew --no-daemon :app:testGithubDebugUnitTest :app:testLiteDebugUnitTest :app:lintGithubDebug :app:lintLiteDebug :app:assembleGithubDebug :app:assembleLiteDebug :app:assembleLiteRelease :app:buildLiteDb

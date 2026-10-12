@@ -1,6 +1,6 @@
 # Rilis bertanda tangan saat tag vX.Y.Z di-push, atau dari tab Actions ("Run workflow", isi versi): APK GitHub, APK Lite,
-# dan AAB Play. Tidak ada pembaru dalam aplikasi.
-# Kebutuhan sekali saja: lihat docs/RELEASING.md (secret keystore dan rilis `build-assets` berisi font halaman).
+# dan AAB Play. Data mushaf diperbarui terpisah di rilis stabil `quran-data`.
+# Kebutuhan sekali saja: lihat docs/RELEASING.md (secret keystore).
 name: Release
 
 on:
@@ -68,21 +68,13 @@ jobs:
       - name: Pasang keystore
         run: echo "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/release.jks"
 
-      - name: Ambil font halaman (tidak disimpan di git)
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release download build-assets --pattern page-fonts.zip --dir "$RUNNER_TEMP"
-          unzip -q "$RUNNER_TEMP/page-fonts.zip" -d app/src/main/assets/fonts
-          test "$(ls app/src/main/assets/fonts/p*.ttf | wc -l)" -eq 604
-
       - name: Build
         env:
           RELEASE_KEYSTORE_PATH: ${{ runner.temp }}/release.jks
           RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
           RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
-        run: ./gradlew --no-daemon :app:assembleGithubRelease :app:bundlePlayRelease :app:assembleLiteRelease :app:buildLiteDb
+        run: ./gradlew --no-daemon :app:assembleGithubRelease :app:bundlePlayRelease :app:assembleLiteRelease
 
       - name: Terbitkan rilis
         env:
@@ -94,11 +86,7 @@ jobs:
           cp app/build/outputs/apk/github/release/app-github-release.apk out/Quran.apk
           cp app/build/outputs/apk/lite/release/app-lite-release.apk out/Quran-Lite.apk
           cp app/build/outputs/bundle/playRelease/app-play-release.aab "out/quran-${TAG}-play.aab"
-          gzip -n -c app/src/main/assets/quran.db > out/quran-full.db.gz
-          gzip -n -c app/build/quran-data/lite/quran.db > out/quran-lite.db.gz
-          cp "$RUNNER_TEMP/page-fonts.zip" out/page-fonts.zip
-          python tools/create_quran_manifest.py --full out/quran-full.db.gz --lite out/quran-lite.db.gz --fonts out/page-fonts.zip --output out/quran-data.json
-          gh release create "$TAG" out/Quran.apk out/Quran-Lite.apk out/quran-full.db.gz out/quran-lite.db.gz out/page-fonts.zip out/quran-data.json --title "$TAG" --generate-notes
+          gh release create "$TAG" out/Quran.apk out/Quran-Lite.apk --title "$TAG" --generate-notes
           # AAB untuk Play Console disimpan sebagai artefak workflow, bukan aset rilis publik.
 
       - uses: actions/upload-artifact@v4

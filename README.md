@@ -28,7 +28,8 @@ King Fahd Complex edition: 604 pages, 15 lines, with tajweed colouring.
 
 Both apps can be installed side by side. Neither updates itself: to update, download again from the same button and
 install over the old one. Your bookmarks and settings are kept. On first launch, choose the app language and download
-the required Qur'an database and page fonts; they are stored on the device so reading works offline afterward. All versions and release notes:
+the required Qur'an database and page fonts; they are stored privately on the device so reading works offline afterward.
+You can redownload or update these files from Settings if needed. All versions and release notes:
 [releases page](https://github.com/zakkyhidayat/quran/releases).
 
 ## Who it is for
@@ -59,8 +60,8 @@ Choices made on purpose:
 - Translations are downloaded in the app, so the APK carries none; the active ones download automatically on first
   launch. Available now: Indonesian (Kemenag, The Sabiq Company, King Fahad Quran Complex) and English (Saheeh
   International), with more languages to come.
-- The Qur'an database and all 604 page fonts are downloaded once during first-run setup from the latest GitHub Release;
-  neither is bundled in the APK, and reading works offline after the download.
+- The Qur'an database and all 604 page fonts are downloaded during first-run setup from the stable `quran-data` release;
+  neither is bundled in the APK. You can manually redownload/update them in Settings, and reading works offline.
 - Indexes by surah, juz, hizb, rub', manzil, and ruku; surah info; go to ayah; random ayah; continue reading from the last ayah.
 - Home tab: ayah of the day, Sunnah readings with their hadith, reading history, and ayah collections.
 - Thematic browsing: topics, ayah themes, similar ayahs, mutashabihat, and word roots.
@@ -84,7 +85,7 @@ A second app built from the same code, for people who only want to read the mush
   continue reading.
 - Tapping an ayah only offers a bookmark; no translations, search, home tab, or thematic browsing.
 - Settings: light, dark, or system theme.
-- Internet is used only for the required first-run download of the Lite Qur'an database and page fonts; no notifications or other
+- Internet is used only for the required first-run download or optional manual update of the Lite Qur'an database and page fonts; no notifications or other
   network features are included. Reading works offline after setup.
 
 It is a separate app (`io.zakkyhidayat.quran.lite`) with its own icon, published on the same GitHub release as

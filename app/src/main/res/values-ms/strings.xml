@@ -154,6 +154,15 @@
     <string name="onb_downloading">Memuat turun %1$s daripada %2$s</string>
     <string name="onb_download_error">Data al-Quran atau fon halaman tidak dapat dimuat turun atau disahkan sepenuhnya. Semak sambungan dan ruang storan, kemudian cuba lagi.</string>
     <string name="onb_download_full_features">Edisi penuh turut menyertakan maklumat topik dan surah.</string>
+    <string name="quran_data_title">Data al-Quran</string>
+    <string name="quran_data_sub">Muat turun atau baiki fail al-Quran luar talian</string>
+    <string name="quran_data_maintenance_body">Muat turun dan sahkan pangkalan data al-Quran terkini serta kesemua 604 fon halaman. Fail disimpan dalam storan peribadi aplikasi dan tidak disertakan dalam sandaran peranti.</string>
+    <string name="quran_data_confirm_title">Muat turun data al-Quran terkini?</string>
+    <string name="quran_data_confirm_body">Pangkalan data dan fon setempat akan digantikan selepas fail baharu disahkan. Saiz muat turun kira-kira %1$s. Biarkan aplikasi terbuka sehingga selesai.</string>
+    <string name="quran_data_refresh">Muat turun atau kemas kini data</string>
+    <string name="quran_data_refresh_confirm">Muat turun dan ganti</string>
+    <string name="quran_data_refresh_success">Data al-Quran terkini telah dipasang.</string>
+    <string name="quran_data_restart_required">Tutup dan buka semula aplikasi untuk menggunakan data yang dikemas kini. Jika fail dibuang apabila storan aplikasi dikosongkan atau aplikasi dipasang semula, muat turun semula di sini.</string>
     <string name="onb_mushaf_title">Tentang mushaf ini</string>
     <string name="onb_mushaf_body">Halaman mengikut mushaf Madinah cetakan Kompleks Raja Fahd: rasm Uthmani, riwayat Hafs, 604 halaman 15 baris. Gaya halaman lain seperti IndoPak atau Shamarly tidak disertakan, jadi jika anda biasa dengan salah satunya, bentuk huruf dan susun atur halaman akan kelihatan berbeza.</string>
     <string name="onb_translation_title">Terjemahan</string>

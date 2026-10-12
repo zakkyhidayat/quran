@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import io.zakkyhidayat.quran.AppViewModel
 import io.zakkyhidayat.quran.R
 import io.zakkyhidayat.quran.data.Backup
+import io.zakkyhidayat.quran.data.QuranDatabaseInstaller
 import io.zakkyhidayat.quran.ui.AppIcons
 import io.zakkyhidayat.quran.ui.CenteredContent
 import kotlinx.coroutines.launch
@@ -51,6 +52,7 @@ enum class SettingsPage(val route: String) {
     Translations("settings/translations"),
     Backup("settings/backup"),
     Reminder("settings/reminder"),
+    QuranData("settings/quran-data"),
     Permissions("settings/permissions"),
     About("settings/about"),
 }
@@ -104,6 +106,7 @@ fun SettingsScreen(
     val repo = vm.settingsRepository
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val quranDataInstaller = remember(context) { QuranDatabaseInstaller(context) }
     val version = remember(context) {
         runCatching { context.packageManager.getPackageInfo(context.packageName, 0).versionName }.getOrNull().orEmpty()
     }
@@ -115,6 +118,7 @@ fun SettingsScreen(
             SettingsPage.Translations -> R.string.translations
             SettingsPage.Backup -> R.string.backup
             SettingsPage.Reminder -> R.string.reminder
+            SettingsPage.QuranData -> R.string.quran_data_title
             SettingsPage.Permissions -> R.string.permissions
             SettingsPage.About -> R.string.about
         },
@@ -168,6 +172,7 @@ fun SettingsScreen(
                             SettingsPage.Translations -> TranslationControls(vm, settings)
                             SettingsPage.Backup -> BackupControls(vm, settings, snackbar)
                             SettingsPage.Reminder -> ReminderControls(vm, settings)
+                            SettingsPage.QuranData -> QuranDataMaintenance(quranDataInstaller)
                             SettingsPage.Permissions -> PermissionControls()
                             SettingsPage.About -> {
                                 Group {
@@ -250,6 +255,13 @@ private fun SettingsMain(settings: AppSettings, onOpen: (SettingsPage) -> Unit) 
             trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
         )
         item(
+            title = stringResource(R.string.quran_data_title),
+            subtitle = stringResource(R.string.quran_data_sub),
+            onClick = { onOpen(SettingsPage.QuranData) },
+            leading = { Icon(AppIcons.Download, contentDescription = null) },
+            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
+        )
+        item(
             title = stringResource(R.string.permissions),
             subtitle = stringResource(R.string.settings_permissions_sub),
             onClick = { onOpen(SettingsPage.Permissions) },
@@ -272,6 +284,13 @@ private fun LiteSettingsMain(vm: AppViewModel, settings: AppSettings, onOpen: (S
     ThemeModeRow(vm, settings)
     Spacer(Modifier.height(16.dp))
     Group {
+        item(
+            title = stringResource(R.string.quran_data_title),
+            subtitle = stringResource(R.string.quran_data_sub),
+            onClick = { onOpen(SettingsPage.QuranData) },
+            leading = { Icon(AppIcons.Download, contentDescription = null) },
+            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
+        )
         item(
             title = stringResource(R.string.about),
             subtitle = stringResource(R.string.settings_about_sub),

@@ -13,18 +13,17 @@ None of the variants updates itself; users download new versions from GitHub Rel
 | `play` | Full app, same code as `github` | AAB for Google Play |
 | `lite` | Reading-only app (`io.zakkyhidayat.quran.lite`) | `Quran-Lite.apk` on the same GitHub release, signed with the same key |
 
-Both APKs omit `quran.db` and the 604 page fonts. On first launch, the app downloads its flavor-specific database and
-the shared page-font archive from the latest GitHub Release, verifies their sizes and SHA-256 hashes, validates the
-database and all 604 fonts, then stores them locally for offline reading. Reading remains blocked until both are
-installed. Each application release must therefore include `quran-full.db.gz`, `quran-lite.db.gz`, `page-fonts.zip`,
-and `quran-data.json` alongside the APKs. The release workflow creates these assets from the verified full source,
-generated Lite database, and `build-assets` font archive.
+Both APKs omit `quran.db` and the 604 page fonts. On first launch, and whenever a user chooses to repair/update data in
+Settings, the app downloads its flavor-specific database and shared page-font archive from the stable `quran-data`
+release. It verifies sizes, SHA-256 hashes, database integrity, and all 604 fonts before storing them in private app
+storage for offline reading. Reading remains blocked until both are installed. App version releases contain only the
+two APKs; the Play AAB remains a workflow artifact.
 
 Local builds: `./gradlew :app:assembleGithubDebug` (or `assemblePlayDebug`, `assembleLiteDebug`).
 
 The README links straight to `releases/latest/download/Quran.apk` and `Quran-Lite.apk`, so the APK names carry no
-version. Keep the `translations` and `build-assets` releases marked as **pre-release**: GitHub's "latest release" skips
-pre-releases, and those links would break if one of them became "latest".
+version. Keep `quran-data` and `translations` marked as **pre-release** so neither interferes with the `latest` app
+release. These stable, named releases are the download channels for Quran data and translation packs.
 
 ## One-time setup
 
@@ -48,17 +47,22 @@ Add these repository secrets (Settings → Secrets and variables → Actions):
 
 Never commit the keystore; `*.jks` is in `.gitignore`.
 
-### 2. Page fonts for CI
+### 2. Quran data release
 
-The 604 page fonts are not in git. Upload them once, unchanged, as a zip to a pre-release named `build-assets`:
+The 604 page fonts are not in git. Create the stable `quran-data` pre-release once with the database archives,
+`quran-data.json`, and the unchanged `page-fonts.zip`. The `Qur'an data` workflow replaces these assets in place
+(`--clobber`) after a reviewed update to `app/src/main/assets/quran.db`; it downloads the existing font archive unless
+the font asset is updated separately:
 
 ```bash
-cd app/src/main/assets/fonts && zip -q ../../../../../page-fonts.zip p*.ttf && cd -
-gh release create build-assets page-fonts.zip --prerelease --title "Build assets" --notes "Files needed by CI that are not in git (KFGQPC V4 page fonts)."
+gh release create quran-data quran-full.db.gz quran-lite.db.gz page-fonts.zip quran-data.json \
+  --prerelease --title "Qur'an data" --notes "Stable download channel for the Quran database and page fonts."
 ```
 
-The release workflow adds this archive to each app release for onboarding downloads. Update the `build-assets`
-pre-release with `gh release upload build-assets page-fonts.zip --clobber` when the fonts change.
+To refresh the databases after a QUL update, update and verify the committed source database, then run Actions →
+`Qur'an data` → Run workflow on `main`. The workflow regenerates Lite, checks both databases, and overwrites the four
+assets without creating another release entry. To update the page fonts, replace `page-fonts.zip` on the `quran-data`
+release first, then run the workflow.
 
 ## Making a release
 
@@ -71,8 +75,8 @@ pre-release with `gh release upload build-assets page-fonts.zip --clobber` when 
      git tag v0.3.0
      git push origin v0.3.0
      ```
-3. The workflow creates the GitHub release `v0.3.0` with `Quran.apk`, `Quran-Lite.apk`, both database archives,
-   `page-fonts.zip`, and `quran-data.json`, with generated notes. Edit the notes on GitHub if needed.
+3. The workflow creates the GitHub release `v0.3.0` with `Quran.apk` and `Quran-Lite.apk`, with generated notes.
+   Database and fonts remain in the stable `quran-data` release and can be updated without publishing new APKs.
 4. Download the `play-bundle` artifact from the workflow run for the Play Console.
 
 `versionCode` is `X*10000 + Y*100 + Z`, so every new tag must be higher than the previous one.

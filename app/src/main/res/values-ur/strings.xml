@@ -154,6 +154,15 @@
     <string name="onb_downloading">%1$s از %2$s ڈاؤن لوڈ ہو رہا ہے</string>
     <string name="onb_download_error">قرآن کا تمام ڈیٹا یا صفحے کے فونٹس ڈاؤن لوڈ یا تصدیق نہیں ہو سکے۔ کنکشن اور اسٹوریج چیک کرکے دوبارہ کوشش کریں۔</string>
     <string name="onb_download_full_features">مکمل ورژن میں موضوعات اور سورتوں کی معلومات بھی شامل ہیں۔</string>
+    <string name="quran_data_title">قرآن کا ڈیٹا</string>
+    <string name="quran_data_sub">آف لائن قرآن فائلیں ڈاؤن لوڈ یا درست کریں</string>
+    <string name="quran_data_maintenance_body">قرآن کا تازہ ترین ڈیٹابیس اور تمام ۶۰۴ صفحوں کے فونٹس ڈاؤن لوڈ اور تصدیق کریں۔ فائلیں ایپ کی نجی اسٹوریج میں رہتی ہیں اور آلے کے بیک اپ میں شامل نہیں ہوتیں۔</string>
+    <string name="quran_data_confirm_title">تازہ ترین قرآن ڈیٹا ڈاؤن لوڈ کریں؟</string>
+    <string name="quran_data_confirm_body">نئی فائلوں کی تصدیق کے بعد مقامی ڈیٹابیس اور فونٹس تبدیل ہوں گے۔ ڈاؤن لوڈ تقریباً %1$s ہے۔ مکمل ہونے تک ایپ کھلی رکھیں۔</string>
+    <string name="quran_data_refresh">ڈیٹا ڈاؤن لوڈ یا اپ ڈیٹ کریں</string>
+    <string name="quran_data_refresh_confirm">ڈاؤن لوڈ کرکے تبدیل کریں</string>
+    <string name="quran_data_refresh_success">قرآن کا تازہ ترین ڈیٹا انسٹال ہوگیا۔</string>
+    <string name="quran_data_restart_required">اپ ڈیٹ شدہ ڈیٹا استعمال کرنے کے لیے ایپ بند کرکے دوبارہ کھولیں۔ اگر ایپ کا اسٹوریج صاف کرنے یا دوبارہ انسٹال کرنے سے فائلیں مٹ جائیں تو یہاں سے دوبارہ ڈاؤن لوڈ کریں۔</string>
     <string name="onb_mushaf_title">اس مصحف کے بارے میں</string>
     <string name="onb_mushaf_body">صفحات شاہ فہد کمپلیکس کے چھاپے ہوئے مدنی مصحف کے مطابق ہیں: رسمِ عثمانی، روایتِ حفص، 15 سطروں کے 604 صفحات۔ دوسرے انداز، جیسے انڈو پاک یا شمرلی، شامل نہیں، اس لیے اگر آپ ان میں سے کسی کے عادی ہیں تو حروف اور صفحات کی ترتیب مختلف نظر آئے گی۔</string>
     <string name="onb_translation_title">ترجمے</string>

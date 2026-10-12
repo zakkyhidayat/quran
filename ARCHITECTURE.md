@@ -8,7 +8,7 @@ QUL files (data-src/, downloaded by hand, checksums in docs/data-manifest.json)
   ▼
 app/src/main/assets/quran.db        source database, verified by tools/verify_quran.py (CI; excluded from APKs)
 app/src/main/assets/fonts/          header, surah-name, common, and Hafs fonts; page fonts excluded from APK
-  │  Release workflow               publishes compressed databases, page-fonts.zip, and quran-data.json
+  │  `quran-data` release            holds compressed databases, page-fonts.zip, and quran-data.json
   │  QuranDatabaseInstaller         downloads the flavor-specific database and all page fonts on first launch;
   │                                  verifies sizes, SHA-256, SQLite integrity, schema, and all 604 fonts
   ▼
@@ -23,7 +23,8 @@ Compose screens                     reader, index, search, surah info, settings,
 
 Translations are not in `quran.db`. They are SQLite packs built by `tools/build_translation_packs.py`, published on
 GitHub Releases (`translations`), downloaded into `filesDir/translations/`, and verified (SHA-256, 6,236 rows) before use.
-The required Qur'an database and page-font archive are downloaded from the latest application release during onboarding.
+The required Qur'an database and page-font archive are downloaded from the stable `quran-data` release during onboarding
+or by a user-requested repair/update from Settings.
 Reading is blocked until both are installed and is offline afterward; full and Lite receive separate database assets and
 the same page-font archive, while neither APK contains `quran.db` or the 604 page fonts.
 
@@ -46,8 +47,9 @@ the same page-font archive, while neither APK contains `quran.db` or the 604 pag
 
 The `lite` product flavor (`io.zakkyhidayat.quran.lite`) is a reading-only app built from the same code: mushaf pages,
 the index lists, page and ayah bookmarks, and the theme setting. `BuildConfig.LITE` hides every other entry point.
-Lite uses internet only during first-run setup to download its separate, slim database and shared page fonts; notifications and boot
-permissions remain removed by `app/src/lite/AndroidManifest.xml`. After installation, reading works offline.
+Lite uses internet only during first-run setup or a user-requested repair/update to download its separate, slim database
+and shared page fonts; notifications and boot permissions remain removed by `app/src/lite/AndroidManifest.xml`. After
+installation, reading works offline.
 `tools/build_lite_db.py` creates the release database without thematic tables, surah info, or transliteration.
 See docs/FORK_LITE.md.
 
