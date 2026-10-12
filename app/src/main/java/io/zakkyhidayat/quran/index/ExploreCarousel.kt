@@ -36,7 +36,7 @@ enum class ExploreEntry { Topics, Themes, Phrases, Similar, Roots }
 private data class EntryUi(val entry: ExploreEntry, val icon: ImageVector, val title: Int, val plural: Int, val count: Int)
 
 /**
- * Bagian "Jelajahi Al-Qur'an" di atas tab layar utama: carousel M3 (uncontained) berisi lima fitur. Kartu disembunyikan bila
+ * Bagian "Jelajahi Al-Qur'an" di Beranda: carousel M3 (uncontained) berisi lima fitur. Kartu disembunyikan bila
  * tabel datanya tidak ada (hitungan null). Lebar kartu tetap sehingga muat di panel sempit 360dp pada layar lebar.
  */
 @OptIn(ExperimentalMaterial3Api::class)

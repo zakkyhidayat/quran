@@ -92,3 +92,4 @@ Perlu dicek pemilik sebelum rilis: redaksi hadits di bacaan sunnah, dan tampilan
 - Screenshot aplikasi saat ini: daftar, pembaca, lembar ayat, pengaturan.
 - Keputusan urutan: merge PR #1 dulu, lalu prioritas 1 di PR baru.
 - Transliterasi ada di Pengaturan > Terjemahan (bukan Tampilan). Lite memakai halaman Tampilan yang sama tanpa ukuran teks terjemahan.
+- Carousel Jelajahi dipindah dari atas tab ke Beranda (di bawah Ayat Hari Ini, meluber ke tepi layar). Ayat Hari Ini memakai gradien primer-tersier; koleksi ayat berupa kartu grid 2 kolom. Header collapsing dihapus.

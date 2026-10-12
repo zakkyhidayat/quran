@@ -59,7 +59,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -108,8 +107,6 @@ fun IndexScreen(
     val surahsForJump by vm.surahs.collectAsStateWithLifecycle()
     val settings by vm.settingsRepository.settings.collectAsStateWithLifecycle(AppSettings())
     val lastSurah = surahsForJump[settings.lastSurah]
-    val exploreCounts by vm.exploreCounts.collectAsStateWithLifecycle()
-    val header = remember { CollapsingHeaderState() }
     Scaffold(
         // Lanjutkan membaca: FAB diperluas di kanan bawah, tampil di semua tab.
         floatingActionButton = {
@@ -154,11 +151,7 @@ fun IndexScreen(
             )
         }
         CenteredContent(Modifier.padding(padding)) {
-            Column(Modifier.fillMaxSize().nestedScroll(header.connection)) {
-                // Carousel Jelajahi mengecil saat daftar di bawahnya digulir dan muncul lagi saat daftar kembali ke atas.
-                if (!BuildConfig.LITE) exploreCounts?.takeIf { it.any }?.let { counts ->
-                    ExploreCarousel(counts, onOpenExplore, Modifier.collapsingHeader(header))
-                }
+            Column(Modifier.fillMaxSize()) {
                 PrimaryScrollableTabRow(selectedTabIndex = pagerState.currentPage, edgePadding = 8.dp, minTabWidth = 0.dp) {
                     tabIds.forEach { i ->
                         val (title, icon) = TABS[i]
@@ -187,7 +180,7 @@ fun IndexScreen(
                 HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize(), key = { tabIds[it] }) { current ->
                     when (tabIds[current]) {
                         0 -> BookmarkList(vm, onBack)
-                        1 -> io.zakkyhidayat.quran.home.HomeTab(vm, onBack, onOpenHome)
+                        1 -> io.zakkyhidayat.quran.home.HomeTab(vm, onBack, onOpenHome, onOpenExplore)
                         2 -> SurahList(vm, onBack, onOpenSurahInfo)
                         3 -> JuzList(vm, onBack)
                         4 -> HizbList(vm, onBack)

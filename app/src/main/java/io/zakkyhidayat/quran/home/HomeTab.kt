@@ -1,6 +1,13 @@
 package io.zakkyhidayat.quran.home
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.layout.layout
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,6 +33,9 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.background
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
@@ -41,6 +51,8 @@ import io.zakkyhidayat.quran.data.AyahRange
 import io.zakkyhidayat.quran.data.Collections
 import io.zakkyhidayat.quran.data.CollectionKind
 import io.zakkyhidayat.quran.data.SunnahReading
+import io.zakkyhidayat.quran.index.ExploreCarousel
+import io.zakkyhidayat.quran.index.ExploreEntry
 import io.zakkyhidayat.quran.reader.arabicFontFamily
 import io.zakkyhidayat.quran.settings.AppSettings
 import io.zakkyhidayat.quran.ui.AppIcons
@@ -60,7 +72,8 @@ private const val HISTORY_SHOWN = 5
 /** Beranda: ayat hari ini, bacaan sunnah sesuai waktu, histori bacaan, dan koleksi ayat. */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun HomeTab(vm: AppViewModel, onOpenReader: () -> Unit, onOpen: (HomeTarget) -> Unit) {
+fun HomeTab(vm: AppViewModel, onOpenReader: () -> Unit, onOpen: (HomeTarget) -> Unit, onOpenExplore: (ExploreEntry) -> Unit = {}) {
+    val exploreCounts by vm.exploreCounts.collectAsStateWithLifecycle()
     val surahs by vm.surahs.collectAsStateWithLifecycle()
     val history by vm.history.entries.collectAsStateWithLifecycle()
     val now = remember { LocalDateTime.now() }
@@ -72,6 +85,11 @@ fun HomeTab(vm: AppViewModel, onOpenReader: () -> Unit, onOpen: (HomeTarget) -> 
 
     LazyColumn(Modifier.fillMaxSize(), contentPadding = ListPadding, verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
         item(key = "votd") { VerseOfTheDay(vm, onOpenReader) }
+
+        exploreCounts?.takeIf { it.any }?.let { counts ->
+            // Carousel meluber ke tepi layar: padding horizontal daftar dibatalkan, carousel punya padding sendiri.
+            item(key = "explore") { ExploreCarousel(counts, onOpenExplore, Modifier.layout { m, c -> val w = c.maxWidth + 32.dp.roundToPx(); val p = m.measure(c.copy(minWidth = w, maxWidth = w)); layout(c.maxWidth, p.height) { p.place(-16.dp.roundToPx(), 0) } }.padding(top = 12.dp)) }
+        }
 
         item(key = "sunnah_h") { SectionHeader(stringResource(R.string.home_sunnah)) }
         itemsIndexed(sunnah, key = { _, s -> "s_${s.name}" }) { index, s ->
@@ -120,13 +138,23 @@ fun HomeTab(vm: AppViewModel, onOpenReader: () -> Unit, onOpen: (HomeTarget) -> 
         }
 
         item(key = "collections_h") { SectionHeader(stringResource(R.string.home_collections)) }
-        itemsIndexed(CollectionKind.entries, key = { _, k -> "c_${k.name}" }) { index, kind ->
-            SegmentedListItem(
-                onClick = { onOpen(HomeTarget.Collection(kind)) },
-                shapes = ListItemDefaults.segmentedShapes(index, CollectionKind.entries.size),
-                colors = segmentedItemColors(),
-                leadingContent = { Icon(collectionIcon(kind), contentDescription = null) },
-            ) { Text(collectionTitles[index]) }
+        items(CollectionKind.entries.chunked(2), key = { row -> "c_${row.first().name}" }) { row ->
+            Row(Modifier.fillMaxWidth().height(IntrinsicSize.Max), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                row.forEach { kind ->
+                    Card(
+                        onClick = { onOpen(HomeTarget.Collection(kind)) },
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer, contentColor = MaterialTheme.colorScheme.onSecondaryContainer),
+                        shape = MaterialTheme.shapes.extraLarge,
+                        modifier = Modifier.weight(1f).fillMaxHeight(),
+                    ) {
+                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                            Icon(collectionIcon(kind), contentDescription = null, modifier = Modifier.size(28.dp))
+                            Text(collectionTitle(kind), style = MaterialTheme.typography.titleSmall)
+                        }
+                    }
+                }
+                if (row.size == 1) Spacer(Modifier.weight(1f))
+            }
         }
     }
 }
@@ -161,8 +189,13 @@ private fun VerseOfTheDay(vm: AppViewModel, onOpenReader: () -> Unit) {
     val arabicFont = remember { arabicFontFamily(context) }
     val r = range
     Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        modifier = Modifier.fillMaxWidth().padding(top = 8.dp).clickable(enabled = r != null) {
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        shape = MaterialTheme.shapes.extraLarge,
+        modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+            .background(
+                Brush.linearGradient(listOf(MaterialTheme.colorScheme.primaryContainer, MaterialTheme.colorScheme.tertiaryContainer)),
+                MaterialTheme.shapes.extraLarge,
+            ).clickable(enabled = r != null) {
             if (r != null) { vm.goToAyah(r.surah, r.from); onOpenReader() }
         },
     ) {
