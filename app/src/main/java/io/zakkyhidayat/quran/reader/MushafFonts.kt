@@ -1,14 +1,12 @@
 package io.zakkyhidayat.quran.reader
 
 import android.content.Context
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-
-@Volatile
-private var fontCache: Set<String>? = null
+import java.io.File
 
 private fun availableFonts(context: Context): Set<String> =
-    fontCache ?: (context.assets.list("fonts")?.toSet() ?: emptySet()).also { fontCache = it }
+    (context.assets.list("fonts")?.toSet() ?: emptySet()) +
+        (File(context.noBackupFilesDir, "quran-fonts").listFiles()?.map { it.name } ?: emptyList())
 
 internal suspend fun pageFontFamily(context: Context, page: Int, palette: GlyphPalette = GlyphPalette.LightTajweed): FontFamily =
     if ("p$page.ttf" in availableFonts(context)) PalettedFonts.load(context, "p$page.ttf", palette.index) else FontFamily.Default

@@ -18,7 +18,7 @@ King Fahd Complex edition: 604 pages, 15 lines, with tajweed colouring.
 | App | For |
 |-----|-----|
 | **Quran** | Reading with translations, search, home tab, thematic browsing, reminders, backup |
-| **Quran Lite** | Reading the mushaf only, with bookmarks; internet is used once to download its required database |
+| **Quran Lite** | Reading the mushaf only, with bookmarks; internet is used once to download its required database and page fonts |
 
 **How to install (Android 8 or newer):**
 
@@ -28,7 +28,7 @@ King Fahd Complex edition: 604 pages, 15 lines, with tajweed colouring.
 
 Both apps can be installed side by side. Neither updates itself: to update, download again from the same button and
 install over the old one. Your bookmarks and settings are kept. On first launch, choose the app language and download
-the required Qur'an database; it is stored on the device so reading works offline afterward. All versions and release notes:
+the required Qur'an database and page fonts; they are stored on the device so reading works offline afterward. All versions and release notes:
 [releases page](https://github.com/zakkyhidayat/quran/releases).
 
 ## Who it is for
@@ -59,8 +59,8 @@ Choices made on purpose:
 - Translations are downloaded in the app, so the APK carries none; the active ones download automatically on first
   launch. Available now: Indonesian (Kemenag, The Sabiq Company, King Fahad Quran Complex) and English (Saheeh
   International), with more languages to come.
-- The Qur'an database is downloaded once during first-run setup from the latest GitHub Release; the APK stays smaller,
-  and reading works offline after the download.
+- The Qur'an database and all 604 page fonts are downloaded once during first-run setup from the latest GitHub Release;
+  neither is bundled in the APK, and reading works offline after the download.
 - Indexes by surah, juz, hizb, rub', manzil, and ruku; surah info; go to ayah; random ayah; continue reading from the last ayah.
 - Home tab: ayah of the day, Sunnah readings with their hadith, reading history, and ayah collections.
 - Thematic browsing: topics, ayah themes, similar ayahs, mutashabihat, and word roots.
@@ -71,7 +71,7 @@ Choices made on purpose:
 - Interface in 10 languages, following the device language by default: English, Indonesian, Arabic, Urdu, Bengali,
   Turkish, Persian, Malay, French, and Russian.
 - Screen reader support: each ayah is read out as Unicode Arabic text.
-- No ads, no account, no tracking. The internet is used for the required first-run Qur'an database download and,
+- No ads, no account, no tracking. The internet is used for the required first-run Qur'an database and page-font download and,
   in the full app, translation downloads.
 
 ## Quran Lite
@@ -84,7 +84,7 @@ A second app built from the same code, for people who only want to read the mush
   continue reading.
 - Tapping an ayah only offers a bookmark; no translations, search, home tab, or thematic browsing.
 - Settings: light, dark, or system theme.
-- Internet is used only for the required first-run download of the Lite Qur'an database; no notifications or other
+- Internet is used only for the required first-run download of the Lite Qur'an database and page fonts; no notifications or other
   network features are included. Reading works offline after setup.
 
 It is a separate app (`io.zakkyhidayat.quran.lite`) with its own icon, published on the same GitHub release as
@@ -95,7 +95,7 @@ leaves out data only the full app uses. Details: [docs/FORK_LITE.md](docs/FORK_L
 
 - [x] Reading modes for all surahs: mushaf page, ayahs with translation, translation only (switched from a pill at the
       bottom of the screen)
-- [x] Onboarding for new users: language and required Qur'an database download, mushaf preview, translations (full), appearance
+- [x] Onboarding for new users: language and required Qur'an database/page-font download, mushaf preview, translations (full), appearance
 - [x] All translations downloadable, none bundled in the APK
 - [ ] Automatic cloud backup (Google Drive, Dropbox, OneDrive)
 - [x] Reading reminders to keep a daily portion by juz, hizb, or manzil
@@ -153,7 +153,7 @@ Requires JDK 17+, the Android SDK, and Python 3 with `fonttools`.
 
 1. Download the QUL files listed in [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md) into `data-src/` (not in git; QUL
    downloads need a login).
-2. Copy the page fonts `data-src/ttf/p1.ttf` to `p604.ttf` into `app/src/main/assets/fonts/` (too large for git).
+2. Copy the page fonts `data-src/ttf/p1.ttf` to `p604.ttf` into `app/src/main/assets/fonts/` (too large for git; excluded from APKs).
    `quran.db` is committed as build input and is excluded from APKs; rebuild it only when the data changes:
    `python tools/build_db.py`.
 3. Build:
@@ -172,7 +172,7 @@ built and signed by GitHub Actions; see [docs/RELEASING.md](docs/RELEASING.md).
 Run these before every release. CI checks Qur'an data and interface strings, runs the same JVM unit-test suite and
 Android lint for both the full and Lite variants, and builds the full app and Quran Lite (debug, plus an unsigned Lite
 release to test code shrinking). It also verifies the generated Lite database against the Qur'an source and ensures
-neither APK bundles a database.
+neither APK bundles the database or page fonts.
 
 ```bash
 python tools/verify_quran.py            # Qur'an: 114 surahs, 6,236 ayahs, pages, SHA-256 content fingerprints

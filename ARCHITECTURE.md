@@ -7,12 +7,12 @@ QUL files (data-src/, downloaded by hand, checksums in docs/data-manifest.json)
   │  tools/build_db.py              read-only build step, no hand-edited Qur'an text
   ▼
 app/src/main/assets/quran.db        source database, verified by tools/verify_quran.py (CI; excluded from APKs)
-app/src/main/assets/fonts/          KFGQPC V4 page fonts p1..p604, header and Hafs fonts (copied unchanged)
-  │  Release workflow               publishes compressed full and Lite databases plus quran-data.json
-  │  QuranDatabaseInstaller         downloads the flavor-specific database on first launch; verifies size, SHA-256,
-  │                                  SQLite integrity, schema version, and Qur'an table counts before installation
+app/src/main/assets/fonts/          header, surah-name, common, and Hafs fonts; page fonts excluded from APK
+  │  Release workflow               publishes compressed databases, page-fonts.zip, and quran-data.json
+  │  QuranDatabaseInstaller         downloads the flavor-specific database and all page fonts on first launch;
+  │                                  verifies sizes, SHA-256, SQLite integrity, schema, and all 604 fonts
   ▼
-noBackupFilesDir/quran.db            installed once; ContentDatabase opens it read-only for offline reading
+noBackupFilesDir/quran.db            installed with noBackupFilesDir/quran-fonts/p1.ttf..p604.ttf for offline reading
   ▼
 MushafRepository                    the only reader of quran.db (+ TranslationPacks for downloaded translations)
   ▼
@@ -23,14 +23,15 @@ Compose screens                     reader, index, search, surah info, settings,
 
 Translations are not in `quran.db`. They are SQLite packs built by `tools/build_translation_packs.py`, published on
 GitHub Releases (`translations`), downloaded into `filesDir/translations/`, and verified (SHA-256, 6,236 rows) before use.
-The required Qur'an database is downloaded from the latest application release during onboarding. Reading is offline
-after installation; full and Lite receive separate database assets, while neither APK contains `quran.db`.
+The required Qur'an database and page-font archive are downloaded from the latest application release during onboarding.
+Reading is blocked until both are installed and is offline afterward; full and Lite receive separate database assets and
+the same page-font archive, while neither APK contains `quran.db` or the 604 page fonts.
 
 ## Packages (`app/src/main/java/io/zakkyhidayat/quran/`)
 
 | Package | Responsibility |
 |---------|----------------|
-| `data/` | `ContentDatabase`, `QuranDatabaseInstaller` (release catalog, verified database download), `DownloadHttp`, `MushafRepository`, `TranslationPacks`, `BookmarkStore` (user.db), `Backup` (JSON export/import), `Collections` (curated ayah collections), `ReadingHistory` (history.db), models |
+| `data/` | `ContentDatabase`, `QuranDatabaseInstaller` (release catalog, verified database/font download), `DownloadHttp`, `MushafRepository`, `TranslationPacks`, `BookmarkStore` (user.db), `Backup` (JSON export/import), `Collections` (curated ayah collections), `ReadingHistory` (history.db), models |
 | `reader/` | `ReaderScreen` (top bar, mode pill, pager), `MushafPage` (page rendering), `PalettedFonts` (font palettes), `AyahListReader` (ayah + translation modes), `AyahSheet` |
 | `home/` | Home tab (`HomeTab`: ayah of the day, sunnah readings, reading history, collections) and `PassageScreen` |
 | `explore/` | Thematic browsing: topic list and topic screen |
@@ -45,7 +46,7 @@ after installation; full and Lite receive separate database assets, while neithe
 
 The `lite` product flavor (`io.zakkyhidayat.quran.lite`) is a reading-only app built from the same code: mushaf pages,
 the index lists, page and ayah bookmarks, and the theme setting. `BuildConfig.LITE` hides every other entry point.
-Lite uses internet only during first-run setup to download its separate, slim database; notifications and boot
+Lite uses internet only during first-run setup to download its separate, slim database and shared page fonts; notifications and boot
 permissions remain removed by `app/src/lite/AndroidManifest.xml`. After installation, reading works offline.
 `tools/build_lite_db.py` creates the release database without thematic tables, surah info, or transliteration.
 See docs/FORK_LITE.md.

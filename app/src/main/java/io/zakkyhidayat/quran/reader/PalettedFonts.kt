@@ -6,6 +6,7 @@ import androidx.compose.ui.text.font.FontFamily
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.FileInputStream
 import java.nio.ByteBuffer
 import java.util.concurrent.ConcurrentHashMap
 
@@ -48,18 +49,23 @@ internal object PalettedFonts {
     /** Versi sinkron untuk dipanggil dari thread latar belakang. */
     fun loadBlocking(context: Context, name: String, palette: Int, copyColors: List<Pair<Int, Int>> = emptyList()): FontFamily =
         cache.getOrPut(key(name, palette, copyColors)) {
+            val downloaded = File(File(context.noBackupFilesDir, "quran-fonts"), name)
+            val asset = downloaded.takeIf { name.startsWith('p') && it.isFile }
             val typeface = if (palette == 0 && copyColors.isEmpty()) {
-                android.graphics.Typeface.createFromAsset(context.assets, "fonts/$name")
+                if (asset != null) android.graphics.Typeface.createFromFile(asset)
+                else android.graphics.Typeface.createFromAsset(context.assets, "fonts/$name")
             } else {
                 val suffix = if (copyColors.isEmpty()) "" else "-" + copyColors.joinToString("") { "c${it.first}_${it.second}" }
                 val file = File(File(context.cacheDir, "palette").apply { mkdirs() }, "${name.removeSuffix(".ttf")}-$palette$suffix.ttf")
                 if (!file.exists() || file.length() == 0L) {
-                    val original = context.assets.open("fonts/$name").use { it.readBytes() }
+                    val original = (asset?.let(::FileInputStream) ?: context.assets.open("fonts/$name")).use { it.readBytes() }
                     val tmp = File(file.parentFile, file.name + "." + Thread.currentThread().id + ".tmp")
                     tmp.writeBytes(withPalette(original, palette, copyColors))
                     if (!tmp.renameTo(file)) tmp.delete()
                 }
-                if (file.exists()) android.graphics.Typeface.createFromFile(file) else android.graphics.Typeface.createFromAsset(context.assets, "fonts/$name")
+                if (file.exists()) android.graphics.Typeface.createFromFile(file)
+                else if (asset != null) android.graphics.Typeface.createFromFile(asset)
+                else android.graphics.Typeface.createFromAsset(context.assets, "fonts/$name")
             }
             FontFamily(androidx.compose.ui.text.font.Typeface(typeface))
         }

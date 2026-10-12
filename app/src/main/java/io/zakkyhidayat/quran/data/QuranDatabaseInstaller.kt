@@ -13,14 +13,19 @@ import java.io.File
 import java.io.IOException
 import java.security.MessageDigest
 import java.util.zip.GZIPInputStream
+import java.util.zip.ZipInputStream
 
 data class QuranDatabaseDownloadProgress(val downloaded: Long, val total: Long)
 
 private data class QuranDatabaseAsset(val file: String, val bytes: Long, val sha256: String)
+private data class QuranFontAsset(val file: String, val bytes: Long, val sha256: String)
+
+private val pageFontName = Regex("p(?:[1-9]|[1-9][0-9]|[1-5][0-9]{2}|60[0-4])\\.ttf")
 
 private data class QuranDatabaseCatalog(
     val databaseVersion: Int,
     val assets: Map<String, QuranDatabaseAsset>,
+    val fonts: QuranFontAsset,
 )
 
 /**
@@ -30,17 +35,18 @@ private data class QuranDatabaseCatalog(
 class QuranDatabaseInstaller(context: Context) {
     private val appContext = context.applicationContext
     private val target = databaseFile(appContext)
+    private val fontsTarget = fontsDirectory(appContext)
     val progress = MutableStateFlow<QuranDatabaseDownloadProgress?>(null)
 
     suspend fun hasInstalledDatabase(): Boolean = withContext(Dispatchers.IO) {
-        if (target.isFile && isValidDatabase(target)) return@withContext true
+        if (target.isFile && isValidDatabase(target) && hasInstalledFonts()) return@withContext true
 
         val legacyFiles = target.parentFile
             ?.listFiles { file -> file.isFile && file.name.startsWith("quran-") && file.name.endsWith(".db") }
             .orEmpty()
             .sortedByDescending { it.lastModified() }
         for (legacy in legacyFiles) {
-            if (!isValidDatabase(legacy)) continue
+            if (!isValidDatabase(legacy) || !hasInstalledFonts()) continue
             val temp = File(target.parentFile, "${target.name}.migration")
             if (legacy.copyTo(temp, overwrite = true).renameTo(target)) return@withContext true
             temp.delete()
@@ -50,7 +56,8 @@ class QuranDatabaseInstaller(context: Context) {
     }
 
     suspend fun downloadSize(): Long? = withContext(Dispatchers.IO) {
-        catalog().assets[flavorKey()]?.bytes
+        val metadata = catalog()
+        metadata.assets[flavorKey()]?.bytes?.plus(metadata.fonts.bytes)
             ?: throw IOException("Database untuk varian ini tidak tersedia")
     }
 
@@ -61,32 +68,13 @@ class QuranDatabaseInstaller(context: Context) {
         val archive = File(target.parentFile, "${target.name}.gz.tmp")
         val database = File(target.parentFile, "${target.name}.tmp")
         val backup = File(target.parentFile, "${target.name}.old")
+        val fontsArchive = File(target.parentFile, "quran-fonts.zip.tmp")
+        val fontsStage = File(target.parentFile, "quran-fonts.stage")
+        val fontsBackup = File(target.parentFile, "quran-fonts.old")
+        val downloadTotal = asset.bytes + metadata.fonts.bytes
         try {
-            val digest = MessageDigest.getInstance("SHA-256")
-            val conn = openHttpsDownload("${BuildConfig.QURAN_DATA_CATALOG_URL.substringBeforeLast('/')}/${asset.file}")
-            try {
-                val total = conn.contentLengthLong.takeIf { it > 0 } ?: asset.bytes
-                var downloaded = 0L
-                conn.inputStream.use { input ->
-                    archive.outputStream().use { output ->
-                        val buffer = ByteArray(64 * 1024)
-                        while (true) {
-                            currentCoroutineContext().ensureActive()
-                            val count = input.read(buffer)
-                            if (count < 0) break
-                            output.write(buffer, 0, count)
-                            digest.update(buffer, 0, count)
-                            downloaded += count
-                            progress.value = QuranDatabaseDownloadProgress(downloaded, total)
-                        }
-                    }
-                }
-                if (downloaded != asset.bytes) throw IOException("Ukuran database tidak cocok")
-            } finally {
-                conn.disconnect()
-            }
-            val hash = digest.digest().joinToString("") { "%02x".format(it) }
-            if (!hash.equals(asset.sha256, ignoreCase = true)) throw IOException("Checksum database tidak cocok")
+            download(asset.file, asset.bytes, asset.sha256, archive, 0L, downloadTotal)
+            download(metadata.fonts.file, metadata.fonts.bytes, metadata.fonts.sha256, fontsArchive, asset.bytes, downloadTotal)
 
             GZIPInputStream(archive.inputStream().buffered()).use { input ->
                 database.outputStream().use { output ->
@@ -103,19 +91,104 @@ class QuranDatabaseInstaller(context: Context) {
                 throw IOException("Database Qur’an tidak lengkap atau tidak kompatibel")
             }
 
+            extractFonts(fontsArchive, fontsStage)
+            if (!hasInstalledFonts(fontsStage)) throw IOException("Paket font mushaf tidak lengkap")
+
+            fontsBackup.deleteRecursively()
+            if (fontsTarget.exists() && !fontsTarget.renameTo(fontsBackup)) {
+                throw IOException("Gagal mengganti font mushaf")
+            }
+            if (!fontsStage.renameTo(fontsTarget)) {
+                if (fontsBackup.exists()) fontsBackup.renameTo(fontsTarget)
+                throw IOException("Gagal menyimpan font mushaf")
+            }
+
             backup.delete()
-            if (target.exists() && !target.renameTo(backup)) throw IOException("Gagal mengganti database lama")
+            if (target.exists() && !target.renameTo(backup)) {
+                fontsTarget.deleteRecursively()
+                if (fontsBackup.exists()) fontsBackup.renameTo(fontsTarget)
+                throw IOException("Gagal mengganti database lama")
+            }
             if (!database.renameTo(target)) {
                 if (backup.exists()) backup.renameTo(target)
+                fontsTarget.deleteRecursively()
+                if (fontsBackup.exists()) fontsBackup.renameTo(fontsTarget)
                 throw IOException("Gagal menyimpan database")
             }
             backup.delete()
+            fontsBackup.deleteRecursively()
         } finally {
             archive.delete()
             database.delete()
+            fontsArchive.delete()
+            fontsStage.deleteRecursively()
             progress.value = null
         }
     }
+
+    private suspend fun download(file: String, bytes: Long, sha256: String, destination: File, offset: Long, total: Long) {
+        val digest = MessageDigest.getInstance("SHA-256")
+        val conn = openHttpsDownload("${BuildConfig.QURAN_DATA_CATALOG_URL.substringBeforeLast('/')}/$file")
+        try {
+            var downloaded = 0L
+            conn.inputStream.use { input ->
+                destination.outputStream().use { output ->
+                    val buffer = ByteArray(64 * 1024)
+                    while (true) {
+                        currentCoroutineContext().ensureActive()
+                        val count = input.read(buffer)
+                        if (count < 0) break
+                        output.write(buffer, 0, count)
+                        digest.update(buffer, 0, count)
+                        downloaded += count
+                        progress.value = QuranDatabaseDownloadProgress(offset + downloaded, total)
+                    }
+                }
+            }
+            if (downloaded != bytes) throw IOException("Ukuran berkas data mushaf tidak cocok")
+        } finally {
+            conn.disconnect()
+        }
+        val hash = digest.digest().joinToString("") { "%02x".format(it) }
+        if (!hash.equals(sha256, ignoreCase = true)) throw IOException("Checksum data mushaf tidak cocok")
+    }
+
+    private suspend fun extractFonts(archive: File, destination: File) {
+        destination.deleteRecursively()
+        if (!destination.mkdirs()) throw IOException("Gagal menyiapkan folder font mushaf")
+        val seen = HashSet<String>()
+        ZipInputStream(archive.inputStream().buffered()).use { zip ->
+            while (true) {
+                currentCoroutineContext().ensureActive()
+                val entry = zip.nextEntry ?: break
+                val name = entry.name
+                if (entry.isDirectory || !pageFontName.matches(name) || !seen.add(name)) {
+                    throw IOException("Isi paket font mushaf tidak valid")
+                }
+                val output = File(destination, name)
+                output.outputStream().use { stream ->
+                    val buffer = ByteArray(32 * 1024)
+                    var fontBytes = 0L
+                    while (true) {
+                        currentCoroutineContext().ensureActive()
+                        val count = zip.read(buffer)
+                        if (count < 0) break
+                        fontBytes += count
+                        if (fontBytes > MAX_PAGE_FONT_BYTES) throw IOException("Berkas font mushaf terlalu besar")
+                        stream.write(buffer, 0, count)
+                    }
+                }
+                if (output.length() == 0L) throw IOException("Berkas font mushaf kosong")
+                zip.closeEntry()
+            }
+        }
+        if (seen.size != 604) throw IOException("Paket font mushaf tidak lengkap")
+    }
+
+    private fun hasInstalledFonts(directory: File = fontsTarget): Boolean =
+        directory.listFiles()?.count { file ->
+            file.isFile && file.length() in 1..MAX_PAGE_FONT_BYTES && pageFontName.matches(file.name)
+        } == 604
 
     private fun catalog(): QuranDatabaseCatalog {
         val conn = openHttpsDownload(BuildConfig.QURAN_DATA_CATALOG_URL)
@@ -140,8 +213,15 @@ class QuranDatabaseInstaller(context: Context) {
                 }
                 QuranDatabaseAsset(name, bytes, sha256)
             }
+            val fontEntry = json.getJSONObject("fonts")
+            val fontName = fontEntry.getString("file")
+            val fontBytes = fontEntry.getLong("bytes")
+            val fontSha256 = fontEntry.getString("sha256")
+            if (fontName != "page-fonts.zip" || fontBytes <= 0 || !fontSha256.matches(Regex("[a-fA-F0-9]{64}"))) {
+                throw IOException("Metadata font mushaf tidak valid")
+            }
             if (version <= 0) throw IOException("Versi database tidak valid")
-            return QuranDatabaseCatalog(version, assets)
+            return QuranDatabaseCatalog(version, assets, QuranFontAsset(fontName, fontBytes, fontSha256))
         } catch (e: IOException) {
             throw e
         } catch (e: Exception) {
@@ -182,6 +262,9 @@ class QuranDatabaseInstaller(context: Context) {
     }.getOrDefault(false)
 
     companion object {
+        private const val MAX_PAGE_FONT_BYTES = 1024L * 1024
+
         fun databaseFile(context: Context) = File(context.applicationContext.noBackupFilesDir, "quran.db")
+        fun fontsDirectory(context: Context) = File(context.applicationContext.noBackupFilesDir, "quran-fonts")
     }
 }

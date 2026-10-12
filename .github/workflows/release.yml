@@ -96,8 +96,9 @@ jobs:
           cp app/build/outputs/bundle/playRelease/app-play-release.aab "out/quran-${TAG}-play.aab"
           gzip -n -c app/src/main/assets/quran.db > out/quran-full.db.gz
           gzip -n -c app/build/quran-data/lite/quran.db > out/quran-lite.db.gz
-          python tools/create_quran_manifest.py --full out/quran-full.db.gz --lite out/quran-lite.db.gz --output out/quran-data.json
-          gh release create "$TAG" out/Quran.apk out/Quran-Lite.apk out/quran-full.db.gz out/quran-lite.db.gz out/quran-data.json --title "$TAG" --generate-notes
+          cp "$RUNNER_TEMP/page-fonts.zip" out/page-fonts.zip
+          python tools/create_quran_manifest.py --full out/quran-full.db.gz --lite out/quran-lite.db.gz --fonts out/page-fonts.zip --output out/quran-data.json
+          gh release create "$TAG" out/Quran.apk out/Quran-Lite.apk out/quran-full.db.gz out/quran-lite.db.gz out/page-fonts.zip out/quran-data.json --title "$TAG" --generate-notes
           # AAB untuk Play Console disimpan sebagai artefak workflow, bukan aset rilis publik.
 
       - uses: actions/upload-artifact@v4

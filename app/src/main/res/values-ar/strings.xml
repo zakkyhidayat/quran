@@ -147,12 +147,12 @@
     <string name="onb_start">ابدأ القراءة</string>
     <string name="onb_welcome_title">السلام عليكم</string>
     <string name="onb_welcome_body">مرحبًا بك. هذا التطبيق لقراءة القرآن الكريم بمصحف المدينة. اختر أولًا لغة التطبيق.</string>
-    <string name="onb_download_title">تنزيل بيانات القرآن</string>
-    <string name="onb_download_body">يلزم تنزيل البيانات مرة واحدة قبل القراءة. تُحفظ على هذا الجهاز، وبعدها يمكنك القراءة دون اتصال بالإنترنت.</string>
+    <string name="onb_download_title">تنزيل بيانات القرآن وخطوط الصفحات</string>
+    <string name="onb_download_body">يجب تنزيل قاعدة البيانات وجميع خطوط الصفحات الـ604 قبل القراءة. تُحفظ على هذا الجهاز للقراءة دون اتصال بالإنترنت.</string>
     <string name="onb_download_size">حجم التنزيل: %1$s</string>
     <string name="onb_download_start">تنزيل ومتابعة</string>
     <string name="onb_downloading">جارٍ تنزيل %1$s من %2$s</string>
-    <string name="onb_download_error">تعذر تنزيل بيانات القرآن. تحقق من الاتصال وحاول مرة أخرى.</string>
+    <string name="onb_download_error">تعذر تنزيل بيانات القرآن أو خطوط الصفحات كاملة أو التحقق منها. تحقق من الاتصال ومساحة التخزين ثم حاول مجدداً.</string>
     <string name="onb_download_full_features">يتضمن الإصدار الكامل أيضًا معلومات الموضوعات والسور.</string>
     <string name="onb_mushaf_title">عن هذا المصحف</string>
     <string name="onb_mushaf_body">تتبع الصفحات مصحف المدينة المطبوع في مجمع الملك فهد: الرسم العثماني، رواية حفص، 604 صفحات في كل منها 15 سطرًا. لا تتوفر أنماط صفحات أخرى مثل الهندي أو الشمرلي، فإن كنت معتادًا على أحدها فستبدو الحروف وتخطيط الصفحات مختلفة.</string>
