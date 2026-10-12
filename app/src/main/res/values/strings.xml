@@ -203,10 +203,10 @@
     <string name="backup_import_done">Backup restored. New bookmarks: %1$d</string>
     <string name="backup_failed">Backup failed: %1$s</string>
     <string name="auto_backup">Auto backup</string>
-    <string name="auto_backup_off_sub">Choose a file once; it is updated whenever your bookmarks or last read position change</string>
-    <string name="auto_backup_on_sub">Saving to %1$s • last saved %2$s</string>
+    <string name="auto_backup_off_sub">Choose a folder once; up to 3 backups are kept and updated when bookmarks or reading position change</string>
+    <string name="auto_backup_on_sub">Folder: %1$s • last saved %2$s • keeps 3 backups</string>
     <string name="auto_backup_pending">not yet</string>
-    <string name="auto_backup_error">Could not save to the chosen file. Turn auto backup off and on to choose it again.</string>
+    <string name="auto_backup_error">Could not save to the chosen folder. Turn auto backup off and on to choose it again.</string>
     <string name="reminder">Reading reminder</string>
     <string name="reminder_daily">Daily reminder</string>
     <string name="reminder_off_sub">A notification each day with the portion you are reading</string>

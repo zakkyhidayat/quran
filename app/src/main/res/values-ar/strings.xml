@@ -202,10 +202,10 @@
     <string name="backup_import_done">تمت الاستعادة. العلامات الجديدة: %1$d</string>
     <string name="backup_failed">فشل النسخ الاحتياطي: %1$s</string>
     <string name="auto_backup">نسخ احتياطي تلقائي</string>
-    <string name="auto_backup_off_sub">اختر ملفًا مرة واحدة؛ يُحدَّث كلما تغيّرت العلامات أو موضع آخر قراءة</string>
-    <string name="auto_backup_on_sub">الحفظ في %1$s • آخر حفظ %2$s</string>
+    <string name="auto_backup_off_sub">اختر مجلدًا؛ يُحدَّث عند تغيّر العلامات أو موضع القراءة مع الاحتفاظ بثلاث نسخ احتياطية كحد أقصى</string>
+    <string name="auto_backup_on_sub">المجلد: %1$s • آخر حفظ %2$s • الاحتفاظ بثلاث نسخ</string>
     <string name="auto_backup_pending">لم يتم بعد</string>
-    <string name="auto_backup_error">تعذّر الحفظ في الملف المختار. أوقف النسخ التلقائي ثم شغّله لاختيار الملف من جديد.</string>
+    <string name="auto_backup_error">تعذّر الحفظ في المجلد المختار. أوقف النسخ التلقائي ثم شغّله لاختيار المجلد من جديد.</string>
     <string name="reminder">تذكير القراءة</string>
     <string name="reminder_daily">تذكير يومي</string>
     <string name="reminder_off_sub">إشعار يومي بالجزء الذي تقرؤه</string>

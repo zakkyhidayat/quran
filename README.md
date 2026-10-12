@@ -71,6 +71,7 @@ Choices made on purpose:
 - Optional daily reading reminder by juz, hizb, or manzil.
 - Backup and restore of bookmarks and settings to a file (on the device or any cloud app with a file provider, such as
   Google Drive). Quran and Quran Lite can share one backup file, so saved pages and ayahs follow you between editions.
+- Optional automatic backup to a user-selected folder; it keeps the three newest snapshots.
 - Page and ayah bookmarks; search by Arabic text, translation, surah name, or a reference such as `2:255`.
 - Reading modes for the mushaf page, ayahs with translation, or translation only; tajweed colours can be switched
   on or off, with a compact guide to the colour rules.

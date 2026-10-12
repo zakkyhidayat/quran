@@ -122,4 +122,18 @@ class BookmarkAndBackupTest {
         assertEquals(1, Backup.import(context, Uri.fromFile(file), settings, store).bookmarksAdded)
         assertEquals(42, settings.settings.first().lastPage)
     }
+
+    @Test
+    fun autoBackupRetentionKeepsOnlyThreeNewestSnapshots() {
+        val removed = Backup.autoBackupNamesToDelete(
+            listOf(
+                "quran-autobackup-1.json" to 10L,
+                "quran-autobackup-2.json" to 20L,
+                "quran-autobackup-3.json" to 30L,
+                "quran-autobackup-4.json" to 40L,
+                "quran-autobackup-5.json" to 50L,
+            ),
+        )
+        assertEquals(listOf("quran-autobackup-2.json", "quran-autobackup-1.json"), removed)
+    }
 }

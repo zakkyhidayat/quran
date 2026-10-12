@@ -114,8 +114,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /**
-     * Cadangan otomatis: bila pengguna sudah memilih berkas tujuan, tulis ulang berkas itu setiap kali bookmark atau
-     * posisi baca terakhir berubah. Jeda 2 detik menggabungkan perubahan beruntun (misalnya membalik banyak halaman).
+     * Cadangan otomatis: setelah jeda dua detik dari perubahan bookmark atau posisi baca, simpan snapshot ke folder
+     * SAF yang dipilih. Backup.exportToFolder menggabungkan data terdahulu dan mempertahankan tiga snapshot terbaru.
      */
     @OptIn(kotlinx.coroutines.FlowPreview::class)
     private fun autoBackup() {
@@ -129,7 +129,10 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
                 .debounce(2_000)
                 .collectLatest { uri ->
                     if (uri == null) return@collectLatest
-                    runCatching { Backup.export(getApplication(), android.net.Uri.parse(uri), settingsRepository, bookmarkStore) }
+                    runCatching {
+                        bookmarkStore.load()
+                        Backup.exportToFolder(getApplication(), android.net.Uri.parse(uri), settingsRepository, bookmarkStore)
+                    }
                         .onSuccess { settingsRepository.setAutoBackupAt(System.currentTimeMillis()) }
                         .onFailure {
                             android.util.Log.w("Backup", "Cadangan otomatis gagal: $it")

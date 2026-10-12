@@ -202,10 +202,10 @@
     <string name="backup_import_done">Копия восстановлена. Новых закладок: %1$d</string>
     <string name="backup_failed">Ошибка резервного копирования: %1$s</string>
     <string name="auto_backup">Автоматическое копирование</string>
-    <string name="auto_backup_off_sub">Выберите файл один раз; он обновляется при каждом изменении закладок или места чтения</string>
-    <string name="auto_backup_on_sub">Сохраняется в %1$s • последний раз %2$s</string>
+    <string name="auto_backup_off_sub">Выберите папку; при изменении закладок или места чтения сохраняются обновления, максимум 3 копии</string>
+    <string name="auto_backup_on_sub">Папка: %1$s • сохранено: %2$s • хранится 3 копии</string>
     <string name="auto_backup_pending">ещё нет</string>
-    <string name="auto_backup_error">Не удалось сохранить в выбранный файл. Выключите и снова включите автокопирование, чтобы выбрать файл заново.</string>
+    <string name="auto_backup_error">Не удалось сохранить в выбранную папку. Выключите и снова включите автокопирование, чтобы выбрать её заново.</string>
     <string name="reminder">Напоминание о чтении</string>
     <string name="reminder_daily">Ежедневное напоминание</string>
     <string name="reminder_off_sub">Каждый день уведомление о части, которую вы читаете</string>

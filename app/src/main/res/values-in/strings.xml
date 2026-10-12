@@ -202,10 +202,10 @@
     <string name="backup_import_done">Cadangan dipulihkan. Bookmark baru: %1$d</string>
     <string name="backup_failed">Cadangan gagal: %1$s</string>
     <string name="auto_backup">Cadangan otomatis</string>
-    <string name="auto_backup_off_sub">Pilih berkas sekali; berkas diperbarui setiap kali bookmark atau posisi baca terakhir berubah</string>
-    <string name="auto_backup_on_sub">Disimpan ke %1$s • terakhir %2$s</string>
+    <string name="auto_backup_off_sub">Pilih folder sekali; maksimal 3 cadangan disimpan dan diperbarui saat bookmark atau posisi baca berubah</string>
+    <string name="auto_backup_on_sub">Folder: %1$s • terakhir disimpan %2$s • menyimpan 3 cadangan</string>
     <string name="auto_backup_pending">belum</string>
-    <string name="auto_backup_error">Tidak bisa menyimpan ke berkas yang dipilih. Matikan lalu nyalakan lagi untuk memilih ulang berkasnya.</string>
+    <string name="auto_backup_error">Tidak bisa menyimpan ke folder yang dipilih. Matikan lalu nyalakan lagi untuk memilih foldernya.</string>
     <string name="reminder">Pengingat membaca</string>
     <string name="reminder_daily">Pengingat harian</string>
     <string name="reminder_off_sub">Notifikasi setiap hari berisi bagian yang sedang Anda baca</string>

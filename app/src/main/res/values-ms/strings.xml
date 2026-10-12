@@ -202,10 +202,10 @@
     <string name="backup_import_done">Sandaran dipulihkan. Penanda baharu: %1$d</string>
     <string name="backup_failed">Sandaran gagal: %1$s</string>
     <string name="auto_backup">Sandaran automatik</string>
-    <string name="auto_backup_off_sub">Pilih fail sekali; ia dikemas kini setiap kali penanda atau kedudukan bacaan terakhir berubah</string>
-    <string name="auto_backup_on_sub">Disimpan ke %1$s • terakhir %2$s</string>
+    <string name="auto_backup_off_sub">Pilih folder; sehingga 3 sandaran disimpan dan dikemas kini apabila penanda atau kedudukan bacaan berubah</string>
+    <string name="auto_backup_on_sub">Folder: %1$s • terakhir disimpan %2$s • menyimpan 3 sandaran</string>
     <string name="auto_backup_pending">belum</string>
-    <string name="auto_backup_error">Tidak dapat menyimpan ke fail yang dipilih. Matikan dan hidupkan semula untuk memilih fail sekali lagi.</string>
+    <string name="auto_backup_error">Tidak dapat menyimpan ke folder yang dipilih. Matikan dan hidupkan semula untuk memilih folder sekali lagi.</string>
     <string name="reminder">Peringatan membaca</string>
     <string name="reminder_daily">Peringatan harian</string>
     <string name="reminder_off_sub">Pemberitahuan setiap hari tentang bahagian yang sedang anda baca</string>

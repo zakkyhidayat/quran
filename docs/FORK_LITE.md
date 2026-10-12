@@ -32,9 +32,13 @@ JSON v2 yang netral edisi:
 - Pengaturan disimpan per profil (`full`, `lite`). Tiap edisi hanya menerapkan profilnya sendiri dan mempertahankan
   profil edisi lain saat menulis ulang berkas.
 - Berkas v1 lama tetap bisa diimpor (di Lite hanya bookmark dan posisi baca).
-- Cadangan otomatis aktif di kedua edisi. Pilih berkas yang sama di keduanya (pilih berkas yang sudah ada pada
-  penyedia dokumen, misalnya Google Drive); setiap penulisan membaca isi berkas dulu dan menggabungkannya. Perilaku
-  menimpa berkas yang ada bergantung pada penyedia dokumen.
+- Cadangan otomatis aktif di kedua edisi. Pilih folder yang sama di keduanya melalui pemilih folder Android; setiap
+  perubahan tersimpan sebagai snapshot baru bernama `quran-autobackup-<timestamp>.json`. Folder mempertahankan maksimal
+  tiga snapshot terbaru dan menghapus yang lebih lama.
+- Data dari snapshot yang ada digabungkan sebelum snapshot baru dibuat, agar perubahan dari Full dan Lite ikut terbawa.
+  Snapshot tetap bisa dipulihkan melalui menu Impor dengan memilih salah satu berkas JSON di folder tersebut.
+- Jika sebelumnya auto-backup memakai satu berkas dari versi lama, matikan auto-backup lalu pilih folder. Berkas lama
+  tidak dihapus dan masih dapat dipulihkan lewat Impor manual.
 - Impor manual selalu memulihkan bookmark aktif di berkas, meski pernah dihapus secara lokal.
 
 ## Struktur kode dan flavor

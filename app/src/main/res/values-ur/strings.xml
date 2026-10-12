@@ -202,10 +202,10 @@
     <string name="backup_import_done">بیک اپ بحال ہو گیا۔ نئے بُک مارکس: %1$d</string>
     <string name="backup_failed">بیک اپ ناکام: %1$s</string>
     <string name="auto_backup">خودکار بیک اپ</string>
-    <string name="auto_backup_off_sub">ایک بار فائل منتخب کریں؛ بُک مارکس یا آخری پڑھی جگہ بدلنے پر یہ اپ ڈیٹ ہو جاتی ہے</string>
-    <string name="auto_backup_on_sub">%1$s میں محفوظ • آخری بار %2$s</string>
+    <string name="auto_backup_off_sub">ایک بار فولڈر منتخب کریں؛ بک مارکس یا مطالعے کی جگہ بدلنے پر تازہ کاری ہوگی اور زیادہ سے زیادہ 3 بیک اپ رکھے جائیں گے</string>
+    <string name="auto_backup_on_sub">فولڈر: %1$s • آخری بار %2$s • 3 بیک اپ محفوظ</string>
     <string name="auto_backup_pending">ابھی نہیں</string>
-    <string name="auto_backup_error">منتخب فائل میں محفوظ نہیں ہو سکا۔ فائل دوبارہ چننے کے لیے خودکار بیک اپ بند کر کے دوبارہ چلائیں۔</string>
+    <string name="auto_backup_error">منتخب فولڈر میں محفوظ نہیں ہو سکا۔ فولڈر دوبارہ چننے کے لیے خودکار بیک اپ بند کر کے دوبارہ چلائیں۔</string>
     <string name="reminder">پڑھنے کی یاد دہانی</string>
     <string name="reminder_daily">روزانہ یاد دہانی</string>
     <string name="reminder_off_sub">ہر روز اس حصے کی اطلاع جو آپ پڑھ رہے ہیں</string>

@@ -2,6 +2,7 @@ package io.zakkyhidayat.quran.data
 
 import android.content.Context
 import android.net.Uri
+import android.provider.DocumentsContract
 import io.zakkyhidayat.quran.BuildConfig
 import io.zakkyhidayat.quran.settings.SettingsRepository
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +26,11 @@ object Backup {
     private const val VERSION = 2
     private val PROFILE = if (BuildConfig.LITE) "lite" else "full"
     private val POSITION_KEYS = listOf("last_page", "last_surah", "last_ayah")
+    private const val AUTO_PREFIX = "quran-autobackup-"
+    private const val AUTO_SUFFIX = ".json"
+    private const val MAX_AUTO_BACKUPS = 3
+
+    private data class AutoBackupDocument(val uri: Uri, val name: String, val modified: Long)
 
     data class Result(val bookmarksAdded: Int, val bookmarksRemoved: Int = 0)
 
@@ -96,8 +102,149 @@ object Backup {
         out.bufferedWriter().use { it.write(json.toString(2)) }
     }
 
-    private suspend fun mergeInto(json: JSONObject, bookmarks: BookmarkStore) =
-        runCatching { bookmarks.merge(bookmarksOf(json), deletionsOf(json)) }
+    /**
+     * Simpan snapshot baru ke folder SAF, gabungkan dahulu semua snapshot yang ada, lalu pertahankan maksimal tiga
+     * berkas terbaru. Folder dapat dipilih sama di Quran dan Quran Lite.
+     */
+    suspend fun exportToFolder(context: Context, treeUri: Uri, settings: SettingsRepository, bookmarks: BookmarkStore) =
+        withContext(Dispatchers.IO) {
+            if (!DocumentsContract.isTreeUri(treeUri)) throw IOException("URI cadangan otomatis bukan folder")
+
+            val snapshots = listAutoBackups(context, treeUri)
+            var latest: JSONObject? = null
+            snapshots.forEach { document ->
+                val json = readSnapshot(context, document.uri)
+                bookmarks.merge(bookmarksOf(json), deletionsOf(json))
+                latest = json
+            }
+
+            val payload = buildPayload(latest, settings, bookmarks)
+            val parentId = DocumentsContract.getTreeDocumentId(treeUri)
+            val parent = DocumentsContract.buildDocumentUriUsingTree(treeUri, parentId)
+            val timestamp = System.currentTimeMillis()
+            val name = "$AUTO_PREFIX$timestamp$AUTO_SUFFIX"
+            val documentUri = DocumentsContract.createDocument(
+                context.contentResolver,
+                parent,
+                "application/json",
+                name,
+            ) ?: throw IOException("Penyedia dokumen tidak dapat membuat berkas cadangan")
+            try {
+                val out = context.contentResolver.openOutputStream(documentUri, "wt")
+                    ?: throw IOException("Tidak bisa menulis berkas cadangan")
+                out.bufferedWriter().use { it.write(payload.toString(2)) }
+            } catch (e: Exception) {
+                DocumentsContract.deleteDocument(context.contentResolver, documentUri)
+                throw e
+            }
+
+            val current = listAutoBackups(context, treeUri)
+            val toDelete = autoBackupNamesToDelete(current.map { it.name to it.modified }).toSet()
+            current.filter { it.name in toDelete }.forEach { old ->
+                if (!DocumentsContract.deleteDocument(context.contentResolver, old.uri)) {
+                    throw IOException("Tidak bisa menghapus cadangan lama: ${old.name}")
+                }
+            }
+        }
+
+    internal fun autoBackupNamesToDelete(entries: List<Pair<String, Long>>): List<String> =
+        entries.sortedWith(compareByDescending<Pair<String, Long>> { it.second }.thenByDescending { it.first })
+            .drop(MAX_AUTO_BACKUPS)
+            .map { it.first }
+
+    private suspend fun buildPayload(
+        existing: JSONObject?,
+        settings: SettingsRepository,
+        bookmarks: BookmarkStore,
+    ): JSONObject {
+        val mine = settings.exportAll()
+        val profiles = JSONObject()
+        existing?.let { old ->
+            if (old.optInt("version") >= 2) {
+                old.optJSONObject("profiles")?.let { p -> p.keys().forEach { if (it != PROFILE) profiles.put(it, p.get(it)) } }
+            } else if (PROFILE != "full") {
+                old.optJSONObject("settings")?.let { profiles.put("full", JSONObject().put("settings", it)) }
+            }
+        }
+        profiles.put(PROFILE, JSONObject().put("settings", JSONObject().also { obj ->
+            mine.filterKeys { it !in POSITION_KEYS }.forEach { (key, value) -> obj.put(key, value) }
+        }))
+
+        return JSONObject()
+            .put("format", FORMAT)
+            .put("version", VERSION)
+            .put("exportedAt", System.currentTimeMillis())
+            .put("app", PROFILE)
+            .put("position", JSONObject().also { obj -> POSITION_KEYS.forEach { k -> mine[k]?.let { obj.put(k, it) } } })
+            .put("profiles", profiles)
+            .put("bookmarks", JSONArray().also { arr ->
+                bookmarks.bookmarks.value.forEach { b ->
+                    arr.put(
+                        JSONObject().put("kind", b.kind.name).put("page", b.page).put("surah", b.surah)
+                            .put("ayah", b.ayah).put("createdAt", b.createdAt),
+                    )
+                }
+            })
+            .put("deleted", JSONArray().also { arr ->
+                bookmarks.deletions().forEach { d ->
+                    arr.put(
+                        JSONObject().put("kind", d.kind.name).put("page", d.page).put("surah", d.surah)
+                            .put("ayah", d.ayah).put("deletedAt", d.at),
+                    )
+                }
+            })
+    }
+
+    private fun listAutoBackups(context: Context, treeUri: Uri): List<AutoBackupDocument> {
+        val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(
+            treeUri,
+            DocumentsContract.getTreeDocumentId(treeUri),
+        )
+        val documents = mutableListOf<AutoBackupDocument>()
+        context.contentResolver.query(
+            childrenUri,
+            arrayOf(
+                DocumentsContract.Document.COLUMN_DOCUMENT_ID,
+                DocumentsContract.Document.COLUMN_DISPLAY_NAME,
+                DocumentsContract.Document.COLUMN_LAST_MODIFIED,
+            ),
+            null,
+            null,
+            null,
+        )?.use { cursor ->
+            val idColumn = cursor.getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_DOCUMENT_ID)
+            val nameColumn = cursor.getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_DISPLAY_NAME)
+            val modifiedColumn = cursor.getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_LAST_MODIFIED)
+            while (cursor.moveToNext()) {
+                val name = cursor.getString(nameColumn) ?: continue
+                if (name.startsWith(AUTO_PREFIX) && name.endsWith(AUTO_SUFFIX)) {
+                    documents += AutoBackupDocument(
+                        DocumentsContract.buildDocumentUriUsingTree(treeUri, cursor.getString(idColumn)),
+                        name,
+                        cursor.getLong(modifiedColumn),
+                    )
+                }
+            }
+        } ?: throw IOException("Tidak bisa membaca isi folder cadangan")
+        return documents.sortedWith(compareBy<AutoBackupDocument> { it.modified }.thenBy { it.name })
+    }
+
+    private fun readSnapshot(context: Context, uri: Uri): JSONObject {
+        val text = context.contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
+            ?: throw IOException("Tidak bisa membaca snapshot cadangan")
+        val json = try {
+            JSONObject(text)
+        } catch (e: Exception) {
+            throw IOException("Snapshot cadangan rusak", e)
+        }
+        if (json.optString("format") != FORMAT || json.optInt("version") > VERSION) {
+            throw IOException("Snapshot bukan cadangan yang didukung aplikasi ini")
+        }
+        return json
+    }
+
+    private suspend fun mergeInto(json: JSONObject, bookmarks: BookmarkStore): BookmarkStore.MergeResult =
+        bookmarks.merge(bookmarksOf(json), deletionsOf(json))
 
     /**
      * Bookmark digabung (yang terbaru menang, termasuk penghapusan). Pengaturan diganti dengan profil edisi ini; berkas

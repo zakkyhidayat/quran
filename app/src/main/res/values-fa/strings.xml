@@ -202,10 +202,10 @@
     <string name="backup_import_done">پشتیبان بازیابی شد. نشانک‌های تازه: %1$d</string>
     <string name="backup_failed">پشتیبان‌گیری ناموفق: %1$s</string>
     <string name="auto_backup">پشتیبان‌گیری خودکار</string>
-    <string name="auto_backup_off_sub">یک بار فایلی انتخاب کنید؛ با هر تغییر نشانک‌ها یا آخرین جای خواندن به‌روز می‌شود</string>
-    <string name="auto_backup_on_sub">ذخیره در %1$s • آخرین بار %2$s</string>
+    <string name="auto_backup_off_sub">یک پوشه انتخاب کنید؛ با تغییر نشانک‌ها یا جای خواندن به‌روز می‌شود و حداکثر ۳ نسخه پشتیبان نگه می‌دارد</string>
+    <string name="auto_backup_on_sub">پوشه: %1$s • آخرین ذخیره %2$s • نگهداری ۳ نسخه</string>
     <string name="auto_backup_pending">هنوز نه</string>
-    <string name="auto_backup_error">ذخیره در فایل انتخاب‌شده ممکن نشد. برای انتخاب دوبارهٔ فایل، پشتیبان‌گیری خودکار را خاموش و روشن کنید.</string>
+    <string name="auto_backup_error">ذخیره در پوشه انتخاب‌شده ممکن نشد. برای انتخاب دوباره، پشتیبان‌گیری خودکار را خاموش و روشن کنید.</string>
     <string name="reminder">یادآور خواندن</string>
     <string name="reminder_daily">یادآور روزانه</string>
     <string name="reminder_off_sub">هر روز اعلانی دربارهٔ بخشی که می‌خوانید</string>
