@@ -161,6 +161,36 @@ val liteDb = tasks.register<LiteDbTask>("buildLiteDb") {
     python.set(providers.gradleProperty("python").orElse("python3"))
 }
 
+tasks.register("assembleFullDebug") {
+    group = "build"
+    description = "Builds the Full GitHub debug APK."
+    dependsOn("assembleGithubDebug")
+}
+
+tasks.register("assembleBothDebug") {
+    group = "build"
+    description = "Builds the Full GitHub and Quran Lite debug APKs."
+    dependsOn("assembleGithubDebug", "assembleLiteDebug")
+}
+
+tasks.register("assembleFullRelease") {
+    group = "build"
+    description = "Builds the Full GitHub release APK."
+    dependsOn("assembleGithubRelease")
+}
+
+tasks.register("assembleBothRelease") {
+    group = "build"
+    description = "Builds the Full GitHub and Quran Lite release APKs."
+    dependsOn("assembleGithubRelease", "assembleLiteRelease")
+}
+
+tasks.register("bundleFullPlayRelease") {
+    group = "build"
+    description = "Builds the Full Google Play release bundle."
+    dependsOn("bundlePlayRelease")
+}
+
 androidComponents {
     onVariants { variant ->
         val type = variant.buildType.orEmpty()

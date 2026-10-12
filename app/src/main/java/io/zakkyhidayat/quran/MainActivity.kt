@@ -93,6 +93,11 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
+                androidx.compose.runtime.LaunchedEffect(installed, settings.onboardingDone) {
+                    if (BuildConfig.LITE && installed == true && !settings.onboardingDone) {
+                        vm.settingsRepository.setOnboardingDone()
+                    }
+                }
                 when {
                     installed == null -> androidx.compose.material3.Surface(
                         Modifier.fillMaxSize(),
@@ -103,7 +108,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                     installed == false -> DatabaseSetupScreen(installer) { installed = true }
-                    !settings.onboardingDone -> OnboardingScreen(vm, settings)
+                    !settings.onboardingDone && !BuildConfig.LITE -> OnboardingScreen(vm, settings)
                     else -> AppNav(vm, settings)
                 }
               }

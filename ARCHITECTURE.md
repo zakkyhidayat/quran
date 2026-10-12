@@ -45,13 +45,21 @@ the same page-font archive, while neither APK contains `quran.db` or the 604 pag
 
 ## Lite variant
 
-The `lite` product flavor (`io.zakkyhidayat.quran.lite`) is a reading-only app built from the same code: mushaf pages,
-the index lists, page and ayah bookmarks, and the theme setting. `BuildConfig.LITE` hides every other entry point.
-Lite uses internet only during first-run setup or a user-requested repair/update to download its separate, slim database
-and shared page fonts; notifications and boot permissions remain removed by `app/src/lite/AndroidManifest.xml`. After
-installation, reading works offline.
-`tools/build_lite_db.py` creates the release database without thematic tables, surah info, or transliteration.
-See docs/FORK_LITE.md.
+The Full app and Quran Lite are outputs of the same `:app` module. Shared reader, data, and tajweed code lives in
+`app/src/main`; the `lite` source set supplies its manifest and app-specific resources. Product-flavor configuration
+sets `BuildConfig.LITE`, which gates the different navigation, home/index, reading modes, onboarding, and settings
+behavior without duplicating the shared mushaf reader.
+
+The `lite` product flavor (`io.zakkyhidayat.quran.lite`) is a reading-only app: mushaf pages, index lists, page and
+ayah bookmarks, and theme settings. Lite uses internet only during first-run setup or a user-requested repair/update
+to download its separate, slim database and shared page fonts; notifications and boot permissions remain removed by
+`app/src/lite/AndroidManifest.xml`. After installation, reading works offline. `tools/build_lite_db.py` creates the
+release database without thematic tables, surah info, or transliteration.
+
+The `github` flavor produces the Full APK and the `play` flavor produces the Full Play bundle. The `lite` flavor
+produces the Quran Lite APK. Short Gradle task aliases for building one or both APKs are documented in
+[`docs/RELEASING.md`](docs/RELEASING.md). See [`docs/FORK_LITE.md`](docs/FORK_LITE.md) for the feature and output
+comparison.
 
 ## Database (`quran.db`, read-only)
 

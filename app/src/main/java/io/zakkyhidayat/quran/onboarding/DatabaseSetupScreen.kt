@@ -79,7 +79,7 @@ fun DatabaseSetupScreen(installer: QuranDatabaseInstaller, onInstalled: () -> Un
                 verticalArrangement = Arrangement.Center,
             ) {
                 Text(
-                    stringResource(R.string.onb_step, 1, if (BuildConfig.LITE) 3 else 4),
+                    stringResource(R.string.onb_step, 1, if (BuildConfig.LITE) 1 else 4),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

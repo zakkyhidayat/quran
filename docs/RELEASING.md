@@ -1,82 +1,100 @@
-# Releasing
+# Rilis
 
-Releases are built by GitHub Actions ([`.github/workflows/release.yml`](../.github/workflows/release.yml)) when a tag
-`vX.Y.Z` is pushed. The workflow publishes signed APKs to GitHub Releases (the `github` variant and Quran Lite) and keeps a signed AAB of the `play` variant as a workflow artifact for the Play Console.
+Rilis dibangun oleh GitHub Actions ([`.github/workflows/release.yml`](../.github/workflows/release.yml)) saat tag
+`vX.Y.Z` di-push. Workflow menerbitkan APK bertanda tangan ke GitHub Releases (varian `github` dan Quran Lite), serta
+menyimpan AAB bertanda tangan dari varian `play` sebagai artefak workflow untuk Play Console.
 
-## Build variants
+## Varian build
 
-None of the variants updates itself; users download new versions from GitHub Releases or get them from Google Play.
+Tidak ada varian yang memperbarui dirinya sendiri; pengguna mengunduh versi baru dari GitHub Releases atau Google Play.
+Full dan Quran Lite dibangun dari modul `:app` yang sama dan memakai implementasi pembaca mushaf serta tajwid bersama.
 
-| Variant | App | Use |
-|---------|-----|-----|
-| `github` | Full app (`io.zakkyhidayat.quran`) | `Quran.apk` on GitHub Releases |
-| `play` | Full app, same code as `github` | AAB for Google Play |
-| `lite` | Reading-only app (`io.zakkyhidayat.quran.lite`) | `Quran-Lite.apk` on the same GitHub release, signed with the same key |
+| Varian | Aplikasi | Penggunaan |
+|--------|----------|------------|
+| `github` | Full (`io.zakkyhidayat.quran`) | `Quran.apk` di GitHub Releases |
+| `play` | Full, kode yang sama dengan `github` | AAB untuk Google Play |
+| `lite` | Hanya membaca (`io.zakkyhidayat.quran.lite`) | `Quran-Lite.apk` di rilis GitHub yang sama, ditandatangani dengan kunci yang sama |
 
-Both APKs omit `quran.db` and the 604 page fonts. On first launch, and whenever a user chooses to repair/update data in
-Settings, the app downloads its flavor-specific database and shared page-font archive from the stable `quran-data`
-release. It verifies sizes, SHA-256 hashes, database integrity, and all 604 fonts before storing them in private app
-storage for offline reading. Reading remains blocked until both are installed. App version releases contain only the
-two APKs; the Play AAB remains a workflow artifact.
+Kedua APK tidak menyertakan `quran.db` dan 604 font halaman. Saat pertama dibuka, atau ketika pengguna memilih
+perbaikan/pembaruan data di Pengaturan, aplikasi mengunduh database sesuai flavor dan arsip font halaman bersama dari
+rilis stabil `quran-data`. Aplikasi memeriksa ukuran, SHA-256, integritas database, dan seluruh font sebelum menyimpan
+data di penyimpanan privat agar dapat dibaca secara luring. Membaca belum tersedia sebelum database dan font terpasang.
+Rilis versi aplikasi hanya berisi dua APK; AAB Play tetap menjadi artefak workflow.
 
-Local builds: `./gradlew :app:assembleGithubDebug` (or `assemblePlayDebug`, `assembleLiteDebug`).
+### Target build lokal
 
-The README links straight to `releases/latest/download/Quran.apk` and `Quran-Lite.apk`, so the APK names carry no
-version. Keep `quran-data` and `translations` marked as **pre-release** so neither interferes with the `latest` app
-release. These stable, named releases are the download channels for Quran data and translation packs.
+Jalankan dari root repositori:
 
-## One-time setup
+| Perintah | Output |
+|----------|--------|
+| `./gradlew :app:assembleFullDebug` | APK Full debug: `app/build/outputs/apk/github/debug/app-github-debug.apk` |
+| `./gradlew :app:assembleLiteDebug` | APK Quran Lite debug: `app/build/outputs/apk/lite/debug/app-lite-debug.apk` |
+| `./gradlew :app:assembleBothDebug` | Kedua APK debug |
+| `./gradlew :app:assembleFullRelease` | APK Full release |
+| `./gradlew :app:assembleLiteRelease` | APK Quran Lite release |
+| `./gradlew :app:assembleBothRelease` | Kedua APK release |
+| `./gradlew :app:bundleFullPlayRelease` | AAB Full Google Play: `app/build/outputs/bundle/playRelease/app-play-release.aab` |
 
-### 1. Release keystore
+Tambahkan `--parallel` pada perintah multi-target seperti `assembleBothDebug` untuk mengaktifkan eksekusi paralel Gradle
+bila didukung. Gunakan task flavor standar (`assembleGithubDebug`, `assemblePlayDebug`, dan `assembleLiteDebug`) bila
+ingin membangun flavor distribusi tertentu secara langsung.
 
-Create it once and keep it safe (a password manager plus an offline copy). If it is lost, installed apps can no longer be
-updated; users would have to uninstall and reinstall.
+README menautkan langsung ke `releases/latest/download/Quran.apk` dan `Quran-Lite.apk`, jadi nama APK tidak memuat
+versi. Pastikan `quran-data` dan `translations` berstatus **pre-release** agar tidak mengubah rilis aplikasi `latest`.
+Rilis bernama tersebut adalah kanal unduhan untuk data Qur'an dan paket terjemahan.
+
+## Persiapan satu kali
+
+### 1. Kunci penandatanganan rilis
+
+Buat kunci sekali dan simpan dengan aman (pengelola kata sandi serta salinan luring). Jika hilang, aplikasi terpasang
+tidak dapat diperbarui; pengguna harus menghapus lalu memasangnya kembali.
 
 ```bash
 keytool -genkeypair -v -keystore quran-release.jks -alias quran -keyalg RSA -keysize 4096 -validity 36500
 ```
 
-Add these repository secrets (Settings → Secrets and variables → Actions):
+Tambahkan secret repositori berikut (Settings → Secrets and variables → Actions):
 
-| Secret | Value |
+| Secret | Nilai |
 |--------|-------|
-| `RELEASE_KEYSTORE_BASE64` | `base64 -w0 quran-release.jks` (on Windows Git Bash: `base64 -w0`; PowerShell: `[Convert]::ToBase64String([IO.File]::ReadAllBytes("quran-release.jks"))`) |
-| `RELEASE_KEYSTORE_PASSWORD` | the keystore password |
-| `RELEASE_KEY_ALIAS` | `quran` (or the alias you chose) |
-| `RELEASE_KEY_PASSWORD` | the key password |
+| `RELEASE_KEYSTORE_BASE64` | `base64 -w0 quran-release.jks` (Windows Git Bash: `base64 -w0`; PowerShell: `[Convert]::ToBase64String([IO.File]::ReadAllBytes("quran-release.jks"))`) |
+| `RELEASE_KEYSTORE_PASSWORD` | Kata sandi keystore |
+| `RELEASE_KEY_ALIAS` | `quran` (atau alias yang dipilih) |
+| `RELEASE_KEY_PASSWORD` | Kata sandi kunci |
 
-Never commit the keystore; `*.jks` is in `.gitignore`.
+Jangan pernah commit keystore; `*.jks` tercantum di `.gitignore`.
 
-### 2. Quran data release
+### 2. Rilis data Qur'an
 
-The 604 page fonts are not in git. Create the stable `quran-data` pre-release once with the database archives,
-`quran-data.json`, and the unchanged `page-fonts.zip`. The `Qur'an data` workflow replaces these assets in place
-(`--clobber`) after a reviewed update to `app/src/main/assets/quran.db`; it downloads the existing font archive unless
-the font asset is updated separately:
+604 font halaman tidak disimpan di Git. Buat pre-release stabil `quran-data` satu kali dengan arsip database,
+`quran-data.json`, dan `page-fonts.zip` yang tidak dimodifikasi. Workflow `Qur'an data` mengganti aset di rilis tersebut
+(`--clobber`) setelah pembaruan yang ditinjau pada `app/src/main/assets/quran.db`; arsip font yang tersedia diunduh ulang
+kecuali aset font diperbarui secara terpisah:
 
 ```bash
 gh release create quran-data quran-full.db.gz quran-lite.db.gz page-fonts.zip quran-data.json \
   --prerelease --title "Qur'an data" --notes "Stable download channel for the Quran database and page fonts."
 ```
 
-To refresh the databases after a QUL update, update and verify the committed source database, then run Actions →
-`Qur'an data` → Run workflow on `main`. The workflow regenerates Lite, checks both databases, and overwrites the four
-assets without creating another release entry. To update the page fonts, replace `page-fonts.zip` on the `quran-data`
-release first, then run the workflow.
+Untuk memperbarui database setelah pembaruan QUL, perbarui dan verifikasi database sumber yang di-commit, lalu jalankan
+Actions → `Qur'an data` → Run workflow pada `main`. Workflow membuat ulang database Lite, memeriksa kedua database, dan
+mengganti empat aset tanpa membuat entri rilis baru. Untuk memperbarui font halaman, ganti `page-fonts.zip` di rilis
+`quran-data` terlebih dahulu, lalu jalankan workflow.
 
-## Making a release
+## Membuat rilis
 
-1. Make sure `main` builds and the data is up to date (see [DATA_SOURCES.md](DATA_SOURCES.md)).
-2. Start the release, either way:
-   - **From GitHub:** Actions → Release → Run workflow (branch `main`), enter the new version, e.g. `v0.3.0`. The
-     workflow tags the latest `main` commit and builds.
-   - **From a computer:**
+1. Pastikan `main` berhasil dibangun dan data sudah terbaru (lihat [DATA_SOURCES.md](DATA_SOURCES.md)).
+2. Mulai rilis dengan salah satu cara:
+   - **Dari GitHub:** Actions → Release → Run workflow (branch `main`), masukkan versi baru, misalnya `v0.3.0`.
+     Workflow memberi tag pada commit `main` terbaru lalu membangun rilis.
+   - **Dari komputer:**
      ```bash
      git tag v0.3.0
      git push origin v0.3.0
      ```
-3. The workflow creates the GitHub release `v0.3.0` with `Quran.apk` and `Quran-Lite.apk`, with generated notes.
-   Database and fonts remain in the stable `quran-data` release and can be updated without publishing new APKs.
-4. Download the `play-bundle` artifact from the workflow run for the Play Console.
+3. Workflow membuat rilis GitHub `v0.3.0` yang memuat `Quran.apk` dan `Quran-Lite.apk`, beserta catatan rilis otomatis.
+   Database dan font tetap berada di rilis stabil `quran-data` dan dapat diperbarui tanpa menerbitkan APK baru.
+4. Unduh artefak `play-bundle` dari workflow untuk diunggah ke Play Console.
 
-`versionCode` is `X*10000 + Y*100 + Z`, so every new tag must be higher than the previous one.
+`versionCode` dihitung sebagai `X*10000 + Y*100 + Z`, jadi setiap tag baru harus lebih tinggi daripada tag sebelumnya.
