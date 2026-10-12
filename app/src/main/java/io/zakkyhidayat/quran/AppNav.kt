@@ -3,6 +3,10 @@ package io.zakkyhidayat.quran
 import io.zakkyhidayat.quran.settings.SettingsPage
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalDensity
@@ -52,6 +56,7 @@ import io.zakkyhidayat.quran.index.IndexScreen
 import io.zakkyhidayat.quran.reader.ReaderScreen
 import io.zakkyhidayat.quran.search.SearchScreen
 import io.zakkyhidayat.quran.settings.AppSettings
+import io.zakkyhidayat.quran.settings.SettingsMainSheet
 import io.zakkyhidayat.quran.settings.SettingsScreen
 
 // Lebar jendela "expanded" M3: daftar surah tampil permanen di samping pembaca.
@@ -61,10 +66,12 @@ private const val EXPANDED_WIDTH_DP = 840
 @Composable
 fun AppNav(vm: AppViewModel, settings: AppSettings) {
     val nav = rememberNavController()
+    var settingsSheetVisible by rememberSaveable { mutableStateOf(false) }
     val slidePx = with(LocalDensity.current) { StepSlide.roundToPx() }
     val shiftPx = with(LocalDensity.current) { PredictiveShift.roundToPx() }
     val expanded = LocalConfiguration.current.screenWidthDp >= EXPANDED_WIDTH_DP
     val forward = if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1 else 1
+    val openSettings: () -> Unit = { settingsSheetVisible = true }
 
     // Di ponsel, layar awal adalah daftar bertab; layar baca dibuka dari sana. Di layar lebar daftar tampil permanen di
     // samping, jadi layar baca menjadi layar awal.
@@ -107,7 +114,7 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
                 IndexScreen(
                     vm = vm,
                     onOpenReader = openReader,
-                    onOpenSettings = { nav.navigate(SettingsPage.Main.route) },
+                    onOpenSettings = openSettings,
                     onOpenSurahInfo = { nav.navigate("surah/$it") },
                     onOpenExplore = onOpenExplore,
                     onOpenHome = openHome,
@@ -135,7 +142,7 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
                 IndexScreen(
                     vm = vm,
                     onOpenReader = openReader,
-                    onOpenSettings = { nav.navigate(SettingsPage.Main.route) },
+                    onOpenSettings = openSettings,
                     onOpenSurahInfo = { nav.navigate("surah/$it") },
                     onOpenExplore = onOpenExplore,
                     onOpenHome = openHome,
@@ -147,7 +154,7 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
                     settings = settings,
                     onBack = if (expanded) null else ({ nav.popBackStack() }),
                     onOpenSearch = { nav.navigate("search") },
-                    onOpenSettings = { nav.navigate(SettingsPage.Main.route) },
+                    onOpenSettings = openSettings,
                     onOpenSurahInfo = { nav.navigate("surah/$it") },
                 )
             }
@@ -203,11 +210,22 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
                 }
                 screen("search") { SearchScreen(vm, settings, onBack = { nav.popBackStack() }) }
             }
-            SettingsPage.entries.forEach { page ->
+            SettingsPage.entries.filter { it != SettingsPage.Main }.forEach { page ->
                 screen(page.route) {
                     SettingsScreen(vm, settings, page = page, onBack = { nav.popBackStack() }, onOpen = { nav.navigate(it.route) })
                 }
             }
+        }
+        if (settingsSheetVisible) {
+            SettingsMainSheet(
+                vm = vm,
+                settings = settings,
+                onDismiss = { settingsSheetVisible = false },
+                onOpen = { page ->
+                    settingsSheetVisible = false
+                    nav.navigate(page.route) { launchSingleTop = true }
+                },
+            )
         }
         }
     }

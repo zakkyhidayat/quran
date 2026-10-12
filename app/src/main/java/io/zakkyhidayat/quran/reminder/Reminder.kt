@@ -1,5 +1,6 @@
 package io.zakkyhidayat.quran.reminder
 
+import android.annotation.SuppressLint
 import android.Manifest
 import android.app.AlarmManager
 import android.app.NotificationChannel
@@ -64,10 +65,14 @@ object Reminder {
         Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
             ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
 
+    @SuppressLint("NotificationPermission")
     internal suspend fun notify(context: Context) {
         val app = context.app
         val settings = app.settings.settings.first()
-        if (!settings.reminderEnabled || !canNotify(context)) return
+        if (!settings.reminderEnabled) return
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+        ) return
         val kind = when (settings.reminderUnit) {
             ReminderUnit.Juz -> MarkerKind.Juz
             ReminderUnit.Hizb -> MarkerKind.Hizb
