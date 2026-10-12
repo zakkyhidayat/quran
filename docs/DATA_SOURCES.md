@@ -168,7 +168,8 @@ Untuk menambah paket baru: unduh dan pecah (langkah 1 sampai 3), tambahkan entri
 lalu unggah ulang `catalog.json`. Naikkan `PACK_VERSION` di `tools/build_translation_packs.py` bila isi paket yang sama berubah.
 
 **Atribusi.** Hak cipta tiap terjemahan ada pada penerbit atau penerjemahnya (tercantum di `author` katalog dan nama paket di
-aplikasi), diambil lewat QUL. Lihat `THIRD_PARTY_NOTICES.md`; izin redistribusi belum dipastikan (lihat `docs/AUDIT.md`).
+aplikasi), diambil lewat QUL. Pemilik proyek telah mengonfirmasi izin redistribusi untuk 167 paket yang diterbitkan pada
+2026-10-12; konfirmasi ulang sebelum menerbitkan paket tambahan. Lihat `THIRD_PARTY_NOTICES.md`.
 
 ## Kapan harus memperbarui
 
