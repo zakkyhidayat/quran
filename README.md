@@ -57,9 +57,8 @@ Choices made on purpose:
 - Light, dark, and AMOLED themes; dynamic colour (Android 12+) or the original palette; three contrast levels.
 - Tap an ayah for its translations (with footnotes), Latin transliteration, and position (juz, hizb, rub', manzil, ruku,
   sajdah).
-- Translations are downloaded in the app, so the APK carries none; the active ones download automatically on first
-  launch. Available now: Indonesian (Kemenag, The Sabiq Company, King Fahad Quran Complex) and English (Saheeh
-  International), with more languages to come.
+- Translation packs are downloaded on demand in the full app, so the APK carries none. Packs are available in many
+  languages, including Indonesian and English; browse and choose them in the app.
 - The Qur'an database and all 604 page fonts are downloaded during first-run setup from the stable `quran-data` release;
   neither is bundled in the APK. You can manually redownload/update them in Settings, and reading works offline.
 - Indexes by surah, juz, hizb, rub', manzil, and ruku; surah info; go to ayah; random ayah; continue reading from the last ayah.
@@ -69,6 +68,8 @@ Choices made on purpose:
 - Backup and restore of bookmarks and settings to a file (on the device or any cloud app with a file provider, such as
   Google Drive).
 - Page and ayah bookmarks; search by Arabic text, translation, surah name, or a reference such as `2:255`.
+- Reading modes for the mushaf page, ayahs with translation, or translation only; tajweed colours can be switched
+  on or off, with a compact guide to the colour rules.
 - Interface in 10 languages, following the device language by default: English, Indonesian, Arabic, Urdu, Bengali,
   Turkish, Persian, Malay, French, and Russian.
 - Screen reader support: each ayah is read out as Unicode Arabic text.
@@ -94,8 +95,7 @@ leaves out data only the full app uses. Details: [docs/FORK_LITE.md](docs/FORK_L
 
 ## Roadmap
 
-- [x] Reading modes for all surahs: mushaf page, ayahs with translation, translation only (switched from a pill at the
-      bottom of the screen)
+- [x] Reading modes for all surahs: mushaf page, ayahs with translation, or translation only
 - [x] Onboarding for new users: language and required Qur'an database/page-font download, mushaf preview, translations (full), appearance
 - [x] All translations downloadable, none bundled in the APK
 - [ ] Automatic cloud backup (Google Drive, Dropbox, OneDrive)

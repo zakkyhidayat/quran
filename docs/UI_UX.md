@@ -26,10 +26,16 @@ Dari screenshot [QuranApp](https://github.com/AlfaazPlus/QuranApp) (GPL-3.0, sam
 
 ### Onboarding dan database
 
-- Pemakaian pertama di kedua varian dimulai dengan salam, pilihan bahasa antarmuka, dan unduhan wajib database mushaf
-  serta paket 604 font halaman dari rilis stabil `quran-data`. Ukuran total, progres gabungan, kegagalan, dan coba lagi
-  ditampilkan; database dan seluruh font diverifikasi sebelum mushaf dibuka. Data lokal dapat diunduh ulang/diperbarui
-  manual dari Pengaturan, dan setelah terpasang mushaf dapat dibaca luring.
+- Pemakaian pertama di kedua varian dimulai dengan salam, pilihan bahasa antarmuka, dan validasi versi database mushaf
+  serta paket 604 font halaman terhadap katalog GitHub `quran-data`. Data baru atau usang baru diunduh; versi lokal yang
+  sama dengan rilis tidak diunduh ulang. Ukuran total, progres gabungan, kegagalan, dan coba lagi ditampilkan; database
+  dan font diperiksa sebelum mushaf dibuka. Data lokal dapat diperbarui manual dari Pengaturan, dan mushaf tetap dapat
+  dibaca luring saat data terpasang.
+- Pembaca mushaf menempatkan tombol Tajwid di kiri baris bawah dan trio mode baca tepat di tengah pada varian penuh.
+  Keempat tombol memiliki target sentuh minimal 48 dp dan ikon mode baca berukuran 24 dp; trio memakai ikon saja
+  agar bisa tetap tepat di tengah. Tombol Tajwid membuka satu panel mengambang berisi legenda hukum bacaan dan
+  sakelar warna tajwid; panel berada tepat di atas tombol, tanpa menggeser atau menutupi trio. Header nama surah
+  dan juz di atas halaman dihilangkan karena informasi itu sudah tampil pada bilah pembaca.
 - Langkah setelah unduhan sama-sama menampilkan pratinjau mushaf dan sakelar tajwid. Varian penuh juga menawarkan
   pilihan paket terjemahan; kedua varian berakhir pada pengaturan tampilan. Lite tidak menampilkan pilihan terjemahan.
 
@@ -37,8 +43,8 @@ Dari screenshot [QuranApp](https://github.com/AlfaazPlus/QuranApp) (GPL-3.0, sam
 
 - Layar daftar memakai tab yang dapat dipilih atau digeser; keduanya menggerakkan pager yang sama.
 - Perpindahan antar-rute memakai shared-axis X dan dukungan back prediktif, berlaku untuk full dan Lite melalui `AppNav`.
-- Menu utama Pengaturan tampil sebagai modal bottom sheet di atas layar aktif. Memilih kategori membuka layar penuh; tombol
-  kembali menutup submenu dan kembali ke layar asal.
+- Menu utama Pengaturan tampil sebagai modal bottom sheet mengambang dengan jarak di kiri, kanan, dan bawah layar aktif.
+  Memilih kategori membuka layar penuh; tombol kembali menutup submenu dan kembali ke layar asal.
 
 Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pull/1)):
 

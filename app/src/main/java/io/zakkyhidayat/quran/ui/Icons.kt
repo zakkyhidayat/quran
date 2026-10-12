@@ -75,6 +75,8 @@ object AppIcons {
     val Contrast = svg("Contrast", "M12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2zM12,20V4c4.41,0 8,3.59 8,8s-3.59,8 -8,8z")
 
     val FormatColorText = svg("FormatColorText", "M2,20h20v4H2v-4zM5.49,17h2.42l1.27,-3.58h5.65L16.09,17h2.42L13.25,3h-2.5L5.49,17zM9.91,11.39l2.03,-5.79h0.12l2.03,5.79H9.91z")
+    val ExpandMore = svg("ExpandMore", "M7.41,8.59L12,13.17l4.59,-4.58L18,10l-6,6 -6,-6z")
+    val ExpandLess = svg("ExpandLess", "M7.41,15.41L12,10.83l4.59,4.58L18,14l-6,-6 -6,6z")
 
     val Category = svg("Category", "M12,2l-5.5,9h11L12,2zM17.5,13c-2.49,0 -4.5,2.01 -4.5,4.5s2.01,4.5 4.5,4.5 4.5,-2.01 4.5,-4.5 -2.01,-4.5 -4.5,-4.5zM3,21.5h8v-8H3v8z")
 
@@ -95,6 +97,7 @@ object AppIcons {
     // Seperempat lingkaran terpisah dari sisanya: untuk rub' (seperempat hizb).
     val Quarter = svg("Quarter", "M13,2.05V11h8.95C21.48,6.28 17.72,2.52 13,2.05zM11,2.05C5.95,2.55 2,6.82 2,12c0,5.52 4.48,10 10,10 5.18,0 9.45,-3.95 9.95,-9H11V2.05z")
     val Notes = svg("Notes", "M3,18h12v-2L3,16v2zM3,6v2h18L21,6L3,6zM3,13h18v-2L3,11v2z")
+    val TextLines = svg("TextLines", "M3,4h18v2H3zM3,11h14v2H3zM3,18h18v2H3z")
     val Shield = svg("Shield", "M12,1L3,5v6c0,5.55 3.84,10.74 9,12 5.16,-1.26 9,-6.45 9,-12V5l-9,-4zM12,11.99h7c-0.53,4.12 -3.28,7.79 -7,8.94V12H5V6.3l7,-3.11v8.8z")
     val Warning = svg("Warning", "M1,21h22L12,2 1,21zM13,18h-2v-2h2v2zM13,14h-2v-4h2v4z")
     val Alarm = svg("Alarm", "M22,5.72l-4.6,-3.86 -1.29,1.53 4.6,3.86L22,5.72zM7.88,3.39L6.6,1.86 2,5.71l1.29,1.53 4.59,-3.85zM12.5,8H11v6l4.75,2.85 0.75,-1.23 -4,-2.37V8zM12,4c-4.97,0 -9,4.03 -9,9s4.02,9 9,9c4.97,0 9,-4.03 9,-9s-4.03,-9 -9,-9zM12,20c-3.87,0 -7,-3.13 -7,-7s3.13,-7 7,-7 7,3.13 7,7 -3.13,7 -7,7z")

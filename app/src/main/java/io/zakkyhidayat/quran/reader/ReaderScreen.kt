@@ -3,7 +3,6 @@ package io.zakkyhidayat.quran.reader
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.graphics.luminance
 import kotlinx.coroutines.withContext
@@ -43,7 +42,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -75,11 +73,8 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.LineHeightStyle
-import androidx.compose.ui.unit.sp
 import io.zakkyhidayat.quran.ui.JumpToAyahDialog
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -113,9 +108,6 @@ private val PageEndPadding = 8.dp
 
 // Blok halaman digeser ke luar tepi kiri layar sebesar ini (dan dilebarkan sama besar) supaya margin kiri lebih sempit.
 private val PageStartBleed = (-2).dp
-private val HeaderHeight = 32.dp
-private val HeaderGap = 10.dp
-private val PageChromeHeight = HeaderHeight + HeaderGap
 // Kertas B5: 176 x 250 mm.
 private const val PageHeightOverWidth = 250f / 176f
 
@@ -191,9 +183,6 @@ fun ReaderScreen(
     val motion = MaterialTheme.motionScheme
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val resources = LocalResources.current
-    val commonFont = remember { commonFontFamily(context) }
-    val nameFont = remember { surahNameFontFamily(context) }
     val meta = pageMeta.getOrNull(currentPage - 1)
     val currentSurah = meta?.let { surahs[it.surah] }
     // Ayat untuk penghitung: di mode mushaf ayat pertama halaman; di mode daftar ayat pertama yang terlihat.
@@ -276,7 +265,7 @@ fun ReaderScreen(
                 // Blok halaman berproporsi kertas B5 (176 x 250 mm), seperti mushaf cetak; header dan nomor menempel di sekelilingnya.
                 val bleed = if (maxWidth - PageEndPadding < PageMaxWidth) PageStartBleed else 0.dp
                 val available = minOf(maxWidth - PageEndPadding + bleed, PageMaxWidth)
-                val fitHeight = (maxHeight - PageChromeHeight) / PageHeightOverWidth
+                val fitHeight = maxHeight / PageHeightOverWidth
                 // Di layar pendek (lanskap ponsel) halaman yang dimuatkan ke tinggi menjadi terlalu kecil untuk dibaca;
                 // halaman dibuat selebar layar dan digulir vertikal.
                 val scrollPage = fitHeight < available * 0.6f
@@ -294,7 +283,6 @@ fun ReaderScreen(
                         val page = index + 1
                         val lines by produceState<List<PageLine>?>(null, page) { value = vm.mushaf.page(page) }
                         val ayahTexts by produceState<List<AyahText>>(emptyList(), page) { value = vm.mushaf.pageAyahs(page) }
-                        val pageInfo = pageMeta.getOrNull(index)
                         Box(
                             Modifier.fillMaxSize()
                                 .then(if (scrollPage) Modifier.verticalScroll(rememberScrollState()) else Modifier)
@@ -303,42 +291,6 @@ fun ReaderScreen(
                                 },
                         ) {
                             Column(Modifier.align(Alignment.CenterStart).offset(x = startOffset), horizontalAlignment = Alignment.CenterHorizontally) {
-                                Row(Modifier.width(blockWidth).height(HeaderHeight).padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                                    val headSurah = pageInfo?.let { surahs[it.surah] }
-                                    // Nama surah (font nama surah) disamakan dengan judul juz kaligrafi: warna sama, tinggi tinta sama (~21 sp).
-                                    val stripColor = MaterialTheme.colorScheme.onSurfaceVariant
-                                    if (headSurah != null) {
-                                        Text(
-                                            text = headSurah.nameGlyph.toString(),
-                                            style = TextStyle(
-                                                fontFamily = nameFont,
-                                                fontSize = 18.sp,
-                                                // Metrik vertikal font ini ~2,6 em; dibatasi supaya tidak mendorong tata letak.
-                                                lineHeight = 21.sp,
-                                                lineHeightStyle = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.Both),
-                                                color = stripColor,
-                                            ),
-                                            modifier = Modifier
-                                                .height(24.dp)
-                                                .wrapContentHeight(Alignment.CenterVertically, unbounded = true)
-                                                .then(
-                                                    if (BuildConfig.LITE) Modifier.semantics { contentDescription = headSurah.nameLatin }
-                                                    else Modifier
-                                                        .clickable(onClickLabel = stringResource(R.string.open_surah_info)) { onOpenSurahInfo(headSurah.id) }
-                                                        .semantics { contentDescription = resources.getString(R.string.surah_info_cd, headSurah.nameLatin) },
-                                                ),
-                                        )
-                                    }
-                                    Box(Modifier.weight(1f))
-                                    pageInfo?.let { info ->
-                                        Text(
-                                            text = juzTitleGlyph(info.juz),
-                                            style = TextStyle(fontFamily = commonFont, fontSize = 18.sp, color = stripColor),
-                                            modifier = Modifier.semantics { contentDescription = resources.getString(R.string.juz_n, info.juz) },
-                                        )
-                                    }
-                                }
-                                Spacer(Modifier.height(HeaderGap))
                                 Box(Modifier.size(blockWidth, blockHeight), contentAlignment = Alignment.Center) {
                                     val loaded = lines
                                     if (loaded == null) {
@@ -391,13 +343,25 @@ fun ReaderScreen(
                     visible = !listMode && !settings.gestureHintDone,
                     enter = fadeIn(motion.defaultEffectsSpec()),
                     exit = fadeOut(motion.fastEffectsSpec()),
-                    modifier = Modifier.align(Alignment.BottomCenter).zIndex(2f),
+                    modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 76.dp).zIndex(2f),
                 ) {
                     GestureHint { scope.launch { vm.settingsRepository.setGestureHintDone() } }
                 }
             }
-            // Pill cara baca di barisnya sendiri, jadi tidak menutupi halaman; tinggi halaman menyesuaikan.
-            if (!BuildConfig.LITE) ReadingModeBar(mode) { scope.launch { vm.settingsRepository.setReadingMode(it) } }
+            if (!listMode) {
+                TajweedReaderControls(
+                    enabled = settings.tajweed,
+                    onEnabledChange = { enabled -> scope.launch { vm.settingsRepository.setTajweed(enabled) } },
+                    mode = mode,
+                    onModeSelect = { scope.launch { vm.settingsRepository.setReadingMode(it) } },
+                    showReadingModes = !BuildConfig.LITE,
+                )
+            } else if (!BuildConfig.LITE) {
+                ReadingModeBar(
+                    mode = mode,
+                    onSelect = { scope.launch { vm.settingsRepository.setReadingMode(it) } },
+                )
+            }
         }
     }
 
@@ -440,5 +404,3 @@ fun ReaderScreen(
         }
     }
 }
-
-

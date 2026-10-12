@@ -12,8 +12,11 @@ Berkas mentah disimpan di `data-src/` (tidak masuk git). Yang masuk git: `tools/
 `app/src/main/assets/quran.db` (hasil build, menjadi sumber build dan tidak dimasukkan ke APK), dan
 `docs/data-manifest.json` (hash berkas sumber yang dipakai). Workflow rilis menerbitkan database full dan Lite sebagai
 aset gzip di rilis stabil `quran-data` bersama `quran-data.json`; onboarding mengunduh varian yang sesuai, memeriksa ukuran, SHA-256, integritas SQLite,
-versi skema, dan jumlah data Qur'an. Paket `page-fonts.zip` berisi 604 font mushaf yang juga diunduh dan diverifikasi;
-aplikasi baru mengizinkan membaca setelah database dan seluruh font terpasang. Setelahnya mushaf dapat dibaca luring.
+versi skema, dan jumlah data Qur'an. Sebelum mengunduh atau memperbarui, aplikasi membandingkan versi serta checksum pada
+katalog GitHub dengan manifest instalasi lokal, lalu memeriksa integritas database dan checksum berkas font yang terpasang;
+unduhan dilewati bila data lokal sama dengan rilis. Instalasi lama tanpa manifest yang versi database-nya cocok dan memiliki
+604 font valid akan diadopsi dan diberi checksum lokal tanpa mengunduh ulang. Paket `page-fonts.zip` berisi 604 font mushaf yang juga diunduh dan
+diverifikasi; aplikasi baru mengizinkan membaca setelah database dan seluruh font terpasang. Setelahnya mushaf dapat dibaca luring.
 
 ## Daftar sumber
 
