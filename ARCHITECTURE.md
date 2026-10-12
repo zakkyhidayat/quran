@@ -51,7 +51,8 @@ sets `BuildConfig.LITE`, which gates the different navigation, home/index, readi
 behavior without duplicating the shared mushaf reader.
 
 The `lite` product flavor (`io.zakkyhidayat.quran.lite`) is a reading-only app: mushaf pages, index lists, page and
-ayah bookmarks, and theme settings. Lite uses internet only during first-run setup or a user-requested repair/update
+ayah bookmarks, backup, and theme settings. Backup is shared with Full: format v2 keeps bookmarks, deletion tombstones, and reading position edition-neutral, and
+settings per `full`/`lite` profile (see `data/Backup.kt`). Lite uses internet only during first-run setup or a user-requested repair/update
 to download its separate, slim database and shared page fonts; notifications and boot permissions remain removed by
 `app/src/lite/AndroidManifest.xml`. After installation, reading works offline. `tools/build_lite_db.py` creates the
 release database without thematic tables, surah info, or transliteration.

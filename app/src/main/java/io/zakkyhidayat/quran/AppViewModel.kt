@@ -98,9 +98,10 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             translations.value = mushaf.translations()
             restoreActiveTranslations()
         }
-        // Lite hanya membaca: tanpa terjemahan, cadangan, histori, pengingat, dan internet.
+        // Cadangan otomatis juga di Lite, agar bookmark tersinkron dengan edisi Full lewat berkas yang sama.
+        autoBackup()
+        // Lite hanya membaca: tanpa terjemahan, histori, pengingat, dan internet.
         if (!BuildConfig.LITE) {
-            autoBackup()
             recordHistory()
             // Pasang ulang jadwal pengingat setiap kali pengaturannya berubah (termasuk saat aplikasi dibuka).
             viewModelScope.launch {

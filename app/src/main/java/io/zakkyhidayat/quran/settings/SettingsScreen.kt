@@ -297,6 +297,13 @@ private fun LiteSettingsMain(vm: AppViewModel, settings: AppSettings, onOpen: (S
             trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
         )
         item(
+            title = stringResource(R.string.backup),
+            subtitle = stringResource(if (settings.autoBackupUri != null) R.string.settings_backup_on else R.string.settings_backup_sub),
+            onClick = { onOpen(SettingsPage.Backup) },
+            leading = { Icon(AppIcons.Backup, contentDescription = null) },
+            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
+        )
+        item(
             title = stringResource(R.string.about),
             subtitle = stringResource(R.string.settings_about_sub),
             onClick = { onOpen(SettingsPage.About) },

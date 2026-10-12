@@ -12,7 +12,7 @@ perilaku dilakukan melalui flavor Gradle, `BuildConfig.LITE`, manifest Lite, dan
 | Halaman utama | Beranda, bookmark, indeks, Jelajahi, dan fitur Full lainnya | Bookmark dan daftar surah |
 | Pembaca | Mushaf, ayat + terjemahan, atau terjemahan saja | Mushaf saja; toggle warna tajwid tetap tersedia |
 | Fitur ayat | Terjemahan, transliterasi, pencarian, berbagi, dan fitur terkait | Bookmark ayat |
-| Pengaturan | Bahasa, tema, data, terjemahan, cadangan, pengingat, dan pengaturan Full lain | Tema, pemeliharaan data, dan informasi aplikasi |
+| Pengaturan | Bahasa, tema, data, terjemahan, cadangan, pengingat, dan pengaturan Full lain | Tema, pemeliharaan data, cadangan, dan informasi aplikasi |
 | Data Qur'an | Database Full | Database Lite yang lebih kecil; teks mushaf sama |
 | Jaringan | Unduh database/font, paket terjemahan, dan fitur Full tertentu | Hanya unduh atau perbarui database/font |
 | Izin | Izin yang diperlukan fitur Full | Izin notifikasi dan boot tidak disertakan |
@@ -21,6 +21,21 @@ Saat pertama dibuka, kedua aplikasi meminta bahasa dan mengunduh database serta 
 dilanjutkan dengan pratinjau mushaf, pilihan terjemahan, dan tampilan. Lite langsung masuk ke aplikasi setelah bahasa
 dan data siap. Setelah data siap, keduanya dapat membaca secara luring. Lite menyimpan bookmark dan pengaturan di
 ruang data aplikasinya sendiri.
+
+## Cadangan bersama Full dan Lite
+
+Kedua aplikasi punya `applicationId` berbeda, jadi data lokalnya terpisah. Bookmark berpindah lewat berkas cadangan
+JSON v2 yang netral edisi:
+
+- Bookmark, penanda hapus (tombstone), dan posisi baca dipakai bersama. Gabungan berbasis waktu: yang terbaru menang,
+  sehingga bookmark yang dihapus di satu edisi tidak muncul lagi dari berkas.
+- Pengaturan disimpan per profil (`full`, `lite`). Tiap edisi hanya menerapkan profilnya sendiri dan mempertahankan
+  profil edisi lain saat menulis ulang berkas.
+- Berkas v1 lama tetap bisa diimpor (di Lite hanya bookmark dan posisi baca).
+- Cadangan otomatis aktif di kedua edisi. Pilih berkas yang sama di keduanya (pilih berkas yang sudah ada pada
+  penyedia dokumen, misalnya Google Drive); setiap penulisan membaca isi berkas dulu dan menggabungkannya. Perilaku
+  menimpa berkas yang ada bergantung pada penyedia dokumen.
+- Impor manual selalu memulihkan bookmark aktif di berkas, meski pernah dihapus secara lokal.
 
 ## Struktur kode dan flavor
 
