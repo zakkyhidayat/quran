@@ -11,7 +11,12 @@ None of the variants updates itself; users download new versions from GitHub Rel
 |---------|-----|-----|
 | `github` | Full app (`io.zakkyhidayat.quran`) | `Quran.apk` on GitHub Releases |
 | `play` | Full app, same code as `github` | AAB for Google Play |
-| `lite` | Reading-only app without internet (`io.zakkyhidayat.quran.lite`) | `Quran-Lite.apk` on the same GitHub release, signed with the same key |
+| `lite` | Reading-only app (`io.zakkyhidayat.quran.lite`) | `Quran-Lite.apk` on the same GitHub release, signed with the same key |
+
+Both APKs omit `quran.db`. On first launch, the app downloads its flavor-specific database from the latest GitHub
+Release, verifies it, and stores it locally for offline reading. Each application release must therefore include
+`quran-full.db.gz`, `quran-lite.db.gz`, and `quran-data.json` alongside the APKs. The release workflow creates these
+assets from the verified full source and generated Lite database.
 
 Local builds: `./gradlew :app:assembleGithubDebug` (or `assemblePlayDebug`, `assembleLiteDebug`).
 
@@ -63,8 +68,8 @@ Update it with `gh release upload build-assets page-fonts.zip --clobber` when th
      git tag v0.3.0
      git push origin v0.3.0
      ```
-3. The workflow creates the GitHub release `v0.3.0` with `Quran.apk` and `Quran-Lite.apk`, with
-   generated notes. Edit the notes on GitHub if needed.
+3. The workflow creates the GitHub release `v0.3.0` with `Quran.apk`, `Quran-Lite.apk`, both database archives, and
+   `quran-data.json`, with generated notes. Edit the notes on GitHub if needed.
 4. Download the `play-bundle` artifact from the workflow run for the Play Console.
 
 `versionCode` is `X*10000 + Y*100 + Z`, so every new tag must be higher than the previous one.

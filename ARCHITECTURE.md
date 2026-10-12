@@ -6,9 +6,13 @@
 QUL files (data-src/, downloaded by hand, checksums in docs/data-manifest.json)
   │  tools/build_db.py              read-only build step, no hand-edited Qur'an text
   ▼
-app/src/main/assets/quran.db        verified by tools/verify_quran.py (CI)
+app/src/main/assets/quran.db        source database, verified by tools/verify_quran.py (CI; excluded from APKs)
 app/src/main/assets/fonts/          KFGQPC V4 page fonts p1..p604, header and Hafs fonts (copied unchanged)
-  │  ContentDatabase                copies quran.db to no-backup storage once per app version, opens it read-only
+  │  Release workflow               publishes compressed full and Lite databases plus quran-data.json
+  │  QuranDatabaseInstaller         downloads the flavor-specific database on first launch; verifies size, SHA-256,
+  │                                  SQLite integrity, schema version, and Qur'an table counts before installation
+  ▼
+noBackupFilesDir/quran.db            installed once; ContentDatabase opens it read-only for offline reading
   ▼
 MushafRepository                    the only reader of quran.db (+ TranslationPacks for downloaded translations)
   ▼
@@ -19,12 +23,14 @@ Compose screens                     reader, index, search, surah info, settings,
 
 Translations are not in `quran.db`. They are SQLite packs built by `tools/build_translation_packs.py`, published on
 GitHub Releases (`translations`), downloaded into `filesDir/translations/`, and verified (SHA-256, 6,236 rows) before use.
+The required Qur'an database is downloaded from the latest application release during onboarding. Reading is offline
+after installation; full and Lite receive separate database assets, while neither APK contains `quran.db`.
 
 ## Packages (`app/src/main/java/io/zakkyhidayat/quran/`)
 
 | Package | Responsibility |
 |---------|----------------|
-| `data/` | `ContentDatabase`, `MushafRepository`, `TranslationPacks`, `BookmarkStore` (user.db), `Backup` (JSON export/import), `Collections` (curated ayah collections), `ReadingHistory` (history.db), models |
+| `data/` | `ContentDatabase`, `QuranDatabaseInstaller` (release catalog, verified database download), `DownloadHttp`, `MushafRepository`, `TranslationPacks`, `BookmarkStore` (user.db), `Backup` (JSON export/import), `Collections` (curated ayah collections), `ReadingHistory` (history.db), models |
 | `reader/` | `ReaderScreen` (top bar, mode pill, pager), `MushafPage` (page rendering), `PalettedFonts` (font palettes), `AyahListReader` (ayah + translation modes), `AyahSheet` |
 | `home/` | Home tab (`HomeTab`: ayah of the day, sunnah readings, reading history, collections) and `PassageScreen` |
 | `explore/` | Thematic browsing: topic list and topic screen |
@@ -38,9 +44,10 @@ GitHub Releases (`translations`), downloaded into `filesDir/translations/`, and 
 ## Lite variant
 
 The `lite` product flavor (`io.zakkyhidayat.quran.lite`) is a reading-only app built from the same code: mushaf pages,
-the index lists, page and ayah bookmarks, and the theme setting. `BuildConfig.LITE` hides every other entry point, and
-`app/src/lite/AndroidManifest.xml` removes the internet, notification and boot permissions. Its `quran.db` is a
-slimmed copy built at build time by `tools/build_lite_db.py` (no thematic tables, surah info or transliteration).
+the index lists, page and ayah bookmarks, and the theme setting. `BuildConfig.LITE` hides every other entry point.
+Lite uses internet only during first-run setup to download its separate, slim database; notifications and boot
+permissions remain removed by `app/src/lite/AndroidManifest.xml`. After installation, reading works offline.
+`tools/build_lite_db.py` creates the release database without thematic tables, surah info, or transliteration.
 See docs/FORK_LITE.md.
 
 ## Database (`quran.db`, read-only)
@@ -72,5 +79,5 @@ in advance, so swiping only draws ready-made layouts.
   original file.
 - `tools/check_strings.py`: interface translations (CI).
 - `app/src/test`: the same JVM unit-test suite and Android lint run for both full (`github`) and `lite` debug variants
-  in CI; the Lite APK's embedded database is also checked against the Qur'an content fingerprints and structure.
+  in CI; source and generated Lite databases are verified, and CI checks that neither APK embeds the database.
 - `baselineprofile/`: generates the Baseline Profile on a device.

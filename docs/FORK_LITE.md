@@ -1,6 +1,6 @@
 # Rencana varian "Mushaf Lite": hanya membaca per halaman
 
-Status: jalan A (flavor `lite`) sudah dikerjakan; build `./gradlew :app:assembleLiteDebug`. Belum diuji di perangkat.
+Status: jalan A (flavor `lite`) sudah dikerjakan. Build lokal: `./gradlew :app:assembleLiteDebug`.
 
 Implementasi: flavor `lite` di dimensi `distribution` (bukan dimensi baru, supaya nama tugas varian lain tidak
 berubah), `BuildConfig.LITE` untuk menyembunyikan fitur, `app/src/lite/AndroidManifest.xml` untuk membuang izin, dan
@@ -8,12 +8,12 @@ berubah), `BuildConfig.LITE` untuk menyembunyikan fitur, `app/src/lite/AndroidMa
 
 ## Ukuran
 
-- `quran.db` lite dibangun saat build oleh `tools/build_lite_db.py` dari `quran.db` penuh (Gradle `buildLiteDb`, hasil di
-  `app/build/`, tidak masuk git): tabel penjelajahan dibuang, isi `surah_info` dan `transliteration` dikosongkan, tabel
-  teks Qur'an dan pembagian disalin utuh dan jumlah barisnya dicek. 12,8 MB menjadi 5,0 MB (terkompresi di APK
-  4,3 MB menjadi 1,5 MB). Salinan di perangkat juga ikut turun karena aplikasi menyalin `quran.db` ke penyimpanan.
+- `quran.db` Lite dibuat oleh `tools/build_lite_db.py` dari sumber full: tabel penjelajahan dibuang, isi `surah_info`
+  dan `transliteration` dikosongkan, sementara teks Qur'an dan pembagian disalin utuh. Database full dan Lite dikirim
+  sebagai aset gzip di GitHub Release; APK tidak membundel database. Onboarding mengunduh varian sesuai aplikasi,
+  memverifikasi ukuran, SHA-256, skema, dan isi sebelum memasang database lokal untuk membaca luring.
 - Rute layar lain tidak didaftarkan di `AppNav` untuk lite, sehingga R8 (rilis) bisa membuang kodenya.
-- CI memeriksa ukuran `assets/quran.db` di APK lite (1–8 MB) supaya salinan penuh tidak ikut tanpa sadar.
+- CI memverifikasi database full dan Lite, lalu memastikan `assets/quran.db` tidak masuk ke kedua APK.
 - Yang tidak bisa dikecilkan: 604 font halaman V4 (lisensi KFGQPC melarang modifikasi), ikut di APK rilis seperti
   versi penuh.
 
@@ -30,11 +30,11 @@ Yang **ada**:
 - Pengaturan: hanya tema terang, gelap, dan ikuti sistem.
 
 Yang **dibuang**: terjemahan dan transliterasi, isi sheet ayat selain bookmark (terjemahan, salin, bagikan, ayat serupa, dan lain-lain), mode ayat+terjemahan dan terjemahan saja,
-pencarian, Beranda, Jelajahi/topik, info surah, pengingat, cadangan, updater, onboarding, pilihan bahasa antarmuka di
-dalam aplikasi, dan unduhan apa pun.
+pencarian, Beranda, Jelajahi/topik, info surah, pengingat, cadangan, updater, dan langkah pilihan terjemahan di onboarding.
+Onboarding Lite tetap mencakup pemilihan bahasa, unduhan wajib database, pratinjau mushaf, dan pengaturan tampilan.
 
-Konsekuensi yang menguntungkan: aplikasi **tanpa izin internet dan notifikasi**, sehingga kebijakan privasinya menjadi
-"tidak mengumpulkan dan tidak mengirim data apa pun".
+Lite memerlukan izin internet hanya untuk unduhan database wajib saat penggunaan pertama. Setelah itu aplikasi membaca
+database lokal secara luring, tanpa fitur jaringan lain atau notifikasi.
 
 ## Keputusan utama: repo terpisah atau flavor di repo ini
 
@@ -45,7 +45,7 @@ Ada dua jalan. Saya sarankan **flavor di repo ini**, kecuali Anda memang ingin k
 | Perbaikan pembaca (mis. animasi geser, issue #9) | Otomatis berlaku di kedua aplikasi | Harus di-port manual, mudah tertinggal |
 | Data `quran.db`, font, verifikasi teks Qur'an | Satu sumber, satu CI | Dua salinan yang harus disinkronkan |
 | Kerumitan kode | Ada percabangan per flavor (`BuildConfig.LITE`) | Kode lebih bersih, hanya yang dipakai |
-| Ukuran APK | Kode fitur lain bisa dipangkas R8, tetapi `quran.db` tetap penuh kecuali dibuat versi ramping | Bebas memangkas `quran.db` |
+| Ukuran APK | Database full/Lite dirilis sebagai aset unduhan; APK tidak memuat database | Bebas memangkas `quran.db` |
 | Rilis | Dua `applicationId` dari satu tag | Siklus rilis sendiri |
 
 Risiko terbesar fork: **teks Qur'an dan perbaikan pembaca bercabang**. Kalau suatu saat ditemukan galat konten

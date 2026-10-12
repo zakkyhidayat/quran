@@ -32,12 +32,13 @@ android {
         versionName = "${semver.first}.${semver.second}.${semver.third}"
         // Katalog paket terjemahan unduhan; paket diambil relatif terhadap alamat ini (lihat docs/DATA_SOURCES.md).
         buildConfigField("String", "TRANSLATION_CATALOG_URL", "\"https://github.com/zakkyhidayat/quran/releases/download/translations/catalog.json\"")
+        buildConfigField("String", "QURAN_DATA_CATALOG_URL", "\"https://github.com/zakkyhidayat/quran/releases/latest/download/quran-data.json\"")
     }
 
     // github: APK di GitHub Releases. play: AAB untuk Play Store. Keduanya sama isinya; dipisah agar nama berkas dan
     // tugas rilis tetap. Tidak ada pembaru dalam aplikasi: versi baru diunduh dari GitHub Releases atau Play.
-    // lite: aplikasi terpisah yang hanya membaca mushaf per halaman, tanpa internet (lihat docs/FORK_LITE.md). Dibuat di
-    // dimensi yang sama agar nama tugas varian lain (assembleGithubDebug dan seterusnya) tidak berubah.
+    // lite: aplikasi terpisah yang hanya membaca mushaf per halaman; internet hanya untuk unduh database awal (lihat
+    // docs/FORK_LITE.md). Dibuat di dimensi yang sama agar nama tugas varian lain tidak berubah.
     flavorDimensions += "distribution"
     productFlavors {
         create("github") {
@@ -102,6 +103,9 @@ android {
     packaging {
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
     }
+    androidResources {
+        ignoreAssetsPattern += ":quran.db"
+    }
 }
 
 dependencies {
@@ -133,8 +137,7 @@ baselineProfile {
     mergeIntoMain = true
 }
 
-// Varian lite memakai quran.db ramping (tanpa data penjelajahan, info surah, transliterasi) yang dibangun dari
-// quran.db penuh oleh tools/build_lite_db.py saat build. Berkas hasilnya menimpa src/main/assets/quran.db di APK lite.
+// Paket database Lite dirilis terpisah dari APK agar kedua varian baru mengunduh data saat onboarding.
 abstract class LiteDbTask : DefaultTask() {
     @get:InputFile abstract val source: RegularFileProperty
     @get:InputFile abstract val script: RegularFileProperty
@@ -153,13 +156,13 @@ abstract class LiteDbTask : DefaultTask() {
 val liteDb = tasks.register<LiteDbTask>("buildLiteDb") {
     source.set(layout.projectDirectory.file("src/main/assets/quran.db"))
     script.set(rootProject.layout.projectDirectory.file("tools/build_lite_db.py"))
+    outputDir.set(layout.buildDirectory.dir("quran-data/lite"))
     // Di Windows biasanya "python": ./gradlew -Ppython=python ...
     python.set(providers.gradleProperty("python").orElse("python3"))
 }
 
 androidComponents {
     onVariants { variant ->
-        if (variant.flavorName == "lite") variant.sources.assets?.addGeneratedSourceDirectory(liteDb, LiteDbTask::outputDir)
         val type = variant.buildType.orEmpty()
         if (type.startsWith("benchmark") || type.startsWith("nonMinified")) {
             variant.applicationId.set("io.zakkyhidayat.quran.bench")

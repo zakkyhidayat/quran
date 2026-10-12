@@ -147,6 +147,13 @@
     <string name="onb_start">Commencer la lecture</string>
     <string name="onb_welcome_title">Assalamu’alaykum</string>
     <string name="onb_welcome_body">Bienvenue. Cette application sert à lire le Coran dans le mushaf de Médine. Choisissez d’abord la langue de l’application.</string>
+    <string name="onb_download_title">Télécharger les données du Coran</string>
+    <string name="onb_download_body">Un téléchargement est nécessaire avant la lecture. Les données seront conservées sur cet appareil pour lire ensuite hors ligne.</string>
+    <string name="onb_download_size">Taille du téléchargement : %1$s</string>
+    <string name="onb_download_start">Télécharger et continuer</string>
+    <string name="onb_downloading">Téléchargement : %1$s sur %2$s</string>
+    <string name="onb_download_error">Impossible de télécharger les données du Coran. Vérifiez la connexion et réessayez.</string>
+    <string name="onb_download_full_features">La version complète inclut aussi les thèmes et les informations sur les sourates.</string>
     <string name="onb_mushaf_title">À propos de ce mushaf</string>
     <string name="onb_mushaf_body">Les pages suivent le mushaf de Médine imprimé par le Complexe du Roi Fahd : écriture uthmanie, lecture de Hafs, 604 pages de 15 lignes. Les autres styles de page, comme l’indo-pakistanais ou le Shamarly, ne sont pas inclus ; si vous êtes habitué à l’un d’eux, les lettres et la mise en page paraîtront différentes.</string>
     <string name="onb_translation_title">Traductions</string>
