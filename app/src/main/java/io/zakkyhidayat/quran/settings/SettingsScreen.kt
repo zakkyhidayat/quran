@@ -153,7 +153,7 @@ fun SettingsScreen(
                             SettingsPage.Appearance -> {
 
                                 AppearanceControls(vm, settings)
-                                                TextSizeControls(vm, settings)
+                                TextSizeControls(vm, settings, showTranslation = !io.zakkyhidayat.quran.BuildConfig.LITE)
 
                                 Spacer(Modifier.height(8.dp))
                                 Group {
@@ -165,13 +165,6 @@ fun SettingsScreen(
                                         trailing = { IconSwitch(settings.amoled) },
                                     )
                                     item(
-                                        title = stringResource(R.string.translit_title),
-                                        subtitle = stringResource(R.string.translit_sub),
-                                        onClick = { scope.launch { repo.setShowTransliteration(!settings.showTransliteration) } },
-                                        leading = { Icon(AppIcons.Translate, contentDescription = null) },
-                                        trailing = { IconSwitch(settings.showTransliteration) },
-                                    )
-                                    item(
                                         title = stringResource(R.string.tajweed_title),
                                         subtitle = stringResource(R.string.tajweed_sub),
                                         onClick = { scope.launch { repo.setTajweed(!settings.tajweed) } },
@@ -181,7 +174,19 @@ fun SettingsScreen(
                                 }
 
                             }
-                            SettingsPage.Translations -> TranslationControls(vm, settings)
+                            SettingsPage.Translations -> {
+                                Group {
+                                    item(
+                                        title = stringResource(R.string.translit_title),
+                                        subtitle = stringResource(R.string.translit_sub),
+                                        onClick = { scope.launch { repo.setShowTransliteration(!settings.showTransliteration) } },
+                                        leading = { Icon(AppIcons.Translate, contentDescription = null) },
+                                        trailing = { IconSwitch(settings.showTransliteration) },
+                                    )
+                                }
+                                Spacer(Modifier.height(16.dp))
+                                TranslationControls(vm, settings)
+                            }
                             SettingsPage.Backup -> BackupControls(vm, settings, snackbar)
                             SettingsPage.Reminder -> ReminderControls(vm, settings)
                             SettingsPage.QuranData -> QuranDataMaintenance(quranDataInstaller)
@@ -290,12 +295,26 @@ private fun SettingsMain(settings: AppSettings, onOpen: (SettingsPage) -> Unit) 
     }
 }
 
-/** Varian lite: hanya tema, dan Tentang (atribusi font dan data wajib tetap tampil). */
+/** Varian lite: bahasa, tampilan, data Qur'an, backup, dan Tentang (atribusi font dan data wajib tetap tampil). */
 @Composable
 private fun LiteSettingsMain(vm: AppViewModel, settings: AppSettings, onOpen: (SettingsPage) -> Unit) {
-    ThemeModeRow(vm, settings)
+    LanguageSection(showTitle = false)
     Spacer(Modifier.height(16.dp))
+    val theme = stringResource(
+        when (settings.themeMode) {
+            ThemeMode.System -> R.string.theme_system
+            ThemeMode.Light -> R.string.theme_light
+            ThemeMode.Dark -> R.string.theme_dark
+        },
+    )
     Group {
+        item(
+            title = stringResource(R.string.appearance),
+            subtitle = stringResource(R.string.settings_appearance_sub, theme),
+            onClick = { onOpen(SettingsPage.Appearance) },
+            leading = { Icon(AppIcons.Palette, contentDescription = null) },
+            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
+        )
         item(
             title = stringResource(R.string.quran_data_title),
             subtitle = stringResource(R.string.quran_data_sub),

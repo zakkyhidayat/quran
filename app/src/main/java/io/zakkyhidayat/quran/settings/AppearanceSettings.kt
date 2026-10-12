@@ -109,7 +109,7 @@ private fun PaletteSwatches(scheme: ColorScheme) {
 
 /** Ukuran teks Arab dan terjemahan (daftar ayat dan lembar ayat), masing-masing 80-160%, dengan pratinjau. */
 @Composable
-internal fun TextSizeControls(vm: AppViewModel, settings: AppSettings) {
+internal fun TextSizeControls(vm: AppViewModel, settings: AppSettings, showTranslation: Boolean = true) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val arabicFont = remember { io.zakkyhidayat.quran.reader.arabicFontFamily(context) }
@@ -126,7 +126,7 @@ internal fun TextSizeControls(vm: AppViewModel, settings: AppSettings) {
             )
         }
     }
-    TextSizeSlider(
+    if (showTranslation) TextSizeSlider(
         label = stringResource(R.string.translation_text_size),
         percent = settings.translationTextPercent,
         onChange = { scope.launch { vm.settingsRepository.setTranslationTextPercent(it) } },
