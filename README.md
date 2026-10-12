@@ -65,9 +65,9 @@ All versions and release notes:
 This app focuses on one way of reading, done carefully: the Madani mushaf printed by the King Fahd Glorious Quran Printing
 Complex (KFGQPC). If that is the mushaf you read, memorise from, or want to get used to, this app is made for you.
 
-Other mushaf traditions include **IndoPak** and **Maghribi** scripts, as well as editions following other riwayat such
-as **Warsh** or **Qalun**. They differ in letter shapes, recitation notation, pause signs, or page layout. These are
-valid traditions; this app focuses on the Madani mushaf in Hafs 'an 'Asim and does not cover those alternatives.
+This app focuses on the Madani mushaf in Hafs 'an 'Asim. Other valid mushaf layouts and scripts include traditions
+such as **IndoPak** or **Shamarly**. Page layouts differ in script, line breaks, and page count; recitation traditions
+such as Warsh and Qalun are a separate distinction. This app currently supports only the **KFGQPC V4 Madani layout**.
 
 Choices made on purpose:
 
