@@ -20,32 +20,37 @@ King Fahd Complex edition, with optional tajweed colouring, translations, and ad
 3. Tap **Install**.
 
 The app does not update itself: download the new APK from the same button and install over the existing app. Bookmarks
-and settings are kept. On first launch, choose a language, translation, and appearance.
+and settings are kept. First-run setup guides you through the app language, required Qur'an data, translations, and
+appearance.
 
 All versions and release notes:
 [releases page](https://github.com/zakkyhidayat/quran/releases).
 
 ## Shared details
 
-- First-run setup downloads the Qur'an database and all 604 page fonts from the stable `quran-data` release; these are
-  not bundled in the APK. Reading works offline after setup. Data can be updated or downloaded again from Settings.
+- First-run setup downloads the Qur'an database and all 604 page fonts from the stable `quran-data` release; neither is
+  bundled in the APK. Reading works offline after setup. Data can be repaired or downloaded again from Settings.
 - Bookmarks and settings can be exported to a file; automatic backup keeps up to three snapshots. Use Android's file
   picker to choose local or cloud storage.
 - Interface in 10 languages: English, Indonesian, Arabic, Urdu, Bengali, Turkish, Persian, Malay, French, and Russian.
 - Screen readers announce each ayah as Unicode Arabic text.
-- No ads, account, or tracking. Internet is used for required setup, optional data updates, and translation downloads.
+- No ads, account, or tracking. Internet is used for required setup, optional data repair, and translation downloads.
 
 ## Features
 
-- Reading modes: fixed mushaf page, ayahs with translation, or translation only; tajweed colours can be toggled.
-- Tap an ayah to view translations with footnotes, transliteration, and its juz, hizb, rub', manzil, ruku, and sajdah
-  positions. Ayah actions include bookmark, copy, and share.
-- Search by Arabic text, translation, surah name, or reference; navigate by surah and divisions, go to an ayah, or open
-  a random ayah.
-- Home features: ayah of the day, Sunnah readings with hadith, reading history, and ayah collections.
+- Reading modes: fixed mushaf page, ayahs with translation, or translation only. Tajweed colours can be toggled in the
+  mushaf and ayah-list modes; ayah-list colouring uses page glyphs when the downloaded fonts are available.
+- Reader controls include counters for ayah, juz, hizb, rub', manzil, and ruku. Tap an ayah to view translations with
+  footnotes, transliteration, and its division positions; ayah actions include bookmark, copy, and share.
+- Search by Arabic text, translation, surah name, or reference; browse surahs and divisions, jump to an ayah, or open a
+  random ayah.
+- Home features: a curated passage for the ayah of the day, Sunnah readings with hadith, reading history, and ayah
+  collections.
+- Translation settings show the active translations and searchable download catalogue together; the catalogue appears
+  inline and can be browsed without opening a separate dialog.
 - Thematic tools: topics, ayah themes, similar ayahs, mutashabihat, and word roots, lemmas, and stems.
 - Optional daily reading reminders by juz, hizb, or manzil.
-- Light, dark, and AMOLED themes; dynamic colour (Android 12+) or original palette; three contrast levels.
+- Light, dark, and AMOLED themes; dynamic colour (Android 12+) or the original teal palette; three contrast levels.
 - Translation packs are downloaded on demand in many languages, including Indonesian and English; none are bundled in
   the APK.
 
@@ -78,8 +83,7 @@ Bug reports and suggestions: [GitHub Issues](https://github.com/zakkyhidayat/qur
 
 ### Known issues
 
-- Page turns sometimes lose their animation: the page shrinks slightly and then disappears instead of sliding. Likely
-  caused by one of the rendering optimisations.
+- Page turns can occasionally lose their animation: the page shrinks slightly and disappears instead of sliding.
 
 ## Data, credits, and licence
 
@@ -103,18 +107,20 @@ listed above.
 
 ## Building from source
 
-Requires JDK 17+, the Android SDK, and Python 3 with `fonttools`.
+Requires JDK 21, the Android SDK, and Python 3. The committed `quran.db` is a build input; the 604 page fonts are
+downloaded at first launch and are not needed to build the APK. QUL source files under `data-src/` are only needed when
+rebuilding the database.
 
-1. Download the QUL files listed in [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md) into `data-src/` (not in git; QUL
-   downloads need a login).
-2. Copy the page fonts `data-src/ttf/p1.ttf` to `p604.ttf` into `app/src/main/assets/fonts/` (too large for git; excluded from APKs).
-   `quran.db` is committed as build input and is excluded from APKs; rebuild it only when the data changes:
-   `python tools/build_db.py`.
-3. Choose the target:
-   ```bash
-   ./gradlew :app:assembleFullDebug       # GitHub APK
-   ./gradlew :app:bundleFullPlayRelease   # Google Play app bundle
-   ```
+Build a debug APK with:
+
+```bash
+./gradlew :app:assembleFullDebug
+```
+
+To rebuild the Qur'an database after updating its QUL source files, download the inputs listed in
+[docs/DATA_SOURCES.md](docs/DATA_SOURCES.md) into `data-src/` (QUL downloads may require a login), then run
+`python tools/build_db.py`. Qur'an text must never be edited by hand. For a Google Play app bundle, release signing, and
+the release workflow, see [docs/RELEASING.md](docs/RELEASING.md).
 
 Outputs are under `app/build/outputs/`.
 For release builds and the exact output mapping, see [docs/RELEASING.md](docs/RELEASING.md).
@@ -126,14 +132,15 @@ built and signed by GitHub Actions; see [docs/RELEASING.md](docs/RELEASING.md).
 
 ## Checks
 
-Run these before every release. CI checks Qur'an data and interface strings, runs the same JVM unit-test suite and
-Android lint, debug and release builds, and verifies that the APK does not bundle the database or page fonts.
+CI runs the Qur'an data and interface-string checks, JVM unit tests, Android lint, debug and release APK builds, then
+verifies that the APK does not bundle the database or page fonts. The release workflow also builds the Play bundle.
 
 ```bash
 python tools/verify_quran.py            # Qur'an: 114 surahs, 6,236 ayahs, pages, SHA-256 content fingerprints
 python tools/check_strings.py           # interface translations
 ./gradlew :app:testGithubDebugUnitTest
 ./gradlew :app:lintGithubDebug
+./gradlew :app:assembleGithubDebug :app:assembleGithubRelease
 python tools/verify_quran.py --source   # compare every ayah with the original QUL file (needs data-src/)
 ```
 
