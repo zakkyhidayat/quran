@@ -1,32 +1,16 @@
 package io.zakkyhidayat.quran.settings
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.ui.semantics.stateDescription
-import io.zakkyhidayat.quran.ui.FADE_IN_MS
-import io.zakkyhidayat.quran.ui.FADE_OUT_MS
-import io.zakkyhidayat.quran.ui.STEP_MS
-import io.zakkyhidayat.quran.ui.StepEasing
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -36,7 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -77,14 +60,13 @@ internal fun translationLabel(tr: io.zakkyhidayat.quran.data.TranslationInfo): S
 }
 
 /**
- * Daftar terjemahan aktif (dengan tombol hapus) dan katalog tambah yang mengembang di tempat.
+ * Daftar terjemahan aktif (dengan tombol hapus) dan katalog tambah yang selalu tampil di tempat.
  */
 @Composable
 internal fun TranslationControls(vm: AppViewModel, settings: AppSettings) {
     val repo = vm.settingsRepository
     val scope = rememberCoroutineScope()
     val translations by vm.translations.collectAsStateWithLifecycle()
-    var showAddTranslation by rememberSaveable { mutableStateOf(false) }
     val updates by vm.packUpdates.collectAsStateWithLifecycle()
     var updating by remember { mutableStateOf<String?>(null) }
     var updateFailed by remember { mutableStateOf<String?>(null) }
@@ -144,29 +126,17 @@ internal fun TranslationControls(vm: AppViewModel, settings: AppSettings) {
                 modifier = Modifier.padding(top = 8.dp),
             )
         }
-        val stateText = stringResource(if (showAddTranslation) R.string.state_expanded else R.string.state_collapsed)
-        FilledTonalButton(
-            onClick = { showAddTranslation = !showAddTranslation },
-            modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
-                .semantics { stateDescription = stateText },
-        ) {
-            Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(ButtonDefaults.IconSize))
-            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-            Text(stringResource(R.string.add_translation))
-        }
+        Text(
+            stringResource(R.string.add_translation),
+            style = androidx.compose.material3.MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(top = 16.dp, bottom = 4.dp),
+        )
         val onActivate: (String) -> Unit = { id ->
             // Urutan mengikuti daftar terjemahan terbaru (paket yang baru diunduh sudah masuk).
             val all = vm.translations.value.map { it.id }
             scope.launch { repo.setTranslations(all.filter { it in settings.translationIds || it == id }) }
-            showAddTranslation = false
         }
-        AnimatedVisibility(
-            visible = showAddTranslation,
-            enter = expandVertically(tween(STEP_MS, easing = StepEasing)) + fadeIn(tween(FADE_IN_MS, delayMillis = FADE_OUT_MS, easing = LinearEasing)),
-            exit = shrinkVertically(tween(STEP_MS, easing = StepEasing)) + fadeOut(tween(FADE_OUT_MS, easing = LinearEasing)),
-        ) {
-            // Daftar lazy dibatasi agar bisa digulir di Pengaturan maupun onboarding.
-            TranslationCatalogList(vm, inactive, onActivate, Modifier.heightIn(max = 400.dp).imePadding().padding(top = 8.dp))
-        }
+        // Daftar lazy dibatasi agar bisa digulir di Pengaturan maupun onboarding.
+        TranslationCatalogList(vm, inactive, onActivate, Modifier.heightIn(max = 400.dp).imePadding())
     }
 }

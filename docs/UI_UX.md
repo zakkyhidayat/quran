@@ -42,9 +42,9 @@ Dari screenshot [QuranApp](https://github.com/AlfaazPlus/QuranApp) (GPL-3.0, sam
   disesuaikan agar tetap muat di layar portrait. Perubahan warna Tajwid memakai transisi spring tanpa mengubah tata letak
   glyph. Warna medali nomor ayat tetap sama saat Tajwid diaktifkan atau dimatikan, termasuk pada tema gelap.
 - Langkah setelah unduhan menampilkan pratinjau mushaf, pilihan paket terjemahan, dan pengaturan tampilan.
-- Pengaturan > Terjemahan menampilkan katalog paket langsung di bawah tombol **Tambah Terjemahan**. Daftar aktif tetap
-  berada di atas tombol; katalog yang dikembangkan menyediakan pencarian dan daftar lazy yang dapat digulir agar banyak
-  paket tetap mudah dijelajahi tanpa dialog atau jendela mengambang.
+- Pengaturan > Terjemahan langsung menampilkan katalog paket beserta pencarian di bawah daftar terjemahan aktif,
+  tanpa perlu menekan tombol atau membuka dialog. Katalog memakai daftar lazy yang dapat digulir agar banyak paket tetap
+  mudah dijelajahi.
 
 ### Navigasi dan pengaturan
 
