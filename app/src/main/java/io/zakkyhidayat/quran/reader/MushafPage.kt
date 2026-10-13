@@ -69,7 +69,6 @@ import kotlin.math.roundToInt
 private const val LINES_PER_PAGE = 15
 private const val REFERENCE_PX = 100f
 private const val DEFAULT_LINE_EM = 16.2f
-private const val MIN_LINE_EM = 15.5f
 private const val FILL_RATIO = 0.995f
 internal val MushafLineSpacing = 1.5.dp
 internal val MushafPageExtraHeight = MushafLineSpacing * (LINES_PER_PAGE - 1)
@@ -400,7 +399,7 @@ private fun fitFontSize(
         val centeredGaps = if (line.centered) (line.words.size - 1).coerceAtLeast(0) * REFERENCE_PX * 0.25f else 0f
         widest = maxOf(widest, wordWidth + centeredGaps)
     }
-    // Ukur kata dan celah persis seperti tata letak kanvas agar ujung baris tetap berada di dalam halaman.
-    val widestEm = if (widest == 0f) DEFAULT_LINE_EM else maxOf(MIN_LINE_EM, widest / REFERENCE_PX)
+    // Jangan batasi lebar em minimum: baris panjang tertentu perlu glyph lebih kecil agar tidak menumpuk di tepi kiri.
+    val widestEm = if (widest == 0f) DEFAULT_LINE_EM else widest / REFERENCE_PX
     return with(density) { (widthPx * FILL_RATIO / widestEm).toSp() }
 }

@@ -1,13 +1,15 @@
 package io.zakkyhidayat.quran.settings
 
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -51,19 +53,27 @@ internal fun NotificationSettingsRow() {
 
 @Composable
 private fun PermissionStatus(granted: Boolean) {
-    val color = if (granted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-            if (granted) Icons.Default.Check else AppIcons.Warning,
-            contentDescription = null,
-            tint = color,
-            modifier = Modifier.size(18.dp),
-        )
-        Spacer(Modifier.width(4.dp))
-        Text(
-            stringResource(if (granted) R.string.perm_granted else R.string.perm_denied),
-            style = MaterialTheme.typography.labelLarge,
-            color = color,
-        )
+    val containerColor = if (granted) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.errorContainer
+    val contentColor = if (granted) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onErrorContainer
+    Surface(
+        shape = CircleShape,
+        color = containerColor,
+        contentColor = contentColor,
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                if (granted) Icons.Default.Check else AppIcons.Warning,
+                contentDescription = null,
+                modifier = Modifier.size(16.dp),
+            )
+            Text(
+                stringResource(if (granted) R.string.perm_granted else R.string.perm_denied),
+                style = MaterialTheme.typography.labelSmall,
+            )
+        }
     }
 }
