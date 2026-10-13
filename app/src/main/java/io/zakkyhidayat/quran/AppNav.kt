@@ -102,7 +102,7 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
         )
     }
     // Ketuk ayat di layar Jelajahi membuka pembaca di ayat itu (sama seperti TopicScreen).
-    val openAyah: (Int, Int) -> Unit = { surah, ayah -> vm.goToAyah(surah, ayah); openReader() }
+    val openAyah: (Int, Int) -> Unit = { surah, ayah -> vm.goToAyah(surah, ayah, openSheet = false); openReader() }
     // Lompatan ke halaman dari mana pun (daftar, pencarian, info surah, notifikasi) membuka layar baca.
     LaunchedEffect(Unit) {
         vm.pendingPage.collect { page -> if (page != null) openReader() }

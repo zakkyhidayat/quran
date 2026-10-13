@@ -35,7 +35,9 @@ Dari screenshot [QuranApp](https://github.com/AlfaazPlus/QuranApp) (GPL-3.0, sam
   Keempat tombol memiliki target sentuh minimal 48 dp dan ikon mode baca berukuran 24 dp; trio memakai ikon saja
   agar bisa tetap tepat di tengah. Tombol Tajwid membuka satu panel mengambang berisi legenda hukum bacaan dan
   sakelar warna tajwid; panel berada tepat di atas tombol, tanpa menggeser atau menutupi trio. Header nama surah
-  dan juz di atas halaman dihilangkan karena informasi itu sudah tampil pada bilah pembaca.
+  dan juz di atas halaman dihilangkan karena informasi itu sudah tampil pada bilah pembaca. Perubahan warna Tajwid
+  pada halaman mushaf memakai fade 300 ms tanpa mengubah tata letak glyph. Warna medali nomor ayat tetap sama saat
+  Tajwid diaktifkan atau dimatikan, termasuk pada tema gelap.
 - Langkah setelah unduhan sama-sama menampilkan pratinjau mushaf dan sakelar tajwid. Varian penuh juga menawarkan
   pilihan paket terjemahan; kedua varian berakhir pada pengaturan tampilan. Lite tidak menampilkan pilihan terjemahan.
 
