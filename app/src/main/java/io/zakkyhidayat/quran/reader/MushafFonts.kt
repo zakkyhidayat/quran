@@ -9,15 +9,22 @@ private fun availableFonts(context: Context): Set<String> =
         (File(context.noBackupFilesDir, "quran-fonts").listFiles()?.map { it.name } ?: emptyList())
 
 internal suspend fun pageFontFamily(context: Context, page: Int, palette: GlyphPalette = GlyphPalette.LightTajweed): FontFamily =
-    if ("p$page.ttf" in availableFonts(context)) PalettedFonts.load(context, "p$page.ttf", palette.index) else FontFamily.Default
+    if ("p$page.ttf" in availableFonts(context)) {
+        PalettedFonts.load(context, "p$page.ttf", palette.index, palette.copyColors, palette.colorSourcePalette)
+    } else {
+        FontFamily.Default
+    }
 
-internal fun cachedPageFont(page: Int, palette: GlyphPalette): FontFamily? = PalettedFonts.cached("p$page.ttf", palette.index)
+internal fun cachedPageFont(page: Int, palette: GlyphPalette): FontFamily? =
+    PalettedFonts.cached("p$page.ttf", palette.index, palette.copyColors, palette.colorSourcePalette)
 
 /** Siapkan font halaman di sekitar posisi baca (di thread latar belakang) agar geser halaman tidak menunggu disk. */
 internal fun prefetchPageFonts(context: Context, center: Int, palette: GlyphPalette) {
     val available = availableFonts(context)
     for (page in listOf(center, center - 1, center + 1, center - 2, center + 2)) {
-        if (page in 1..604 && "p$page.ttf" in available) PalettedFonts.loadBlocking(context, "p$page.ttf", palette.index)
+        if (page in 1..604 && "p$page.ttf" in available) {
+            PalettedFonts.loadBlocking(context, "p$page.ttf", palette.index, palette.copyColors, palette.colorSourcePalette)
+        }
     }
 }
 

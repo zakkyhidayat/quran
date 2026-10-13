@@ -66,6 +66,7 @@ fun AyahSheetContent(
     onPrevious: () -> Unit,
     onNext: () -> Unit,
     showTransliteration: Boolean = true,
+    showArabicText: Boolean = true,
     extras: AyahExtras? = null,
     onOpenAyah: (Int, Int) -> Unit = { _, _ -> },
     surahNames: Map<Int, Surah> = emptyMap(),
@@ -115,15 +116,17 @@ fun AyahSheetContent(
             Spacer(Modifier.height(4.dp))
             InfoLabel(stringResource(if (type == "required") R.string.sajda_ayah_required else R.string.sajda_ayah_recommended))
         }
-        Spacer(Modifier.height(8.dp))
-        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-            val arabicStyle = MaterialTheme.typography.headlineMedium.scaled(LocalReadingTextScale.current.arabic, 1.9f)
-            Text(
-                text = detail.arabic,
-                style = arabicStyle.copy(fontFamily = remember { arabicFontFamily(context) }),
-                textAlign = TextAlign.Start,
-                modifier = Modifier.fillMaxWidth(),
-            )
+        if (showArabicText) {
+            Spacer(Modifier.height(8.dp))
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                val arabicStyle = MaterialTheme.typography.headlineMedium.scaled(LocalReadingTextScale.current.arabic, 1.9f)
+                Text(
+                    text = detail.arabic,
+                    style = arabicStyle.copy(fontFamily = remember { arabicFontFamily(context) }),
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
         }
 
         val romanized = detail.transliteration
@@ -183,7 +186,6 @@ fun AyahSheetContent(
                 }
             }
         }
-        // Bagian tematik (data QUL opsional): tampil hanya bila ada isinya.
         if (extras != null && !extras.isEmpty) ExtrasSections(extras, surahNames, onOpenAyah)
         Spacer(Modifier.height(24.dp))
     }

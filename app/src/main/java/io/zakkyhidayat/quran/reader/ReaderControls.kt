@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -52,6 +53,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.window.PopupProperties
 import io.zakkyhidayat.quran.R
 import io.zakkyhidayat.quran.data.AyahRef
@@ -82,12 +84,12 @@ internal fun TajweedReaderControls(
             .height(48.dp),
     ) {
         Box(
-            Modifier.align(if (showReadingModes) Alignment.BottomStart else Alignment.BottomCenter),
+            Modifier.align(Alignment.BottomStart),
         ) {
             Button(
                 onClick = { guideOpen = !guideOpen },
                 shape = androidx.compose.foundation.shape.CircleShape,
-                contentPadding = PaddingValues(horizontal = 0.dp),
+                contentPadding = PaddingValues(start = 16.dp, end = 12.dp),
                 modifier = Modifier.defaultMinSize(minWidth = 48.dp, minHeight = 48.dp),
             ) {
                 Text(stringResource(R.string.tajweed_reader_button), maxLines = 1)
@@ -110,7 +112,7 @@ internal fun TajweedReaderControls(
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         shadowElevation = 8.dp,
                         tonalElevation = 2.dp,
-                        modifier = Modifier.widthIn(max = 360.dp).fillMaxWidth(),
+                        modifier = Modifier.width(LocalConfiguration.current.screenWidthDp.dp - 32.dp),
                     ) {
                         Column(
                             Modifier

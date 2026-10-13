@@ -1,6 +1,8 @@
 package io.zakkyhidayat.quran.reader
 
 import androidx.compose.runtime.setValue
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.ui.unit.DpSize
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.Dispatchers
@@ -36,6 +38,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.layout
@@ -85,18 +88,28 @@ fun MushafPage(
 ) {
     val context = LocalContext.current
     val dark = MaterialTheme.colorScheme.background.luminance() < 0.5f
-    val palette = GlyphPalette.of(tajweed, dark)
-    // Semua font dimuat di thread IO; selama belum siap (jarang, karena dipanggil lebih dulu oleh prefetch) halaman kosong.
-    val pageFont by produceState(cachedPageFont(page, palette), page, palette) { value = pageFontFamily(context, page, palette) }
+    val plainPalette = GlyphPalette.of(false, dark)
+    val tajweedPalette = GlyphPalette.of(true, dark)
+    // Kedua palet memiliki metrik glyph yang sama. Siapkan lapisan warna terpisah agar toggle tidak mengubah tata letak.
+    val pageFont by produceState(cachedPageFont(page, plainPalette), page, plainPalette) { value = pageFontFamily(context, page, plainPalette) }
+    val tajweedPageFont by produceState(cachedPageFont(page, tajweedPalette), page, tajweedPalette) { value = pageFontFamily(context, page, tajweedPalette) }
     val headerFont by produceState<FontFamily?>(null, dark) { value = surahHeaderFontFamily(context, dark) }
-    val basmalahFont by produceState(cachedPageFont(1, palette), palette) { value = pageFontFamily(context, 1, palette) }
+    val basmalahFont by produceState(cachedPageFont(1, plainPalette), plainPalette) { value = pageFontFamily(context, 1, plainPalette) }
+    val tajweedBasmalahFont by produceState(cachedPageFont(1, tajweedPalette), tajweedPalette) { value = pageFontFamily(context, 1, tajweedPalette) }
     val font = pageFont
+    val tajweedFont = tajweedPageFont
     val header = headerFont
     val basmalah = basmalahFont
+    val tajweedBasmalah = tajweedBasmalahFont
     if (font == null || header == null || basmalah == null) {
         Box(modifier.fillMaxSize())
         return
     }
+    val tajweedAlpha by animateFloatAsState(
+        targetValue = if (tajweed && tajweedFont != null && tajweedBasmalah != null) 1f else 0f,
+        animationSpec = tween(durationMillis = 300),
+        label = "tajweed fade",
+    )
     val density = LocalDensity.current
     val resolver = LocalFontFamilyResolver.current
 
@@ -112,7 +125,15 @@ fun MushafPage(
                 preparePage(TextMeasurer(resolver, density, LayoutDirection.Ltr, cacheSize = 0), density, lines, font, basmalah, header, surahs, widthPx)
             }
         }
+        val tajweedPrepared by produceState<PreparedPage?>(null, page, lines, widthPx, tajweedFont, tajweedBasmalah, header, density, surahs) {
+            val coloredFont = tajweedFont ?: return@produceState
+            val coloredBasmalah = tajweedBasmalah ?: return@produceState
+            value = withContext(Dispatchers.Default) {
+                preparePage(TextMeasurer(resolver, density, LayoutDirection.Ltr, cacheSize = 0), density, lines, coloredFont, coloredBasmalah, header, surahs, widthPx)
+            }
+        }
         val ready = prepared ?: return@Box
+        val colorReady = tajweedPrepared
         // Baris bingkai surah lebih tinggi dari baris ayat (bingkai tidak diubah proporsinya); baris ayat di halaman itu
         // dirapatkan secukupnya agar total tetap seukuran halaman.
         val headerLineHeight = with(density) { (widthPx * HEADER_WIDTH_RATIO * HEADER_FRAME_HEIGHT_EM / HEADER_FRAME_EM * HEADER_LINE_RATIO).toDp() }
@@ -132,9 +153,25 @@ fun MushafPage(
                 val thisHeight = if (line.type == LineType.SurahName) headerLineHeight else lineHeight
                 Box(Modifier.fillMaxWidth().height(thisHeight), contentAlignment = Alignment.Center) {
                     when (line.type) {
-                        LineType.Ayah -> AyahLine(line, ready.words[line] ?: emptyList(), ready.gapPx, selected, onAyahClick, thisHeight)
+                        LineType.Ayah -> AyahLine(
+                            line,
+                            ready.words[line] ?: emptyList(),
+                            colorReady?.words?.get(line).orEmpty(),
+                            tajweedAlpha,
+                            ready.gapPx,
+                            selected,
+                            onAyahClick,
+                            thisHeight,
+                        )
                         LineType.SurahName -> ready.headers[line]?.let { SurahHeader(it, widthPx) { onSurahClick(line.surah!!) } }
-                        LineType.Basmallah -> GlyphRow(ready.basmalah, centered = true, minGapPx = ready.gapPx, bounds = remember { FloatArray(ready.basmalah.size * 2) })
+                        LineType.Basmallah -> GlyphRow(
+                            layouts = ready.basmalah,
+                            overlayLayouts = colorReady?.basmalah,
+                            overlayAlpha = tajweedAlpha,
+                            centered = true,
+                            minGapPx = ready.gapPx,
+                            bounds = remember { FloatArray(ready.basmalah.size * 2) },
+                        )
                     }
                 }
             }
@@ -187,6 +224,8 @@ private fun preparePage(
 @Composable
 private fun GlyphRow(
     layouts: List<TextLayoutResult>,
+    overlayLayouts: List<TextLayoutResult>? = null,
+    overlayAlpha: Float = 0f,
     centered: Boolean,
     minGapPx: Float,
     bounds: FloatArray,
@@ -194,11 +233,12 @@ private fun GlyphRow(
     behind: DrawScope.() -> Unit = {},
 ) {
     val height = layouts.maxOfOrNull { it.size.height } ?: 0
-    Spacer(
-        modifier
-            .fillMaxWidth()
-            .height(with(LocalDensity.current) { height.toDp() })
-            .drawBehind {
+    val rowHeight = with(LocalDensity.current) { height.toDp() }
+    Box(modifier.fillMaxWidth().height(rowHeight)) {
+        Spacer(
+            Modifier
+                .fillMaxSize()
+                .drawBehind {
                 val width = size.width
                 val total = layouts.sumOf { it.size.width }.toFloat()
                 val count = layouts.size
@@ -217,13 +257,30 @@ private fun GlyphRow(
                     drawText(layout, topLeft = Offset(bounds[2 * i], (size.height - layout.size.height) / 2f))
                 }
             },
-    )
+        )
+        if (overlayAlpha > 0f && !overlayLayouts.isNullOrEmpty()) {
+            Spacer(
+                Modifier
+                    .fillMaxSize()
+                    .graphicsLayer { alpha = overlayAlpha }
+                    .drawBehind {
+                        overlayLayouts.forEachIndexed { i, layout ->
+                            if (i < layouts.size) {
+                                drawText(layout, topLeft = Offset(bounds[2 * i], (size.height - layout.size.height) / 2f))
+                            }
+                        }
+                    },
+            )
+        }
+    }
 }
 
 @Composable
 private fun AyahLine(
     line: PageLine,
     layouts: List<TextLayoutResult>,
+    overlayLayouts: List<TextLayoutResult>,
+    overlayAlpha: Float,
     gapPx: Float,
     selected: AyahRef?,
     onAyahClick: (AyahRef) -> Unit,
@@ -247,6 +304,8 @@ private fun AyahLine(
 
     GlyphRow(
         layouts = layouts,
+        overlayLayouts = overlayLayouts,
+        overlayAlpha = overlayAlpha,
         centered = line.centered,
         minGapPx = gapPx,
         bounds = bounds,

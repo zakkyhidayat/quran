@@ -214,9 +214,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun goToAyah(surah: Int, ayah: Int, openSheet: Boolean = false) {
+        selected.value = AyahRef(surah, ayah)
+        sheetVisible.value = openSheet
         viewModelScope.launch {
-            selected.value = AyahRef(surah, ayah)
-            sheetVisible.value = openSheet
             settingsRepository.setLastAyah(surah, ayah)
             goToPage(mushaf.ayahPage(surah, ayah))
         }

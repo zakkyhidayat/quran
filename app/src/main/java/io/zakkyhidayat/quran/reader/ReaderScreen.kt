@@ -396,6 +396,7 @@ fun ReaderScreen(
                     onPrevious = { vm.moveSelection(-1) },
                     onNext = { vm.moveSelection(1) },
                     showTransliteration = settings.showTransliteration,
+                    showArabicText = false,
                     extras = extras,
                     onOpenAyah = { s, a -> vm.goToAyah(s, a, openSheet = true) },
                     surahNames = surahs,

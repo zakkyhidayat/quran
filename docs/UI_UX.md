@@ -35,7 +35,9 @@ Dari screenshot [QuranApp](https://github.com/AlfaazPlus/QuranApp) (GPL-3.0, sam
   Keempat tombol memiliki target sentuh minimal 48 dp dan ikon mode baca berukuran 24 dp; trio memakai ikon saja
   agar bisa tetap tepat di tengah. Tombol Tajwid membuka satu panel mengambang berisi legenda hukum bacaan dan
   sakelar warna tajwid; panel berada tepat di atas tombol, tanpa menggeser atau menutupi trio. Header nama surah
-  dan juz di atas halaman dihilangkan karena informasi itu sudah tampil pada bilah pembaca.
+  dan juz di atas halaman dihilangkan karena informasi itu sudah tampil pada bilah pembaca. Perubahan warna Tajwid
+  pada halaman mushaf memakai fade 300 ms tanpa mengubah tata letak glyph. Warna medali nomor ayat tetap sama saat
+  Tajwid diaktifkan atau dimatikan, termasuk pada tema gelap.
 - Langkah setelah unduhan sama-sama menampilkan pratinjau mushaf dan sakelar tajwid. Varian penuh juga menawarkan
   pilihan paket terjemahan; kedua varian berakhir pada pengaturan tampilan. Lite tidak menampilkan pilihan terjemahan.
 
@@ -43,7 +45,7 @@ Dari screenshot [QuranApp](https://github.com/AlfaazPlus/QuranApp) (GPL-3.0, sam
 
 - Layar daftar memakai tab yang dapat dipilih atau digeser; keduanya menggerakkan pager yang sama.
 - Perpindahan antar-rute memakai shared-axis X dan dukungan back prediktif, berlaku untuk full dan Lite melalui `AppNav`.
-- Menu utama Pengaturan tampil sebagai modal bottom sheet mengambang dengan jarak di kiri, kanan, dan bawah layar aktif.
+- Menu utama Pengaturan tampil sebagai dialog melayang di tengah (margin 16dp, lebar maks 560dp, sudut 28dp), bukan bottom sheet. Evaluasi Material 3: bottom sheet cocok untuk aksi kontekstual singkat; daftar pengaturan bertingkat dengan navigasi ke halaman lain lebih sesuai dialog/layar penuh, dan dialog yang diperkecil menjaga konteks pembaca tetap terlihat. Tombol Tajwid selalu di kiri bawah; kartu legenda selebar layar dengan margin 16dp senilai tombol.
   Memilih kategori membuka layar penuh; tombol kembali menutup submenu dan kembali ke layar asal.
 
 Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pull/1)):
@@ -91,3 +93,5 @@ Perlu dicek pemilik sebelum rilis: redaksi hadits di bacaan sunnah, dan tampilan
 
 - Screenshot aplikasi saat ini: daftar, pembaca, lembar ayat, pengaturan.
 - Keputusan urutan: merge PR #1 dulu, lalu prioritas 1 di PR baru.
+- Transliterasi ada di Pengaturan > Terjemahan (bukan Tampilan). Lite memakai halaman Tampilan yang sama tanpa ukuran teks terjemahan.
+- Carousel Jelajahi dipindah dari atas tab ke Beranda (di bawah Ayat Hari Ini, meluber ke tepi layar). Ayat Hari Ini memakai gradien primer-tersier; koleksi ayat berupa kartu grid 2 kolom. Header collapsing dihapus.

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -24,7 +25,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -66,12 +66,18 @@ internal fun SettingsMainSheet(
     onDismiss: () -> Unit,
     onOpen: (SettingsPage) -> Unit,
 ) {
-    ModalBottomSheet(
+    // Dialog melayang di tengah dengan margin 16dp, bukan sheet dari bawah.
+    androidx.compose.ui.window.Dialog(
         onDismissRequest = onDismiss,
-        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-        shape = RoundedCornerShape(28.dp),
+        properties = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false),
     ) {
-        Column(Modifier.fillMaxWidth().heightIn(max = 640.dp)) {
+        androidx.compose.material3.Surface(
+            shape = RoundedCornerShape(28.dp),
+            color = androidx.compose.material3.MaterialTheme.colorScheme.surfaceContainerHigh,
+            tonalElevation = 6.dp,
+            modifier = Modifier.padding(16.dp).widthIn(max = 560.dp).fillMaxWidth(),
+        ) {
+        Column(Modifier.fillMaxWidth().heightIn(max = 560.dp).padding(top = 12.dp)) {
             Row(
                 Modifier.fillMaxWidth().padding(start = 24.dp, end = 16.dp, top = 4.dp, bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -84,7 +90,7 @@ internal fun SettingsMainSheet(
             }
             Column(
                 Modifier
-                    .heightIn(max = 560.dp)
+                    .weight(1f, fill = false)
                     .verticalScroll(rememberScrollState())
                     .padding(horizontal = 16.dp)
                     .padding(bottom = 24.dp),
@@ -95,6 +101,7 @@ internal fun SettingsMainSheet(
                     SettingsMain(settings, onOpen)
                 }
             }
+        }
         }
     }
 }
@@ -146,7 +153,7 @@ fun SettingsScreen(
                             SettingsPage.Appearance -> {
 
                                 AppearanceControls(vm, settings)
-                                                TextSizeControls(vm, settings)
+                                TextSizeControls(vm, settings, showTranslation = !io.zakkyhidayat.quran.BuildConfig.LITE)
 
                                 Spacer(Modifier.height(8.dp))
                                 Group {
@@ -158,13 +165,6 @@ fun SettingsScreen(
                                         trailing = { IconSwitch(settings.amoled) },
                                     )
                                     item(
-                                        title = stringResource(R.string.translit_title),
-                                        subtitle = stringResource(R.string.translit_sub),
-                                        onClick = { scope.launch { repo.setShowTransliteration(!settings.showTransliteration) } },
-                                        leading = { Icon(AppIcons.Translate, contentDescription = null) },
-                                        trailing = { IconSwitch(settings.showTransliteration) },
-                                    )
-                                    item(
                                         title = stringResource(R.string.tajweed_title),
                                         subtitle = stringResource(R.string.tajweed_sub),
                                         onClick = { scope.launch { repo.setTajweed(!settings.tajweed) } },
@@ -174,7 +174,19 @@ fun SettingsScreen(
                                 }
 
                             }
-                            SettingsPage.Translations -> TranslationControls(vm, settings)
+                            SettingsPage.Translations -> {
+                                Group {
+                                    item(
+                                        title = stringResource(R.string.translit_title),
+                                        subtitle = stringResource(R.string.translit_sub),
+                                        onClick = { scope.launch { repo.setShowTransliteration(!settings.showTransliteration) } },
+                                        leading = { Icon(AppIcons.Translate, contentDescription = null) },
+                                        trailing = { IconSwitch(settings.showTransliteration) },
+                                    )
+                                }
+                                Spacer(Modifier.height(16.dp))
+                                TranslationControls(vm, settings)
+                            }
                             SettingsPage.Backup -> BackupControls(vm, settings, snackbar)
                             SettingsPage.Reminder -> ReminderControls(vm, settings)
                             SettingsPage.QuranData -> QuranDataMaintenance(quranDataInstaller)
@@ -283,12 +295,26 @@ private fun SettingsMain(settings: AppSettings, onOpen: (SettingsPage) -> Unit) 
     }
 }
 
-/** Varian lite: hanya tema, dan Tentang (atribusi font dan data wajib tetap tampil). */
+/** Varian lite: bahasa, tampilan, data Qur'an, backup, dan Tentang (atribusi font dan data wajib tetap tampil). */
 @Composable
 private fun LiteSettingsMain(vm: AppViewModel, settings: AppSettings, onOpen: (SettingsPage) -> Unit) {
-    ThemeModeRow(vm, settings)
+    LanguageSection(showTitle = false)
     Spacer(Modifier.height(16.dp))
+    val theme = stringResource(
+        when (settings.themeMode) {
+            ThemeMode.System -> R.string.theme_system
+            ThemeMode.Light -> R.string.theme_light
+            ThemeMode.Dark -> R.string.theme_dark
+        },
+    )
     Group {
+        item(
+            title = stringResource(R.string.appearance),
+            subtitle = stringResource(R.string.settings_appearance_sub, theme),
+            onClick = { onOpen(SettingsPage.Appearance) },
+            leading = { Icon(AppIcons.Palette, contentDescription = null) },
+            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
+        )
         item(
             title = stringResource(R.string.quran_data_title),
             subtitle = stringResource(R.string.quran_data_sub),
