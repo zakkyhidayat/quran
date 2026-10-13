@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -108,7 +109,32 @@ fun IndexScreen(
     Scaffold(
         // Lanjutkan membaca: FAB diperluas di kanan bawah, tampil di semua tab.
         floatingActionButton = {
-            if (lastSurah != null && settings.lastAyah > 0) {
+            val sunnahReading = io.zakkyhidayat.quran.data.SunnahReading.entries
+                .firstOrNull { it.name == settings.sunnahReadingId }
+            if (sunnahReading != null) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    IconButton(onClick = { vm.dismissSunnahReading() }) {
+                        Icon(Icons.Default.Close, contentDescription = stringResource(R.string.close))
+                    }
+                    ExtendedFloatingActionButton(
+                        onClick = { vm.startSunnahReading(sunnahReading, resume = true); onBack() },
+                        icon = { Icon(AppIcons.MenuBook, contentDescription = null) },
+                        text = {
+                            Column {
+                                Text(stringResource(R.string.continue_sunnah_reading), style = MaterialTheme.typography.labelLarge)
+                                Text(
+                                    io.zakkyhidayat.quran.home.sunnahTitle(sunnahReading),
+                                    style = MaterialTheme.typography.labelMedium,
+                                    maxLines = 1,
+                                )
+                            }
+                        },
+                    )
+                }
+            } else if (lastSurah != null && settings.lastAyah > 0) {
                 ExtendedFloatingActionButton(
                     onClick = { vm.goToAyah(lastSurah.id, settings.lastAyah); onBack() },
                     icon = { Icon(AppIcons.MenuBook, contentDescription = null) },

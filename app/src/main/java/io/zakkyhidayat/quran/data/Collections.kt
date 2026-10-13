@@ -11,6 +11,8 @@ import java.time.LocalDateTime
 /** Rentang ayat; [to] 0 = sampai akhir surah. */
 data class AyahRange(val surah: Int, val from: Int, val to: Int) {
     val wholeSurah get() = from == 1 && to == 0
+    fun contains(surah: Int, ayah: Int): Boolean = this.surah == surah && ayah >= from && (to == 0 || ayah <= to)
+
     override fun toString() = when {
         wholeSurah -> "$surah"
         to == from -> "$surah:$from"

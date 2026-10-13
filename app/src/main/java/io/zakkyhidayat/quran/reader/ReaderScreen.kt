@@ -55,6 +55,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LoadingIndicator
@@ -91,10 +92,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.zakkyhidayat.quran.AppViewModel
 import io.zakkyhidayat.quran.data.AyahRef
+import io.zakkyhidayat.quran.data.AyahRange
 import io.zakkyhidayat.quran.data.AyahText
 import io.zakkyhidayat.quran.data.BookmarkKind
 import io.zakkyhidayat.quran.data.DivisionProgress
 import io.zakkyhidayat.quran.data.PageLine
+import io.zakkyhidayat.quran.data.SunnahReading
 import io.zakkyhidayat.quran.settings.AppSettings
 import io.zakkyhidayat.quran.settings.CounterMode
 import io.zakkyhidayat.quran.ui.AppIcons
@@ -202,6 +205,23 @@ fun ReaderScreen(
         value = CounterValue(counterMode, a, divisions)
     }
     val pageBookmarked = bookmarks.any { it.kind == BookmarkKind.Page && it.page == currentPage }
+    val sunnahReading = SunnahReading.entries.firstOrNull { it.name == settings.sunnahReadingId }
+    val sunnahRanges = remember(sunnahReading, settings.sunnahReadingStep, surahs) {
+        sunnahReading?.let { reading ->
+            AyahRange.parseList(reading.refs).mapNotNull { range ->
+                val end = if (range.to == 0) surahs[range.surah]?.ayahCount ?: 0 else range.to
+                range.copy(to = end).takeIf { end >= range.from }
+            }
+        }.orEmpty()
+    }
+    val sunnahStep = settings.sunnahReadingStep.coerceIn(0, sunnahRanges.lastIndex.coerceAtLeast(0))
+    val activeSunnahRange = sunnahRanges.getOrNull(sunnahStep)
+    val nextSunnahRange = sunnahRanges.getOrNull(sunnahStep + 1)
+    val sunnahStepReached by produceState(false, activeSunnahRange, currentPage) {
+        value = activeSunnahRange?.let { range ->
+            currentPage >= vm.mushaf.ayahPage(range.surah, range.to)
+        } ?: false
+    }
 
     Scaffold(containerColor = MaterialTheme.colorScheme.background, contentWindowInsets = WindowInsets(0, 0, 0, 0)) { scaffoldPadding ->
         // Inset ditangani sendiri (systemBars); padding Scaffold di sini selalu nol karena contentWindowInsets kosong.
@@ -361,6 +381,27 @@ fun ReaderScreen(
                     modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 76.dp).zIndex(2f),
                 ) {
                     GestureHint { scope.launch { vm.settingsRepository.setGestureHintDone() } }
+                }
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = activeSunnahRange != null && sunnahStepReached,
+                    enter = fadeIn(motion.defaultEffectsSpec()),
+                    exit = fadeOut(motion.fastEffectsSpec()),
+                    modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 12.dp).zIndex(3f),
+                ) {
+                    val label = nextSunnahRange?.let { range ->
+                        stringResource(R.string.sunnah_next_segment, surahs[range.surah]?.nameLatin.orEmpty())
+                    } ?: stringResource(R.string.sunnah_finish_reading)
+                    FilledTonalButton(
+                        onClick = { vm.advanceSunnahReading() },
+                        colors = androidx.compose.material3.ButtonDefaults.filledTonalButtonColors(
+                            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        ),
+                    ) {
+                        Icon(AppIcons.MenuBook, contentDescription = null)
+                        Spacer(Modifier.width(8.dp))
+                        Text(label)
+                    }
                 }
             }
             ReadingModeBar(

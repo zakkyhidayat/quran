@@ -50,6 +50,10 @@ data class AppSettings(
     /** Jam pengingat dalam menit sejak tengah malam (bawaan 20.00). */
     val reminderMinutes: Int = 20 * 60,
     val reminderUnit: ReminderUnit = ReminderUnit.Juz,
+    val bedtimeSunnahReminderEnabled: Boolean = false,
+    /** Nama SunnahReading dan indeks rentang yang sedang dibaca; disimpan lokal untuk tombol lanjut. */
+    val sunnahReadingId: String? = null,
+    val sunnahReadingStep: Int = 0,
     val counterMode: CounterMode = CounterMode.Surah,
     val lastPage: Int = 1,
     val lastSurah: Int = 0,
@@ -76,10 +80,19 @@ class SettingsRepository(private val context: Context) {
     private val reminderKey = booleanPreferencesKey("reminder_enabled")
     private val reminderMinutesKey = intPreferencesKey("reminder_minutes")
     private val reminderUnitKey = stringPreferencesKey("reminder_unit")
+    private val bedtimeSunnahReminderKey = booleanPreferencesKey("bedtime_sunnah_reminder_enabled")
+    private val sunnahReadingIdKey = stringPreferencesKey("sunnah_reading_id")
+    private val sunnahReadingStepKey = intPreferencesKey("sunnah_reading_step")
     private val counterModeKey = stringPreferencesKey("counter_mode")
 
     // Khusus perangkat ini: tidak ikut diekspor dan tidak ditimpa saat memulihkan cadangan.
-    private val deviceOnlyKeys = setOf(autoBackupUriKey.name, autoBackupAtKey.name)
+    private val deviceOnlyKeys = setOf(
+        autoBackupUriKey.name,
+        autoBackupAtKey.name,
+        bedtimeSunnahReminderKey.name,
+        sunnahReadingIdKey.name,
+        sunnahReadingStepKey.name,
+    )
     private val lastPageKey = intPreferencesKey("last_page")
     private val lastSurahKey = intPreferencesKey("last_surah")
     private val lastAyahKey = intPreferencesKey("last_ayah")
@@ -101,6 +114,9 @@ class SettingsRepository(private val context: Context) {
             reminderEnabled = prefs[reminderKey] ?: false,
             reminderMinutes = prefs[reminderMinutesKey] ?: (20 * 60),
             reminderUnit = prefs[reminderUnitKey].toEnum(ReminderUnit.Juz),
+            bedtimeSunnahReminderEnabled = prefs[bedtimeSunnahReminderKey] ?: false,
+            sunnahReadingId = prefs[sunnahReadingIdKey],
+            sunnahReadingStep = prefs[sunnahReadingStepKey] ?: 0,
             // Pengguna lama (sudah pernah membaca) tidak perlu onboarding maupun petunjuk gerakan.
             onboardingDone = prefs[onboardingKey] ?: (prefs[lastPageKey] != null),
             // Pengguna baru: onboarding_done tersimpan, jadi petunjuk tetap tampil walau baca terakhir sudah tercatat.
@@ -177,6 +193,19 @@ class SettingsRepository(private val context: Context) {
     suspend fun setReminderMinutes(minutes: Int) = context.dataStore.edit { it[reminderMinutesKey] = minutes }
 
     suspend fun setReminderUnit(unit: ReminderUnit) = context.dataStore.edit { it[reminderUnitKey] = unit.name }
+
+    suspend fun setBedtimeSunnahReminderEnabled(enabled: Boolean) =
+        context.dataStore.edit { it[bedtimeSunnahReminderKey] = enabled }
+
+    suspend fun setSunnahReading(id: String, step: Int) = context.dataStore.edit {
+        it[sunnahReadingIdKey] = id
+        it[sunnahReadingStepKey] = step
+    }
+
+    suspend fun clearSunnahReading() = context.dataStore.edit {
+        it.remove(sunnahReadingIdKey)
+        it.remove(sunnahReadingStepKey)
+    }
 
     suspend fun setOnboardingDone() = context.dataStore.edit { it[onboardingKey] = true }
 

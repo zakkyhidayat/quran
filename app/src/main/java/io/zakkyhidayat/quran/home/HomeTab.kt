@@ -66,6 +66,7 @@ import java.time.LocalDateTime
 sealed interface HomeTarget {
     data class Passage(val title: String, val subtitle: String?, val refs: String) : HomeTarget
     data class Collection(val kind: CollectionKind) : HomeTarget
+    data class Sunnah(val reading: SunnahReading) : HomeTarget
 }
 
 private val ListPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 96.dp)
@@ -99,7 +100,7 @@ fun HomeTab(vm: AppViewModel, onOpenReader: () -> Unit, onOpen: (HomeTarget) -> 
             val overline: (@Composable () -> Unit)? =
                 if (s.time.isNow(now)) { { Text(nowLabel, color = MaterialTheme.colorScheme.primary) } } else null
             SegmentedListItem(
-                onClick = { onOpen(HomeTarget.Passage(sunnahTitles[index], sunnahNotes[index], s.refs)) },
+                onClick = { onOpen(HomeTarget.Sunnah(s)) },
                 shapes = ListItemDefaults.segmentedShapes(index, sunnah.size),
                 colors = segmentedItemColors(),
                 leadingContent = {
