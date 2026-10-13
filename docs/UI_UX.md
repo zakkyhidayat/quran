@@ -32,13 +32,19 @@ Dari screenshot [QuranApp](https://github.com/AlfaazPlus/QuranApp) (GPL-3.0, sam
   dan font diperiksa sebelum mushaf dibuka. Data lokal dapat diperbarui manual dari Pengaturan, dan mushaf tetap dapat
   dibaca luring saat data terpasang.
 - Pembaca mushaf menempatkan Tajwid di kiri dan dropdown counter di kanan pada strip di bawah bilah atas; counter
-  memiliki enam pilihan (surah, juz, hizb, rub', manzil, ruku) dengan animasi menu dan bentuk item bersegmen.
-  Panel legenda Tajwid dan sakelar warna muncul di bawah tombol. Trio mode baca tampil di bawah pembaca saat mode daftar
-  ayat aktif. Baris mushaf diberi sela vertikal 1,5 dp (sekitar 4–5% tinggi sel per baris) tanpa mengecilkan glyph;
-  tinggi halaman bertambah secukupnya, dan lebar disesuaikan agar tetap muat di layar portrait. Perubahan warna Tajwid
-  memakai fade 300 ms tanpa mengubah tata letak glyph. Warna medali nomor ayat tetap sama saat Tajwid diaktifkan atau
-  dimatikan, termasuk pada tema gelap.
+  memiliki enam pilihan (ayat, juz, hizb, rub', manzil, ruku). Pilihan ayat menampilkan hitungan ayat/total surah.
+  Kedua menu memakai permukaan tonal membulat dan animasi spring; dropdown counter menampilkan enam pill tanpa wadah
+  latar tambahan, lebar menu dipersempit, dan tombolnya berlebar tetap mengikuti label terpanjang dengan indikator
+  progres melingkar. Setiap item counter menampilkan progres dalam lingkaran, nama mode, serta hitungan saat ini/total.
+  Panel legenda Tajwid dan sakelar warna muncul di bawah tombol. Trio mode baca selalu tampil sebagai bilah bawah agar
+  mode mushaf dan daftar ayat dapat dipilih kapan saja. Baris mushaf diberi sela vertikal 1,5 dp
+  (sekitar 4–5% tinggi sel per baris) tanpa mengecilkan glyph; tinggi halaman bertambah secukupnya, dan lebar
+  disesuaikan agar tetap muat di layar portrait. Perubahan warna Tajwid memakai transisi spring tanpa mengubah tata letak
+  glyph. Warna medali nomor ayat tetap sama saat Tajwid diaktifkan atau dimatikan, termasuk pada tema gelap.
 - Langkah setelah unduhan menampilkan pratinjau mushaf, pilihan paket terjemahan, dan pengaturan tampilan.
+- Pengaturan > Terjemahan menampilkan katalog paket langsung di bawah tombol **Tambah Terjemahan**. Daftar aktif tetap
+  berada di atas tombol; katalog yang dikembangkan menyediakan pencarian dan daftar lazy yang dapat digulir agar banyak
+  paket tetap mudah dijelajahi tanpa dialog atau jendela mengambang.
 
 ### Navigasi dan pengaturan
 

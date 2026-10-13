@@ -93,6 +93,7 @@ import io.zakkyhidayat.quran.AppViewModel
 import io.zakkyhidayat.quran.data.AyahRef
 import io.zakkyhidayat.quran.data.AyahText
 import io.zakkyhidayat.quran.data.BookmarkKind
+import io.zakkyhidayat.quran.data.DivisionProgress
 import io.zakkyhidayat.quran.data.PageLine
 import io.zakkyhidayat.quran.settings.AppSettings
 import io.zakkyhidayat.quran.settings.CounterMode
@@ -191,7 +192,14 @@ fun ReaderScreen(
     val counter by produceState<CounterValue?>(null, counterAyah, counterMode, surahs) {
         val a = counterAyah
         if (a == null || surahs.isEmpty()) return@produceState
-        value = CounterValue(counterMode, a, if (counterMode == CounterMode.Surah) null else vm.mushaf.divisionProgress(counterMode.kind(), a.surah, a.ayah))
+        val divisions = CounterMode.entries.associateWith { mode ->
+            if (mode == CounterMode.Surah) {
+                DivisionProgress(a.surah + 1, a.ayah, surahs[a.surah]?.ayahCount ?: 0)
+            } else {
+                vm.mushaf.divisionProgress(mode.kind(), a.surah, a.ayah)
+            }
+        }
+        value = CounterValue(counterMode, a, divisions)
     }
     val pageBookmarked = bookmarks.any { it.kind == BookmarkKind.Page && it.page == currentPage }
 
@@ -354,12 +362,10 @@ fun ReaderScreen(
                     GestureHint { scope.launch { vm.settingsRepository.setGestureHintDone() } }
                 }
             }
-            if (listMode) {
-                ReadingModeBar(
-                    mode = mode,
-                    onSelect = { scope.launch { vm.settingsRepository.setReadingMode(it) } },
-                )
-            }
+            ReadingModeBar(
+                mode = mode,
+                onSelect = { scope.launch { vm.settingsRepository.setReadingMode(it) } },
+            )
         }
     }
 

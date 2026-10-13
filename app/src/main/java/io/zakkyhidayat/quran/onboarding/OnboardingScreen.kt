@@ -192,7 +192,7 @@ private fun MushafStep(vm: AppViewModel, settings: AppSettings) {
 @Composable
 private fun TranslationStep(vm: AppViewModel, settings: AppSettings) {
     StepTitle(stringResource(R.string.onb_translation_title), stringResource(R.string.onb_translation_body))
-    TranslationControls(vm, settings, inlineCatalog = true)
+    TranslationControls(vm, settings)
 }
 
 @Composable

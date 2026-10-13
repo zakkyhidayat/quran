@@ -77,11 +77,10 @@ internal fun translationLabel(tr: io.zakkyhidayat.quran.data.TranslationInfo): S
 }
 
 /**
- * Daftar terjemahan aktif (dengan tombol hapus) dan tombol tambah. Dipakai di Pengaturan dan onboarding.
- * [inlineCatalog] = katalog mengembang di tempat (onboarding); jika tidak, tampil sebagai dialog (Pengaturan).
+ * Daftar terjemahan aktif (dengan tombol hapus) dan katalog tambah yang mengembang di tempat.
  */
 @Composable
-internal fun TranslationControls(vm: AppViewModel, settings: AppSettings, inlineCatalog: Boolean = false) {
+internal fun TranslationControls(vm: AppViewModel, settings: AppSettings) {
     val repo = vm.settingsRepository
     val scope = rememberCoroutineScope()
     val translations by vm.translations.collectAsStateWithLifecycle()
@@ -145,14 +144,11 @@ internal fun TranslationControls(vm: AppViewModel, settings: AppSettings, inline
                 modifier = Modifier.padding(top = 8.dp),
             )
         }
-        val expanded = inlineCatalog && showAddTranslation
-        val stateText = stringResource(if (expanded) R.string.state_expanded else R.string.state_collapsed)
+        val stateText = stringResource(if (showAddTranslation) R.string.state_expanded else R.string.state_collapsed)
         FilledTonalButton(
             onClick = { showAddTranslation = !showAddTranslation },
-            modifier = Modifier.fillMaxWidth().padding(top = 8.dp).then(
-                // Mode inline: tombol berperan sebagai pengendali kembang/ciut, keadaannya dibacakan TalkBack.
-                if (inlineCatalog) Modifier.semantics { stateDescription = stateText } else Modifier,
-            ),
+            modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+                .semantics { stateDescription = stateText },
         ) {
             Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(ButtonDefaults.IconSize))
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
@@ -164,17 +160,13 @@ internal fun TranslationControls(vm: AppViewModel, settings: AppSettings, inline
             scope.launch { repo.setTranslations(all.filter { it in settings.translationIds || it == id }) }
             showAddTranslation = false
         }
-        if (inlineCatalog) {
-            AnimatedVisibility(
-                visible = showAddTranslation,
-                enter = expandVertically(tween(STEP_MS, easing = StepEasing)) + fadeIn(tween(FADE_IN_MS, delayMillis = FADE_OUT_MS, easing = LinearEasing)),
-                exit = shrinkVertically(tween(STEP_MS, easing = StepEasing)) + fadeOut(tween(FADE_OUT_MS, easing = LinearEasing)),
-            ) {
-                // Tinggi dibatasi karena langkah onboarding sudah verticalScroll; imePadding agar kolom cari tetap terlihat.
-                TranslationCatalogList(vm, inactive, onActivate, Modifier.heightIn(max = 400.dp).imePadding().padding(top = 8.dp))
-            }
-        } else if (showAddTranslation) {
-            AddTranslationDialog(vm = vm, inactive = inactive, onActivate = onActivate, onDismiss = { showAddTranslation = false })
+        AnimatedVisibility(
+            visible = showAddTranslation,
+            enter = expandVertically(tween(STEP_MS, easing = StepEasing)) + fadeIn(tween(FADE_IN_MS, delayMillis = FADE_OUT_MS, easing = LinearEasing)),
+            exit = shrinkVertically(tween(STEP_MS, easing = StepEasing)) + fadeOut(tween(FADE_OUT_MS, easing = LinearEasing)),
+        ) {
+            // Daftar lazy dibatasi agar bisa digulir di Pengaturan maupun onboarding.
+            TranslationCatalogList(vm, inactive, onActivate, Modifier.heightIn(max = 400.dp).imePadding().padding(top = 8.dp))
         }
     }
 }

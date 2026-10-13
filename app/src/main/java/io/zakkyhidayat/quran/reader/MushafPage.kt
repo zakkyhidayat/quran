@@ -2,7 +2,8 @@ package io.zakkyhidayat.quran.reader
 
 import androidx.compose.runtime.setValue
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.ui.unit.DpSize
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.Dispatchers
@@ -109,7 +110,10 @@ fun MushafPage(
     }
     val tajweedAlpha by animateFloatAsState(
         targetValue = if (tajweed && tajweedFont != null && tajweedBasmalah != null) 1f else 0f,
-        animationSpec = tween(durationMillis = 300),
+        animationSpec = spring(
+            dampingRatio = 0.9f,
+            stiffness = Spring.StiffnessLow,
+        ),
         label = "tajweed fade",
     )
     val density = LocalDensity.current

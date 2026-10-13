@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalButton
@@ -25,7 +24,6 @@ import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -53,22 +51,6 @@ private sealed interface CatalogState {
     data object Loading : CatalogState
     data object Failed : CatalogState
     data class Loaded(val packs: List<CatalogPack>) : CatalogState
-}
-
-/** Dialog tambah terjemahan (Pengaturan): pembungkus tipis di sekitar [TranslationCatalogList]. */
-@Composable
-internal fun AddTranslationDialog(
-    vm: AppViewModel,
-    inactive: List<TranslationInfo>,
-    onActivate: (String) -> Unit,
-    onDismiss: () -> Unit,
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.add_translation)) },
-        text = { TranslationCatalogList(vm, inactive, onActivate) },
-        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.close)) } },
-    )
 }
 
 /**
