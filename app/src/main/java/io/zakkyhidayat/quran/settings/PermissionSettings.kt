@@ -26,7 +26,7 @@ import io.zakkyhidayat.quran.ui.AppIcons
  * Status izin yang dibutuhkan aplikasi: notifikasi (pengingat membaca). Diperiksa ulang setiap kali layar kembali aktif, karena izin diubah di Pengaturan Android.
  */
 @Composable
-internal fun PermissionControls() {
+internal fun NotificationSettingsRow() {
     val context = LocalContext.current
     var notifications by remember { mutableStateOf(io.zakkyhidayat.quran.reminder.Reminder.canNotify(context)) }
     androidx.lifecycle.compose.LifecycleResumeEffect(Unit) {

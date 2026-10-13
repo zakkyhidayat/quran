@@ -70,7 +70,6 @@ private const val LINES_PER_PAGE = 15
 private const val REFERENCE_PX = 100f
 private const val DEFAULT_LINE_EM = 16.2f
 private const val MIN_LINE_EM = 15.5f
-private const val MAX_LINE_EM = 17f
 private const val FILL_RATIO = 0.995f
 internal val MushafLineSpacing = 1.5.dp
 internal val MushafPageExtraHeight = MushafLineSpacing * (LINES_PER_PAGE - 1)
@@ -386,19 +385,22 @@ private fun fitFontSize(
     widthPx: Int,
 ): TextUnit {
     val referenceSp = with(density) { REFERENCE_PX.toSp() }
-    var widest = 0
+    var widest = 0f
     for (line in lines) {
-        if (line.type != LineType.Ayah || line.centered) continue
-        val result = measurer.measure(
-            text = line.words.joinToString("") { it.text },
-            style = TextStyle(fontFamily = font, fontSize = referenceSp),
-            softWrap = false,
-            maxLines = 1,
-            constraints = Constraints(),
-        )
-        widest = maxOf(widest, result.size.width)
+        if (line.type != LineType.Ayah) continue
+        val wordWidth = line.words.sumOf { word ->
+            measurer.measure(
+                text = word.text,
+                style = TextStyle(fontFamily = font, fontSize = referenceSp),
+                softWrap = false,
+                maxLines = 1,
+                constraints = Constraints(),
+            ).size.width
+        }
+        val centeredGaps = if (line.centered) (line.words.size - 1).coerceAtLeast(0) * REFERENCE_PX * 0.25f else 0f
+        widest = maxOf(widest, wordWidth + centeredGaps)
     }
-    // Lebar baris penuh ~16 em; halaman tanpa baris penuh (hal. 1) dan halaman dengan satu baris pendek memakai dasar itu.
-    val widestEm = if (widest == 0) DEFAULT_LINE_EM else (widest / REFERENCE_PX).coerceIn(MIN_LINE_EM, MAX_LINE_EM)
+    // Ukur kata dan celah persis seperti tata letak kanvas agar ujung baris tetap berada di dalam halaman.
+    val widestEm = if (widest == 0f) DEFAULT_LINE_EM else maxOf(MIN_LINE_EM, widest / REFERENCE_PX)
     return with(density) { (widthPx * FILL_RATIO / widestEm).toSp() }
 }

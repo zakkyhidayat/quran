@@ -1,10 +1,6 @@
 package io.zakkyhidayat.quran.settings
 
-import android.os.Build
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -23,13 +19,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.selected
 import io.zakkyhidayat.quran.AppViewModel
 import io.zakkyhidayat.quran.R
 import io.zakkyhidayat.quran.ui.AppIcons
 import kotlinx.coroutines.launch
 
-/** Pengingat membaca harian: sakelar (meminta izin notifikasi di Android 13+), jam, dan satuan bagian. */
+/** Pengingat membaca harian: sakelar, jam, dan satuan bagian. Izin dikelola dari Settings > Notifications. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ReminderControls(vm: AppViewModel, settings: AppSettings) {
@@ -37,48 +32,19 @@ internal fun ReminderControls(vm: AppViewModel, settings: AppSettings) {
     val scope = rememberCoroutineScope()
     val repo = vm.settingsRepository
     var showTime by rememberSaveable { mutableStateOf(false) }
-    var showDenied by rememberSaveable { mutableStateOf(false) }
-    var requestingBedtimePermission by rememberSaveable { mutableStateOf(false) }
-    val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-        if (granted) {
-            scope.launch {
-                if (requestingBedtimePermission) repo.setBedtimeSunnahReminderEnabled(true) else repo.setReminder(true)
-            }
-        } else {
-            showDenied = true
-        }
-        requestingBedtimePermission = false
-    }
     val timeText = remember(settings.reminderMinutes) { reminderTimeText(context, settings.reminderMinutes) }
     Group {
         item(
             title = stringResource(R.string.reminder_daily),
             subtitle = if (settings.reminderEnabled) stringResource(R.string.reminder_on_sub, timeText) else stringResource(R.string.reminder_off_sub),
-            onClick = {
-                when {
-                    settings.reminderEnabled -> scope.launch { repo.setReminder(false) }
-                    io.zakkyhidayat.quran.reminder.Reminder.canNotify(context) -> scope.launch { repo.setReminder(true) }
-                    Build.VERSION.SDK_INT >= 33 -> permission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
-                }
-            },
+            onClick = { scope.launch { repo.setReminder(!settings.reminderEnabled) } },
             leading = { Icon(AppIcons.Alarm, contentDescription = null) },
             trailing = { IconSwitch(settings.reminderEnabled) },
         )
         item(
             title = stringResource(R.string.reminder_bedtime_sunnah),
             subtitle = stringResource(R.string.reminder_bedtime_sunnah_sub),
-            onClick = {
-                when {
-                    settings.bedtimeSunnahReminderEnabled ->
-                        scope.launch { repo.setBedtimeSunnahReminderEnabled(false) }
-                    io.zakkyhidayat.quran.reminder.Reminder.canNotify(context) ->
-                        scope.launch { repo.setBedtimeSunnahReminderEnabled(true) }
-                    Build.VERSION.SDK_INT >= 33 -> {
-                        requestingBedtimePermission = true
-                        permission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
-                    }
-                }
-            },
+            onClick = { scope.launch { repo.setBedtimeSunnahReminderEnabled(!settings.bedtimeSunnahReminderEnabled) } },
             leading = { Icon(AppIcons.DarkMode, contentDescription = null) },
             trailing = { IconSwitch(settings.bedtimeSunnahReminderEnabled) },
         )
@@ -115,24 +81,6 @@ internal fun ReminderControls(vm: AppViewModel, settings: AppSettings) {
                 }
             }
         }
-    }
-    // Izin ditolak: pengingat tetap mati; arahkan pengguna ke pengaturan notifikasi aplikasi.
-    if (showDenied) {
-        AlertDialog(
-            onDismissRequest = { showDenied = false },
-            title = { Text(stringResource(R.string.perm_notifications)) },
-            text = { Text(stringResource(R.string.reminder_perm_denied)) },
-            confirmButton = {
-                TextButton(onClick = {
-                    showDenied = false
-                    context.startActivity(
-                        android.content.Intent(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS)
-                            .putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, context.packageName),
-                    )
-                }) { Text(stringResource(R.string.reminder_open_settings)) }
-            },
-            dismissButton = { TextButton(onClick = { showDenied = false }) { Text(stringResource(R.string.cancel)) } },
-        )
     }
     if (showTime) {
         val state = androidx.compose.material3.rememberTimePickerState(

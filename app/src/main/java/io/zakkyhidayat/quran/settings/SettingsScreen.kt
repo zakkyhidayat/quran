@@ -55,7 +55,6 @@ enum class SettingsPage(val route: String) {
     Backup("settings/backup"),
     Reminder("settings/reminder"),
     QuranData("settings/quran-data"),
-    Permissions("settings/permissions"),
     About("settings/about"),
 }
 
@@ -127,7 +126,6 @@ fun SettingsScreen(
             SettingsPage.Backup -> R.string.backup
             SettingsPage.Reminder -> R.string.reminder
             SettingsPage.QuranData -> R.string.quran_data_title
-            SettingsPage.Permissions -> R.string.permissions
             SettingsPage.About -> R.string.about
         },
     )
@@ -193,7 +191,6 @@ fun SettingsScreen(
                             SettingsPage.Backup -> BackupControls(vm, settings, snackbar)
                             SettingsPage.Reminder -> ReminderControls(vm, settings)
                             SettingsPage.QuranData -> QuranDataMaintenance(quranDataInstaller)
-                            SettingsPage.Permissions -> PermissionControls()
                             SettingsPage.About -> {
                                 Group {
                                     item(title = stringResource(R.string.version), subtitle = version)
@@ -259,9 +256,7 @@ private fun SettingsMain(settings: AppSettings, onOpen: (SettingsPage) -> Unit) 
         SettingsCategory(stringResource(R.string.quran_data_title), stringResource(R.string.quran_data_sub), AppIcons.Download) {
             onOpen(SettingsPage.QuranData)
         }
-        SettingsCategory(stringResource(R.string.permissions), stringResource(R.string.settings_permissions_sub), AppIcons.Shield) {
-            onOpen(SettingsPage.Permissions)
-        }
+        NotificationSettingsRow()
         SettingsCategory(stringResource(R.string.about), stringResource(R.string.settings_about_sub), Icons.Default.Info) {
             onOpen(SettingsPage.About)
         }
