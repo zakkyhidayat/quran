@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.height
@@ -241,58 +242,40 @@ private fun SettingsMain(settings: AppSettings, onOpen: (SettingsPage) -> Unit) 
             ThemeMode.Dark -> R.string.theme_dark
         },
     )
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        SettingsCategory(stringResource(R.string.appearance), stringResource(R.string.settings_appearance_sub, theme), AppIcons.Palette) { onOpen(SettingsPage.Appearance) }
+        SettingsCategory(stringResource(R.string.translations), stringResource(R.string.settings_translations_sub, settings.translationIds.size), AppIcons.Translate) { onOpen(SettingsPage.Translations) }
+        SettingsCategory(
+            stringResource(R.string.backup),
+            stringResource(if (settings.autoBackupUri != null) R.string.settings_backup_on else R.string.settings_backup_sub),
+            AppIcons.Backup,
+        ) { onOpen(SettingsPage.Backup) }
+        SettingsCategory(
+            stringResource(R.string.reminder),
+            if (settings.reminderEnabled) stringResource(R.string.reminder_on_sub, reminderTimeText(LocalContext.current, settings.reminderMinutes))
+            else stringResource(R.string.reminder_off_sub),
+            AppIcons.Alarm,
+        ) { onOpen(SettingsPage.Reminder) }
+        SettingsCategory(stringResource(R.string.quran_data_title), stringResource(R.string.quran_data_sub), AppIcons.Download) {
+            onOpen(SettingsPage.QuranData)
+        }
+        SettingsCategory(stringResource(R.string.permissions), stringResource(R.string.settings_permissions_sub), AppIcons.Shield) {
+            onOpen(SettingsPage.Permissions)
+        }
+        SettingsCategory(stringResource(R.string.about), stringResource(R.string.settings_about_sub), Icons.Default.Info) {
+            onOpen(SettingsPage.About)
+        }
+    }
+}
+
+@Composable
+private fun SettingsCategory(title: String, subtitle: String, icon: androidx.compose.ui.graphics.vector.ImageVector, onClick: () -> Unit) {
     Group {
         item(
-            title = stringResource(R.string.appearance),
-            subtitle = stringResource(R.string.settings_appearance_sub, theme),
-            onClick = { onOpen(SettingsPage.Appearance) },
-            leading = { Icon(AppIcons.Palette, contentDescription = null) },
-            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
-        )
-        item(
-            title = stringResource(R.string.translations),
-            subtitle = stringResource(R.string.settings_translations_sub, settings.translationIds.size),
-            onClick = { onOpen(SettingsPage.Translations) },
-            leading = { Icon(AppIcons.Translate, contentDescription = null) },
-            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
-        )
-        item(
-            title = stringResource(R.string.backup),
-            subtitle = stringResource(if (settings.autoBackupUri != null) R.string.settings_backup_on else R.string.settings_backup_sub),
-            onClick = { onOpen(SettingsPage.Backup) },
-            leading = { Icon(AppIcons.Backup, contentDescription = null) },
-            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
-        )
-        item(
-            title = stringResource(R.string.reminder),
-            subtitle = if (settings.reminderEnabled) {
-                stringResource(R.string.reminder_on_sub, reminderTimeText(LocalContext.current, settings.reminderMinutes))
-            } else {
-                stringResource(R.string.reminder_off_sub)
-            },
-            onClick = { onOpen(SettingsPage.Reminder) },
-            leading = { Icon(AppIcons.Alarm, contentDescription = null) },
-            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
-        )
-        item(
-            title = stringResource(R.string.quran_data_title),
-            subtitle = stringResource(R.string.quran_data_sub),
-            onClick = { onOpen(SettingsPage.QuranData) },
-            leading = { Icon(AppIcons.Download, contentDescription = null) },
-            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
-        )
-        item(
-            title = stringResource(R.string.permissions),
-            subtitle = stringResource(R.string.settings_permissions_sub),
-            onClick = { onOpen(SettingsPage.Permissions) },
-            leading = { Icon(AppIcons.Shield, contentDescription = null) },
-            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
-        )
-        item(
-            title = stringResource(R.string.about),
-            subtitle = stringResource(R.string.settings_about_sub),
-            onClick = { onOpen(SettingsPage.About) },
-            leading = { Icon(Icons.Default.Info, contentDescription = null) },
+            title = title,
+            subtitle = subtitle,
+            onClick = onClick,
+            leading = { Icon(icon, contentDescription = null) },
             trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
         )
     }

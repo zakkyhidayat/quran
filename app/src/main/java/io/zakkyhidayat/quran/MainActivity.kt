@@ -20,8 +20,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.zakkyhidayat.quran.data.QuranDatabaseInstaller
+import io.zakkyhidayat.quran.data.SunnahReading
 import io.zakkyhidayat.quran.onboarding.DatabaseSetupScreen
 import io.zakkyhidayat.quran.onboarding.OnboardingScreen
+import io.zakkyhidayat.quran.reminder.Reminder
 import io.zakkyhidayat.quran.settings.AppSettings
 import io.zakkyhidayat.quran.settings.ThemeMode
 import io.zakkyhidayat.quran.ui.theme.QuranTheme
@@ -30,6 +32,7 @@ class MainActivity : ComponentActivity() {
     private val vm: AppViewModel by viewModels()
     private var databaseReady = false
     private var pendingPage: Int? = null
+    private var pendingSunnah: SunnahReading? = null
 
     override fun attachBaseContext(newBase: android.content.Context) {
         super.attachBaseContext(AppLanguage.wrap(newBase))
@@ -37,7 +40,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        if (intent.hasExtra("page")) {
+        pendingSunnah = intent.getStringExtra(Reminder.EXTRA_SUNNAH_READING)
+            ?.let { name -> SunnahReading.entries.firstOrNull { it.name == name } }
+        if (databaseReady && pendingSunnah != null) {
+            pendingSunnah?.let { vm.startSunnahReading(it) }
+            pendingSunnah = null
+        } else if (intent.hasExtra("page")) {
             val page = intent.getIntExtra("page", 1)
             if (databaseReady) vm.goToPage(page) else pendingPage = page
         }
@@ -45,7 +53,11 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (savedInstanceState == null && intent.hasExtra("page")) pendingPage = intent.getIntExtra("page", 1)
+        if (savedInstanceState == null) {
+            pendingSunnah = intent.getStringExtra(Reminder.EXTRA_SUNNAH_READING)
+                ?.let { name -> SunnahReading.entries.firstOrNull { it.name == name } }
+            if (pendingSunnah == null && intent.hasExtra("page")) pendingPage = intent.getIntExtra("page", 1)
+        }
         setContent {
             // Posisi baca berubah setiap ganti halaman; UI tidak memakainya setelah layar dibuka, jadi perubahan yang hanya
             // menyangkut posisi tidak memicu render ulang seluruh aplikasi.
@@ -87,7 +99,10 @@ class MainActivity : ComponentActivity() {
                 androidx.compose.runtime.LaunchedEffect(installed) {
                     if (installed == true) {
                         databaseReady = true
-                        pendingPage?.let { page ->
+                        pendingSunnah?.let { reading ->
+                            vm.startSunnahReading(reading)
+                            pendingSunnah = null
+                        } ?: pendingPage?.let { page ->
                             vm.goToPage(page)
                             pendingPage = null
                         }

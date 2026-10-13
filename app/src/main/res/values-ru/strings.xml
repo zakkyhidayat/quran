@@ -208,6 +208,10 @@
     <string name="auto_backup_error">Не удалось сохранить в выбранную папку. Выключите и снова включите автокопирование, чтобы выбрать её заново.</string>
     <string name="reminder">Напоминание о чтении</string>
     <string name="reminder_daily">Ежедневное напоминание</string>
+    <string name="reminder_bedtime_sunnah">Сунна перед сном</string>
+    <string name="reminder_bedtime_sunnah_sub">Ас-Саджда, затем Аль-Мульк в 21:00</string>
+    <string name="sunnah_reminder_notification_title">Вечернее чтение сунны</string>
+    <string name="sunnah_reminder_notification_text">Прочитайте Ас-Саджда, затем Аль-Мульк.</string>
     <string name="reminder_off_sub">Каждый день уведомление о части, которую вы читаете</string>
     <string name="reminder_on_sub">Каждый день в %1$s</string>
     <string name="reminder_time">Время напоминания</string>
@@ -282,6 +286,9 @@
     <string name="translation_update_failed">Не удалось обновить %1$s. Проверьте подключение и повторите.</string>
     <string name="translation_empty_ayah">(для этого аята нет перевода)</string>
     <string name="reminder_send_test">Отправить тестовое напоминание</string>
+    <string name="continue_sunnah_reading">Продолжить чтение сунны</string>
+    <string name="sunnah_next_segment">Перейти к суре «%1$s»</string>
+    <string name="sunnah_finish_reading">Завершить чтение сунны</string>
     <string name="state_expanded">Развёрнуто</string>
     <string name="state_collapsed">Свёрнуто</string>
     <!-- Layar utama: Jelajahi (carousel, tema, mutasyabihat, ayat serupa, akar kata) -->

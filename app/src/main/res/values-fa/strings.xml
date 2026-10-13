@@ -208,6 +208,10 @@
     <string name="auto_backup_error">ذخیره در پوشه انتخاب‌شده ممکن نشد. برای انتخاب دوباره، پشتیبان‌گیری خودکار را خاموش و روشن کنید.</string>
     <string name="reminder">یادآور خواندن</string>
     <string name="reminder_daily">یادآور روزانه</string>
+    <string name="reminder_bedtime_sunnah">سنت پیش از خواب</string>
+    <string name="reminder_bedtime_sunnah_sub">سجده، سپس ملک، ساعت ۹ شب</string>
+    <string name="sunnah_reminder_notification_title">تلاوت سنت شبانه</string>
+    <string name="sunnah_reminder_notification_text">سورهٔ سجده، سپس ملک را بخوانید.</string>
     <string name="reminder_off_sub">هر روز اعلانی دربارهٔ بخشی که می‌خوانید</string>
     <string name="reminder_on_sub">هر روز ساعت %1$s</string>
     <string name="reminder_time">زمان یادآوری</string>
@@ -282,6 +286,9 @@
     <string name="translation_update_failed">به‌روزرسانی %1$s ناموفق بود. اتصال را بررسی و دوباره تلاش کنید.</string>
     <string name="translation_empty_ayah">(برای این آیه ترجمه‌ای نیست)</string>
     <string name="reminder_send_test">ارسال یادآور آزمایشی</string>
+    <string name="continue_sunnah_reading">ادامهٔ تلاوت سنت</string>
+    <string name="sunnah_next_segment">رفتن به %1$s</string>
+    <string name="sunnah_finish_reading">پایان تلاوت سنت</string>
     <string name="state_expanded">باز</string>
     <string name="state_collapsed">بسته</string>
     <!-- Layar utama: Jelajahi (carousel, tema, mutasyabihat, ayat serupa, akar kata) -->

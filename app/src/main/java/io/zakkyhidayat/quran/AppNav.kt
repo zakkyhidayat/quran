@@ -88,6 +88,7 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
         when (target) {
             is HomeTarget.Passage -> { vm.passage.value = target; nav.navigate("passage") }
             is HomeTarget.Collection -> nav.navigate("collection/${target.kind.name}")
+            is HomeTarget.Sunnah -> { vm.startSunnahReading(target.reading); openReader() }
         }
     }
     val onOpenExplore: (ExploreEntry) -> Unit = {

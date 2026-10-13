@@ -208,6 +208,10 @@
     <string name="auto_backup_error">Impossible d’enregistrer dans le dossier choisi. Désactivez puis réactivez la sauvegarde automatique pour le choisir à nouveau.</string>
     <string name="reminder">Rappel de lecture</string>
     <string name="reminder_daily">Rappel quotidien</string>
+    <string name="reminder_bedtime_sunnah">Sunnah avant de dormir</string>
+    <string name="reminder_bedtime_sunnah_sub">As-Sajda, puis Al-Mulk à 21 h</string>
+    <string name="sunnah_reminder_notification_title">Lecture de la Sunnah du soir</string>
+    <string name="sunnah_reminder_notification_text">Lisez As-Sajda, puis Al-Mulk.</string>
     <string name="reminder_off_sub">Une notification chaque jour avec la partie que vous lisez</string>
     <string name="reminder_on_sub">Chaque jour à %1$s</string>
     <string name="reminder_time">Heure du rappel</string>
@@ -282,6 +286,9 @@
     <string name="translation_update_failed">Impossible de mettre à jour %1$s. Vérifiez votre connexion et réessayez.</string>
     <string name="translation_empty_ayah">(pas de traduction pour ce verset)</string>
     <string name="reminder_send_test">Envoyer un rappel de test</string>
+    <string name="continue_sunnah_reading">Continuer la lecture de la Sunnah</string>
+    <string name="sunnah_next_segment">Aller à %1$s</string>
+    <string name="sunnah_finish_reading">Terminer la lecture de la Sunnah</string>
     <string name="state_expanded">Développé</string>
     <string name="state_collapsed">Réduit</string>
     <!-- Layar utama: Jelajahi (carousel, tema, mutasyabihat, ayat serupa, akar kata) -->

@@ -208,6 +208,10 @@
     <string name="auto_backup_error">تعذّر الحفظ في المجلد المختار. أوقف النسخ التلقائي ثم شغّله لاختيار المجلد من جديد.</string>
     <string name="reminder">تذكير القراءة</string>
     <string name="reminder_daily">تذكير يومي</string>
+    <string name="reminder_bedtime_sunnah">السنة قبل النوم</string>
+    <string name="reminder_bedtime_sunnah_sub">السجدة ثم الملك عند الساعة 9 مساءً</string>
+    <string name="sunnah_reminder_notification_title">ورد السنة الليلي</string>
+    <string name="sunnah_reminder_notification_text">اقرأ السجدة ثم الملك.</string>
     <string name="reminder_off_sub">إشعار يومي بالجزء الذي تقرؤه</string>
     <string name="reminder_on_sub">كل يوم الساعة %1$s</string>
     <string name="reminder_time">وقت التذكير</string>
@@ -282,6 +286,9 @@
     <string name="translation_update_failed">تعذّر تحديث %1$s. تحقق من الاتصال وحاول مرة أخرى.</string>
     <string name="translation_empty_ayah">(لا توجد ترجمة لهذه الآية)</string>
     <string name="reminder_send_test">إرسال تذكير تجريبي</string>
+    <string name="continue_sunnah_reading">متابعة قراءة السنة</string>
+    <string name="sunnah_next_segment">انتقل إلى %1$s</string>
+    <string name="sunnah_finish_reading">إكمال قراءة السنة</string>
     <string name="state_expanded">موسّع</string>
     <string name="state_collapsed">مطوي</string>
     <!-- Layar utama: Jelajahi (carousel, tema, mutasyabihat, ayat serupa, akar kata) -->

@@ -20,6 +20,7 @@ import io.zakkyhidayat.quran.data.DivisionMath
 import io.zakkyhidayat.quran.data.MarkerKind
 import io.zakkyhidayat.quran.settings.AppSettings
 import io.zakkyhidayat.quran.settings.ReminderUnit
+import io.zakkyhidayat.quran.data.SunnahReading
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -36,16 +37,41 @@ import java.util.Calendar
  */
 object Reminder {
     private const val CHANNEL = "reading_reminder"
-    private const val NOTIFICATION_ID = 1
 
     fun schedule(context: Context, settings: AppSettings) {
         val alarms = context.getSystemService(AlarmManager::class.java)
-        val pending = alarmIntent(context)
+        scheduleAlarm(
+            alarms,
+            context,
+            settings.reminderEnabled,
+            settings.reminderMinutes,
+            REQUEST_DAILY,
+            ReminderReceiver.ACTION_REMIND,
+        )
+        scheduleAlarm(
+            alarms,
+            context,
+            settings.bedtimeSunnahReminderEnabled,
+            BEDTIME_MINUTES,
+            REQUEST_BEDTIME,
+            ReminderReceiver.ACTION_BEDTIME,
+        )
+    }
+
+    private fun scheduleAlarm(
+        alarms: AlarmManager,
+        context: Context,
+        enabled: Boolean,
+        minutes: Int,
+        requestCode: Int,
+        action: String,
+    ) {
+        val pending = alarmIntent(context, requestCode, action)
         alarms.cancel(pending)
-        if (!settings.reminderEnabled) return
+        if (!enabled) return
         val next = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, settings.reminderMinutes / 60)
-            set(Calendar.MINUTE, settings.reminderMinutes % 60)
+            set(Calendar.HOUR_OF_DAY, minutes / 60)
+            set(Calendar.MINUTE, minutes % 60)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
             if (timeInMillis <= System.currentTimeMillis()) add(Calendar.DAY_OF_YEAR, 1)
@@ -54,10 +80,10 @@ object Reminder {
         alarms.setWindow(AlarmManager.RTC_WAKEUP, next.timeInMillis, 10 * 60 * 1000L, pending)
     }
 
-    private fun alarmIntent(context: Context): PendingIntent = PendingIntent.getBroadcast(
+    private fun alarmIntent(context: Context, requestCode: Int, action: String): PendingIntent = PendingIntent.getBroadcast(
         context,
-        0,
-        Intent(context, ReminderReceiver::class.java).setAction(ReminderReceiver.ACTION_REMIND),
+        requestCode,
+        Intent(context, ReminderReceiver::class.java).setAction(action),
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
     )
 
@@ -66,13 +92,41 @@ object Reminder {
             ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
 
     @SuppressLint("NotificationPermission")
-    internal suspend fun notify(context: Context) {
+    internal suspend fun notify(context: Context, bedtimeSunnah: Boolean = false) {
         val app = context.app
         val settings = app.settings.settings.first()
-        if (!settings.reminderEnabled) return
+        if (bedtimeSunnah && !settings.bedtimeSunnahReminderEnabled) return
+        if (!bedtimeSunnah && !settings.reminderEnabled) return
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
             ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
         ) return
+        val manager = context.getSystemService(NotificationManager::class.java)
+        manager.createNotificationChannel(
+            NotificationChannel(CHANNEL, context.getString(R.string.reminder_channel), NotificationManager.IMPORTANCE_DEFAULT),
+        )
+        if (bedtimeSunnah) {
+            val page = app.mushaf.ayahPage(32, 1)
+            val open = PendingIntent.getActivity(
+                context,
+                REQUEST_BEDTIME,
+                Intent(context, MainActivity::class.java)
+                    .putExtra(EXTRA_SUNNAH_READING, SunnahReading.MulkSajdah.name)
+                    .putExtra("page", page)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+            )
+            manager.notify(
+                BEDTIME_NOTIFICATION_ID,
+                NotificationCompat.Builder(context, CHANNEL)
+                    .setSmallIcon(R.drawable.ic_notification)
+                    .setContentTitle(context.getString(R.string.sunnah_reminder_notification_title))
+                    .setContentText(context.getString(R.string.sunnah_reminder_notification_text))
+                    .setContentIntent(open)
+                    .setAutoCancel(true)
+                    .build(),
+            )
+            return
+        }
         val kind = when (settings.reminderUnit) {
             ReminderUnit.Juz -> MarkerKind.Juz
             ReminderUnit.Hizb -> MarkerKind.Hizb
@@ -102,13 +156,9 @@ object Reminder {
         }
         val page = app.mushaf.ayahPage(fromSurah, fromAyah)
 
-        val manager = context.getSystemService(NotificationManager::class.java)
-        manager.createNotificationChannel(
-            NotificationChannel(CHANNEL, context.getString(R.string.reminder_channel), NotificationManager.IMPORTANCE_DEFAULT),
-        )
         val open = PendingIntent.getActivity(
             context,
-            0,
+            REQUEST_DAILY,
             Intent(context, MainActivity::class.java).putExtra("page", page).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
@@ -119,8 +169,15 @@ object Reminder {
             .setContentIntent(open)
             .setAutoCancel(true)
             .build()
-        manager.notify(NOTIFICATION_ID, notification)
+        manager.notify(DAILY_NOTIFICATION_ID, notification)
     }
+
+    private const val REQUEST_DAILY = 0
+    private const val REQUEST_BEDTIME = 1
+    private const val DAILY_NOTIFICATION_ID = 1
+    private const val BEDTIME_NOTIFICATION_ID = 2
+    private const val BEDTIME_MINUTES = 21 * 60
+    const val EXTRA_SUNNAH_READING = "sunnah_reading"
 }
 
 class ReminderReceiver : BroadcastReceiver() {
@@ -128,7 +185,10 @@ class ReminderReceiver : BroadcastReceiver() {
         val pending = goAsync()
         CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
             try {
-                if (intent.action == ACTION_REMIND) Reminder.notify(context)
+                when (intent.action) {
+                    ACTION_REMIND -> Reminder.notify(context)
+                    ACTION_BEDTIME -> Reminder.notify(context, bedtimeSunnah = true)
+                }
                 // Selain itu: boot, pembaruan aplikasi, atau jam/zona waktu berubah; cukup jadwalkan ulang.
                 // Jadwalkan kemunculan berikutnya (hanya bila pengingat menyala; schedule() membatalkan alarm bila mati).
                 Reminder.schedule(context, context.app.settings.settings.first())
@@ -140,5 +200,6 @@ class ReminderReceiver : BroadcastReceiver() {
 
     companion object {
         const val ACTION_REMIND = "io.zakkyhidayat.quran.REMIND"
+        const val ACTION_BEDTIME = "io.zakkyhidayat.quran.REMIND_BEDTIME_SUNNAH"
     }
 }

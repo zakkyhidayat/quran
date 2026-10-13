@@ -66,10 +66,15 @@ Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pu
 - Ayat hari ini: sama untuk semua pengguna per hari, berganti tengah malam.
 - Bacaan sunnah dengan dalil; yang waktunya berlaku (Jumat atau malam, pendekatan pukul 18.00) diberi label
   "Dianjurkan sekarang" dan ditaruh di atas.
+- Kartu bacaan Sunnah membuka langsung ayat/surah di pembaca. Untuk rangkaian beberapa surah, petunjuk beraksen
+  `tertiaryContainer` mengantar ke bagian berikutnya; progres tersimpan dan bisa dilanjutkan atau dibuang dari tombol
+  mengambang di daftar. Pengingat terpisah pukul 21.00 membuka rangkaian As-Sajdah lalu Al-Mulk.
 - Histori bacaan: satu baris per surah, 5 tampil.
 - Kumpulan ayat: doa, solusi, adab, dosa besar; layar kumpulan dengan teks Arab, terjemahan, dan "Buka di pembaca".
 - Kartu Ayat Hari Ini memasangkan latar `primaryContainer` dengan `onPrimaryContainer` di tema terang/gelap; daftar
   Sunnah, histori, dan koleksi memakai wadah ikon tonal dengan pasangan warna yang sesuai.
+- Kategori Pengaturan memakai kartu terpisah dengan jarak antarkelompok agar tidak tampak berjejal. Paket terjemahan
+  yang dapat diunduh menampilkan ikon unduh dalam wadah tonal.
 
 Perlu dicek pemilik sebelum rilis: redaksi hadits di bacaan sunnah, dan tampilan di perangkat.
 

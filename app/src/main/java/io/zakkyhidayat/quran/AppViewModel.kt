@@ -13,6 +13,8 @@ import io.zakkyhidayat.quran.data.Marker
 import io.zakkyhidayat.quran.data.MarkerKind
 import io.zakkyhidayat.quran.data.PageMeta
 import io.zakkyhidayat.quran.data.Surah
+import io.zakkyhidayat.quran.data.SunnahReading
+import io.zakkyhidayat.quran.data.AyahRange
 import io.zakkyhidayat.quran.data.TranslationInfo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.NonCancellable
@@ -103,7 +105,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         // Pasang ulang jadwal pengingat setiap kali pengaturannya berubah (termasuk saat aplikasi dibuka).
         viewModelScope.launch {
             settingsRepository.settings
-                .map { Triple(it.reminderEnabled, it.reminderMinutes, it.reminderUnit) }
+                .map { listOf(it.reminderEnabled, it.reminderMinutes, it.reminderUnit, it.bedtimeSunnahReminderEnabled) }
                 .distinctUntilChanged()
                 .collect { io.zakkyhidayat.quran.reminder.Reminder.schedule(getApplication(), settingsRepository.settings.first()) }
         }
@@ -151,6 +153,57 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun clearHistory() = viewModelScope.launch { history.clear() }
+
+    fun startSunnahReading(reading: SunnahReading, resume: Boolean = false) {
+        viewModelScope.launch {
+            val stored = settingsRepository.settings.first()
+            val ranges = sunnahRanges(reading)
+            if (ranges.isEmpty()) return@launch
+            val step = if (resume) stored.sunnahReadingStep.coerceIn(0, ranges.lastIndex) else 0
+            if (!resume || stored.sunnahReadingId != reading.name) {
+                settingsRepository.setSunnahReading(reading.name, step)
+            }
+            val range = ranges[step]
+            val last = stored.lastSurah to stored.lastAyah
+            val resumePosition = resume && stored.sunnahReadingId == reading.name &&
+                range.contains(last.first, last.second)
+            val surah = if (resumePosition) last.first else range.surah
+            val ayah = if (resumePosition) last.second else range.from
+            selected.value = AyahRef(surah, ayah)
+            sheetVisible.value = false
+            settingsRepository.setLastAyah(surah, ayah)
+            goToPage(mushaf.ayahPage(surah, ayah))
+        }
+    }
+
+    fun advanceSunnahReading() {
+        viewModelScope.launch {
+            val stored = settingsRepository.settings.first()
+            val reading = SunnahReading.entries.firstOrNull { it.name == stored.sunnahReadingId } ?: return@launch
+            val ranges = sunnahRanges(reading)
+            val nextStep = stored.sunnahReadingStep + 1
+            if (nextStep >= ranges.size) {
+                settingsRepository.clearSunnahReading()
+                return@launch
+            }
+            settingsRepository.setSunnahReading(reading.name, nextStep)
+            val next = ranges[nextStep]
+            selected.value = AyahRef(next.surah, next.from)
+            sheetVisible.value = false
+            settingsRepository.setLastAyah(next.surah, next.from)
+            goToPage(mushaf.ayahPage(next.surah, next.from))
+        }
+    }
+
+    fun dismissSunnahReading() = viewModelScope.launch { settingsRepository.clearSunnahReading() }
+
+    private suspend fun sunnahRanges(reading: SunnahReading): List<AyahRange> {
+        val names = surahs.value.ifEmpty { mushaf.surahs().also { surahs.value = it } }
+        return AyahRange.parseList(reading.refs).mapNotNull { range ->
+            val end = if (range.to == 0) names[range.surah]?.ayahCount ?: 0 else range.to
+            range.copy(to = end).takeIf { end >= range.from }
+        }
+    }
 
     /**
      * Terjemahan tidak dibundel: terjemahan aktif yang belum terpasang (bawaan untuk pengguna baru, atau terjemahan yang

@@ -208,6 +208,10 @@
     <string name="auto_backup_error">Tidak bisa menyimpan ke folder yang dipilih. Matikan lalu nyalakan lagi untuk memilih foldernya.</string>
     <string name="reminder">Pengingat membaca</string>
     <string name="reminder_daily">Pengingat harian</string>
+    <string name="reminder_bedtime_sunnah">Sunnah sebelum tidur</string>
+    <string name="reminder_bedtime_sunnah_sub">As-Sajdah, lalu Al-Mulk pukul 21.00</string>
+    <string name="sunnah_reminder_notification_title">Bacaan Sunnah malam</string>
+    <string name="sunnah_reminder_notification_text">Baca As-Sajdah, lalu Al-Mulk.</string>
     <string name="reminder_off_sub">Notifikasi setiap hari berisi bagian yang sedang Anda baca</string>
     <string name="reminder_on_sub">Setiap hari pukul %1$s</string>
     <string name="reminder_time">Jam pengingat</string>
@@ -282,6 +286,9 @@
     <string name="translation_update_failed">Gagal memperbarui %1$s. Periksa koneksi lalu coba lagi.</string>
     <string name="translation_empty_ayah">(tidak ada terjemahan untuk ayat ini)</string>
     <string name="reminder_send_test">Kirim pengingat uji</string>
+    <string name="continue_sunnah_reading">Lanjutkan bacaan Sunnah</string>
+    <string name="sunnah_next_segment">Lanjut ke %1$s</string>
+    <string name="sunnah_finish_reading">Selesaikan bacaan Sunnah</string>
     <string name="state_expanded">Terbuka</string>
     <string name="state_collapsed">Tertutup</string>
     <!-- Layar utama: Jelajahi (carousel, tema, mutasyabihat, ayat serupa, akar kata) -->

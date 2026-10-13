@@ -209,6 +209,10 @@
     <string name="auto_backup_error">Could not save to the chosen folder. Turn auto backup off and on to choose it again.</string>
     <string name="reminder">Reading reminder</string>
     <string name="reminder_daily">Daily reminder</string>
+    <string name="reminder_bedtime_sunnah">Sunnah before sleep</string>
+    <string name="reminder_bedtime_sunnah_sub">As-Sajdah, then Al-Mulk at 9:00 PM</string>
+    <string name="sunnah_reminder_notification_title">Nightly Sunnah reading</string>
+    <string name="sunnah_reminder_notification_text">Read As-Sajdah, then Al-Mulk.</string>
     <string name="reminder_off_sub">A notification each day with the portion you are reading</string>
     <string name="reminder_on_sub">Every day at %1$s</string>
     <string name="reminder_time">Reminder time</string>
@@ -283,6 +287,9 @@
     <string name="translation_update_failed">Could not update %1$s. Check your connection and try again.</string>
     <string name="translation_empty_ayah">(no translation for this verse)</string>
     <string name="reminder_send_test">Send test reminder</string>
+    <string name="continue_sunnah_reading">Continue Sunnah reading</string>
+    <string name="sunnah_next_segment">Go to %1$s</string>
+    <string name="sunnah_finish_reading">Finish Sunnah reading</string>
     <string name="state_expanded">Expanded</string>
     <string name="state_collapsed">Collapsed</string>
 

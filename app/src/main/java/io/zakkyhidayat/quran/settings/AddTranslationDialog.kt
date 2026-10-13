@@ -23,6 +23,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,6 +45,7 @@ import io.zakkyhidayat.quran.AppViewModel
 import io.zakkyhidayat.quran.R
 import io.zakkyhidayat.quran.data.CatalogPack
 import io.zakkyhidayat.quran.data.TranslationInfo
+import io.zakkyhidayat.quran.ui.AppIcons
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
@@ -191,12 +193,32 @@ internal fun TranslationCatalogList(
                                                 progress = { progress },
                                                 modifier = Modifier.size(24.dp).semantics { contentDescription = cd },
                                             )
-                                        } else if (pack.bytes > 0) {
-                                            Text(
-                                                stringResource(R.string.translation_size_mb, String.format(locale, "%.1f", pack.bytes / 1_000_000.0)),
-                                                style = MaterialTheme.typography.labelMedium,
-                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                            )
+                                        } else {
+                                            val downloadCd = stringResource(R.string.translation_download_cd, label)
+                                            Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                                                if (pack.bytes > 0) {
+                                                    Text(
+                                                        stringResource(R.string.translation_size_mb, String.format(locale, "%.1f", pack.bytes / 1_000_000.0)),
+                                                        style = MaterialTheme.typography.labelMedium,
+                                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                    )
+                                                }
+                                                Surface(
+                                                    shape = MaterialTheme.shapes.small,
+                                                    color = MaterialTheme.colorScheme.secondaryContainer,
+                                                    modifier = Modifier.size(40.dp).semantics {
+                                                        contentDescription = downloadCd
+                                                    },
+                                                ) {
+                                                    Box(contentAlignment = Alignment.Center) {
+                                                        Icon(
+                                                            AppIcons.Download,
+                                                            contentDescription = null,
+                                                            tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                                                        )
+                                                    }
+                                                }
+                                            }
                                         }
                                     },
                                     colors = dialogItemColors(),

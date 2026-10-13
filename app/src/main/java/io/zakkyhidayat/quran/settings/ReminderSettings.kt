@@ -38,8 +38,16 @@ internal fun ReminderControls(vm: AppViewModel, settings: AppSettings) {
     val repo = vm.settingsRepository
     var showTime by rememberSaveable { mutableStateOf(false) }
     var showDenied by rememberSaveable { mutableStateOf(false) }
+    var requestingBedtimePermission by rememberSaveable { mutableStateOf(false) }
     val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-        if (granted) scope.launch { repo.setReminder(true) } else showDenied = true
+        if (granted) {
+            scope.launch {
+                if (requestingBedtimePermission) repo.setBedtimeSunnahReminderEnabled(true) else repo.setReminder(true)
+            }
+        } else {
+            showDenied = true
+        }
+        requestingBedtimePermission = false
     }
     val timeText = remember(settings.reminderMinutes) { reminderTimeText(context, settings.reminderMinutes) }
     Group {
@@ -55,6 +63,24 @@ internal fun ReminderControls(vm: AppViewModel, settings: AppSettings) {
             },
             leading = { Icon(AppIcons.Alarm, contentDescription = null) },
             trailing = { IconSwitch(settings.reminderEnabled) },
+        )
+        item(
+            title = stringResource(R.string.reminder_bedtime_sunnah),
+            subtitle = stringResource(R.string.reminder_bedtime_sunnah_sub),
+            onClick = {
+                when {
+                    settings.bedtimeSunnahReminderEnabled ->
+                        scope.launch { repo.setBedtimeSunnahReminderEnabled(false) }
+                    io.zakkyhidayat.quran.reminder.Reminder.canNotify(context) ->
+                        scope.launch { repo.setBedtimeSunnahReminderEnabled(true) }
+                    Build.VERSION.SDK_INT >= 33 -> {
+                        requestingBedtimePermission = true
+                        permission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                    }
+                }
+            },
+            leading = { Icon(AppIcons.DarkMode, contentDescription = null) },
+            trailing = { IconSwitch(settings.bedtimeSunnahReminderEnabled) },
         )
         // Build debug saja: tampilkan pengingat sekarang untuk menguji isi dan ketukannya.
         if (settings.reminderEnabled && io.zakkyhidayat.quran.BuildConfig.DEBUG) {
