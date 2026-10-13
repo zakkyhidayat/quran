@@ -140,10 +140,29 @@ fun SettingsScreen(
         },
     ) { padding ->
         CenteredContent(Modifier.padding(padding)) {
-            LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp)) {
-                item(key = page.route) {
-                    Column {
-                        when (page) {
+            if (page == SettingsPage.Translations) {
+                Column(
+                    Modifier.fillMaxSize()
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 8.dp, bottom = 24.dp),
+                ) {
+                    Group {
+                        item(
+                            title = stringResource(R.string.translit_title),
+                            subtitle = stringResource(R.string.translit_sub),
+                            onClick = { scope.launch { repo.setShowTransliteration(!settings.showTransliteration) } },
+                            leading = { Icon(AppIcons.Translate, contentDescription = null) },
+                            trailing = { IconSwitch(settings.showTransliteration) },
+                        )
+                    }
+                    Spacer(Modifier.height(16.dp))
+                    TranslationControls(vm, settings, Modifier.weight(1f), fillAvailableHeight = true)
+                }
+            } else {
+                LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp)) {
+                    item(key = page.route) {
+                        Column {
+                            when (page) {
                             SettingsPage.Main -> SettingsMain(settings, onOpen)
                             SettingsPage.Appearance -> {
 
@@ -169,19 +188,7 @@ fun SettingsScreen(
                                 }
 
                             }
-                            SettingsPage.Translations -> {
-                                Group {
-                                    item(
-                                        title = stringResource(R.string.translit_title),
-                                        subtitle = stringResource(R.string.translit_sub),
-                                        onClick = { scope.launch { repo.setShowTransliteration(!settings.showTransliteration) } },
-                                        leading = { Icon(AppIcons.Translate, contentDescription = null) },
-                                        trailing = { IconSwitch(settings.showTransliteration) },
-                                    )
-                                }
-                                Spacer(Modifier.height(16.dp))
-                                TranslationControls(vm, settings)
-                            }
+                            SettingsPage.Translations -> Unit
                             SettingsPage.Backup -> BackupControls(vm, settings, snackbar)
                             SettingsPage.Reminder -> ReminderControls(vm, settings)
                             SettingsPage.QuranData -> QuranDataMaintenance(quranDataInstaller)
@@ -212,6 +219,7 @@ fun SettingsScreen(
                                     )
                                 }
 
+                                }
                             }
                         }
                     }

@@ -63,7 +63,12 @@ internal fun translationLabel(tr: io.zakkyhidayat.quran.data.TranslationInfo): S
  * Daftar terjemahan aktif (dengan tombol hapus) dan katalog tambah yang selalu tampil di tempat.
  */
 @Composable
-internal fun TranslationControls(vm: AppViewModel, settings: AppSettings) {
+internal fun TranslationControls(
+    vm: AppViewModel,
+    settings: AppSettings,
+    modifier: Modifier = Modifier,
+    fillAvailableHeight: Boolean = false,
+) {
     val repo = vm.settingsRepository
     val scope = rememberCoroutineScope()
     val translations by vm.translations.collectAsStateWithLifecycle()
@@ -72,7 +77,7 @@ internal fun TranslationControls(vm: AppViewModel, settings: AppSettings) {
     var updateFailed by remember { mutableStateOf<String?>(null) }
     // Cek versi katalog sekali saat daftar tampil (dan lagi bila daftar terpasang berubah); luring dilewati diam-diam.
     LaunchedEffect(translations.map { it.id to it.version }) { vm.checkPackUpdates() }
-    Column {
+    Column(modifier) {
         val ordered = translations.map { it.id }
         val active = translations.filter { it.id in settings.translationIds }
         val inactive = translations.filter { it.id !in settings.translationIds }
@@ -137,6 +142,11 @@ internal fun TranslationControls(vm: AppViewModel, settings: AppSettings) {
             scope.launch { repo.setTranslations(all.filter { it in settings.translationIds || it == id }) }
         }
         // Daftar lazy dibatasi agar bisa digulir di Pengaturan maupun onboarding.
-        TranslationCatalogList(vm, inactive, onActivate, Modifier.heightIn(max = 400.dp).imePadding())
+        val catalogModifier = if (fillAvailableHeight) {
+            Modifier.weight(1f).imePadding()
+        } else {
+            Modifier.heightIn(max = 400.dp).imePadding()
+        }
+        TranslationCatalogList(vm, inactive, onActivate, catalogModifier)
     }
 }

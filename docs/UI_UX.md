@@ -43,8 +43,8 @@ Dari screenshot [QuranApp](https://github.com/AlfaazPlus/QuranApp) (GPL-3.0, sam
   glyph. Warna medali nomor ayat tetap sama saat Tajwid diaktifkan atau dimatikan, termasuk pada tema gelap.
 - Langkah setelah unduhan menampilkan pratinjau mushaf, pilihan paket terjemahan, dan pengaturan tampilan.
 - Pengaturan > Terjemahan langsung menampilkan katalog paket beserta pencarian di bawah daftar terjemahan aktif,
-  tanpa perlu menekan tombol atau membuka dialog. Katalog memakai daftar lazy yang dapat digulir agar banyak paket tetap
-  mudah dijelajahi.
+  tanpa perlu menekan tombol atau membuka dialog. Daftar katalog memakai sisa tinggi layar dan dapat digulir dengan
+  gestur sentuh; onboarding tetap membatasi tinggi daftar agar muat di langkah yang juga dapat digulir.
 
 ### Navigasi dan pengaturan
 

@@ -119,7 +119,7 @@ internal fun TranslationCatalogList(
                 modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
             )
         }
-        LazyColumn(Modifier.weight(1f, fill = false)) {
+        LazyColumn(Modifier.weight(1f)) {
             items(inactiveShown, key = { "inactive-${it.id}" }) { tr ->
                 ListItem(
                     headlineContent = { Text(translationLabel(tr)) },
