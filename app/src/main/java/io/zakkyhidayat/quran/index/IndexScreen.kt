@@ -36,12 +36,15 @@ import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.LeadingIconTab
 import androidx.compose.material3.Tab
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.mutableStateOf
 import io.zakkyhidayat.quran.reader.commonFontFamily
 import io.zakkyhidayat.quran.reader.juzOpeningGlyph
@@ -111,46 +114,57 @@ fun IndexScreen(
         floatingActionButton = {
             val sunnahReading = io.zakkyhidayat.quran.data.SunnahReading.entries
                 .firstOrNull { it.name == settings.sunnahReadingId }
-            if (sunnahReading != null) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    IconButton(onClick = { vm.dismissSunnahReading() }) {
-                        Icon(Icons.Default.Close, contentDescription = stringResource(R.string.close))
+            Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                if (sunnahReading != null) {
+                    val shape = MaterialTheme.shapes.large
+                    Surface(
+                        shape = shape,
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        tonalElevation = 3.dp,
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Row(
+                                Modifier.weight(1f)
+                                    .clickable { vm.startSunnahReading(sunnahReading, resume = true); onBack() }
+                                    .padding(start = 16.dp, end = 4.dp, top = 12.dp, bottom = 12.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Icon(AppIcons.MenuBook, contentDescription = null)
+                                Spacer(Modifier.width(12.dp))
+                                Column {
+                                    Text(stringResource(R.string.continue_sunnah_reading), style = MaterialTheme.typography.labelLarge)
+                                    Text(
+                                        io.zakkyhidayat.quran.home.sunnahTitle(sunnahReading),
+                                        style = MaterialTheme.typography.labelMedium,
+                                        maxLines = 1,
+                                    )
+                                }
+                            }
+                            IconButton(onClick = { vm.dismissSunnahReading() }) {
+                                Icon(Icons.Default.Close, contentDescription = stringResource(R.string.close))
+                            }
+                        }
                     }
+                }
+                if (lastSurah != null && settings.lastAyah > 0) {
                     ExtendedFloatingActionButton(
-                        onClick = { vm.startSunnahReading(sunnahReading, resume = true); onBack() },
+                        onClick = { vm.goToAyah(lastSurah.id, settings.lastAyah); onBack() },
                         icon = { Icon(AppIcons.MenuBook, contentDescription = null) },
                         text = {
                             Column {
-                                Text(stringResource(R.string.continue_sunnah_reading), style = MaterialTheme.typography.labelLarge)
-                                Text(
-                                    io.zakkyhidayat.quran.home.sunnahTitle(sunnahReading),
-                                    style = MaterialTheme.typography.labelMedium,
-                                    maxLines = 1,
-                                )
+                                Text(stringResource(R.string.continue_reading), style = MaterialTheme.typography.labelLarge)
+                                // Label berganti halus (bukan tiba-tiba) saat posisi terakhir berubah sepulang dari pembaca.
+                                val motion = MaterialTheme.motionScheme
+                                AnimatedContent(
+                                    targetState = "${lastSurah.nameLatin} ${lastSurah.id}:${settings.lastAyah}",
+                                    transitionSpec = { fadeIn(motion.defaultEffectsSpec()) togetherWith fadeOut(motion.fastEffectsSpec()) },
+                                    label = "continueLabel",
+                                ) { label -> Text(label, style = MaterialTheme.typography.labelMedium) }
                             }
                         },
                     )
                 }
-            } else if (lastSurah != null && settings.lastAyah > 0) {
-                ExtendedFloatingActionButton(
-                    onClick = { vm.goToAyah(lastSurah.id, settings.lastAyah); onBack() },
-                    icon = { Icon(AppIcons.MenuBook, contentDescription = null) },
-                    text = {
-                        Column {
-                            Text(stringResource(R.string.continue_reading), style = MaterialTheme.typography.labelLarge)
-                            // Label berganti halus (bukan tiba-tiba) saat posisi terakhir berubah sepulang dari pembaca.
-                            val motion = MaterialTheme.motionScheme
-                            AnimatedContent(
-                                targetState = "${lastSurah.nameLatin} ${lastSurah.id}:${settings.lastAyah}",
-                                transitionSpec = { fadeIn(motion.defaultEffectsSpec()) togetherWith fadeOut(motion.fastEffectsSpec()) },
-                                label = "continueLabel",
-                            ) { label -> Text(label, style = MaterialTheme.typography.labelMedium) }
-                        }
-                    },
-                )
             }
         },
         topBar = {
