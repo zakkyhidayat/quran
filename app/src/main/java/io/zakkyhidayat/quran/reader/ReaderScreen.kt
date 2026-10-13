@@ -343,6 +343,7 @@ fun ReaderScreen(
                     surahs = surahs,
                     translationIds = settings.translationIds,
                     showArabic = lastListMode == ReadingMode.AyahTranslation,
+                    tajweed = settings.tajweed,
                     // Animasi teks Arab hanya saat daftar sudah terlihat; dari mushaf, daftar langsung muncul dalam mode tujuan.
                     animateArabic = listMode && listAlpha > 0f,
                     state = listPagerState,

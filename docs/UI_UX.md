@@ -40,11 +40,19 @@ Dari screenshot [QuranApp](https://github.com/AlfaazPlus/QuranApp) (GPL-3.0, sam
   mode mushaf dan daftar ayat dapat dipilih kapan saja. Baris mushaf diberi sela vertikal 1,5 dp
   (sekitar 4–5% tinggi sel per baris) tanpa mengecilkan glyph; tinggi halaman bertambah secukupnya, dan lebar
   disesuaikan agar tetap muat di layar portrait. Perubahan warna Tajwid memakai transisi spring tanpa mengubah tata letak
-  glyph. Warna medali nomor ayat tetap sama saat Tajwid diaktifkan atau dimatikan, termasuk pada tema gelap.
+  glyph. Warna medali nomor ayat memakai slot palet tanpa Tajwid pada tema terang dan gelap, sehingga kecerahannya
+  konsisten saat Tajwid diaktifkan atau dimatikan. Pewarnaan Tajwid tersedia di tampilan Mushaf; mode Ayat per Ayat
+  memakai glyph font halaman yang sama saat tersedia, dengan transisi warna spring saat Tajwid diaktifkan atau dimatikan;
+  basmalah pada judul surah juga memakai glyph/font halaman bertajwid dengan transisi yang sama. Teks Arab Unicode dari
+  database dan basmalah font umum menjadi fallback bila font halaman belum tersedia.
+- Header surah pada mode Ayat per Ayat memakai glyph nama surah seperti sebelumnya, bukan banner mushaf, agar tidak
+  berganti tampilan saat font banner dimuat. Glyph nama surah pada daftar/tab memakai hitam di tema terang dan putih di
+  tema gelap.
 - Langkah setelah unduhan menampilkan pratinjau mushaf, pilihan paket terjemahan, dan pengaturan tampilan.
 - Pengaturan > Terjemahan langsung menampilkan katalog paket beserta pencarian di bawah daftar terjemahan aktif,
   tanpa perlu menekan tombol atau membuka dialog. Daftar katalog memakai sisa tinggi layar dan dapat digulir dengan
-  gestur sentuh; onboarding tetap membatasi tinggi daftar agar muat di langkah yang juga dapat digulir.
+  gestur sentuh; kolom pencarian tampil segera tanpa menunggu katalog dimuat. Onboarding tetap membatasi tinggi daftar
+  agar muat di langkah yang juga dapat digulir.
 
 ### Navigasi dan pengaturan
 
@@ -60,6 +68,8 @@ Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pu
   "Dianjurkan sekarang" dan ditaruh di atas.
 - Histori bacaan: satu baris per surah, 5 tampil.
 - Kumpulan ayat: doa, solusi, adab, dosa besar; layar kumpulan dengan teks Arab, terjemahan, dan "Buka di pembaca".
+- Kartu Ayat Hari Ini memasangkan latar `primaryContainer` dengan `onPrimaryContainer` di tema terang/gelap; daftar
+  Sunnah, histori, dan koleksi memakai wadah ikon tonal dengan pasangan warna yang sesuai.
 
 Perlu dicek pemilik sebelum rilis: redaksi hadits di bacaan sunnah, dan tampilan di perangkat.
 

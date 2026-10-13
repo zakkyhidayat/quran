@@ -7,6 +7,14 @@ import org.junit.Test
 
 class PalettedFontsTest {
     @Test
+    fun lightTajweedPaletteKeepsAyahMedallionColor() {
+        val palette = GlyphPalette.LightTajweed
+
+        assertEquals(GlyphPalette.LightPlain.index, palette.colorSourcePalette)
+        assertEquals(listOf(10 to 10), palette.copyColors)
+    }
+
+    @Test
     fun darkTajweedPaletteKeepsAyahMedallionColor() {
         val palette = GlyphPalette.DarkTajweed
 

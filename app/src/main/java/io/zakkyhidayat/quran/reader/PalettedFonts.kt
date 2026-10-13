@@ -18,7 +18,8 @@ internal enum class GlyphPalette(
     val copyColors: List<Pair<Int, Int>> = emptyList(),
     val colorSourcePalette: Int = index,
 ) {
-    LightTajweed(0), // P6: huruf berwarna tajwid
+    // Samakan slot 10 (lapisan medali nomor ayat) dengan palet terang polos; warna Tajwid lain tetap dari P6.
+    LightTajweed(0, copyColors = listOf(10 to 10), colorSourcePalette = 3), // P6: huruf berwarna tajwid
     LightPlain(3), // P3: huruf hitam, nomor ayat berwarna
     // Samakan slot 10 (lapisan medali nomor ayat) dengan palet gelap polos; warna Tajwid lain tetap dari P1.
     DarkTajweed(1, copyColors = listOf(10 to 10), colorSourcePalette = 4), // P1: huruf putih dengan warna tajwid yang lebih cerah
