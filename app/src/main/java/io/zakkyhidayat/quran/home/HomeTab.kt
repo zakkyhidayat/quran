@@ -1,6 +1,5 @@
 package io.zakkyhidayat.quran.home
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -17,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -24,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SegmentedListItem
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -36,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.foundation.background
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
@@ -100,7 +102,18 @@ fun HomeTab(vm: AppViewModel, onOpenReader: () -> Unit, onOpen: (HomeTarget) -> 
                 onClick = { onOpen(HomeTarget.Passage(sunnahTitles[index], sunnahNotes[index], s.refs)) },
                 shapes = ListItemDefaults.segmentedShapes(index, sunnah.size),
                 colors = segmentedItemColors(),
-                leadingContent = { Icon(if (s.time == io.zakkyhidayat.quran.data.SunnahTime.Night) AppIcons.DarkMode else AppIcons.MenuBook, contentDescription = null) },
+                leadingContent = {
+                    val icon = if (s.time == io.zakkyhidayat.quran.data.SunnahTime.Night) AppIcons.DarkMode else AppIcons.MenuBook
+                    Surface(
+                        shape = CircleShape,
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    ) {
+                        androidx.compose.foundation.layout.Box(Modifier.size(40.dp), contentAlignment = Alignment.Center) {
+                            Icon(icon, contentDescription = null)
+                        }
+                    }
+                },
                 overlineContent = overline,
                 supportingContent = { Text(sunnahNotes[index], maxLines = 2, overflow = TextOverflow.Ellipsis) },
             ) { Text(sunnahTitles[index]) }
@@ -128,7 +141,17 @@ fun HomeTab(vm: AppViewModel, onOpenReader: () -> Unit, onOpen: (HomeTarget) -> 
                 onClick = { vm.goToAyah(h.surah, h.ayah); onOpenReader() },
                 shapes = ListItemDefaults.segmentedShapes(index, historyShown.size),
                 colors = segmentedItemColors(),
-                leadingContent = { Icon(AppIcons.Schedule, contentDescription = null) },
+                leadingContent = {
+                    Surface(
+                        shape = CircleShape,
+                        color = MaterialTheme.colorScheme.secondaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    ) {
+                        androidx.compose.foundation.layout.Box(Modifier.size(40.dp), contentAlignment = Alignment.Center) {
+                            Icon(AppIcons.Schedule, contentDescription = null)
+                        }
+                    }
+                },
                 supportingContent = {
                     Text(
                         android.text.format.DateUtils.getRelativeTimeSpanString(h.readAt, System.currentTimeMillis(), android.text.format.DateUtils.MINUTE_IN_MILLIS).toString(),
@@ -148,7 +171,15 @@ fun HomeTab(vm: AppViewModel, onOpenReader: () -> Unit, onOpen: (HomeTarget) -> 
                         modifier = Modifier.weight(1f).fillMaxHeight(),
                     ) {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                            Icon(collectionIcon(kind), contentDescription = null, modifier = Modifier.size(28.dp))
+                            Surface(
+                                shape = CircleShape,
+                                color = MaterialTheme.colorScheme.primaryContainer,
+                                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            ) {
+                                androidx.compose.foundation.layout.Box(Modifier.size(44.dp), contentAlignment = Alignment.Center) {
+                                    Icon(collectionIcon(kind), contentDescription = null, modifier = Modifier.size(24.dp))
+                                }
+                            }
                             Text(collectionTitle(kind), style = MaterialTheme.typography.titleSmall)
                         }
                     }
@@ -188,26 +219,32 @@ private fun VerseOfTheDay(vm: AppViewModel, onOpenReader: () -> Unit) {
     val context = LocalContext.current
     val arabicFont = remember { arabicFontFamily(context) }
     val r = range
+    val shape = MaterialTheme.shapes.extraLarge
+    val container = MaterialTheme.colorScheme.primaryContainer
+    val gradient = Brush.linearGradient(
+        listOf(container, lerp(container, MaterialTheme.colorScheme.surfaceContainerHigh, 0.28f)),
+    )
     Card(
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-        shape = MaterialTheme.shapes.extraLarge,
-        modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
-            .background(
-                Brush.linearGradient(listOf(MaterialTheme.colorScheme.primaryContainer, MaterialTheme.colorScheme.tertiaryContainer)),
-                MaterialTheme.shapes.extraLarge,
-            ).clickable(enabled = r != null) {
+        onClick = {
             if (r != null) { vm.goToAyah(r.surah, r.from); onOpenReader() }
         },
+        enabled = r != null,
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent, contentColor = MaterialTheme.colorScheme.onPrimaryContainer),
+        shape = shape,
+        modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
     ) {
-        Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Column(
+            Modifier.fillMaxWidth().background(gradient, shape).padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(AppIcons.Favorite, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                Icon(AppIcons.Favorite, contentDescription = null)
                 Text(stringResource(R.string.home_votd), style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(start = 8.dp).weight(1f))
                 if (r != null) {
                     Text(
                         "${surahs[r.surah]?.nameLatin.orEmpty()} $r",
                         style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.primary,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
                 }
             }
@@ -222,7 +259,11 @@ private fun VerseOfTheDay(vm: AppViewModel, onOpenReader: () -> Unit) {
                 }
                 val translation = ayahs.mapNotNull { a -> a.translations.firstOrNull()?.text?.let(::plainTranslation)?.takeIf { it.isNotBlank() } }
                 if (translation.isNotEmpty()) {
-                    Text(translation.joinToString(" "), style = MaterialTheme.typography.bodyLarge)
+                    Text(
+                        translation.joinToString(" "),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    )
                 }
             }
         }

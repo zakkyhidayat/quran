@@ -191,7 +191,7 @@ fun MushafPage(
 
 // Basmalah memakai glyph ayat 1:1 dari font halaman 1 (U+FC41..FC44 = bismi / Allahi / alrrahmani / alrraheemi),
 // sehingga gaya dan warna tajwidnya sama dengan teks ayat di halaman.
-private const val BASMALAH_GLYPHS = "ﱁﱂﱃﱄ"
+internal const val BASMALAH_GLYPHS = "ﱁﱂﱃﱄ"
 
 
 /** Hasil persiapan satu halaman: tata letak tiap kata per baris ayat, glyph basmalah, dan jarak minimum antarkata. */
@@ -358,7 +358,7 @@ private const val HEADER_FRAME_HEIGHT_EM = 1026f / HEADER_UPEM
 private const val HEADER_WIDTH_RATIO = 0.94f
 private const val HEADER_LINE_RATIO = 1.12f
 
-private fun headerFontPx(widthPx: Int): Float = widthPx * HEADER_WIDTH_RATIO / HEADER_FRAME_EM
+internal fun headerFontPx(widthPx: Int): Float = widthPx * HEADER_WIDTH_RATIO / HEADER_FRAME_EM
 
 @Composable
 private fun SurahHeader(layout: TextLayoutResult, widthPx: Int, onClick: () -> Unit) {

@@ -47,6 +47,20 @@ class MushafRepository(context: Context) {
         return words
     }
 
+    suspend fun ayahGlyphText(surah: Int, ayah: Int): String = withContext(Dispatchers.IO) {
+        buildString {
+            db.rawQuery(
+                "SELECT text FROM words WHERE surah = ? AND ayah = ? ORDER BY id",
+                arrayOf(surah.toString(), ayah.toString()),
+            ).use { c ->
+                while (c.moveToNext()) {
+                    if (isNotEmpty()) append(' ')
+                    append(c.getString(0))
+                }
+            }
+        }
+    }
+
     suspend fun surahs(): Map<Int, Surah> = surahCache ?: withContext(Dispatchers.IO) {
         val map = LinkedHashMap<Int, Surah>()
         db.rawQuery("SELECT id, name_ar, name_latin, ayah_count, first_page, name_glyph FROM surahs ORDER BY id", null).use { c ->

@@ -7,6 +7,9 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
@@ -63,6 +66,9 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -88,6 +94,7 @@ internal fun AyahListReader(
     surahs: Map<Int, Surah>,
     translationIds: List<String>,
     showArabic: Boolean,
+    tajweed: Boolean,
     animateArabic: Boolean = true,
     state: PagerState,
     targetAyah: AyahRef?,
@@ -127,7 +134,7 @@ internal fun AyahListReader(
         HorizontalPager(state = state, reverseLayout = true, beyondViewportPageCount = 1, modifier = modifier.fillMaxSize()) { index ->
             CompositionLocalProvider(LocalLayoutDirection provides contentDirection) {
                 PageAyahs(
-                    vm, index + 1, pages[index + 1].orEmpty(), surahs, translationIds, showArabic, animateArabic, targetAyah,
+                    vm, index + 1, pages[index + 1].orEmpty(), surahs, translationIds, showArabic, tajweed, animateArabic, targetAyah,
                     isCurrent = state.currentPage == index,
                     openAyah = openAyah,
                     onToggleAyah = { ref -> openAyah = if (openAyah == ref) null else ref },
@@ -147,6 +154,7 @@ private fun PageAyahs(
     surahs: Map<Int, Surah>,
     translationIds: List<String>,
     showArabic: Boolean,
+    tajweed: Boolean,
     animateArabic: Boolean,
     targetAyah: AyahRef?,
     isCurrent: Boolean,
@@ -171,10 +179,10 @@ private fun PageAyahs(
     CenteredContent(Modifier.fillMaxSize()) {
         LazyColumn(state = listState, modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 16.dp)) {
             items(ayahs, key = { "${it.surah}:${it.ayah}" }) { pos ->
-                if (pos.ayah == 1) SurahTitle(surahs[pos.surah])
+                if (pos.ayah == 1) SurahTitle(surahs[pos.surah], tajweed)
                 val ref = AyahRef(pos.surah, pos.ayah)
                 AyahRow(
-                    vm, pos, surahs[pos.surah], translationIds, showArabic, animateArabic,
+                    vm, pos, surahs[pos.surah], translationIds, showArabic, tajweed, animateArabic,
                     actionsOpen = openAyah == ref,
                     bookmarked = ref in bookmarkedAyahs,
                     onToggle = { onToggleAyah(ref) },
@@ -185,11 +193,31 @@ private fun PageAyahs(
 }
 
 @Composable
-private fun SurahTitle(surah: Surah?) {
+private fun SurahTitle(surah: Surah?, tajweed: Boolean) {
     if (surah == null) return
     val context = LocalContext.current
     val nameFont = remember { surahNameFontFamily(context) }
     val commonFont = remember { commonFontFamily(context) }
+    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val plainPalette = GlyphPalette.of(false, isDark)
+    val tajweedPalette = GlyphPalette.of(true, isDark)
+    val plainBasmalahFont by produceState<FontFamily?>(
+        cachedPageFont(1, plainPalette).takeIf { hasPageFont(context, 1) },
+        plainPalette,
+    ) {
+        value = if (hasPageFont(context, 1)) pageFontFamily(context, 1, plainPalette) else null
+    }
+    val tajweedBasmalahFont by produceState<FontFamily?>(
+        cachedPageFont(1, tajweedPalette).takeIf { hasPageFont(context, 1) },
+        tajweedPalette,
+    ) {
+        value = if (hasPageFont(context, 1)) pageFontFamily(context, 1, tajweedPalette) else null
+    }
+    val tajweedAlpha by animateFloatAsState(
+        targetValue = if (tajweed && tajweedBasmalahFont != null) 1f else 0f,
+        animationSpec = spring(dampingRatio = 0.9f, stiffness = Spring.StiffnessLow),
+        label = "basmalah tajweed fade",
+    )
     Column(
         Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -203,11 +231,34 @@ private fun SurahTitle(surah: Surah?) {
         // Al-Fatihah: basmalah adalah ayat 1; At-Taubah tanpa basmalah.
         if (surah.id != 1 && surah.id != 9) {
             Spacer(Modifier.height(12.dp))
-            Text(
-                "﷽",
-                style = TextStyle(fontFamily = commonFont, fontSize = 36.sp, color = MaterialTheme.colorScheme.onSurface),
-                modifier = Modifier.clearAndSetSemantics { },
-            )
+            if (plainBasmalahFont == null) {
+                Text(
+                    "﷽",
+                    style = TextStyle(fontFamily = commonFont, fontSize = 36.sp, color = MaterialTheme.colorScheme.onSurface),
+                    modifier = Modifier.clearAndSetSemantics { },
+                )
+            } else {
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                    Box(Modifier.fillMaxWidth()) {
+                        Text(
+                            BASMALAH_GLYPHS,
+                            style = TextStyle(fontFamily = plainBasmalahFont, fontSize = 36.sp),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth().clearAndSetSemantics { },
+                        )
+                        tajweedBasmalahFont?.let { font ->
+                            Text(
+                                BASMALAH_GLYPHS,
+                                style = TextStyle(fontFamily = font, fontSize = 36.sp),
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth()
+                                    .graphicsLayer { alpha = tajweedAlpha }
+                                    .clearAndSetSemantics { },
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
     HorizontalDivider(Modifier.padding(horizontal = 16.dp))
@@ -220,6 +271,7 @@ private fun AyahRow(
     surah: Surah?,
     translationIds: List<String>,
     showArabic: Boolean,
+    tajweed: Boolean,
     animateArabic: Boolean,
     actionsOpen: Boolean,
     bookmarked: Boolean,
@@ -231,7 +283,32 @@ private fun AyahRow(
     val detail by produceState<AyahDetail?>(null, pos, translationIds) {
         value = vm.mushaf.ayahDetail(pos.surah, pos.ayah, translationIds)
     }
+    val glyphText by produceState<String?>(null, pos) {
+        value = vm.mushaf.ayahGlyphText(pos.surah, pos.ayah).takeIf { it.isNotBlank() }
+    }
     val arabicFont = remember { arabicFontFamily(context) }
+    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val plainPalette = GlyphPalette.of(false, isDark)
+    val tajweedPalette = GlyphPalette.of(true, isDark)
+    val plainGlyphFont by produceState<FontFamily?>(
+        cachedPageFont(pos.page, plainPalette).takeIf { hasPageFont(context, pos.page) },
+        pos.page,
+        plainPalette,
+    ) {
+        value = if (hasPageFont(context, pos.page)) pageFontFamily(context, pos.page, plainPalette) else null
+    }
+    val tajweedGlyphFont by produceState<FontFamily?>(
+        cachedPageFont(pos.page, tajweedPalette).takeIf { hasPageFont(context, pos.page) },
+        pos.page,
+        tajweedPalette,
+    ) {
+        value = if (hasPageFont(context, pos.page)) pageFontFamily(context, pos.page, tajweedPalette) else null
+    }
+    val tajweedAlpha by animateFloatAsState(
+        targetValue = if (tajweed && tajweedGlyphFont != null) 1f else 0f,
+        animationSpec = spring(dampingRatio = 0.9f, stiffness = Spring.StiffnessLow),
+        label = "ayah tajweed fade",
+    )
     Column(
         Modifier
             .fillMaxWidth()
@@ -253,12 +330,35 @@ private fun AyahRow(
         ) {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                 val style = MaterialTheme.typography.headlineSmall.scaled(LocalReadingTextScale.current.arabic, 1.9f)
-                Text(
-                    d.arabic,
-                    style = style.copy(fontFamily = arabicFont),
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
-                )
+                val glyphs = glyphText?.takeIf { plainGlyphFont != null }
+                if (glyphs == null) {
+                    Text(
+                        d.arabic,
+                        style = style.copy(fontFamily = arabicFont),
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                    )
+                } else {
+                    Box(Modifier.fillMaxWidth().padding(bottom = 8.dp)) {
+                        Text(
+                            glyphs,
+                            style = style.copy(fontFamily = plainGlyphFont),
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                        if (tajweedGlyphFont != null) {
+                            Text(
+                                glyphs,
+                                style = style.copy(fontFamily = tajweedGlyphFont),
+                                textAlign = TextAlign.Start,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .graphicsLayer { alpha = tajweedAlpha }
+                                    .clearAndSetSemantics { },
+                            )
+                        }
+                    }
+                }
             }
         }
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {

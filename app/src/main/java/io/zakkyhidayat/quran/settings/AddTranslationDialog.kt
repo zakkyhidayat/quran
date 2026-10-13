@@ -110,15 +110,13 @@ internal fun TranslationCatalogList(
     }
 
     Column(modifier) {
-        if (state is CatalogState.Loaded) {
-            OutlinedTextField(
-                value = query,
-                onValueChange = { query = it },
-                placeholder = { Text(stringResource(R.string.translations_search_hint)) },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
-            )
-        }
+        OutlinedTextField(
+            value = query,
+            onValueChange = { query = it },
+            placeholder = { Text(stringResource(R.string.translations_search_hint)) },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+        )
         LazyColumn(Modifier.weight(1f)) {
             items(inactiveShown, key = { "inactive-${it.id}" }) { tr ->
                 ListItem(

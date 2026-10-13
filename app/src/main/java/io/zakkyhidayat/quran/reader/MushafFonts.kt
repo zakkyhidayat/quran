@@ -8,6 +8,8 @@ private fun availableFonts(context: Context): Set<String> =
     (context.assets.list("fonts")?.toSet() ?: emptySet()) +
         (File(context.noBackupFilesDir, "quran-fonts").listFiles()?.map { it.name } ?: emptyList())
 
+internal fun hasPageFont(context: Context, page: Int): Boolean = "p$page.ttf" in availableFonts(context)
+
 internal suspend fun pageFontFamily(context: Context, page: Int, palette: GlyphPalette = GlyphPalette.LightTajweed): FontFamily =
     if ("p$page.ttf" in availableFonts(context)) {
         PalettedFonts.load(context, "p$page.ttf", palette.index, palette.copyColors, palette.colorSourcePalette)

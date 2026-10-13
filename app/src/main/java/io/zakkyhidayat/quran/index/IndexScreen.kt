@@ -57,6 +57,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -195,6 +197,7 @@ private fun SurahList(vm: AppViewModel, onBack: () -> Unit, onOpenSurahInfo: (In
     val font = remember { surahNameFontFamily(vm.getApplication()) }
     val items = remember(surahs) { surahs.values.toList() }
     val glyphSize = MaterialTheme.typography.headlineSmall.fontSize
+    val glyphColor = if (MaterialTheme.colorScheme.background.luminance() < 0.5f) Color.White else Color.Black
     // Di layar sempit (< 360dp) kaligrafi nama surah menyempitkan judul sampai terpotong di tengah kata.
     val showGlyph = androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp >= 360
     Column(Modifier.fillMaxSize()) {
@@ -208,7 +211,7 @@ private fun SurahList(vm: AppViewModel, onBack: () -> Unit, onOpenSurahInfo: (In
                 supportingContent = { Text(stringResource(R.string.surah_summary, s.ayahCount, s.firstPage)) },
                 trailingContent = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        if (showGlyph) Text(s.nameGlyph.toString(), style = TextStyle(fontFamily = font, fontSize = glyphSize, color = MaterialTheme.colorScheme.primary))
+                        if (showGlyph) Text(s.nameGlyph.toString(), style = TextStyle(fontFamily = font, fontSize = glyphSize, color = glyphColor))
                         IconButton(onClick = { onOpenSurahInfo(s.id) }) { Icon(Icons.Default.Info, contentDescription = stringResource(R.string.surah_info_cd, s.nameLatin)) }
                     }
                 },
