@@ -21,8 +21,6 @@ android {
     productFlavors {
         create("github") { dimension = "distribution" }
         create("play") { dimension = "distribution" }
-        // Hanya agar varian lite di :app menemukan pasangannya; profil tetap dihasilkan dari varian github.
-        create("lite") { dimension = "distribution" }
     }
 
     compileOptions {

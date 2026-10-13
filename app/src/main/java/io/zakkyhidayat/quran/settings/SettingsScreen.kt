@@ -61,7 +61,6 @@ enum class SettingsPage(val route: String) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SettingsMainSheet(
-    vm: AppViewModel,
     settings: AppSettings,
     onDismiss: () -> Unit,
     onOpen: (SettingsPage) -> Unit,
@@ -95,11 +94,7 @@ internal fun SettingsMainSheet(
                     .padding(horizontal = 16.dp)
                     .padding(bottom = 24.dp),
             ) {
-                if (io.zakkyhidayat.quran.BuildConfig.LITE) {
-                    LiteSettingsMain(vm, settings, onOpen)
-                } else {
-                    SettingsMain(settings, onOpen)
-                }
+                SettingsMain(settings, onOpen)
             }
         }
         }
@@ -149,11 +144,11 @@ fun SettingsScreen(
                 item(key = page.route) {
                     Column {
                         when (page) {
-                            SettingsPage.Main -> if (io.zakkyhidayat.quran.BuildConfig.LITE) LiteSettingsMain(vm, settings, onOpen) else SettingsMain(settings, onOpen)
+                            SettingsPage.Main -> SettingsMain(settings, onOpen)
                             SettingsPage.Appearance -> {
 
                                 AppearanceControls(vm, settings)
-                                TextSizeControls(vm, settings, showTranslation = !io.zakkyhidayat.quran.BuildConfig.LITE)
+                                TextSizeControls(vm, settings, showTranslation = true)
 
                                 Spacer(Modifier.height(8.dp))
                                 Group {
@@ -283,50 +278,6 @@ private fun SettingsMain(settings: AppSettings, onOpen: (SettingsPage) -> Unit) 
             subtitle = stringResource(R.string.settings_permissions_sub),
             onClick = { onOpen(SettingsPage.Permissions) },
             leading = { Icon(AppIcons.Shield, contentDescription = null) },
-            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
-        )
-        item(
-            title = stringResource(R.string.about),
-            subtitle = stringResource(R.string.settings_about_sub),
-            onClick = { onOpen(SettingsPage.About) },
-            leading = { Icon(Icons.Default.Info, contentDescription = null) },
-            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
-        )
-    }
-}
-
-/** Varian lite: bahasa, tampilan, data Qur'an, backup, dan Tentang (atribusi font dan data wajib tetap tampil). */
-@Composable
-private fun LiteSettingsMain(vm: AppViewModel, settings: AppSettings, onOpen: (SettingsPage) -> Unit) {
-    LanguageSection(showTitle = false)
-    Spacer(Modifier.height(16.dp))
-    val theme = stringResource(
-        when (settings.themeMode) {
-            ThemeMode.System -> R.string.theme_system
-            ThemeMode.Light -> R.string.theme_light
-            ThemeMode.Dark -> R.string.theme_dark
-        },
-    )
-    Group {
-        item(
-            title = stringResource(R.string.appearance),
-            subtitle = stringResource(R.string.settings_appearance_sub, theme),
-            onClick = { onOpen(SettingsPage.Appearance) },
-            leading = { Icon(AppIcons.Palette, contentDescription = null) },
-            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
-        )
-        item(
-            title = stringResource(R.string.quran_data_title),
-            subtitle = stringResource(R.string.quran_data_sub),
-            onClick = { onOpen(SettingsPage.QuranData) },
-            leading = { Icon(AppIcons.Download, contentDescription = null) },
-            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
-        )
-        item(
-            title = stringResource(R.string.backup),
-            subtitle = stringResource(if (settings.autoBackupUri != null) R.string.settings_backup_on else R.string.settings_backup_sub),
-            onClick = { onOpen(SettingsPage.Backup) },
-            leading = { Icon(AppIcons.Backup, contentDescription = null) },
             trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
         )
         item(

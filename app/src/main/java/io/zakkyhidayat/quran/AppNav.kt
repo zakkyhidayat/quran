@@ -158,10 +158,8 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
                     onOpenSurahInfo = { nav.navigate("surah/$it") },
                 )
             }
-            // Lite hanya memuat daftar, pembaca, dan pengaturan; rute fitur data tambahan tidak didaftarkan.
-            if (!BuildConfig.LITE) {
-                screen("surah/{id}", arguments = listOf(navArgument("id") { type = NavType.IntType })) { entry ->
-                    SurahInfoScreen(
+            screen("surah/{id}", arguments = listOf(navArgument("id") { type = NavType.IntType })) { entry ->
+                SurahInfoScreen(
                         vm = vm,
                         surahId = entry.arguments?.getInt("id") ?: 1,
                         onBack = { nav.popBackStack() },
@@ -208,8 +206,7 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
                     val target = vm.passage.collectAsState().value
                     if (target != null) PassageScreen(vm, target, onBack = { nav.popBackStack() }, onOpenReader = openReader)
                 }
-                screen("search") { SearchScreen(vm, settings, onBack = { nav.popBackStack() }) }
-            }
+            screen("search") { SearchScreen(vm, settings, onBack = { nav.popBackStack() }) }
             SettingsPage.entries.filter { it != SettingsPage.Main }.forEach { page ->
                 screen(page.route) {
                     SettingsScreen(vm, settings, page = page, onBack = { nav.popBackStack() }, onOpen = { nav.navigate(it.route) })
@@ -218,7 +215,6 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
         }
         if (settingsSheetVisible) {
             SettingsMainSheet(
-                vm = vm,
                 settings = settings,
                 onDismiss = { settingsSheetVisible = false },
                 onOpen = { page ->

@@ -72,13 +72,13 @@ class BookmarkAndBackupTest {
     }
 
     @Test
-    fun sharedFileKeepsOtherEditionProfileAndSyncsDeletions() = runBlocking {
+    fun sharedFileKeepsUnknownProfilesAndSyncsDeletions() = runBlocking {
         val store = BookmarkStore(context)
         val settings = SettingsRepository(context)
         store.load()
         val file = File(context.cacheDir, "shared-test.json")
-        // Berkas dari edisi lain: profil lite, satu bookmark, dan satu penanda hapus.
-        val other0 = if (io.zakkyhidayat.quran.BuildConfig.LITE) "full" else "lite"
+        // Profil yang tidak dikenal dipertahankan agar data cadangan lama tidak hilang saat diekspor ulang.
+        val other0 = "legacy"
         file.writeText(
             """{"format":"io.zakkyhidayat.quran.backup","version":2,"app":"$other0",
             "profiles":{"$other0":{"settings":{"tajweed":true}}},
@@ -89,10 +89,8 @@ class BookmarkAndBackupTest {
         Backup.export(context, Uri.fromFile(file), settings, store)
 
         val json = org.json.JSONObject(file.readText())
-        val own = if (io.zakkyhidayat.quran.BuildConfig.LITE) "lite" else "full"
-        val other = if (io.zakkyhidayat.quran.BuildConfig.LITE) "full" else "lite"
-        assertTrue(json.getJSONObject("profiles").has(own))
-        assertTrue(json.getJSONObject("profiles").has(other))
+        assertTrue(json.getJSONObject("profiles").has("full"))
+        assertTrue(json.getJSONObject("profiles").has(other0))
         assertEquals(setOf(8, 9), store.bookmarks.value.map { it.page }.toSet())
         assertEquals(2, json.getJSONArray("bookmarks").length())
     }

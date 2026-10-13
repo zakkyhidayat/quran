@@ -6,7 +6,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.ui.res.stringResource
-import io.zakkyhidayat.quran.BuildConfig
 import io.zakkyhidayat.quran.R
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -97,11 +96,8 @@ fun IndexScreen(
     onOpenHome: (io.zakkyhidayat.quran.home.HomeTarget) -> Unit = {},
 ) {
     val onBack = onOpenReader // pilihan di daftar membuka layar baca
-    // Lite hanya menampilkan Bookmark dan Surah; pager memetakan indeks halaman ke indeks tab aslinya.
-    val tabIds = remember { if (BuildConfig.LITE) TABS.indices.filter { it != 1 } else TABS.indices.toList() }
-    val initialTab = if (BuildConfig.LITE) 2 else 1
-    val pagerState = rememberPagerState(initialPage = tabIds.indexOf(initialTab)) { tabIds.size }
-    val tab = tabIds[pagerState.currentPage]
+    val pagerState = rememberPagerState(initialPage = 1) { TABS.size }
+    val tab = pagerState.currentPage
     val tabScope = rememberCoroutineScope()
     var showJump by remember { mutableStateOf(false) }
     val surahsForJump by vm.surahs.collectAsStateWithLifecycle()
@@ -133,10 +129,8 @@ fun IndexScreen(
             TopAppBar(
                 title = { Text(stringResource(R.string.index_title)) },
                 actions = {
-                    if (!BuildConfig.LITE) {
-                        IconButton(onClick = { showJump = true }) { Icon(AppIcons.FormatListNumbered, contentDescription = stringResource(R.string.jump_to_ayah)) }
-                        IconButton(onClick = { vm.randomAyah(); onBack() }) { Icon(AppIcons.Shuffle, contentDescription = stringResource(R.string.random_ayah)) }
-                    }
+                    IconButton(onClick = { showJump = true }) { Icon(AppIcons.FormatListNumbered, contentDescription = stringResource(R.string.jump_to_ayah)) }
+                    IconButton(onClick = { vm.randomAyah(); onBack() }) { Icon(AppIcons.Shuffle, contentDescription = stringResource(R.string.random_ayah)) }
                     IconButton(onClick = onOpenSettings) { Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.settings)) }
                 },
             )
@@ -153,14 +147,14 @@ fun IndexScreen(
         CenteredContent(Modifier.padding(padding)) {
             Column(Modifier.fillMaxSize()) {
                 PrimaryScrollableTabRow(selectedTabIndex = pagerState.currentPage, edgePadding = 8.dp, minTabWidth = 0.dp) {
-                    tabIds.forEach { i ->
+                    TABS.indices.forEach { i ->
                         val (title, icon) = TABS[i]
                         if (i == 0) {
                             // Bookmark cukup ikon; namanya tetap dibacakan pembaca layar.
                             // Latar tonal seukuran tab membedakan Bookmark (koleksi pribadi) dari tab daftar isi lainnya.
                             Tab(
                                 selected = tab == i,
-                                onClick = { tabScope.launch { pagerState.animateScrollToPage(tabIds.indexOf(i)) } },
+                                onClick = { tabScope.launch { pagerState.animateScrollToPage(i) } },
                                 modifier = Modifier.width(64.dp).background(MaterialTheme.colorScheme.secondaryContainer),
                                 selectedContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                                 unselectedContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -169,7 +163,7 @@ fun IndexScreen(
                         } else {
                             LeadingIconTab(
                                 selected = tab == i,
-                                onClick = { tabScope.launch { pagerState.animateScrollToPage(tabIds.indexOf(i)) } },
+                                onClick = { tabScope.launch { pagerState.animateScrollToPage(i) } },
                                 text = { Text(stringResource(title)) },
                                 icon = { Icon(icon, contentDescription = null) },
                             )
@@ -177,8 +171,8 @@ fun IndexScreen(
                     }
                 }
                 // Tab digeser (swipe) lewat pager; arah mengikuti layout direction seperti kolom tab-nya.
-                HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize(), key = { tabIds[it] }) { current ->
-                    when (tabIds[current]) {
+                HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize(), key = { it }) { current ->
+                    when (current) {
                         0 -> BookmarkList(vm, onBack)
                         1 -> io.zakkyhidayat.quran.home.HomeTab(vm, onBack, onOpenHome, onOpenExplore)
                         2 -> SurahList(vm, onBack, onOpenSurahInfo)
@@ -215,7 +209,7 @@ private fun SurahList(vm: AppViewModel, onBack: () -> Unit, onOpenSurahInfo: (In
                 trailingContent = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         if (showGlyph) Text(s.nameGlyph.toString(), style = TextStyle(fontFamily = font, fontSize = glyphSize, color = MaterialTheme.colorScheme.primary))
-                        if (!BuildConfig.LITE) IconButton(onClick = { onOpenSurahInfo(s.id) }) { Icon(Icons.Default.Info, contentDescription = stringResource(R.string.surah_info_cd, s.nameLatin)) }
+                        IconButton(onClick = { onOpenSurahInfo(s.id) }) { Icon(Icons.Default.Info, contentDescription = stringResource(R.string.surah_info_cd, s.nameLatin)) }
                     }
                 },
             ) { Text(s.nameLatin) }

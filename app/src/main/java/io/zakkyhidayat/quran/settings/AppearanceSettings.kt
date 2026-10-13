@@ -214,7 +214,7 @@ internal fun AppearanceControls(vm: AppViewModel, settings: AppSettings) {
     }
 }
 
-/** Pilihan tema: ikuti sistem, terang, gelap. Juga satu-satunya pengaturan tampilan di varian lite. */
+/** Pilihan tema: ikuti sistem, terang, gelap. */
 @Composable
 internal fun ThemeModeRow(vm: AppViewModel, settings: AppSettings) {
     val scope = rememberCoroutineScope()

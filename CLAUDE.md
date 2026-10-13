@@ -23,9 +23,8 @@ yang sudah ada; baca hanya yang relevan dengan tugas:
 - `data-src/` dan font halaman `p1..p604.ttf` tidak ada di git. Build debug tetap jalan dengan font bawaan; APK
   mengecualikan font halaman dan onboarding mengunduh seluruh font tersebut bersama database sebelum mengizinkan baca.
 - Id paket terjemahan lama di `tools/translation_catalog.json` tidak boleh diubah (pilihan pengguna tersimpan dengan id itu).
-- Varian `lite` (`BuildConfig.LITE`) hanya membaca: fitur baru harus disembunyikan di sana. Internet diizinkan hanya
-  untuk unduhan database dan font Qur'an saat penyiapan pertama atau unduh ulang manual; izin notifikasi dan receiver
-  pengingat tetap dibuang di `app/src/lite/AndroidManifest.xml`. Setelah keduanya terpasang, membaca berjalan luring. Lihat `docs/FORK_LITE.md`.
+- Aplikasi mengunduh database dan font Qur'an saat penyiapan pertama atau unduh ulang manual. Setelah terpasang,
+  membaca berjalan luring; jaringan juga dipakai untuk katalog dan paket terjemahan.
 - Teks antarmuka hanya lewat string resource; setiap kunci baru harus ada di semua bahasa (`check_strings.py`).
 
 ## Pemeriksaan sebelum push (sama dengan CI)

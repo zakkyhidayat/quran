@@ -24,7 +24,7 @@ enum class ReminderUnit { Juz, Hizb, Manzil }
 /** Cara baca, berlaku untuk semua surah: halaman mushaf, ayat dengan terjemahan, atau terjemahan saja. */
 enum class ReadingMode { Mushaf, AyahTranslation, Translation }
 
-/** Isi penghitung di bilah atas pembaca; berganti tiap diketuk. */
+/** Jenis hitungan posisi baca yang dipilih di kontrol pembaca. */
 enum class CounterMode { Surah, Juz, Hizb, Rub, Manzil, Ruku }
 
 data class AppSettings(

@@ -66,7 +66,7 @@ Diisi 2026-10-08 berdasarkan kode dan dokumen di repo. Perbarui setiap rilis. `[
 
 ## 6. Privasi dan izin
 
-- [x] Izin diaudit: INTERNET (hanya terjemahan; tidak ada di varian lite). Pembaru dalam aplikasi dan
+- [x] Izin diaudit: INTERNET untuk data mushaf, perbaikan manual, dan paket terjemahan. Pembaru dalam aplikasi dan
       REQUEST_INSTALL_PACKAGES dihapus. Izin
       pengingat dilepas selama fiturnya disembunyikan.
 - n/a Lokasi

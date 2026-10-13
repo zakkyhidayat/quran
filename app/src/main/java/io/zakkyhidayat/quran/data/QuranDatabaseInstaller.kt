@@ -30,7 +30,7 @@ private val pageFontName = Regex("p(?:[1-9]|[1-9][0-9]|[1-5][0-9]{2}|60[0-4])\\.
 
 private data class QuranDatabaseCatalog(
     val databaseVersion: Int,
-    val assets: Map<String, QuranDatabaseAsset>,
+    val database: QuranDatabaseAsset,
     val fonts: QuranFontAsset,
 )
 
@@ -64,8 +64,7 @@ class QuranDatabaseInstaller(context: Context) {
 
     suspend fun checkForUpdate(): QuranDataCheck = withContext(Dispatchers.IO) {
         val metadata = catalog()
-        val asset = metadata.assets[flavorKey()]
-            ?: throw IOException("Database untuk varian ini tidak tersedia")
+        val asset = metadata.database
         QuranDataCheck(
             current = isCurrentInstall(metadata, asset),
             latestVersion = metadata.databaseVersion,
@@ -76,7 +75,7 @@ class QuranDatabaseInstaller(context: Context) {
     suspend fun install(): Boolean = withContext(Dispatchers.IO) {
         progress.value = null
         val metadata = catalog()
-        val asset = metadata.assets[flavorKey()] ?: throw IOException("Database untuk varian ini tidak tersedia")
+        val asset = metadata.database
         if (isCurrentInstall(metadata, asset)) return@withContext false
         val archive = File(target.parentFile, "${target.name}.gz.tmp")
         val database = File(target.parentFile, "${target.name}.tmp")
@@ -299,17 +298,15 @@ class QuranDatabaseInstaller(context: Context) {
             if (json.getInt("version") != 1) throw IOException("Versi katalog database tidak didukung")
             val version = json.getInt("database_version")
             val databases = json.getJSONObject("databases")
-            val assets = listOf("full", "lite").associateWith { key ->
-                val item = databases.getJSONObject(key)
-                val name = item.getString("file")
-                if (!name.matches(Regex("[A-Za-z0-9._-]+\\.db\\.gz"))) throw IOException("Nama berkas database tidak valid")
-                val bytes = item.getLong("bytes")
-                val sha256 = item.getString("sha256")
-                if (bytes <= 0 || !sha256.matches(Regex("[a-fA-F0-9]{64}"))) {
-                    throw IOException("Metadata database tidak valid")
-                }
-                QuranDatabaseAsset(name, bytes, sha256)
+            val item = databases.getJSONObject("full")
+            val name = item.getString("file")
+            if (!name.matches(Regex("[A-Za-z0-9._-]+\\.db\\.gz"))) throw IOException("Nama berkas database tidak valid")
+            val bytes = item.getLong("bytes")
+            val sha256 = item.getString("sha256")
+            if (bytes <= 0 || !sha256.matches(Regex("[a-fA-F0-9]{64}"))) {
+                throw IOException("Metadata database tidak valid")
             }
+            val asset = QuranDatabaseAsset(name, bytes, sha256)
             val fontEntry = json.getJSONObject("fonts")
             val fontName = fontEntry.getString("file")
             val fontBytes = fontEntry.getLong("bytes")
@@ -318,15 +315,13 @@ class QuranDatabaseInstaller(context: Context) {
                 throw IOException("Metadata font mushaf tidak valid")
             }
             if (version <= 0) throw IOException("Versi database tidak valid")
-            return QuranDatabaseCatalog(version, assets, QuranFontAsset(fontName, fontBytes, fontSha256))
+            return QuranDatabaseCatalog(version, asset, QuranFontAsset(fontName, fontBytes, fontSha256))
         } catch (e: IOException) {
             throw e
         } catch (e: Exception) {
             throw IOException("Katalog database tidak valid: ${e.message}", e)
         }
     }
-
-    private fun flavorKey() = if (BuildConfig.LITE) "lite" else "full"
 
     private fun isValidDatabase(file: File, expectedVersion: Int? = null): Boolean = runCatching {
         val db = SQLiteDatabase.openDatabase(file.path, null, SQLiteDatabase.OPEN_READONLY)

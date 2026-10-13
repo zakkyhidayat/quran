@@ -10,8 +10,8 @@ diunduh; [API-nya](https://qul.tarteel.ai/docs/api) masih ditandai "Coming soon"
 
 Berkas mentah disimpan di `data-src/` (tidak masuk git). Yang masuk git: `tools/build_db.py` (pembangun database),
 `app/src/main/assets/quran.db` (hasil build, menjadi sumber build dan tidak dimasukkan ke APK), dan
-`docs/data-manifest.json` (hash berkas sumber yang dipakai). Workflow rilis menerbitkan database full dan Lite sebagai
-aset gzip di rilis stabil `quran-data` bersama `quran-data.json`; onboarding mengunduh varian yang sesuai, memeriksa ukuran, SHA-256, integritas SQLite,
+`docs/data-manifest.json` (hash berkas sumber yang dipakai). Workflow rilis menerbitkan database sebagai
+aset gzip di rilis stabil `quran-data` bersama `quran-data.json`; onboarding mengunduhnya dan memeriksa ukuran, SHA-256, integritas SQLite,
 versi skema, dan jumlah data Qur'an. Sebelum mengunduh atau memperbarui, aplikasi membandingkan versi serta checksum pada
 katalog GitHub dengan manifest instalasi lokal, lalu memeriksa integritas database dan checksum berkas font yang terpasang;
 unduhan dilewati bila data lokal sama dengan rilis. Instalasi lama tanpa manifest yang versi database-nya cocok dan memiliki
@@ -207,7 +207,7 @@ QUL tidak memberi pemberitahuan. Periksa sendiri:
    ```bash
    python tools/data_manifest.py --write
    ```
-7. Rilis dengan tag `vX.Y.Z`; workflow menerbitkan database full/Lite terkompresi dan manifest sebagai aset rilis.
+7. Rilis dengan tag `vX.Y.Z`; workflow menerbitkan database terkompresi dan manifest sebagai aset rilis.
 
 ## Hal yang perlu diwaspadai
 
