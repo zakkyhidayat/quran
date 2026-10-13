@@ -12,6 +12,11 @@ on:
       tag:
         description: "Versi baru, misalnya v0.3.0"
         required: true
+      replace_existing:
+        description: "Ganti APK pada rilis dengan versi tag terbaru yang sama"
+        type: boolean
+        required: true
+        default: false
 
 env:
   TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
@@ -28,7 +33,7 @@ jobs:
           fetch-depth: 0 # git describe --tags menentukan versionName/versionCode
 
       - name: Buat tag (hanya dari tab Actions)
-        if: github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'workflow_dispatch' && inputs.replace_existing != true
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -48,6 +53,18 @@ jobs:
           git tag -a "$TAG" -m "$TAG"
           # Tag dari GITHUB_TOKEN tidak memicu workflow ini lagi, jadi tidak ada rilis ganda.
           git push origin "$TAG"
+
+      - name: Validasi penerbitan ulang
+        if: github.event_name == 'workflow_dispatch' && inputs.replace_existing == true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "::error::Versi harus berbentuk vX.Y.Z, bukan $TAG"; exit 1; }
+          git rev-parse -q --verify "refs/tags/$TAG" >/dev/null || { echo "::error::Tag $TAG tidak ditemukan"; exit 1; }
+          gh release view "$TAG" >/dev/null || { echo "::error::Rilis $TAG tidak ditemukan"; exit 1; }
+          LATEST_TAG="$(git describe --tags --abbrev=0 --match 'v[0-9]*')"
+          [[ "$LATEST_TAG" == "$TAG" ]] || { echo "::error::Hanya tag terbaru ($LATEST_TAG) yang boleh diterbitkan ulang"; exit 1; }
+          git merge-base --is-ancestor "$TAG" HEAD || { echo "::error::Commit sumber bukan turunan dari $TAG"; exit 1; }
 
       - uses: actions/setup-java@v5
         with:
@@ -85,7 +102,11 @@ jobs:
           # mengarah ke versi terbaru.
           cp app/build/outputs/apk/github/release/app-github-release.apk out/Quran.apk
           cp app/build/outputs/bundle/playRelease/app-play-release.aab "out/quran-${TAG}-play.aab"
-          gh release create "$TAG" out/Quran.apk --title "$TAG" --generate-notes
+          if [[ "${{ inputs.replace_existing }}" == "true" ]]; then
+            gh release upload "$TAG" out/Quran.apk --clobber
+          else
+            gh release create "$TAG" out/Quran.apk --title "$TAG" --generate-notes
+          fi
           # AAB untuk Play Console disimpan sebagai artefak workflow, bukan aset rilis publik.
 
       - uses: actions/upload-artifact@v4

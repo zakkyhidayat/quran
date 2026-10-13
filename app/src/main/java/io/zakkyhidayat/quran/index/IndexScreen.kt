@@ -39,6 +39,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -125,19 +126,24 @@ fun IndexScreen(
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Row(
-                                Modifier.weight(1f)
-                                    .clickable { vm.startSunnahReading(sunnahReading, resume = true); onBack() }
+                                Modifier.clickable { vm.startSunnahReading(sunnahReading, resume = true); onBack() }
                                     .padding(start = 16.dp, end = 4.dp, top = 12.dp, bottom = 12.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Icon(AppIcons.MenuBook, contentDescription = null)
                                 Spacer(Modifier.width(12.dp))
-                                Column {
-                                    Text(stringResource(R.string.continue_sunnah_reading), style = MaterialTheme.typography.labelLarge)
+                                Column(Modifier.widthIn(max = 180.dp)) {
+                                    Text(
+                                        stringResource(R.string.continue_sunnah_reading),
+                                        style = MaterialTheme.typography.labelLarge,
+                                        maxLines = 1,
+                                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                                    )
                                     Text(
                                         io.zakkyhidayat.quran.home.sunnahTitle(sunnahReading),
                                         style = MaterialTheme.typography.labelMedium,
                                         maxLines = 1,
+                                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                                     )
                                 }
                             }

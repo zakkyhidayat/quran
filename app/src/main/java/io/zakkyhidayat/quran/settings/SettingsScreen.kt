@@ -256,7 +256,6 @@ private fun SettingsMain(settings: AppSettings, onOpen: (SettingsPage) -> Unit) 
         SettingsCategory(stringResource(R.string.quran_data_title), stringResource(R.string.quran_data_sub), AppIcons.Download) {
             onOpen(SettingsPage.QuranData)
         }
-        NotificationSettingsRow()
         SettingsCategory(stringResource(R.string.about), stringResource(R.string.settings_about_sub), Icons.Default.Info) {
             onOpen(SettingsPage.About)
         }

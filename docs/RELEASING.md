@@ -92,3 +92,6 @@ entri rilis baru. Untuk memperbarui font halaman, ganti `page-fonts.zip` di rili
 4. Unduh artefak `play-bundle` dari workflow untuk diunggah ke Play Console.
 
 `versionCode` dihitung sebagai `X*10000 + Y*100 + Z`, jadi setiap tag baru harus lebih tinggi daripada tag sebelumnya.
+Untuk menerbitkan ulang APK dari perbaikan yang tidak mengubah versi, jalankan workflow pada `main`, isi tag yang sama,
+dan aktifkan `replace_existing`. Opsi ini hanya menerima rilis untuk tag versi terbaru; tag tidak dipindah dan aset
+`Quran.apk` pada rilis tersebut diganti setelah build release bertanda tangan berhasil.

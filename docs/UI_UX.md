@@ -75,11 +75,12 @@ Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pu
   Sunnah, histori, dan koleksi memakai wadah ikon tonal dengan pasangan warna yang sesuai.
 - Kategori Pengaturan memakai kartu terpisah dengan jarak antarkelompok agar tidak tampak berjejal. Paket terjemahan
   yang dapat diunduh menampilkan ikon unduh dalam wadah tonal.
-- Baris Notifications pada halaman utama Pengaturan membuka setelan notifikasi Android; sakelar pengingat tidak meminta
-  izin melalui dialog aplikasi. Saat ada progres Sunnah, tombol lanjut Sunnah tampil di atas tombol lanjut baca harian;
-  tombol tutup berada di dalam wadah Sunnah di sisi kanan.
+- Tautan Notifications ada di Pengaturan > Pengingat dan membuka setelan notifikasi Android; status izin tampil ringkas
+  di sisi kanan baris. Sakelar pengingat tidak meminta izin melalui dialog aplikasi. Saat ada progres Sunnah, tombol
+  lanjut Sunnah tampil di atas tombol lanjut baca harian; lebarnya mengikuti konten dan tombol tutup berada di dalam
+  wadah Sunnah di sisi kanan.
 - Baris mushaf mengukur lebar tiap glyph seperti saat menggambar dan menyertakan jarak baris terpusat, sehingga baris
-  panjang diperkecil agar tidak terpotong di sisi kiri halaman.
+  panjang diperkecil tanpa batas ukuran minimum yang dapat membuat ujung ayat menumpuk di sisi kiri halaman.
 
 Perlu dicek pemilik sebelum rilis: redaksi hadits di bacaan sunnah, dan tampilan di perangkat.
 
