@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create release metadata for the full and Lite Qur'an databases and page fonts."""
+"""Create release metadata for the Qur'an database and page fonts."""
 import argparse
 import gzip
 import hashlib
@@ -50,22 +50,17 @@ def verify_fonts(path: Path) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--full", required=True, type=Path)
-    parser.add_argument("--lite", required=True, type=Path)
     parser.add_argument("--fonts", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
 
     full_version = database_version(args.full)
-    lite_version = database_version(args.lite)
-    if full_version != lite_version:
-        raise ValueError(f"database versions differ: full={full_version}, lite={lite_version}")
     verify_fonts(args.fonts)
     manifest = {
         "version": 1,
         "database_version": full_version,
         "databases": {
             "full": asset(args.full, args.full.name),
-            "lite": asset(args.lite, args.lite.name),
         },
         "fonts": asset(args.fonts, "page-fonts.zip"),
     }

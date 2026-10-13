@@ -3,7 +3,6 @@ package io.zakkyhidayat.quran.data
 import android.content.Context
 import android.net.Uri
 import android.provider.DocumentsContract
-import io.zakkyhidayat.quran.BuildConfig
 import io.zakkyhidayat.quran.settings.SettingsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -16,15 +15,14 @@ import java.io.IOException
  * jadi pengguna bisa menyimpannya di perangkat atau di aplikasi awan yang menyediakan penyedia dokumen (Google Drive,
  * Dropbox, OneDrive) tanpa izin penyimpanan. Terjemahan tidak ikut: yang aktif diunduh ulang otomatis.
  *
- * Format v2 netral edisi, supaya Quran dan Quran Lite bisa berbagi satu berkas: bookmark, penanda hapus, dan posisi
- * baca bersama; pengaturan disimpan per profil (`full`/`lite`) dan hanya diterapkan oleh edisi pemiliknya. Saat
- * mengekspor, isi berkas yang ada dibaca dulu sehingga profil edisi lain dan penanda hapus tidak hilang.
+ * Format v2 menyimpan bookmark, penanda hapus, posisi baca, dan profil pengaturan. Saat mengekspor, isi berkas yang ada
+ * dibaca dulu sehingga profil lain yang mungkin tersimpan di cadangan lama tidak hilang.
  * Format v1 (bookmark + pengaturan Full) tetap bisa dibaca.
  */
 object Backup {
     private const val FORMAT = "io.zakkyhidayat.quran.backup"
     private const val VERSION = 2
-    private val PROFILE = if (BuildConfig.LITE) "lite" else "full"
+    private const val PROFILE = "full"
     private val POSITION_KEYS = listOf("last_page", "last_surah", "last_ayah")
     private const val AUTO_PREFIX = "quran-autobackup-"
     private const val AUTO_SUFFIX = ".json"
@@ -66,9 +64,6 @@ object Backup {
         existing?.let { old ->
             if (old.optInt("version") >= 2) {
                 old.optJSONObject("profiles")?.let { p -> p.keys().forEach { if (it != PROFILE) profiles.put(it, p.get(it)) } }
-            } else if (PROFILE != "full") {
-                // Pengaturan v1 berasal dari Full; simpan sebagai profilnya.
-                old.optJSONObject("settings")?.let { profiles.put("full", JSONObject().put("settings", it)) }
             }
         }
         profiles.put(PROFILE, JSONObject().put("settings", JSONObject().also { obj ->
@@ -104,7 +99,7 @@ object Backup {
 
     /**
      * Simpan snapshot baru ke folder SAF, gabungkan dahulu semua snapshot yang ada, lalu pertahankan maksimal tiga
-     * berkas terbaru. Folder dapat dipilih sama di Quran dan Quran Lite.
+     * berkas terbaru. Folder dapat dipilih pengguna dari penyedia dokumen lokal atau awan.
      */
     suspend fun exportToFolder(context: Context, treeUri: Uri, settings: SettingsRepository, bookmarks: BookmarkStore) =
         withContext(Dispatchers.IO) {
@@ -162,8 +157,6 @@ object Backup {
         existing?.let { old ->
             if (old.optInt("version") >= 2) {
                 old.optJSONObject("profiles")?.let { p -> p.keys().forEach { if (it != PROFILE) profiles.put(it, p.get(it)) } }
-            } else if (PROFILE != "full") {
-                old.optJSONObject("settings")?.let { profiles.put("full", JSONObject().put("settings", it)) }
             }
         }
         profiles.put(PROFILE, JSONObject().put("settings", JSONObject().also { obj ->
@@ -246,10 +239,7 @@ object Backup {
     private suspend fun mergeInto(json: JSONObject, bookmarks: BookmarkStore): BookmarkStore.MergeResult =
         bookmarks.merge(bookmarksOf(json), deletionsOf(json))
 
-    /**
-     * Bookmark digabung (yang terbaru menang, termasuk penghapusan). Pengaturan diganti dengan profil edisi ini; berkas
-     * v1 hanya menerapkan pengaturannya di Full. Posisi baca ikut diterapkan bila ada.
-     */
+    /** Bookmark digabung (yang terbaru menang, termasuk penghapusan); pengaturan dan posisi baca dipulihkan bila ada. */
     suspend fun import(context: Context, uri: Uri, settings: SettingsRepository, bookmarks: BookmarkStore): Result = withContext(Dispatchers.IO) {
         val text = context.contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
             ?: throw IOException("Tidak bisa membaca berkas")
@@ -265,7 +255,7 @@ object Backup {
         val values = mutableMapOf<String, Any?>()
         val v2 = json.optInt("version") >= 2
         val own = if (v2) json.optJSONObject("profiles")?.optJSONObject(PROFILE)?.optJSONObject("settings")
-        else if (!BuildConfig.LITE) json.optJSONObject("settings") else null
+        else json.optJSONObject("settings")
         own?.let { obj -> obj.keys().forEach { values[it] = obj.get(it) } }
         val position = if (v2) json.optJSONObject("position") else json.optJSONObject("settings")
         position?.let { obj -> POSITION_KEYS.forEach { k -> if (obj.has(k)) values[k] = obj.get(k) } }

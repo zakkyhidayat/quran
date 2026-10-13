@@ -42,7 +42,7 @@ internal fun BackupControls(vm: AppViewModel, settings: AppSettings, snackbar: S
                 .onFailure { toast(failed.format(it.message.orEmpty())) }
         }
     }
-    // Cadangan otomatis memakai folder agar Full dan Lite dapat menulis snapshot pada lokasi yang sama.
+    // Cadangan otomatis memakai folder agar snapshot dapat dibagikan melalui penyedia dokumen.
     val autoLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
         if (uri != null) scope.launch {
             val flags = android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION or android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION

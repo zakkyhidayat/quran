@@ -8,8 +8,8 @@ QUL files (data-src/, downloaded by hand, checksums in docs/data-manifest.json)
   ▼
 app/src/main/assets/quran.db        source database, verified by tools/verify_quran.py (CI; excluded from APKs)
 app/src/main/assets/fonts/          header, surah-name, common, and Hafs fonts; page fonts excluded from APK
-  │  `quran-data` release            holds compressed databases, page-fonts.zip, and quran-data.json
-  │  QuranDatabaseInstaller         downloads the flavor-specific database and all page fonts on first launch;
+  │  `quran-data` release            holds the compressed database, page-fonts.zip, and quran-data.json
+  │ QuranDatabaseInstaller         downloads the database and all page fonts on first launch;
   │                                  verifies sizes, SHA-256, SQLite integrity, schema, and all 604 fonts
   ▼
 noBackupFilesDir/quran.db            installed with noBackupFilesDir/quran-fonts/p1.ttf..p604.ttf for offline reading
@@ -25,15 +25,14 @@ Translations are not in `quran.db`. They are SQLite packs built by `tools/build_
 GitHub Releases (`translations`), downloaded into `filesDir/translations/`, and verified (SHA-256, 6,236 rows) before use.
 The required Qur'an database and page-font archive are downloaded from the stable `quran-data` release during onboarding
 or by a user-requested repair/update from Settings.
-Reading is blocked until both are installed and is offline afterward; full and Lite receive separate database assets and
-the same page-font archive, while neither APK contains `quran.db` or the 604 page fonts.
+Reading is blocked until both are installed and is offline afterward; the APK does not contain `quran.db` or the 604 page fonts.
 
 ## Packages (`app/src/main/java/io/zakkyhidayat/quran/`)
 
 | Package | Responsibility |
 |---------|----------------|
 | `data/` | `ContentDatabase`, `QuranDatabaseInstaller` (release catalog, verified database/font download), `DownloadHttp`, `MushafRepository`, `TranslationPacks`, `BookmarkStore` (user.db), `Backup` (JSON export/import), `Collections` (curated ayah collections), `ReadingHistory` (history.db), models |
-| `reader/` | `ReaderScreen` (top bar, mode pill, pager), `MushafPage` (page rendering), `PalettedFonts` (font palettes), `AyahListReader` (ayah + translation modes), `AyahSheet` |
+| `reader/` | `ReaderScreen` (top bar, reader controls, pager), `MushafPage` (page rendering), `PalettedFonts` (font palettes), `AyahListReader` (ayah + translation modes), `AyahSheet` |
 | `home/` | Home tab (`HomeTab`: ayah of the day, sunnah readings, reading history, collections) and `PassageScreen` |
 | `explore/` | Thematic browsing: topic list and topic screen |
 | `index/`, `search/`, `info/` | Surah/juz/hizb/rub'/manzil/ruku/bookmark lists, search, surah info |
@@ -43,26 +42,12 @@ the same page-font archive, while neither APK contains `quran.db` or the 604 pag
 | `ui/` | Theme, shared components, icons, HTML renderer for surah info, update dialog |
 | `AppLanguage.kt` | Interface language (system per-app locales on Android 13+) |
 
-## Lite variant
+## Distribution
 
-The Full app and Quran Lite are outputs of the same `:app` module. Shared reader, data, and tajweed code lives in
-`app/src/main`; the `lite` source set supplies its manifest and app-specific resources. Product-flavor configuration
-sets `BuildConfig.LITE`, which gates the different navigation, home/index, reading modes, onboarding, and settings
-behavior without duplicating the shared mushaf reader.
-
-The `lite` product flavor (`io.zakkyhidayat.quran.lite`) is a reading-only app: mushaf pages, index lists, page and
-ayah bookmarks, backup, and theme settings. Backup is shared with Full: format v2 keeps bookmarks, deletion tombstones, and reading position edition-neutral, and
-settings per `full`/`lite` profile (see `data/Backup.kt`). Auto-backup uses a SAF folder, writes timestamped snapshots
-after debounced changes, and prunes older snapshots to retain at most three. Lite uses internet only during first-run
-setup or a user-requested repair/update
-to download its separate, slim database and shared page fonts; notifications and boot permissions remain removed by
-`app/src/lite/AndroidManifest.xml`. After installation, reading works offline. `tools/build_lite_db.py` creates the
-release database without thematic tables, surah info, or transliteration.
-
-The `github` flavor produces the Full APK and the `play` flavor produces the Full Play bundle. The `lite` flavor
-produces the Quran Lite APK. Short Gradle task aliases for building one or both APKs are documented in
-[`docs/RELEASING.md`](docs/RELEASING.md). See [`docs/FORK_LITE.md`](docs/FORK_LITE.md) for the feature and output
-comparison.
+The `github` flavor produces the downloadable APK and the `play` flavor produces the Google Play bundle. Both flavors
+contain the same app features and use the same database and page-font archive. Bookmarks and settings are exported in
+backup format v2 (see `data/Backup.kt`); automatic backup writes timestamped snapshots to a user-selected SAF folder
+after debounced changes and retains at most three snapshots.
 
 ## Database (`quran.db`, read-only)
 
@@ -92,6 +77,6 @@ in advance, so swiping only draws ready-made layouts.
 - `tools/verify_quran.py`: Qur'an structure and content fingerprints (CI); `--source` compares every ayah with the
   original file.
 - `tools/check_strings.py`: interface translations (CI).
-- `app/src/test`: the same JVM unit-test suite and Android lint run for both full (`github`) and `lite` debug variants
-  in CI; source and generated Lite databases are verified, and CI checks that neither APK embeds the database.
+- `app/src/test`: JVM unit tests and Android lint run for the `github` debug variant in CI; CI also checks that the APK
+  does not embed the database or page fonts.
 - `baselineprofile/`: generates the Baseline Profile on a device.

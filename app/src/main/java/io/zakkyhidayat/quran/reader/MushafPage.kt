@@ -71,6 +71,8 @@ private const val DEFAULT_LINE_EM = 16.2f
 private const val MIN_LINE_EM = 15.5f
 private const val MAX_LINE_EM = 17f
 private const val FILL_RATIO = 0.995f
+internal val MushafLineSpacing = 1.5.dp
+internal val MushafPageExtraHeight = MushafLineSpacing * (LINES_PER_PAGE - 1)
 
 @Composable
 fun MushafPage(
@@ -117,7 +119,9 @@ fun MushafPage(
     Box(modifier.size(pageSize)) {
         val maxHeight = pageSize.height
         val widthPx = with(density) { pageSize.width.roundToPx() }
-        val nominal = maxHeight / LINES_PER_PAGE
+        val lineGaps = MushafLineSpacing * (lines.size - 1).coerceAtLeast(0)
+        val lineAreaHeight = (maxHeight - lineGaps).coerceAtLeast(0.dp)
+        val nominal = lineAreaHeight / LINES_PER_PAGE
         // Semua pengukuran teks (ukuran glyph, ~130 kata) dikerjakan di thread latar belakang; thread utama hanya
         // menggambar hasilnya. Halaman tetangga disusun lebih dulu oleh pager, jadi biasanya siap sebelum terlihat.
         val prepared by produceState<PreparedPage?>(null, page, lines, widthPx, font, basmalah, header, density, surahs) {
@@ -139,8 +143,8 @@ fun MushafPage(
         val headerLineHeight = with(density) { (widthPx * HEADER_WIDTH_RATIO * HEADER_FRAME_HEIGHT_EM / HEADER_FRAME_EM * HEADER_LINE_RATIO).toDp() }
         val headerCount = lines.count { it.type == LineType.SurahName }
         val otherCount = lines.size - headerCount
-        val lineHeight = if (headerCount == 0) nominal else minOf(nominal, (maxHeight - headerLineHeight * headerCount) / otherCount)
-        val topPadding = (maxHeight - lineHeight * otherCount - headerLineHeight * headerCount).coerceAtLeast(0.dp) / 2f
+        val lineHeight = if (headerCount == 0) nominal else minOf(nominal, (lineAreaHeight - headerLineHeight * headerCount) / otherCount)
+        val topPadding = (lineAreaHeight - lineHeight * otherCount - headerLineHeight * headerCount).coerceAtLeast(0.dp) / 2f
 
         // Lapisan pembaca layar (satu node per ayat) hanya disusun saat TalkBack aktif: tanpa itu tidak ada gunanya, dan
         // menyusunnya untuk setiap halaman tetangga menambah kerja saat geser.
@@ -149,7 +153,8 @@ fun MushafPage(
         // Glyph V4 berupa kode private-use: tidak berguna untuk pembaca layar, jadi disembunyikan dari semantics.
         Column(Modifier.fillMaxSize().clearAndSetSemantics { }) {
             Box(Modifier.height(topPadding))
-            lines.forEach { line ->
+            lines.forEachIndexed { index, line ->
+                if (index > 0) Spacer(Modifier.height(MushafLineSpacing))
                 val thisHeight = if (line.type == LineType.SurahName) headerLineHeight else lineHeight
                 Box(Modifier.fillMaxWidth().height(thisHeight), contentAlignment = Alignment.Center) {
                     when (line.type) {

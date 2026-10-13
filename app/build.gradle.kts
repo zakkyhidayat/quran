@@ -1,5 +1,3 @@
-import javax.inject.Inject
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -37,23 +35,10 @@ android {
 
     // github: APK di GitHub Releases. play: AAB untuk Play Store. Keduanya sama isinya; dipisah agar nama berkas dan
     // tugas rilis tetap. Tidak ada pembaru dalam aplikasi: versi baru diunduh dari GitHub Releases atau Play.
-    // lite: aplikasi terpisah yang hanya membaca mushaf per halaman; internet hanya untuk unduh database dan font awal (lihat
-    // docs/FORK_LITE.md). Dibuat di dimensi yang sama agar nama tugas varian lain tidak berubah.
     flavorDimensions += "distribution"
     productFlavors {
-        create("github") {
-            dimension = "distribution"
-            buildConfigField("boolean", "LITE", "false")
-        }
-        create("play") {
-            dimension = "distribution"
-            buildConfigField("boolean", "LITE", "false")
-        }
-        create("lite") {
-            dimension = "distribution"
-            applicationIdSuffix = ".lite"
-            buildConfigField("boolean", "LITE", "true")
-        }
+        create("github") { dimension = "distribution" }
+        create("play") { dimension = "distribution" }
     }
 
     signingConfigs {
@@ -137,52 +122,16 @@ baselineProfile {
     mergeIntoMain = true
 }
 
-// Paket database Lite dirilis terpisah dari APK agar kedua varian baru mengunduh data saat onboarding.
-abstract class LiteDbTask : DefaultTask() {
-    @get:InputFile abstract val source: RegularFileProperty
-    @get:InputFile abstract val script: RegularFileProperty
-    @get:Input abstract val python: Property<String>
-    @get:OutputDirectory abstract val outputDir: DirectoryProperty
-    @get:Inject abstract val exec: ExecOperations
-
-    @TaskAction
-    fun build() {
-        exec.exec {
-            commandLine(python.get(), script.get().asFile.path, source.get().asFile.path, outputDir.get().file("quran.db").asFile.path)
-        }
-    }
-}
-
-val liteDb = tasks.register<LiteDbTask>("buildLiteDb") {
-    source.set(layout.projectDirectory.file("src/main/assets/quran.db"))
-    script.set(rootProject.layout.projectDirectory.file("tools/build_lite_db.py"))
-    outputDir.set(layout.buildDirectory.dir("quran-data/lite"))
-    // Di Windows biasanya "python": ./gradlew -Ppython=python ...
-    python.set(providers.gradleProperty("python").orElse("python3"))
-}
-
 tasks.register("assembleFullDebug") {
     group = "build"
     description = "Builds the Full GitHub debug APK."
     dependsOn("assembleGithubDebug")
 }
 
-tasks.register("assembleBothDebug") {
-    group = "build"
-    description = "Builds the Full GitHub and Quran Lite debug APKs."
-    dependsOn("assembleGithubDebug", "assembleLiteDebug")
-}
-
 tasks.register("assembleFullRelease") {
     group = "build"
     description = "Builds the Full GitHub release APK."
     dependsOn("assembleGithubRelease")
-}
-
-tasks.register("assembleBothRelease") {
-    group = "build"
-    description = "Builds the Full GitHub and Quran Lite release APKs."
-    dependsOn("assembleGithubRelease", "assembleLiteRelease")
 }
 
 tasks.register("bundleFullPlayRelease") {

@@ -4,6 +4,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,22 +16,24 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.clickable
 import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalToggleButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -42,7 +46,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -63,29 +66,24 @@ import io.zakkyhidayat.quran.data.Surah
 import io.zakkyhidayat.quran.settings.CounterMode
 import io.zakkyhidayat.quran.settings.ReadingMode
 import io.zakkyhidayat.quran.ui.AppIcons
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 
 @Composable
 internal fun TajweedReaderControls(
     enabled: Boolean,
     onEnabledChange: (Boolean) -> Unit,
-    mode: ReadingMode,
-    onModeSelect: (ReadingMode) -> Unit,
-    showReadingModes: Boolean,
     modifier: Modifier = Modifier,
 ) {
     var guideOpen by remember { mutableStateOf(false) }
     val tajweedLabel = stringResource(R.string.tajweed_title)
-    val guideOffsetY = with(LocalDensity.current) { -56.dp.roundToPx() }
+    val guideOffsetY = with(LocalDensity.current) { 56.dp.roundToPx() }
     Box(
         Modifier
             .then(modifier)
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
             .height(48.dp),
     ) {
-        Box(
-            Modifier.align(Alignment.BottomStart),
-        ) {
+        Box(Modifier.align(Alignment.CenterStart)) {
             Button(
                 onClick = { guideOpen = !guideOpen },
                 shape = androidx.compose.foundation.shape.CircleShape,
@@ -102,7 +100,7 @@ internal fun TajweedReaderControls(
             }
             if (guideOpen) {
                 Popup(
-                    alignment = Alignment.BottomStart,
+                    alignment = Alignment.TopStart,
                     offset = IntOffset(0, guideOffsetY),
                     onDismissRequest = { guideOpen = false },
                     properties = PopupProperties(focusable = true),
@@ -156,14 +154,6 @@ internal fun TajweedReaderControls(
                     }
                 }
             }
-        }
-        if (showReadingModes) {
-            ReadingModeBar(
-                mode,
-                onModeSelect,
-                compact = true,
-                modifier = Modifier.align(Alignment.BottomCenter),
-            )
         }
     }
 }
@@ -269,9 +259,13 @@ internal fun CounterMode.kind(): MarkerKind = when (this) {
     else -> MarkerKind.Ruku
 }
 
-/** Tombol teks ringkas di bilah atas: "12/286" atau "Juz 3 · 45/148"; diketuk untuk berganti jenis. */
+/** Tombol ringkas yang menampilkan hitungan aktif dan membuka pilihan jenis counter. */
 @Composable
-internal fun ReaderCounter(value: CounterValue, surah: Surah?, onSwitch: () -> Unit) {
+internal fun ReaderCounter(
+    value: CounterValue,
+    surah: Surah?,
+    onModeSelect: (CounterMode) -> Unit,
+) {
     val d = value.division
     val label = when (value.mode) {
         CounterMode.Surah -> null
@@ -285,15 +279,67 @@ internal fun ReaderCounter(value: CounterValue, surah: Surah?, onSwitch: () -> U
     val total = d?.total ?: surah?.ayahCount ?: 0
     val text = if (label == null) "$n/$total" else "$label · $n/$total"
     val description = stringResource(R.string.counter_cd, label ?: surah?.nameLatin.orEmpty(), n, total)
-    Box(
-        Modifier
-            .heightIn(min = 48.dp)
-            .clip(MaterialTheme.shapes.large)
-            .clickable(onClickLabel = stringResource(R.string.counter_switch), role = Role.Button, onClick = onSwitch)
-            .padding(horizontal = 8.dp)
-            .semantics { contentDescription = description },
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(text, style = MaterialTheme.typography.labelLarge, maxLines = 1, color = MaterialTheme.colorScheme.primary)
+    var expanded by remember { mutableStateOf(false) }
+    Box {
+        Surface(
+            onClick = { expanded = true },
+            shape = MaterialTheme.shapes.large,
+            color = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            modifier = Modifier
+                .heightIn(min = 48.dp)
+                .semantics {
+                    contentDescription = description
+                    role = Role.Button
+                },
+        ) {
+            Row(
+                Modifier.padding(start = 12.dp, end = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(text, style = MaterialTheme.typography.labelLarge, maxLines = 1)
+                Icon(AppIcons.ExpandMore, contentDescription = stringResource(R.string.counter_switch))
+            }
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.width(240.dp),
+        ) {
+            Column(
+                Modifier.padding(8.dp),
+                verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap),
+            ) {
+                CounterMode.entries.forEachIndexed { index, mode ->
+                    val selected = value.mode == mode
+                    val title = when (mode) {
+                        CounterMode.Surah -> stringResource(R.string.surah_label)
+                        CounterMode.Juz -> stringResource(R.string.juz_n, 1)
+                        CounterMode.Hizb -> stringResource(R.string.hizb_n, 1)
+                        CounterMode.Rub -> stringResource(R.string.rub_n, "1/4")
+                        CounterMode.Manzil -> stringResource(R.string.manzil_n, 1)
+                        CounterMode.Ruku -> stringResource(R.string.counter_ruku, 1)
+                    }
+                    SegmentedListItem(
+                        onClick = {
+                            expanded = false
+                            if (!selected) onModeSelect(mode)
+                        },
+                        shapes = ListItemDefaults.segmentedShapes(index, CounterMode.entries.size),
+                        trailingContent = {
+                            AnimatedVisibility(
+                                visible = selected,
+                                enter = scaleIn(MaterialTheme.motionScheme.fastSpatialSpec()) + fadeIn(MaterialTheme.motionScheme.fastEffectsSpec()),
+                                exit = scaleOut(MaterialTheme.motionScheme.fastSpatialSpec()) + fadeOut(MaterialTheme.motionScheme.fastEffectsSpec()),
+                            ) {
+                                Icon(Icons.Default.Check, contentDescription = null)
+                            }
+                        },
+                    ) {
+                        Text(title)
+                    }
+                }
+            }
+        }
     }
 }

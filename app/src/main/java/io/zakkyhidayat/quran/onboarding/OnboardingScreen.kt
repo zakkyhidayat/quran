@@ -75,7 +75,7 @@ import io.zakkyhidayat.quran.ui.sharedAxisXEnter
 import io.zakkyhidayat.quran.ui.sharedAxisXExit
 import kotlinx.coroutines.launch
 
-private val STEPS = if (io.zakkyhidayat.quran.BuildConfig.LITE) 2 else 3
+private const val STEPS = 3
 
 /**
  * Pengaturan setelah database siap: pratinjau mushaf, terjemahan (full), dan tampilan. Langkah disimpan karena perubahan
@@ -126,7 +126,7 @@ fun OnboardingScreen(vm: AppViewModel, settings: AppSettings) {
                     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 24.dp, vertical = 8.dp)) {
                         when {
                             current == 0 -> MushafStep(vm, settings)
-                            !io.zakkyhidayat.quran.BuildConfig.LITE && current == 1 -> TranslationStep(vm, settings)
+                            current == 1 -> TranslationStep(vm, settings)
                             else -> AppearanceStep(vm, settings)
                         }
                     }

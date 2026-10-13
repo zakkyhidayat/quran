@@ -94,22 +94,18 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             ruku.value = mushaf.markers(MarkerKind.Ruku)
             sajda.value = mushaf.markers(MarkerKind.Sajda)
             pageMeta.value = mushaf.pageMeta()
-            if (BuildConfig.LITE) return@launch
             translations.value = mushaf.translations()
             restoreActiveTranslations()
         }
-        // Cadangan otomatis juga di Lite, agar bookmark tersinkron dengan edisi Full lewat berkas yang sama.
+        // Cadangan otomatis menyimpan bookmark dan posisi baca ke folder yang dipilih.
         autoBackup()
-        // Lite hanya membaca: tanpa terjemahan, histori, pengingat, dan internet.
-        if (!BuildConfig.LITE) {
-            recordHistory()
-            // Pasang ulang jadwal pengingat setiap kali pengaturannya berubah (termasuk saat aplikasi dibuka).
-            viewModelScope.launch {
-                settingsRepository.settings
-                    .map { Triple(it.reminderEnabled, it.reminderMinutes, it.reminderUnit) }
-                    .distinctUntilChanged()
-                    .collect { io.zakkyhidayat.quran.reminder.Reminder.schedule(getApplication(), settingsRepository.settings.first()) }
-            }
+        recordHistory()
+        // Pasang ulang jadwal pengingat setiap kali pengaturannya berubah (termasuk saat aplikasi dibuka).
+        viewModelScope.launch {
+            settingsRepository.settings
+                .map { Triple(it.reminderEnabled, it.reminderMinutes, it.reminderUnit) }
+                .distinctUntilChanged()
+                .collect { io.zakkyhidayat.quran.reminder.Reminder.schedule(getApplication(), settingsRepository.settings.first()) }
         }
     }
 

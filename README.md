@@ -1,10 +1,9 @@
-<p align="center"><img src="docs/icon.png" width="128" alt="Quran app icon">&nbsp;&nbsp;&nbsp;<img src="docs/icon-lite.png" width="128" alt="Quran Lite app icon"></p>
+<p align="center"><img src="docs/icon.png" width="128" alt="Quran app icon"></p>
 
 # Quran
 
 An Android app for reading the Qur'an in the **Uthmani script of the Madani mushaf**, matching the 604-page, 15-line
-King Fahd Complex edition, with optional tajweed colouring. Choose **Quran Full** for translations and additional
-reading tools, or **Quran Lite** for a focused mushaf-reading experience. Both editions share the same page rendering.
+King Fahd Complex edition, with optional tajweed colouring, translations, and additional reading tools.
 
 [![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-support-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/zakkyhidayat)
 
@@ -12,17 +11,7 @@ reading tools, or **Quran Lite** for a focused mushaf-reading experience. Both e
 
 <p align="center">
   <a href="https://github.com/zakkyhidayat/quran/releases/latest/download/Quran.apk"><img src="https://img.shields.io/badge/Download-Quran-176B4D?style=for-the-badge&logo=android&logoColor=white" alt="Download Quran"></a>
-  &nbsp;
-  <a href="https://github.com/zakkyhidayat/quran/releases/latest/download/Quran-Lite.apk"><img src="https://img.shields.io/badge/Download-Quran%20Lite-F2C14E?style=for-the-badge&logo=android&logoColor=176B4D&labelColor=176B4D" alt="Download Quran Lite"></a>
 </p>
-
-| Edition | Includes |
-|---------|----------|
-| **Quran Full** | The complete reading app; see [features](#quran-full-features) below. |
-| **Quran Lite** | A focused mushaf reader with page/ayah bookmarks and no translations, search, home content, or thematic browsing. |
-
-Both are separate apps and can be installed side by side. Quran Lite has its own package ID (`io.zakkyhidayat.quran.lite`)
-and icon. See [docs/FORK_LITE.md](docs/FORK_LITE.md) for a detailed comparison.
 
 **How to install (Android 8 or newer):**
 
@@ -30,8 +19,8 @@ and icon. See [docs/FORK_LITE.md](docs/FORK_LITE.md) for a detailed comparison.
 2. Open the downloaded file. If Android asks, allow your browser or file manager to **install unknown apps**.
 3. Tap **Install**.
 
-Neither app updates itself: download the new APK from the same button and install over the existing app. Bookmarks and
-settings are kept. On first launch, choose a language; Quran Full also offers translation and appearance setup.
+The app does not update itself: download the new APK from the same button and install over the existing app. Bookmarks
+and settings are kept. On first launch, choose a language, translation, and appearance.
 
 All versions and release notes:
 [releases page](https://github.com/zakkyhidayat/quran/releases).
@@ -40,13 +29,13 @@ All versions and release notes:
 
 - First-run setup downloads the Qur'an database and all 604 page fonts from the stable `quran-data` release; these are
   not bundled in the APK. Reading works offline after setup. Data can be updated or downloaded again from Settings.
-- Bookmarks and settings can be exported to a file. Both editions can share a backup folder for bookmarks and reading
-  position; automatic backup keeps up to three snapshots. Use Android's file picker to choose local or cloud storage.
+- Bookmarks and settings can be exported to a file; automatic backup keeps up to three snapshots. Use Android's file
+  picker to choose local or cloud storage.
 - Interface in 10 languages: English, Indonesian, Arabic, Urdu, Bengali, Turkish, Persian, Malay, French, and Russian.
 - Screen readers announce each ayah as Unicode Arabic text.
-- No ads, account, or tracking. Internet is used for required setup, optional data updates, and Full translation downloads.
+- No ads, account, or tracking. Internet is used for required setup, optional data updates, and translation downloads.
 
-## Quran Full features
+## Features
 
 - Reading modes: fixed mushaf page, ayahs with translation, or translation only; tajweed colours can be toggled.
 - Tap an ayah to view translations with footnotes, transliteration, and its juz, hizb, rub', manzil, ruku, and sajdah
@@ -123,14 +112,11 @@ Requires JDK 17+, the Android SDK, and Python 3 with `fonttools`.
    `python tools/build_db.py`.
 3. Choose the target:
    ```bash
-   ./gradlew :app:assembleFullDebug       # Full APK
-   ./gradlew :app:assembleLiteDebug       # Quran Lite APK
-   ./gradlew :app:assembleBothDebug       # both APKs
-   ./gradlew :app:bundleFullPlayRelease   # Full app bundle for Google Play
+   ./gradlew :app:assembleFullDebug       # GitHub APK
+   ./gradlew :app:bundleFullPlayRelease   # Google Play app bundle
    ```
 
-The `assembleBothDebug` task can be run with `--parallel` to enable Gradle's parallel execution where supported.
-Outputs are under `app/build/outputs/`; Full and Lite use separate package IDs and can be installed side by side.
+Outputs are under `app/build/outputs/`.
 For release builds and the exact output mapping, see [docs/RELEASING.md](docs/RELEASING.md).
 
 Minimum Android version: 8.0 (API 26).
@@ -141,15 +127,13 @@ built and signed by GitHub Actions; see [docs/RELEASING.md](docs/RELEASING.md).
 ## Checks
 
 Run these before every release. CI checks Qur'an data and interface strings, runs the same JVM unit-test suite and
-Android lint for both the full and Lite variants, and builds the full app and Quran Lite (debug, plus an unsigned Lite
-release to test code shrinking). It also verifies the generated Lite database against the Qur'an source and ensures
-neither APK bundles the database or page fonts.
+Android lint, debug and release builds, and verifies that the APK does not bundle the database or page fonts.
 
 ```bash
 python tools/verify_quran.py            # Qur'an: 114 surahs, 6,236 ayahs, pages, SHA-256 content fingerprints
 python tools/check_strings.py           # interface translations
-./gradlew :app:testGithubDebugUnitTest :app:testLiteDebugUnitTest
-./gradlew :app:lintGithubDebug :app:lintLiteDebug
+./gradlew :app:testGithubDebugUnitTest
+./gradlew :app:lintGithubDebug
 python tools/verify_quran.py --source   # compare every ayah with the original QUL file (needs data-src/)
 ```
 
@@ -166,7 +150,6 @@ Interface text lives in standard Android string resources, one file per language
 - [CHANGELOG.md](CHANGELOG.md), [PRIVACY.md](PRIVACY.md), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 - [docs/AUDIT.md](docs/AUDIT.md): release audit checklist and open findings (in Indonesian).
 - [docs/RELEASING.md](docs/RELEASING.md): signing, CI, and making a release.
-- [docs/FORK_LITE.md](docs/FORK_LITE.md): how Quran Lite is built from the same code (in Indonesian).
 - [docs/UI_UX.md](docs/UI_UX.md) and [docs/LANGUAGE_DATA.md](docs/LANGUAGE_DATA.md): UI/UX decisions and language data
   licensing notes (in Indonesian).
 - [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md): QUL sources, how to update the data, and downloadable translation packs

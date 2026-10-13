@@ -34,7 +34,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import io.zakkyhidayat.quran.BuildConfig
 import io.zakkyhidayat.quran.R
 import io.zakkyhidayat.quran.data.QuranDataCheck
 import io.zakkyhidayat.quran.data.QuranDatabaseInstaller
@@ -79,7 +78,7 @@ fun DatabaseSetupScreen(installer: QuranDatabaseInstaller, onInstalled: () -> Un
                 verticalArrangement = Arrangement.Center,
             ) {
                 Text(
-                    stringResource(R.string.onb_step, 1, if (BuildConfig.LITE) 1 else 4),
+                    stringResource(R.string.onb_step, 1, 4),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -194,15 +193,13 @@ fun DatabaseSetupScreen(installer: QuranDatabaseInstaller, onInstalled: () -> Un
                     }
                     Text(stringResource(R.string.onb_download_start))
                 }
-                if (!BuildConfig.LITE) {
-                    Spacer(Modifier.height(8.dp))
-                    Text(
-                        stringResource(R.string.onb_download_full_features),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        textAlign = TextAlign.Center,
-                    )
-                }
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    stringResource(R.string.onb_download_full_features),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                )
             }
         }
     }
