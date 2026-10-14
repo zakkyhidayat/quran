@@ -161,6 +161,14 @@ class MushafRepository(context: Context) {
         list
     }
 
+    /** Kode bahasa yang punya info surah: id dan en lebih dulu, lalu sisanya urut abjad. */
+    suspend fun surahInfoLanguages(): List<String> = withContext(Dispatchers.IO) {
+        val list = mutableListOf<String>()
+        db.rawQuery("SELECT DISTINCT lang FROM surah_info ORDER BY lang NOT IN ('id', 'en'), lang <> 'id', lang", null)
+            .use { c -> while (c.moveToNext()) list += c.getString(0) }
+        list
+    }
+
     suspend fun surahDetails(id: Int, lang: String): SurahDetails = withContext(Dispatchers.IO) {
         val surah = surahs().getValue(id)
         var place: String? = null
@@ -173,8 +181,11 @@ class MushafRepository(context: Context) {
         }
         val lastPage = db.rawQuery("SELECT MAX(page) FROM words WHERE surah = ?", arrayOf(id.toString())).use { if (it.moveToFirst()) it.getInt(0) else surah.firstPage }
         val ruku = db.rawQuery("SELECT COUNT(*) FROM ruku WHERE surah = ?", arrayOf(id.toString())).use { if (it.moveToFirst()) it.getInt(0) else 0 }
-        val html = db.rawQuery("SELECT text FROM surah_info WHERE lang = ? AND surah = ?", arrayOf(lang, id.toString()))
-            .use { if (it.moveToFirst()) it.getString(0) else "" }
+        // Bahasa tanpa info surah (atau sumber yang tidak lengkap, mis. Italia) memakai bahasa Inggris.
+        val html = db.rawQuery(
+            "SELECT text FROM surah_info WHERE lang IN (?, 'en') AND surah = ? AND text <> '' ORDER BY lang = 'en' LIMIT 1",
+            arrayOf(lang, id.toString()),
+        ).use { if (it.moveToFirst()) it.getString(0) else "" }
         SurahDetails(
             place = place,
             ayahCount = surah.ayahCount,

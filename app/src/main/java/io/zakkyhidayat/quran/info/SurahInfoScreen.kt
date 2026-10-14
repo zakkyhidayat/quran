@@ -23,9 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -58,6 +56,7 @@ fun SurahInfoScreen(vm: AppViewModel, surahId: Int, onBack: () -> Unit, onOpenAy
     val surah = surahs[surahId]
     val appLang = AppLanguage.effective(androidx.compose.ui.platform.LocalContext.current)
     var lang by rememberSaveable { mutableStateOf(appLang) }
+    val languages by produceState(listOf("id", "en")) { value = vm.mushaf.surahInfoLanguages() }
     val details by produceState<SurahDetails?>(null, surahId, lang) { value = vm.mushaf.surahDetails(surahId, lang) }
     val font = remember { surahNameFontFamily(vm.getApplication()) }
 
@@ -96,13 +95,15 @@ fun SurahInfoScreen(vm: AppViewModel, surahId: Int, onBack: () -> Unit, onOpenAy
                         Text(stringResource(R.string.read_surah))
                     }
                 }
-                SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth().padding(vertical = 12.dp)) {
-                    listOf("id" to stringResource(R.string.lang_name_id), "en" to stringResource(R.string.lang_name_en)).forEachIndexed { i, (code, label) ->
-                        SegmentedButton(
+                // Nama bahasa dari Locale (dalam bahasa UI), jadi bahasa info baru tidak butuh string tambahan.
+                val uiLocale = java.util.Locale.forLanguageTag(appLang)
+                FlowRow(Modifier.fillMaxWidth().padding(vertical = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    languages.forEach { code ->
+                        FilterChip(
                             selected = lang == code,
                             onClick = { lang = code },
-                            shape = SegmentedButtonDefaults.itemShape(i, 2),
-                        ) { Text(label) }
+                            label = { Text(java.util.Locale.forLanguageTag(code).getDisplayLanguage(uiLocale).replaceFirstChar { it.titlecase(uiLocale) }) },
+                        )
                     }
                 }
                 details?.let { d ->
