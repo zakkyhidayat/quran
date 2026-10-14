@@ -159,6 +159,7 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
                     onOpenSettings = openSettings,
                     onOpenSurahInfo = { nav.navigate("surah/$it") },
                     onOpenTafsirSettings = { vm.dismissSheet(); nav.navigate(SettingsPage.Tafsir.route) },
+                    keepScreenOnAllowed = !settingsSheetVisible,
                 )
             }
             screen("surah/{id}", arguments = listOf(navArgument("id") { type = NavType.IntType })) { entry ->

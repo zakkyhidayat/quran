@@ -125,7 +125,16 @@ fun ReaderScreen(
     onOpenSettings: () -> Unit,
     onOpenSurahInfo: (Int) -> Unit,
     onOpenTafsirSettings: () -> Unit = onOpenSettings,
+    /** False saat sheet Pengaturan melayang terbuka di atas pembaca: layar kembali padam sesuai pengaturan sistem. */
+    keepScreenOnAllowed: Boolean = true,
 ) {
+    // Layar tidak padam sendiri selama membaca (ketiga mode baca). Hanya selama layar pembaca tampil dan sheet Pengaturan
+    // tertutup; keluar dari pembaca atau membuka sheet Pengaturan mengembalikan perilaku sistem.
+    val view = androidx.compose.ui.platform.LocalView.current
+    androidx.compose.runtime.DisposableEffect(view, keepScreenOnAllowed) {
+        view.keepScreenOn = keepScreenOnAllowed
+        onDispose { view.keepScreenOn = false }
+    }
     val surahs by vm.surahs.collectAsStateWithLifecycle()
     val pageMeta by vm.pageMeta.collectAsStateWithLifecycle()
     val selected by vm.selected.collectAsStateWithLifecycle()
