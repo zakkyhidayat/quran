@@ -66,6 +66,11 @@ Lima sumber QUL untuk fitur Jelajahi (topik, tema ayat, ayat serupa, mutasyabiha
 Folder `morphology/` boleh berisi beberapa berkas (satu per jenis); `build_db.py` mengenali tabelnya dari nama (`roots`/`word_roots`,
 `lemmas`/`word_lemmas`, `stems`/`word_stems`).
 
+Sumber topik QUL yang dibundel menyediakan `name` dan `description` dalam bahasa Inggris serta `arabic_name`; tidak ada
+terjemahan Indonesia atau Melayu di skema sumber ini. UI Jelajahi memakai nama Arab ketika bahasa aplikasi Arab dan
+fallback nama Inggris untuk bahasa lain; deskripsi dan tema ayat tetap berbahasa Inggris karena terjemahan lokalnya tidak
+tersedia. Teks ayat Qur'an tidak diubah dan tetap ditampilkan dalam bahasa Arab.
+
 Skema yang dibaca skrip (dari berkas asli; nama kolom alternatif juga diterima, lihat `tools/build_db.py`):
 
 - **Topik** `topics/topics.db`: tabel `topics` (`topic_id`, `name`, `arabic_name`, `parent_id`, `thematic_parent_id`,

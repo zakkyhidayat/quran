@@ -257,6 +257,9 @@
     <string name="topic_related">موضوعات مرتبط</string>
     <string name="tab_home">خانه</string>
     <string name="home_votd">آیه روز</string>
+    <string name="home_votd_morning">صبح</string>
+    <string name="home_votd_afternoon">بعدازظهر</string>
+    <string name="home_votd_night">شب</string>
     <string name="home_sunnah">قرائت‌های سنت</string>
     <string name="home_sunnah_now">اکنون توصیه می‌شود</string>
     <string name="home_history">تاریخچه مطالعه</string>

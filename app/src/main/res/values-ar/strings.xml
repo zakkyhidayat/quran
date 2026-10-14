@@ -257,6 +257,9 @@
     <string name="topic_related">مواضيع ذات صلة</string>
     <string name="tab_home">الرئيسية</string>
     <string name="home_votd">آية اليوم</string>
+    <string name="home_votd_morning">الصباح</string>
+    <string name="home_votd_afternoon">بعد الظهر</string>
+    <string name="home_votd_night">الليل</string>
     <string name="home_sunnah">قراءات من السنة</string>
     <string name="home_sunnah_now">يُستحب الآن</string>
     <string name="home_history">سجل القراءة</string>

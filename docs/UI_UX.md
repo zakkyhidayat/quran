@@ -63,13 +63,18 @@ Dari screenshot [QuranApp](https://github.com/AlfaazPlus/QuranApp) (GPL-3.0, sam
 
 Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pull/1)):
 
-- Ayat hari ini: sama untuk semua pengguna per hari, berganti tengah malam.
+- Ayat hari ini: tiga potongan kurasi yang dapat digeser (pagi, siang, malam), masing-masing untuk jendela lokal
+  delapan jam (04.00–12.00, 12.00–20.00, dan 20.00–04.00). Pilihan stabil selama satu hari dan berganti tengah malam.
+- Histori bacaan diletakkan tepat di bawah pager Ayat Hari Ini; maksimal lima surah terakhir tampil.
+- Jelajahi memakai label UI terlokalisasi. Data QUL yang tersedia hanya memberi nama topik Inggris dan Arab serta
+  deskripsi Inggris; nama Arab dipakai saat bahasa UI Arab, sedangkan bahasa lain memakai fallback Inggris. Tema ayat
+  juga hanya tersedia dalam bahasa Inggris. Teks ayat Qur'an tetap Arab.
 - Bacaan sunnah dengan dalil; yang waktunya berlaku (Jumat atau malam, pendekatan pukul 18.00) diberi label
   "Dianjurkan sekarang" dan ditaruh di atas.
 - Kartu bacaan Sunnah membuka langsung ayat/surah di pembaca. Untuk rangkaian beberapa surah, petunjuk beraksen
   `tertiaryContainer` mengantar ke bagian berikutnya; progres tersimpan dan bisa dilanjutkan atau dibuang dari tombol
   mengambang di daftar. Pengingat terpisah pukul 21.00 membuka rangkaian As-Sajdah lalu Al-Mulk.
-- Histori bacaan: satu baris per surah, 5 tampil.
+- Histori bacaan: satu baris per surah, 5 tampil, langsung setelah Ayat Hari Ini.
 - Kumpulan ayat: doa, solusi, adab, dosa besar; layar kumpulan dengan teks Arab, terjemahan, dan "Buka di pembaca".
 - Kartu Ayat Hari Ini memasangkan latar `primaryContainer` dengan `onPrimaryContainer` di tema terang/gelap; daftar
   Sunnah, histori, dan koleksi memakai wadah ikon tonal dengan pasangan warna yang sesuai.

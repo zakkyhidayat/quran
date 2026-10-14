@@ -107,6 +107,7 @@ fun IndexScreen(
     val tab = pagerState.currentPage
     val tabScope = rememberCoroutineScope()
     var showJump by remember { mutableStateOf(false) }
+    var votdTouchActive by remember { mutableStateOf(false) }
     val surahsForJump by vm.surahs.collectAsStateWithLifecycle()
     val settings by vm.settingsRepository.settings.collectAsStateWithLifecycle(AppSettings())
     val lastSurah = surahsForJump[settings.lastSurah]
@@ -219,10 +220,21 @@ fun IndexScreen(
                     }
                 }
                 // Tab digeser (swipe) lewat pager; arah mengikuti layout direction seperti kolom tab-nya.
-                HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize(), key = { it }) { current ->
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier.fillMaxSize(),
+                    key = { it },
+                    userScrollEnabled = !votdTouchActive,
+                ) { current ->
                     when (current) {
                         0 -> BookmarkList(vm, onBack)
-                        1 -> io.zakkyhidayat.quran.home.HomeTab(vm, onBack, onOpenHome, onOpenExplore)
+                        1 -> io.zakkyhidayat.quran.home.HomeTab(
+                            vm,
+                            onBack,
+                            onOpenHome,
+                            onOpenExplore,
+                            onVotdGestureChanged = { votdTouchActive = it },
+                        )
                         2 -> SurahList(vm, onBack, onOpenSurahInfo)
                         3 -> JuzList(vm, onBack)
                         4 -> HizbList(vm, onBack)

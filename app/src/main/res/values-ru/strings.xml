@@ -257,6 +257,9 @@
     <string name="topic_related">Связанные темы</string>
     <string name="tab_home">Главная</string>
     <string name="home_votd">Аят дня</string>
+    <string name="home_votd_morning">Утро</string>
+    <string name="home_votd_afternoon">День</string>
+    <string name="home_votd_night">Ночь</string>
     <string name="home_sunnah">Чтения из Сунны</string>
     <string name="home_sunnah_now">Рекомендуется сейчас</string>
     <string name="home_history">История чтения</string>
