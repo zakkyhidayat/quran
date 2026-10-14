@@ -27,6 +27,11 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.core.text.TextUtilsCompat
+import androidx.core.view.ViewCompat
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -110,8 +115,12 @@ fun SurahInfoScreen(vm: AppViewModel, surahId: Int, onBack: () -> Unit, onOpenAy
                     if (d.infoHtml.isBlank()) {
                         Text(stringResource(R.string.no_surah_info), color = MaterialTheme.colorScheme.onSurfaceVariant)
                     } else {
-                        HtmlContent(d.infoHtml) { href ->
-                            parseAyahLink(href)?.let { (s, a) -> onOpenAyah(s, a) }
+                        // Info Urdu (dan bahasa RTL lain) harus rata kanan dengan arah teks kanan-ke-kiri.
+                        val rtl = TextUtilsCompat.getLayoutDirectionFromLocale(java.util.Locale.forLanguageTag(lang)) == ViewCompat.LAYOUT_DIRECTION_RTL
+                        CompositionLocalProvider(LocalLayoutDirection provides if (rtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
+                            HtmlContent(d.infoHtml) { href ->
+                                parseAyahLink(href)?.let { (s, a) -> onOpenAyah(s, a) }
+                            }
                         }
                     }
                 }
