@@ -100,7 +100,7 @@ internal fun TranslationCatalogList(
         downloadable
             .map { languageDisplayName(it.lang, it.langName, locale) to it }
             .filter { (language, pack) ->
-                q.isEmpty() || listOf(language, pack.lang, pack.langName.orEmpty(), pack.name, pack.source).any { it.lowercase(locale).contains(q) }
+                q.isEmpty() || (languageSearchTerms(pack.lang, pack.langName, locale) + language + pack.name + pack.source).any { it.lowercase(locale).contains(q) }
             }
             .groupBy({ it.first }, { it.second })
             .toSortedMap(collator)

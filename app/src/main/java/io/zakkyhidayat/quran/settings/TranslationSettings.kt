@@ -41,6 +41,17 @@ internal fun languageDisplayName(code: String, fallback: String?, locale: java.u
     return if (name.isBlank() || name.equals(code, ignoreCase = true)) fallback?.takeIf { it.isNotBlank() } ?: code else name
 }
 
+/**
+ * Semua nama yang boleh dicocokkan saat mencari bahasa: nama di bahasa aplikasi, Inggris, bahasa itu sendiri, kodenya, dan
+ * [fallback] (nama Inggris dari katalog). Jadi "Indonesia", "Indonesian", dan "id" menemukan bahasa yang sama.
+ */
+internal fun languageSearchTerms(code: String, fallback: String?, locale: java.util.Locale): List<String> {
+    val language = java.util.Locale.forLanguageTag(code)
+    return listOfNotNull(
+        language.getDisplayLanguage(locale), language.getDisplayLanguage(java.util.Locale.ENGLISH), language.getDisplayLanguage(language), code, fallback,
+    ).filter { it.isNotBlank() }.distinct()
+}
+
 @Composable
 internal fun translationLabel(tr: io.zakkyhidayat.quran.data.TranslationInfo): String {
     val language = when (tr.lang) {
