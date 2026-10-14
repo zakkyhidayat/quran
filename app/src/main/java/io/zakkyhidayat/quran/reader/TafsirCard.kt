@@ -16,13 +16,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -67,11 +67,14 @@ internal fun TafsirCard(vm: AppViewModel, surah: Int, ayah: Int, onOpenTafsirSet
                 return@Column
             }
 
-            // (sudah dimuat, isi): bedakan "sedang memuat" dari "tidak ada tafsir untuk ayat ini".
-            val result by produceState(false to (null as TafsirEntry?), selected.id, surah, ayah) {
-                value = true to vm.mushaf.tafsirFor(selected.id, surah, ayah)
+            // Hasil disimpan bersama kuncinya (paket, surah, ayat): selama kunci baru belum selesai dimuat, hasil kunci lama
+            // tidak boleh tampil di bawah ayat atau chip yang baru. Null = belum selesai; beda dengan "tidak ada tafsir".
+            val key = Triple(selected.id, surah, ayah)
+            val result by produceState<Pair<Triple<String, Int, Int>, TafsirEntry?>?>(null, key) {
+                value = key to vm.mushaf.tafsirFor(selected.id, surah, ayah)
             }
-            val (loaded, entry) = result
+            val loaded = result?.first == key
+            val entry = if (loaded) result?.second else null
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(stringResource(R.string.tafsir), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)

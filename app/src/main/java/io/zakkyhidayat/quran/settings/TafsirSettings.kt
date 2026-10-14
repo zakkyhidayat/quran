@@ -1,6 +1,5 @@
 package io.zakkyhidayat.quran.settings
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,25 +18,21 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -47,7 +42,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.zakkyhidayat.quran.AppViewModel
 import io.zakkyhidayat.quran.R
 import io.zakkyhidayat.quran.data.ContentPack
-import io.zakkyhidayat.quran.ui.AppIcons
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
@@ -99,16 +93,12 @@ internal fun TafsirControls(vm: AppViewModel, modifier: Modifier = Modifier) {
     val downloadable = (state as? TafsirCatalogState.Loaded)?.packs.orEmpty().filter { it.id !in installedIds }
     // Kelompok per bahasa (nama bahasa mengikuti bahasa aplikasi), urut abjad; pencarian cocok ke bahasa, kode, nama, atau pengarang.
     val groups = remember(downloadable, query, locale) {
-        val q = query.trim().lowercase(locale)
-        val collator = java.text.Collator.getInstance(locale)
-        downloadable
-            .map { languageDisplayName(it.lang, null, locale) to it }
-            .filter { (language, pack) ->
-                q.isEmpty() || (languageSearchTerms(pack.lang, null, locale) + language + pack.name + pack.source).any { it.lowercase(locale).contains(q) }
-            }
-            .groupBy({ it.first }, { it.second })
-            .toSortedMap(collator)
-            .map { (language, packs) -> language to packs.sortedWith { x, y -> collator.compare(x.name, y.name) } }
+        groupPacksByLanguage(
+            downloadable, query, locale,
+            languageOf = { languageDisplayName(it.lang, null, locale) },
+            searchTerms = { languageSearchTerms(it.lang, null, locale) + it.name + it.source },
+            nameOf = { it.name },
+        )
     }
     val loadingCd = stringResource(R.string.tafsir_loading_cd)
 
@@ -209,80 +199,30 @@ internal fun TafsirControls(vm: AppViewModel, modifier: Modifier = Modifier) {
                         }
                     }
                 } else {
-                    item {
-                        Text(
-                            stringResource(R.string.translations_downloadable),
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 4.dp),
-                        )
-                    }
-                    groups.forEach { (language, packs) ->
-                        item(key = "lang-$language") {
-                            Text(
-                                language,
-                                style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 2.dp),
-                            )
-                        }
-                        items(packs, key = { it.id }) { pack ->
-                            val label = tafsirLabel(pack.lang, pack.name)
-                            val downloading = busy == pack.id
-                            ListItem(
-                                headlineContent = { Text(pack.name) },
-                                supportingContent = pack.source.takeIf { it.isNotBlank() }?.let { { Text(it) } },
-                                trailingContent = {
-                                    if (downloading) {
-                                        val cd = stringResource(R.string.translation_downloading_cd, label)
-                                        CircularProgressIndicator(
-                                            progress = { progress },
-                                            modifier = Modifier.size(24.dp).semantics { contentDescription = cd },
-                                        )
-                                    } else {
-                                        val downloadCd = stringResource(R.string.translation_download_cd, label)
-                                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                                            if (pack.bytes > 0) {
-                                                Text(
-                                                    stringResource(R.string.translation_size_mb, String.format(locale, "%.1f", pack.bytes / 1_000_000.0)),
-                                                    style = MaterialTheme.typography.labelMedium,
-                                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                                )
-                                            }
-                                            Surface(
-                                                shape = MaterialTheme.shapes.small,
-                                                color = MaterialTheme.colorScheme.secondaryContainer,
-                                                modifier = Modifier.size(40.dp).semantics { contentDescription = downloadCd },
-                                            ) {
-                                                Box(contentAlignment = Alignment.Center) {
-                                                    Icon(AppIcons.Download, contentDescription = null, tint = MaterialTheme.colorScheme.onSecondaryContainer)
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                                colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-                                modifier = Modifier.clickable(enabled = busy == null) {
-                                    scope.launch {
-                                        busy = pack.id
-                                        progress = 0f
-                                        failed = null
-                                        try {
-                                            vm.installTafsir(pack) { done, total -> progress = if (total > 0) done.toFloat() / total else 0f }
-                                        } catch (e: CancellationException) {
-                                            throw e
-                                        } catch (e: Exception) {
-                                            android.util.Log.w("TafsirPacks", "Gagal mengunduh ${pack.id}", e)
-                                            failed = label
-                                            failedWasUpdate = false
-                                        } finally {
-                                            busy = null
-                                        }
-                                    }
-                                },
-                            )
-                        }
-                    }
+                    languageGroupedPackItems(
+                        groups,
+                        key = { it.id }, name = { it.name }, source = { it.source.takeIf { s -> s.isNotBlank() } }, bytes = { it.bytes },
+                        label = { tafsirLabel(it.lang, it.name) },
+                        busyId = busy, progress = progress, locale = locale,
+                        onClick = { pack, label ->
+                            scope.launch {
+                                busy = pack.id
+                                progress = 0f
+                                failed = null
+                                try {
+                                    vm.installTafsir(pack) { done, total -> progress = if (total > 0) done.toFloat() / total else 0f }
+                                } catch (e: CancellationException) {
+                                    throw e
+                                } catch (e: Exception) {
+                                    android.util.Log.w("TafsirPacks", "Gagal mengunduh ${pack.id}", e)
+                                    failed = label
+                                    failedWasUpdate = false
+                                } finally {
+                                    busy = null
+                                }
+                            }
+                        },
+                    )
                 }
             }
         }

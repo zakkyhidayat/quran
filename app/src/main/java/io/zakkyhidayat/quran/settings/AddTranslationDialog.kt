@@ -7,16 +7,13 @@ import androidx.compose.material3.ListItem
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
@@ -24,19 +21,18 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.Stable
 import kotlinx.coroutines.CoroutineScope
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -48,7 +44,6 @@ import io.zakkyhidayat.quran.AppViewModel
 import io.zakkyhidayat.quran.R
 import io.zakkyhidayat.quran.data.CatalogPack
 import io.zakkyhidayat.quran.data.TranslationInfo
-import io.zakkyhidayat.quran.ui.AppIcons
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
@@ -100,16 +95,12 @@ internal fun rememberTranslationCatalog(vm: AppViewModel, inactive: List<Transla
     val query = catalog.query
     val downloadable = (catalog.state as? CatalogState.Loaded)?.packs.orEmpty().filter { it.id !in catalog.installedIds }
     catalog.groups = remember(downloadable, query, locale) {
-        val q = query.trim().lowercase(locale)
-        val collator = java.text.Collator.getInstance(locale)
-        downloadable
-            .map { languageDisplayName(it.lang, it.langName, locale) to it }
-            .filter { (language, pack) ->
-                q.isEmpty() || (languageSearchTerms(pack.lang, pack.langName, locale) + language + pack.name + pack.source).any { it.lowercase(locale).contains(q) }
-            }
-            .groupBy({ it.first }, { it.second })
-            .toSortedMap(collator)
-            .map { (language, packs) -> language to packs.sortedWith { x, y -> collator.compare(x.name, y.name) } }
+        groupPacksByLanguage(
+            downloadable, query, locale,
+            languageOf = { languageDisplayName(it.lang, it.langName, locale) },
+            searchTerms = { languageSearchTerms(it.lang, it.langName, locale) + it.name + it.source },
+            nameOf = { it.name },
+        )
     }
     catalog.inactiveShown = remember(inactive, query, locale) {
         val q = query.trim().lowercase(locale)
@@ -205,85 +196,30 @@ internal fun LazyListScope.translationCatalogItems(
                     }
                 }
             } else {
-                item(key = "catalog-title") {
-                    Text(
-                        stringResource(R.string.translations_downloadable),
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 4.dp),
-                    )
-                }
-                groups.forEach { (language, packs) ->
-                    item(key = "lang-$language") {
-                        Text(
-                            language,
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 2.dp),
-                        )
-                    }
-                    items(packs, key = { it.id }) { pack ->
-                        val label = translationLabel(pack.info)
-                        val busy = catalog.downloading == pack.id
-                        ListItem(
-                            headlineContent = { Text(pack.name) },
-                            trailingContent = {
-                                if (busy) {
-                                    val cd = stringResource(R.string.translation_downloading_cd, label)
-                                    CircularProgressIndicator(
-                                        progress = { catalog.progress },
-                                        modifier = Modifier.size(24.dp).semantics { contentDescription = cd },
-                                    )
-                                } else {
-                                    val downloadCd = stringResource(R.string.translation_download_cd, label)
-                                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                                        if (pack.bytes > 0) {
-                                            Text(
-                                                stringResource(R.string.translation_size_mb, String.format(locale, "%.1f", pack.bytes / 1_000_000.0)),
-                                                style = MaterialTheme.typography.labelMedium,
-                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                            )
-                                        }
-                                        Surface(
-                                            shape = MaterialTheme.shapes.small,
-                                            color = MaterialTheme.colorScheme.secondaryContainer,
-                                            modifier = Modifier.size(40.dp).semantics {
-                                                contentDescription = downloadCd
-                                            },
-                                        ) {
-                                            Box(contentAlignment = Alignment.Center) {
-                                                Icon(
-                                                    AppIcons.Download,
-                                                    contentDescription = null,
-                                                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                                                )
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            colors = dialogItemColors(),
-                            modifier = Modifier.clickable(enabled = catalog.downloading == null) {
-                                scope.launch {
-                                    catalog.downloading = pack.id
-                                    catalog.progress = 0f
-                                    catalog.failedLabel = null
-                                    try {
-                                        vm.installPack(pack) { done, total -> catalog.progress = if (total > 0) done.toFloat() / total else 0f }
-                                        onActivate(pack.id)
-                                    } catch (e: CancellationException) {
-                                        throw e
-                                    } catch (e: Exception) {
-                                        android.util.Log.w("TranslationPacks", "Gagal mengunduh ${pack.id}", e)
-                                        catalog.failedLabel = label
-                                    } finally {
-                                        catalog.downloading = null
-                                    }
-                                }
-                            },
-                        )
-                    }
-                }
+                languageGroupedPackItems(
+                    groups,
+                    key = { it.id }, name = { it.name }, source = { null }, bytes = { it.bytes },
+                    label = { translationLabel(it.info) },
+                    busyId = catalog.downloading, progress = catalog.progress, locale = locale,
+                    onClick = { pack, label ->
+                        scope.launch {
+                            catalog.downloading = pack.id
+                            catalog.progress = 0f
+                            catalog.failedLabel = null
+                            try {
+                                vm.installPack(pack) { done, total -> catalog.progress = if (total > 0) done.toFloat() / total else 0f }
+                                onActivate(pack.id)
+                            } catch (e: CancellationException) {
+                                throw e
+                            } catch (e: Exception) {
+                                android.util.Log.w("TranslationPacks", "Gagal mengunduh ${pack.id}", e)
+                                catalog.failedLabel = label
+                            } finally {
+                                catalog.downloading = null
+                            }
+                        }
+                    },
+                )
             }
         }
     }

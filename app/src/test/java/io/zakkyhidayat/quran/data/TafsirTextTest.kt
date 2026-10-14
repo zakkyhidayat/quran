@@ -34,13 +34,27 @@ class TafsirTextTest {
     }
 
     @Test
-    fun `blok dibatasi menurut jumlah huruf dan blok yang melewati batas ikut utuh`() {
-        val all = blocks("<p>${"a".repeat(100)}</p><p>${"b".repeat(100)}</p><p>${"c".repeat(100)}</p>")
-        assertEquals(300, htmlTextLength("<p>${"a".repeat(100)}</p><p>${"b".repeat(100)}</p><p>${"c".repeat(100)}</p>"))
+    fun `blok dibatasi menurut jumlah huruf dan blok yang melewati batas dipotong`() {
+        val html = "<p>${"a".repeat(100)}</p><p>${"b".repeat(100)}</p><p>${"c".repeat(100)}</p>"
+        val all = blocks(html)
+        assertEquals(300, htmlTextLength(html))
         assertEquals(1, limitBlocks(all, 50).size)
         assertEquals(2, limitBlocks(all, 150).size)
         assertEquals(3, limitBlocks(all, 1_000).size)
         assertEquals(3, limitBlocks(all, Int.MAX_VALUE).size)
+        // Blok kedua dipotong pada sisa jatah (50 huruf) dan diberi elipsis.
+        val second = limitBlocks(all, 150)[1] as HtmlBlock.Paragraph
+        assertEquals("b".repeat(50) + "…", second.text.text)
+    }
+
+    @Test
+    fun `satu paragraf raksasa dipotong di batas kata`() {
+        val huge = "kata ".repeat(40_000) // 200 ribu huruf dalam satu paragraf
+        val shown = limitBlocks(blocks("<p>$huge</p>"), 3_000)
+        assertEquals(1, shown.size)
+        val text = (shown.single() as HtmlBlock.Paragraph).text.text
+        assertTrue(text.length <= 3_001)
+        assertTrue(text.endsWith("kata…"))
     }
 
     @Test
