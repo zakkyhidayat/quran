@@ -149,17 +149,23 @@ fun SettingsScreen(
                         .padding(horizontal = 16.dp)
                         .padding(top = 8.dp, bottom = 24.dp),
                 ) {
-                    Group {
-                        item(
-                            title = stringResource(R.string.translit_title),
-                            subtitle = stringResource(R.string.translit_sub),
-                            onClick = { scope.launch { repo.setShowTransliteration(!settings.showTransliteration) } },
-                            leading = { Icon(AppIcons.Translate, contentDescription = null) },
-                            trailing = { IconSwitch(settings.showTransliteration) },
-                        )
-                    }
-                    Spacer(Modifier.height(16.dp))
-                    TranslationControls(vm, settings, Modifier.weight(1f), fillAvailableHeight = true)
+                    TranslationControls(
+                        vm, settings, Modifier.weight(1f), fillAvailableHeight = true,
+                        header = {
+                            Column {
+                                Group {
+                                    item(
+                                        title = stringResource(R.string.translit_title),
+                                        subtitle = stringResource(R.string.translit_sub),
+                                        onClick = { scope.launch { repo.setShowTransliteration(!settings.showTransliteration) } },
+                                        leading = { Icon(AppIcons.Translate, contentDescription = null) },
+                                        trailing = { IconSwitch(settings.showTransliteration) },
+                                    )
+                                }
+                                Spacer(Modifier.height(16.dp))
+                            }
+                        },
+                    )
                 }
             } else if (page == SettingsPage.Tafsir) {
                 Column(
