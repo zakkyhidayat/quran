@@ -356,7 +356,9 @@ def load_surah_info(db):
         rows = src.execute("SELECT surah_number, surah_name, text, short_text FROM surah_infos ORDER BY surah_number").fetchall()
         assert len(rows) == 114, (lang, len(rows))
         for number, name, text, short in rows:
-            db.execute("INSERT INTO surah_info VALUES (?,?,?,?,?)", (lang, number, name, (short or "").strip(), clean_info_html(text)))
+            # Hanya bahasa Inggris yang dibundel (cadangan); bahasa lain diunduh sebagai paket (tools/build_content_packs.py).
+            if lang == "en":
+                db.execute("INSERT INTO surah_info VALUES (?,?,?,?,?)", (lang, number, name, (short or "").strip(), clean_info_html(text)))
             if lang == "id":
                 places[number] = detect_place(text)
         print(f"surah_info {lang}: {len(rows)}")
@@ -370,28 +372,7 @@ def load_surah_info(db):
     for number, place, order in rows:
         db.execute("UPDATE surahs SET place=?, revelation_order=? WHERE id=?", (official[number], order, number))
     print("tempat turun:", {k: sum(1 for v in official.values() if v == k) for k in ("makki", "madani")})
-    load_extra_surah_info(db)
 
-
-def load_extra_surah_info(db):
-    """Info surah bahasa lain dari data-src/surah-info/surah-info-<kode>.db (opsional; id dan en tetap dari sumber dasar).
-
-    Sebagian sumber QUL tidak lengkap (Italia: 112 surah); aplikasi memakai bahasa Inggris untuk surah yang tidak ada.
-    """
-    folder = SRC / "surah-info"
-    if not folder.is_dir():
-        return
-    for f in sorted(folder.glob("surah-info-*.db")):
-        lang = f.stem.removeprefix("surah-info-")
-        if lang in SURAH_INFO_SOURCES:
-            continue
-        rows = sqlite3.connect(f).execute(
-            "SELECT surah_number, surah_name, text, short_text FROM surah_infos ORDER BY surah_number").fetchall()
-        assert 100 <= len(rows) <= 114 and all(1 <= r[0] <= 114 for r in rows), (lang, len(rows))
-        db.execute("DELETE FROM surah_info WHERE lang = ?", (lang,))
-        for number, name, text, short in rows:
-            db.execute("INSERT INTO surah_info VALUES (?,?,?,?,?)", (lang, number, name, (short or "").strip(), clean_info_html(text or "")))
-        print(f"surah_info {lang}: {len(rows)}")
 
 
 def load_transliteration(db):
@@ -683,7 +664,8 @@ def explore_only():
     for table in EXPLORE_TABLES:
         db.execute(f"DROP TABLE IF EXISTS {table}")
     load_explore(db)
-    load_extra_surah_info(db)
+    # Info surah selain Inggris kini paket unduhan; buang sisa dari build lama.
+    db.execute("DELETE FROM surah_info WHERE lang <> 'en'")
     db.execute(f"PRAGMA user_version = {DATA_VERSION}")
     db.commit()
     db.execute("VACUUM")
