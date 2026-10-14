@@ -7,6 +7,9 @@ import io.zakkyhidayat.quran.data.AyahDetail
 import io.zakkyhidayat.quran.data.AyahExtras
 import io.zakkyhidayat.quran.data.AyahRef
 import io.zakkyhidayat.quran.data.CatalogPack
+import io.zakkyhidayat.quran.data.ContentKind
+import io.zakkyhidayat.quran.data.ContentPack
+import io.zakkyhidayat.quran.data.InstalledContentPack
 import io.zakkyhidayat.quran.data.ExploreCounts
 import io.zakkyhidayat.quran.data.isPackUpdateAvailable
 import io.zakkyhidayat.quran.data.Marker
@@ -255,6 +258,46 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             mushaf.deletePack(id)
             translations.value = mushaf.translations()
+        }
+    }
+
+    // ---- Tafsir: paket unduhan opsional (katalog yang sama dengan terjemahan) ----
+
+    val tafsirInstalled = MutableStateFlow<List<InstalledContentPack>>(emptyList())
+
+    /** Tafsir terpasang yang punya versi lebih baru di katalog, menurut id. Diisi [checkTafsirUpdates]. */
+    val tafsirUpdates = MutableStateFlow<Map<String, ContentPack>>(emptyMap())
+
+    suspend fun refreshTafsir() {
+        tafsirInstalled.value = mushaf.installedContent(ContentKind.Tafsir)
+    }
+
+    suspend fun tafsirCatalog(): List<ContentPack> = mushaf.contentCatalog(ContentKind.Tafsir)
+
+    /** Bandingkan versi tafsir terpasang dengan katalog; gagal (luring) diam-diam dilewati. */
+    suspend fun checkTafsirUpdates() {
+        val packs = runCatching { tafsirCatalog() }
+            .onFailure { if (it is kotlinx.coroutines.CancellationException) throw it }
+            .getOrNull() ?: return
+        val installed = tafsirInstalled.value.associateBy { it.id }
+        tafsirUpdates.value = packs.filter { p -> installed[p.id]?.let { isPackUpdateAvailable(it.version, p.version) } == true }.associateBy { it.id }
+    }
+
+    /** Unduh dan pasang (atau perbarui) tafsir, lalu segarkan daftar. Melempar IOException bila gagal. */
+    suspend fun installTafsir(pack: ContentPack, onProgress: (Long, Long) -> Unit = { _, _ -> }) {
+        try {
+            mushaf.installContent(ContentKind.Tafsir, pack, onProgress)
+            tafsirUpdates.value = tafsirUpdates.value - pack.id
+        } finally {
+            withContext(NonCancellable) { refreshTafsir() }
+        }
+    }
+
+    fun deleteTafsir(id: String) {
+        viewModelScope.launch {
+            mushaf.deleteContent(ContentKind.Tafsir, id)
+            tafsirUpdates.value = tafsirUpdates.value - id
+            refreshTafsir()
         }
     }
 

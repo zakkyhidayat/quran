@@ -104,6 +104,7 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
     }
     // Ketuk ayat di layar Jelajahi membuka pembaca di ayat itu (sama seperti TopicScreen).
     val openAyah: (Int, Int) -> Unit = { surah, ayah -> vm.goToAyah(surah, ayah, openSheet = false); openReader() }
+    LaunchedEffect(Unit) { vm.refreshTafsir() }
     // Lompatan ke halaman dari mana pun (daftar, pencarian, info surah, notifikasi) membuka layar baca.
     LaunchedEffect(Unit) {
         vm.pendingPage.collect { page -> if (page != null) openReader() }
@@ -217,6 +218,7 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
         if (settingsSheetVisible) {
             SettingsMainSheet(
                 settings = settings,
+                tafsirCount = vm.tafsirInstalled.collectAsState().value.size,
                 onDismiss = { settingsSheetVisible = false },
                 onOpen = { page ->
                     settingsSheetVisible = false

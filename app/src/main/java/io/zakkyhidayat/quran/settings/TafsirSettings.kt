@@ -1,0 +1,291 @@
+package io.zakkyhidayat.quran.settings
+
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.LoadingIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import io.zakkyhidayat.quran.AppViewModel
+import io.zakkyhidayat.quran.R
+import io.zakkyhidayat.quran.data.ContentPack
+import io.zakkyhidayat.quran.ui.AppIcons
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
+
+private sealed interface TafsirCatalogState {
+    data object Loading : TafsirCatalogState
+    data object Failed : TafsirCatalogState
+    data class Loaded(val packs: List<ContentPack>) : TafsirCatalogState
+}
+
+@Composable
+private fun tafsirLabel(lang: String, name: String): String =
+    stringResource(R.string.translation_label, languageDisplayName(lang, null, LocalConfiguration.current.locales[0]), name)
+
+/**
+ * Halaman Tafsir di Pengaturan, sejajar dengan halaman Terjemahan: daftar tafsir terpasang (hapus, perbarui bila katalog
+ * punya versi lebih baru), lalu katalog tambah yang dikelompokkan per bahasa, bisa dicari (bahasa atau pengarang), dan
+ * mengunduh dengan indikator progres. Tafsir tidak punya status aktif; terpasang berarti tersedia.
+ */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+internal fun TafsirControls(vm: AppViewModel, modifier: Modifier = Modifier) {
+    val scope = rememberCoroutineScope()
+    val installed by vm.tafsirInstalled.collectAsStateWithLifecycle()
+    val updates by vm.tafsirUpdates.collectAsStateWithLifecycle()
+    var state by remember { mutableStateOf<TafsirCatalogState>(TafsirCatalogState.Loading) }
+    var attempt by remember { mutableIntStateOf(0) }
+    var busy by remember { mutableStateOf<String?>(null) }
+    var progress by remember { mutableFloatStateOf(0f) }
+    var failed by remember { mutableStateOf<String?>(null) }
+    var failedWasUpdate by remember { mutableStateOf(false) }
+    var query by remember { mutableStateOf("") }
+    val locale = LocalConfiguration.current.locales[0]
+
+    LaunchedEffect(attempt) {
+        state = TafsirCatalogState.Loading
+        state = try {
+            TafsirCatalogState.Loaded(vm.tafsirCatalog())
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            android.util.Log.w("TafsirPacks", "Katalog gagal dimuat: $e; sebab: ${e.cause}")
+            TafsirCatalogState.Failed
+        }
+    }
+    // Cek versi katalog sekali setelah katalog dan daftar terpasang siap; luring dilewati diam-diam.
+    LaunchedEffect(installed.map { it.id to it.version }, state is TafsirCatalogState.Loaded) { vm.checkTafsirUpdates() }
+
+    val installedIds = installed.map { it.id }.toSet()
+    val downloadable = (state as? TafsirCatalogState.Loaded)?.packs.orEmpty().filter { it.id !in installedIds }
+    // Kelompok per bahasa (nama bahasa mengikuti bahasa aplikasi), urut abjad; pencarian cocok ke bahasa, kode, nama, atau pengarang.
+    val groups = remember(downloadable, query, locale) {
+        val q = query.trim().lowercase(locale)
+        val collator = java.text.Collator.getInstance(locale)
+        downloadable
+            .map { languageDisplayName(it.lang, null, locale) to it }
+            .filter { (language, pack) ->
+                q.isEmpty() || listOf(language, pack.lang, pack.name, pack.source).any { it.lowercase(locale).contains(q) }
+            }
+            .groupBy({ it.first }, { it.second })
+            .toSortedMap(collator)
+            .map { (language, packs) -> language to packs.sortedWith { x, y -> collator.compare(x.name, y.name) } }
+    }
+    val loadingCd = stringResource(R.string.tafsir_loading_cd)
+
+    Column(modifier) {
+        if (installed.isEmpty()) {
+            Text(stringResource(R.string.tafsir_none_installed), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        } else {
+            Group {
+                installed.forEach { pack ->
+                    val label = tafsirLabel(pack.lang, pack.name)
+                    item(
+                        title = label,
+                        subtitle = if (pack.id in updates) stringResource(R.string.translation_update_available) else pack.source.takeIf { it.isNotBlank() },
+                        trailing = {
+                            Row {
+                                updates[pack.id]?.let { update ->
+                                    if (busy == pack.id) {
+                                        val cd = stringResource(R.string.tafsir_updating_cd, label)
+                                        CircularProgressIndicator(Modifier.size(24.dp).semantics { contentDescription = cd })
+                                    } else {
+                                        IconButton(
+                                            enabled = busy == null,
+                                            onClick = {
+                                                scope.launch {
+                                                    busy = pack.id
+                                                    failed = null
+                                                    try {
+                                                        vm.installTafsir(update)
+                                                    } catch (e: CancellationException) {
+                                                        throw e
+                                                    } catch (e: Exception) {
+                                                        android.util.Log.w("TafsirPacks", "Gagal memperbarui ${pack.id}", e)
+                                                        failed = label
+                                                        failedWasUpdate = true
+                                                    } finally {
+                                                        busy = null
+                                                    }
+                                                }
+                                            },
+                                        ) { Icon(Icons.Default.Refresh, contentDescription = stringResource(R.string.update_tafsir_cd, label)) }
+                                    }
+                                }
+                                IconButton(onClick = { vm.deleteTafsir(pack.id) }) {
+                                    Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete_tafsir_cd, label))
+                                }
+                            }
+                        },
+                    )
+                }
+            }
+        }
+        Text(
+            stringResource(R.string.add_tafsir),
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(top = 16.dp, bottom = 4.dp),
+        )
+        OutlinedTextField(
+            value = query,
+            onValueChange = { query = it },
+            placeholder = { Text(stringResource(R.string.tafsir_search_hint)) },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp).imePadding(),
+        )
+        LazyColumn(Modifier.weight(1f).imePadding()) {
+            when (state) {
+                TafsirCatalogState.Loading -> item {
+                    Box(Modifier.fillMaxWidth().padding(vertical = 16.dp), contentAlignment = Alignment.Center) {
+                        LoadingIndicator(Modifier.semantics { contentDescription = loadingCd })
+                    }
+                }
+                TafsirCatalogState.Failed -> item {
+                    Column(
+                        Modifier.fillMaxWidth().padding(top = 8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        Text(stringResource(R.string.tafsir_catalog_error), style = MaterialTheme.typography.bodyMedium)
+                        FilledTonalButton(onClick = { attempt++ }) { Text(stringResource(R.string.retry)) }
+                    }
+                }
+                is TafsirCatalogState.Loaded -> {
+                    if (groups.isEmpty()) {
+                        item {
+                            if (query.isNotBlank()) {
+                                Text(stringResource(R.string.tafsir_no_match), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 8.dp))
+                            } else {
+                                Text(stringResource(R.string.tafsir_all_added), style = MaterialTheme.typography.bodyMedium)
+                            }
+                        }
+                    } else {
+                        item {
+                            Text(
+                                stringResource(R.string.translations_downloadable),
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 4.dp),
+                            )
+                        }
+                        groups.forEach { (language, packs) ->
+                            item(key = "lang-$language") {
+                                Text(
+                                    language,
+                                    style = MaterialTheme.typography.labelLarge,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 2.dp),
+                                )
+                            }
+                            items(packs, key = { it.id }) { pack ->
+                                val label = tafsirLabel(pack.lang, pack.name)
+                                val downloading = busy == pack.id
+                                ListItem(
+                                    headlineContent = { Text(pack.name) },
+                                    supportingContent = pack.source.takeIf { it.isNotBlank() }?.let { { Text(it) } },
+                                    trailingContent = {
+                                        if (downloading) {
+                                            val cd = stringResource(R.string.translation_downloading_cd, label)
+                                            CircularProgressIndicator(
+                                                progress = { progress },
+                                                modifier = Modifier.size(24.dp).semantics { contentDescription = cd },
+                                            )
+                                        } else {
+                                            val downloadCd = stringResource(R.string.translation_download_cd, label)
+                                            Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                                                if (pack.bytes > 0) {
+                                                    Text(
+                                                        stringResource(R.string.translation_size_mb, String.format(locale, "%.1f", pack.bytes / 1_000_000.0)),
+                                                        style = MaterialTheme.typography.labelMedium,
+                                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                    )
+                                                }
+                                                Surface(
+                                                    shape = MaterialTheme.shapes.small,
+                                                    color = MaterialTheme.colorScheme.secondaryContainer,
+                                                    modifier = Modifier.size(40.dp).semantics { contentDescription = downloadCd },
+                                                ) {
+                                                    Box(contentAlignment = Alignment.Center) {
+                                                        Icon(AppIcons.Download, contentDescription = null, tint = MaterialTheme.colorScheme.onSecondaryContainer)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                                    modifier = Modifier.clickable(enabled = busy == null) {
+                                        scope.launch {
+                                            busy = pack.id
+                                            progress = 0f
+                                            failed = null
+                                            try {
+                                                vm.installTafsir(pack) { done, total -> progress = if (total > 0) done.toFloat() / total else 0f }
+                                            } catch (e: CancellationException) {
+                                                throw e
+                                            } catch (e: Exception) {
+                                                android.util.Log.w("TafsirPacks", "Gagal mengunduh ${pack.id}", e)
+                                                failed = label
+                                                failedWasUpdate = false
+                                            } finally {
+                                                busy = null
+                                            }
+                                        }
+                                    },
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            failed?.let {
+                item {
+                    Text(
+                        stringResource(if (failedWasUpdate) R.string.translation_update_failed else R.string.translation_download_failed, it),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.padding(top = 8.dp),
+                    )
+                }
+            }
+        }
+    }
+}
