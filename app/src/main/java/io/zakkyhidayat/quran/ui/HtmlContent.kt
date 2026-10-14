@@ -74,6 +74,7 @@ fun parseHtml(html: String, linkStyle: SpanStyle, onLink: (String) -> Unit): Lis
                 val marker = if (ordered) "$listCounter." else "•"
                 open { HtmlBlock.Item(marker, it) }
             }
+            "br" -> if (!closing) builder?.append("\n")
             "strong", "b" -> builder?.let { if (closing) it.pop() else it.pushStyle(SpanStyle(fontWeight = FontWeight.Bold)) }
             "em", "i" -> builder?.let { if (closing) it.pop() else it.pushStyle(SpanStyle(fontStyle = FontStyle.Italic)) }
             "a" -> builder?.let {
@@ -90,10 +91,34 @@ fun parseHtml(html: String, linkStyle: SpanStyle, onLink: (String) -> Unit): Lis
     return blocks
 }
 
+private fun HtmlBlock.length() = when (this) {
+    is HtmlBlock.Heading -> text.length
+    is HtmlBlock.Paragraph -> text.length
+    is HtmlBlock.Item -> text.length
+}
+
+/** Jumlah huruf semua blok (tanpa tag), untuk memutuskan apakah teks perlu dipotong. */
+fun htmlTextLength(html: String): Int = parseHtml(html, SpanStyle()) { }.sumOf { it.length() }
+
+/** Blok-blok pertama sampai jumlah hurufnya mencapai [maxChars]; blok yang melewati batas ikut utuh. */
+fun limitBlocks(blocks: List<HtmlBlock>, maxChars: Int): List<HtmlBlock> {
+    if (maxChars == Int.MAX_VALUE) return blocks
+    var total = 0
+    val out = ArrayList<HtmlBlock>()
+    for (b in blocks) {
+        if (total >= maxChars) break
+        out += b
+        total += b.length()
+    }
+    return out
+}
+
 @Composable
-fun HtmlContent(html: String, modifier: Modifier = Modifier, onLink: (String) -> Unit) {
+fun HtmlContent(html: String, modifier: Modifier = Modifier, maxChars: Int = Int.MAX_VALUE, onLink: (String) -> Unit) {
     val linkStyle = SpanStyle(color = MaterialTheme.colorScheme.primary, textDecoration = TextDecoration.Underline)
-    val blocks = remember(html, linkStyle) { parseHtml(html, linkStyle, onLink) }
+    val parsed = remember(html, linkStyle) { parseHtml(html, linkStyle, onLink) }
+    // Teks yang sangat panjang (tafsir) hanya ditampilkan sampai batas huruf; blok yang melewati batas ikut tampil utuh.
+    val blocks = remember(parsed, maxChars) { limitBlocks(parsed, maxChars) }
     Column(modifier, verticalArrangement = Arrangement.spacedBy(12.dp)) {
         blocks.forEach { block ->
             when (block) {

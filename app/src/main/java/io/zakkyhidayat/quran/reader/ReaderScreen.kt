@@ -124,6 +124,7 @@ fun ReaderScreen(
     onOpenSearch: () -> Unit,
     onOpenSettings: () -> Unit,
     onOpenSurahInfo: (Int) -> Unit,
+    onOpenTafsirSettings: () -> Unit = onOpenSettings,
 ) {
     val surahs by vm.surahs.collectAsStateWithLifecycle()
     val pageMeta by vm.pageMeta.collectAsStateWithLifecycle()
@@ -436,6 +437,7 @@ fun ReaderScreen(
                 extras = extras,
                 onOpenAyah = { s, a -> vm.goToAyah(s, a, openSheet = true) },
                 surahNames = surahs,
+                tafsir = { TafsirCard(vm, shown.surah, shown.ayah, onOpenTafsirSettings) },
             )
         }
     }

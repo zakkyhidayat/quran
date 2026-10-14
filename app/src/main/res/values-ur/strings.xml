@@ -248,6 +248,10 @@
     <string name="update_tafsir_cd">تفسیر %1$s اپ ڈیٹ کریں</string>
     <string name="tafsir_updating_cd">تفسیر %1$s اپ ڈیٹ ہو رہی ہے</string>
     <string name="tafsir_loading_cd">تفاسیر لوڈ ہو رہی ہیں</string>
+    <string name="tafsir_sheet_hint">اس آیت کی تشریح پڑھنے کے لیے کوئی تفسیر ڈاؤن لوڈ کریں۔</string>
+    <string name="tafsir_none_for_ayah">اس تفسیر میں اس آیت پر کوئی کلام نہیں۔</string>
+    <string name="tafsir_show_more">مزید دکھائیں</string>
+    <string name="tafsir_show_less">کم دکھائیں</string>
     <string name="settings_backup_sub">برآمد، بحالی، خودکار بیک اپ</string>
     <string name="settings_backup_on">خودکار بیک اپ فعال ہے</string>
     <string name="settings_permissions_sub">ایپ کن چیزوں تک رسائی رکھتی ہے اور کیوں</string>

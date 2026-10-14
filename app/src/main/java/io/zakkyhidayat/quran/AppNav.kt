@@ -158,6 +158,7 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
                     onOpenSearch = { nav.navigate("search") },
                     onOpenSettings = openSettings,
                     onOpenSurahInfo = { nav.navigate("surah/$it") },
+                    onOpenTafsirSettings = { vm.dismissSheet(); nav.navigate(SettingsPage.Tafsir.route) },
                 )
             }
             screen("surah/{id}", arguments = listOf(navArgument("id") { type = NavType.IntType })) { entry ->

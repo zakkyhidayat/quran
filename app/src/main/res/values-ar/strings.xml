@@ -248,6 +248,10 @@
     <string name="update_tafsir_cd">تحديث التفسير %1$s</string>
     <string name="tafsir_updating_cd">جارٍ تحديث التفسير %1$s</string>
     <string name="tafsir_loading_cd">جارٍ تحميل التفاسير</string>
+    <string name="tafsir_sheet_hint">نزّل تفسيرًا لقراءة شرح هذه الآية.</string>
+    <string name="tafsir_none_for_ayah">لا يتناول هذا التفسير هذه الآية.</string>
+    <string name="tafsir_show_more">عرض المزيد</string>
+    <string name="tafsir_show_less">عرض أقل</string>
     <string name="settings_backup_sub">تصدير، استعادة، نسخ تلقائي</string>
     <string name="settings_backup_on">النسخ التلقائي مفعّل</string>
     <string name="settings_permissions_sub">ما يمكن للتطبيق الوصول إليه ولماذا</string>

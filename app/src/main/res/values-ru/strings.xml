@@ -248,6 +248,10 @@
     <string name="update_tafsir_cd">Обновить тафсир %1$s</string>
     <string name="tafsir_updating_cd">Обновление тафсира %1$s</string>
     <string name="tafsir_loading_cd">Загрузка тафсиров</string>
+    <string name="tafsir_sheet_hint">Скачайте тафсир, чтобы прочитать толкование этого аята.</string>
+    <string name="tafsir_none_for_ayah">В этом тафсире нет толкования этого аята.</string>
+    <string name="tafsir_show_more">Показать больше</string>
+    <string name="tafsir_show_less">Показать меньше</string>
     <string name="settings_backup_sub">Экспорт, восстановление, автокопирование</string>
     <string name="settings_backup_on">Автокопирование включено</string>
     <string name="settings_permissions_sub">К чему есть доступ у приложения и зачем</string>

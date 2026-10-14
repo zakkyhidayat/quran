@@ -249,6 +249,10 @@
     <string name="update_tafsir_cd">Update tafsir %1$s</string>
     <string name="tafsir_updating_cd">Updating tafsir %1$s</string>
     <string name="tafsir_loading_cd">Loading tafsir</string>
+    <string name="tafsir_sheet_hint">Download a tafsir to read the explanation of this verse.</string>
+    <string name="tafsir_none_for_ayah">This tafsir has no commentary for this verse.</string>
+    <string name="tafsir_show_more">Show more</string>
+    <string name="tafsir_show_less">Show less</string>
     <string name="settings_backup_sub">Export, restore, auto backup</string>
     <string name="settings_backup_on">Auto backup is on</string>
     <string name="settings_permissions_sub">What the app may access and why</string>

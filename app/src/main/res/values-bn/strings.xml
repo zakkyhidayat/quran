@@ -248,6 +248,10 @@
     <string name="update_tafsir_cd">তাফসীর %1$s আপডেট করুন</string>
     <string name="tafsir_updating_cd">তাফসীর %1$s আপডেট হচ্ছে</string>
     <string name="tafsir_loading_cd">তাফসীর লোড হচ্ছে</string>
+    <string name="tafsir_sheet_hint">এই আয়াতের ব্যাখ্যা পড়তে একটি তাফসীর ডাউনলোড করুন।</string>
+    <string name="tafsir_none_for_ayah">এই তাফসীরে এই আয়াতের কোনো আলোচনা নেই।</string>
+    <string name="tafsir_show_more">আরও দেখুন</string>
+    <string name="tafsir_show_less">কম দেখুন</string>
     <string name="settings_backup_sub">রপ্তানি, পুনরুদ্ধার, স্বয়ংক্রিয় ব্যাকআপ</string>
     <string name="settings_backup_on">স্বয়ংক্রিয় ব্যাকআপ চালু</string>
     <string name="settings_permissions_sub">অ্যাপ কী ব্যবহার করে এবং কেন</string>

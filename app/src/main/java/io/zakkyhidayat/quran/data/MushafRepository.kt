@@ -173,6 +173,21 @@ class MushafRepository(context: Context) {
 
     suspend fun deleteContent(kind: ContentKind, id: String) = withContext(Dispatchers.IO) { content.delete(kind, id) }
 
+    /**
+     * Tafsir [packId] untuk ayat [surah]:[ayah], atau null bila paket tidak terpasang atau tidak membahas ayat itu. Bila beberapa
+     * kelompok tumpang tindih (ada di beberapa sumber QUL), dipakai kelompok yang mulai paling dekat sebelum ayat.
+     */
+    suspend fun tafsirFor(packId: String, surah: Int, ayah: Int): TafsirEntry? = withContext(Dispatchers.IO) {
+        val pack = content.database(ContentKind.Tafsir, packId) ?: return@withContext null
+        val key = tafsirKey(surah, ayah).toString()
+        pack.rawQuery("SELECT start, \"end\", text FROM tafsir WHERE start <= ? AND \"end\" >= ? ORDER BY start DESC LIMIT 1", arrayOf(key, key)).use { c ->
+            if (!c.moveToFirst()) return@use null
+            val start = c.getInt(0)
+            val end = c.getInt(1)
+            TafsirEntry(packId, start / 1000, start % 1000, end / 1000, end % 1000, normalizeTafsirHtml(c.getString(2)))
+        }
+    }
+
     /** Kode bahasa info surah yang bisa dibaca sekarang: Inggris (bawaan) ditambah paket yang sudah diunduh. */
     suspend fun surahInfoLanguages(): List<String> =
         listOf("en") + content.installed(ContentKind.SurahInfo).map { it.lang }.filter { it != "en" }.distinct()

@@ -265,6 +265,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     val tafsirInstalled = MutableStateFlow<List<InstalledContentPack>>(emptyList())
 
+    /** Tafsir yang dipilih di lembar ayat (id paket); null = tafsir terpasang pertama. Bertahan selama aplikasi hidup. */
+    val tafsirChoice = MutableStateFlow<String?>(null)
+
     /** Tafsir terpasang yang punya versi lebih baru di katalog, menurut id. Diisi [checkTafsirUpdates]. */
     val tafsirUpdates = MutableStateFlow<Map<String, ContentPack>>(emptyMap())
 

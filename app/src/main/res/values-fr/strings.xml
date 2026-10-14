@@ -248,6 +248,10 @@
     <string name="update_tafsir_cd">Mettre à jour le tafsir %1$s</string>
     <string name="tafsir_updating_cd">Mise à jour du tafsir %1$s</string>
     <string name="tafsir_loading_cd">Chargement des tafsirs</string>
+    <string name="tafsir_sheet_hint">Téléchargez un tafsir pour lire l’explication de ce verset.</string>
+    <string name="tafsir_none_for_ayah">Ce tafsir ne commente pas ce verset.</string>
+    <string name="tafsir_show_more">Afficher plus</string>
+    <string name="tafsir_show_less">Afficher moins</string>
     <string name="settings_backup_sub">Exporter, restaurer, sauvegarde automatique</string>
     <string name="settings_backup_on">Sauvegarde automatique activée</string>
     <string name="settings_permissions_sub">Ce que l’application utilise et pourquoi</string>

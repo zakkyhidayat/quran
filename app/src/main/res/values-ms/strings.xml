@@ -248,6 +248,10 @@
     <string name="update_tafsir_cd">Kemas kini tafsir %1$s</string>
     <string name="tafsir_updating_cd">Mengemas kini tafsir %1$s</string>
     <string name="tafsir_loading_cd">Memuatkan tafsir</string>
+    <string name="tafsir_sheet_hint">Muat turun tafsir untuk membaca penjelasan ayat ini.</string>
+    <string name="tafsir_none_for_ayah">Tafsir ini tidak membincangkan ayat ini.</string>
+    <string name="tafsir_show_more">Tunjukkan lagi</string>
+    <string name="tafsir_show_less">Tunjukkan kurang</string>
     <string name="settings_backup_sub">Eksport, pulihkan, sandaran automatik</string>
     <string name="settings_backup_on">Sandaran automatik aktif</string>
     <string name="settings_permissions_sub">Akses yang digunakan aplikasi dan sebabnya</string>

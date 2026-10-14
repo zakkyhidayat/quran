@@ -248,6 +248,10 @@
     <string name="update_tafsir_cd">به‌روزرسانی تفسیر %1$s</string>
     <string name="tafsir_updating_cd">در حال به‌روزرسانی تفسیر %1$s</string>
     <string name="tafsir_loading_cd">در حال بارگذاری تفسیرها</string>
+    <string name="tafsir_sheet_hint">برای خواندن توضیح این آیه، یک تفسیر دانلود کنید.</string>
+    <string name="tafsir_none_for_ayah">این تفسیر درباره این آیه توضیحی ندارد.</string>
+    <string name="tafsir_show_more">نمایش بیشتر</string>
+    <string name="tafsir_show_less">نمایش کمتر</string>
     <string name="settings_backup_sub">برون‌بری، بازیابی، پشتیبان خودکار</string>
     <string name="settings_backup_on">پشتیبان خودکار روشن است</string>
     <string name="settings_permissions_sub">دسترسی‌های برنامه و دلیل آن‌ها</string>
