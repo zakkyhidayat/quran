@@ -1,5 +1,5 @@
 (async () => {
-  const FORMATS = ["translation-with-footnote-tags.sqlite"];
+  const FORMATS = ["sqlite"];
   const FILTER = "";
   const DELAY_MS = 3000;
 
