@@ -15,7 +15,7 @@ King Fahd Complex edition, with optional tajweed colouring, translations, and ad
 
 **How to install (Android 8 or newer):**
 
-1. Tap one of the buttons above on your phone. The APK file downloads.
+1. Tap the **Download Quran** button above on your phone. The APK file downloads.
 2. Open the downloaded file. If Android asks, allow your browser or file manager to **install unknown apps**.
 3. Tap **Install**.
 

@@ -257,6 +257,9 @@
     <string name="topic_related">Topik berkaitan</string>
     <string name="tab_home">Utama</string>
     <string name="home_votd">Ayat hari ini</string>
+    <string name="home_votd_morning">Pagi</string>
+    <string name="home_votd_afternoon">Tengah hari</string>
+    <string name="home_votd_night">Malam</string>
     <string name="home_sunnah">Bacaan sunnah</string>
     <string name="home_sunnah_now">Dianjurkan sekarang</string>
     <string name="home_history">Sejarah bacaan</string>

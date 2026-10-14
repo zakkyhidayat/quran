@@ -36,6 +36,18 @@ class CollectionsTest {
     }
 
     @Test
+    fun `tiga ayat hari ini stabil dan berbeda untuk pagi siang malam`() {
+        val pool = listOf(AyahRange(1, 1, 1), AyahRange(2, 1, 1), AyahRange(3, 1, 1), AyahRange(4, 1, 1))
+        val day = LocalDate.of(2026, 10, 9)
+        val picks = Collections.picksForDay(pool, day)
+        assertEquals(3, picks.size)
+        assertEquals(3, picks.toSet().size)
+        assertEquals(picks, Collections.picksForDay(pool, day))
+        assertEquals(emptyList<AyahRange?>(), Collections.picksForDay(emptyList(), day, 0))
+        assertEquals(listOf(null, null, null), Collections.picksForDay(emptyList(), day))
+    }
+
+    @Test
     fun `waktu bacaan sunnah`() {
         val thursdayEvening = LocalDateTime.of(2026, 10, 8, 19, 0)
         val fridayNoon = LocalDateTime.of(2026, 10, 9, 12, 0)

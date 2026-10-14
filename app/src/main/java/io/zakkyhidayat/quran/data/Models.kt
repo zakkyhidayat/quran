@@ -91,6 +91,10 @@ data class Topic(
     val ayahCount: Int,
 )
 
+/** QUL menyediakan nama Inggris dan Arab; gunakan nama Arab saat UI berbahasa Arab, selain itu fallback Inggris. */
+fun Topic.localizedName(language: String): String =
+    if (language == "ar") nameAr?.takeIf(String::isNotBlank) ?: name else name
+
 /** Tema untuk sekelompok ayat berurutan [ayahFrom]..[ayahTo] dalam satu surah. */
 data class AyahTheme(val surah: Int, val ayahFrom: Int, val ayahTo: Int, val theme: String, val keywords: String?)
 

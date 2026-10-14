@@ -32,9 +32,17 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.background
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.waitForUpOrCancellation
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
@@ -61,6 +69,7 @@ import io.zakkyhidayat.quran.ui.AppIcons
 import io.zakkyhidayat.quran.ui.segmentedItemColors
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 /** Tujuan yang dibuka dari beranda: kumpulan ayat (judul + rujukan) atau daftar koleksi. */
 sealed interface HomeTarget {
@@ -72,10 +81,16 @@ sealed interface HomeTarget {
 private val ListPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 96.dp)
 private const val HISTORY_SHOWN = 5
 
-/** Beranda: ayat hari ini, bacaan sunnah sesuai waktu, histori bacaan, dan koleksi ayat. */
+/** Beranda: ayat harian, histori bacaan, bacaan sunnah sesuai waktu, dan koleksi ayat. */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun HomeTab(vm: AppViewModel, onOpenReader: () -> Unit, onOpen: (HomeTarget) -> Unit, onOpenExplore: (ExploreEntry) -> Unit = {}) {
+fun HomeTab(
+    vm: AppViewModel,
+    onOpenReader: () -> Unit,
+    onOpen: (HomeTarget) -> Unit,
+    onOpenExplore: (ExploreEntry) -> Unit = {},
+    onVotdGestureChanged: (Boolean) -> Unit = {},
+) {
     val exploreCounts by vm.exploreCounts.collectAsStateWithLifecycle()
     val surahs by vm.surahs.collectAsStateWithLifecycle()
     val history by vm.history.entries.collectAsStateWithLifecycle()
@@ -87,38 +102,7 @@ fun HomeTab(vm: AppViewModel, onOpenReader: () -> Unit, onOpen: (HomeTarget) -> 
     val historyShown = history.take(HISTORY_SHOWN)
 
     LazyColumn(Modifier.fillMaxSize(), contentPadding = ListPadding, verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
-        item(key = "votd") { VerseOfTheDay(vm, onOpenReader) }
-
-        exploreCounts?.takeIf { it.any }?.let { counts ->
-            // Carousel meluber ke tepi layar: padding horizontal daftar dibatalkan, carousel punya padding sendiri.
-            item(key = "explore") { ExploreCarousel(counts, onOpenExplore, Modifier.layout { m, c -> val w = c.maxWidth + 32.dp.roundToPx(); val p = m.measure(c.copy(minWidth = w, maxWidth = w)); layout(c.maxWidth, p.height) { p.place(-16.dp.roundToPx(), 0) } }.padding(top = 12.dp)) }
-        }
-
-        item(key = "sunnah_h") { SectionHeader(stringResource(R.string.home_sunnah)) }
-        itemsIndexed(sunnah, key = { _, s -> "s_${s.name}" }) { index, s ->
-            val nowLabel = stringResource(R.string.home_sunnah_now)
-            val overline: (@Composable () -> Unit)? =
-                if (s.time.isNow(now)) { { Text(nowLabel, color = MaterialTheme.colorScheme.primary) } } else null
-            SegmentedListItem(
-                onClick = { onOpen(HomeTarget.Sunnah(s)) },
-                shapes = ListItemDefaults.segmentedShapes(index, sunnah.size),
-                colors = segmentedItemColors(),
-                leadingContent = {
-                    val icon = if (s.time == io.zakkyhidayat.quran.data.SunnahTime.Night) AppIcons.DarkMode else AppIcons.MenuBook
-                    Surface(
-                        shape = CircleShape,
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    ) {
-                        androidx.compose.foundation.layout.Box(Modifier.size(40.dp), contentAlignment = Alignment.Center) {
-                            Icon(icon, contentDescription = null)
-                        }
-                    }
-                },
-                overlineContent = overline,
-                supportingContent = { Text(sunnahNotes[index], maxLines = 2, overflow = TextOverflow.Ellipsis) },
-            ) { Text(sunnahTitles[index]) }
-        }
+        item(key = "votd") { VerseOfTheDay(vm, onOpenReader, onVotdGestureChanged) }
 
         item(key = "history_h") {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -161,6 +145,37 @@ fun HomeTab(vm: AppViewModel, onOpenReader: () -> Unit, onOpen: (HomeTarget) -> 
             ) { Text("${surah?.nameLatin.orEmpty()} ${h.surah}:${h.ayah}") }
         }
 
+        exploreCounts?.takeIf { it.any }?.let { counts ->
+            // Carousel meluber ke tepi layar: padding horizontal daftar dibatalkan, carousel punya padding sendiri.
+            item(key = "explore") { ExploreCarousel(counts, onOpenExplore, Modifier.layout { m, c -> val w = c.maxWidth + 32.dp.roundToPx(); val p = m.measure(c.copy(minWidth = w, maxWidth = w)); layout(c.maxWidth, p.height) { p.place(-16.dp.roundToPx(), 0) } }.padding(top = 12.dp)) }
+        }
+
+        item(key = "sunnah_h") { SectionHeader(stringResource(R.string.home_sunnah)) }
+        itemsIndexed(sunnah, key = { _, s -> "s_${s.name}" }) { index, s ->
+            val nowLabel = stringResource(R.string.home_sunnah_now)
+            val overline: (@Composable () -> Unit)? =
+                if (s.time.isNow(now)) { { Text(nowLabel, color = MaterialTheme.colorScheme.primary) } } else null
+            SegmentedListItem(
+                onClick = { onOpen(HomeTarget.Sunnah(s)) },
+                shapes = ListItemDefaults.segmentedShapes(index, sunnah.size),
+                colors = segmentedItemColors(),
+                leadingContent = {
+                    val icon = if (s.time == io.zakkyhidayat.quran.data.SunnahTime.Night) AppIcons.DarkMode else AppIcons.MenuBook
+                    Surface(
+                        shape = CircleShape,
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    ) {
+                        androidx.compose.foundation.layout.Box(Modifier.size(40.dp), contentAlignment = Alignment.Center) {
+                            Icon(icon, contentDescription = null)
+                        }
+                    }
+                },
+                overlineContent = overline,
+                supportingContent = { Text(sunnahNotes[index], maxLines = 2, overflow = TextOverflow.Ellipsis) },
+            ) { Text(sunnahTitles[index]) }
+        }
+
         item(key = "collections_h") { SectionHeader(stringResource(R.string.home_collections)) }
         items(CollectionKind.entries.chunked(2), key = { row -> "c_${row.first().name}" }) { row ->
             Row(Modifier.fillMaxWidth().height(IntrinsicSize.Max), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -201,20 +216,67 @@ private fun SectionHeader(text: String, modifier: Modifier = Modifier) {
     )
 }
 
-/**
- * Ayat hari ini: potongan 1-4 ayat dari koleksi kurasi (solusi, doa, adab), sama untuk semua pengguna pada hari yang
- * sama, berganti tiap tengah malam. Bukan ayat acak, supaya maknanya tidak terputus dari ayat sebelum/sesudahnya.
- */
+/** Tiga potongan harian kurasi yang dapat digeser; tiap kartu mewakili satu jendela waktu lokal delapan jam. */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun VerseOfTheDay(vm: AppViewModel, onOpenReader: () -> Unit) {
+private fun VerseOfTheDay(vm: AppViewModel, onOpenReader: () -> Unit, onGestureChanged: (Boolean) -> Unit) {
     val settings by vm.settingsRepository.settings.collectAsStateWithLifecycle(AppSettings())
     val surahs by vm.surahs.collectAsStateWithLifecycle()
     val translations by vm.translations.collectAsStateWithLifecycle()
-    val range by produceState<AyahRange?>(null) {
-        value = Collections.pickForDay(vm.collections.dailyPool(), LocalDate.now())
+    val day = remember { LocalDate.now() }
+    val pool by produceState<List<AyahRange>>(emptyList()) {
+        value = vm.collections.dailyPool()
     }
+    val ranges = remember(pool, day) { Collections.picksForDay(pool, day) }
+    val initialPage = when (LocalTime.now().hour) {
+        in 4..11 -> 0
+        in 12..19 -> 1
+        else -> 2
+    }
+    val pagerState = rememberPagerState(initialPage = initialPage) { DAILY_SLOT_LABELS.size }
+    HorizontalPager(
+        state = pagerState,
+        modifier = Modifier.fillMaxWidth().height(300.dp).padding(top = 8.dp),
+        key = { it },
+    ) { page ->
+        VerseOfTheDayCard(
+            vm = vm,
+            range = ranges.getOrNull(page),
+            surahs = surahs,
+            settings = settings,
+            translations = translations,
+            slotLabel = stringResource(DAILY_SLOT_LABELS[page]),
+            page = page,
+            onOpenReader = onOpenReader,
+            onGestureChanged = onGestureChanged,
+        )
+    }
+}
+
+private val DAILY_SLOT_LABELS = listOf(
+    R.string.home_votd_morning,
+    R.string.home_votd_afternoon,
+    R.string.home_votd_night,
+)
+
+@Composable
+private fun VerseOfTheDayCard(
+    vm: AppViewModel,
+    range: AyahRange?,
+    surahs: Map<Int, io.zakkyhidayat.quran.data.Surah>,
+    settings: AppSettings,
+    translations: List<io.zakkyhidayat.quran.data.TranslationInfo>,
+    slotLabel: String,
+    page: Int,
+    onOpenReader: () -> Unit,
+    onGestureChanged: (Boolean) -> Unit,
+) {
+    val onGestureChangedState = rememberUpdatedState(onGestureChanged)
     val ayahs by produceState<List<AyahDetail>>(emptyList(), range, settings.translationIds, translations) {
-        val r = range ?: return@produceState
+        val r = range ?: run {
+            value = emptyList()
+            return@produceState
+        }
         value = (r.from..r.to).map { vm.mushaf.ayahDetail(r.surah, it, settings.translationIds.take(1)) }
     }
     val context = LocalContext.current
@@ -232,30 +294,46 @@ private fun VerseOfTheDay(vm: AppViewModel, onOpenReader: () -> Unit) {
         enabled = r != null,
         colors = CardDefaults.cardColors(containerColor = Color.Transparent, contentColor = MaterialTheme.colorScheme.onPrimaryContainer),
         shape = shape,
-        modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .pointerInput(Unit) {
+                awaitEachGesture {
+                    awaitFirstDown(requireUnconsumed = false)
+                    onGestureChangedState.value(true)
+                    try {
+                        waitForUpOrCancellation()
+                    } finally {
+                        onGestureChangedState.value(false)
+                    }
+                }
+            },
     ) {
         Column(
-            Modifier.fillMaxWidth().background(gradient, shape).padding(20.dp),
+            Modifier.fillMaxSize().background(gradient, shape).padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(AppIcons.Favorite, contentDescription = null)
                 Text(stringResource(R.string.home_votd), style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(start = 8.dp).weight(1f))
-                if (r != null) {
-                    Text(
-                        "${surahs[r.surah]?.nameLatin.orEmpty()} $r",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    )
-                }
+                Text(slotLabel, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimaryContainer)
+            }
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text(
+                    r?.let { "${surahs[it.surah]?.nameLatin.orEmpty()} $it" }.orEmpty(),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                )
+                Text("${page + 1}/${DAILY_SLOT_LABELS.size}", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
             }
             if (ayahs.isNotEmpty()) {
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                     Text(
                         ayahs.joinToString(" ") { it.arabic },
-                        style = MaterialTheme.typography.headlineSmall.copy(fontFamily = arabicFont, lineHeight = MaterialTheme.typography.headlineSmall.fontSize * 1.9f),
+                        style = MaterialTheme.typography.bodyLarge.copy(fontFamily = arabicFont, lineHeight = MaterialTheme.typography.bodyLarge.fontSize * 1.8f),
                         textAlign = TextAlign.Start,
                         modifier = Modifier.fillMaxWidth(),
+                        maxLines = 4,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
                 val translation = ayahs.mapNotNull { a -> a.translations.firstOrNull()?.text?.let(::plainTranslation)?.takeIf { it.isNotBlank() } }
@@ -264,6 +342,8 @@ private fun VerseOfTheDay(vm: AppViewModel, onOpenReader: () -> Unit) {
                         translation.joinToString(" "),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        maxLines = 4,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             }

@@ -257,6 +257,9 @@
     <string name="topic_related">İlgili konular</string>
     <string name="tab_home">Ana sayfa</string>
     <string name="home_votd">Günün ayeti</string>
+    <string name="home_votd_morning">Sabah</string>
+    <string name="home_votd_afternoon">Öğleden sonra</string>
+    <string name="home_votd_night">Gece</string>
     <string name="home_sunnah">Sünnet okumalar</string>
     <string name="home_sunnah_now">Şimdi tavsiye edilir</string>
     <string name="home_history">Okuma geçmişi</string>

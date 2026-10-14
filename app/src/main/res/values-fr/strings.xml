@@ -257,6 +257,9 @@
     <string name="topic_related">Thèmes liés</string>
     <string name="tab_home">Accueil</string>
     <string name="home_votd">Verset du jour</string>
+    <string name="home_votd_morning">Matin</string>
+    <string name="home_votd_afternoon">Après-midi</string>
+    <string name="home_votd_night">Nuit</string>
     <string name="home_sunnah">Lectures de la Sunna</string>
     <string name="home_sunnah_now">Recommandé maintenant</string>
     <string name="home_history">Historique de lecture</string>

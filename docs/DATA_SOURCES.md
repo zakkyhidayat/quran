@@ -38,6 +38,8 @@ tombol unduhnya butuh login. Ambil format **SQLite** kecuali dicatat lain.
 | 11 | Info surah Inggris | [surah-info/3](https://qul.tarteel.ai/resources/surah-info/3) | `surah-info-en/surah-info-en.db` | Layar info surah |
 | 12 | Transliterasi Latin (tajwid, simple) | [transliteration/469](https://qul.tarteel.ai/resources/transliteration/469), `english-transliteration-tajweed-simple` | `translit-tajweed-simple/` | Kartu transliterasi di sheet ayat |
 | 13 | Terjemahan Indonesia, Kemenag RI (berkas `quran-id-with-footnote-tags`) | [translation/224](https://qul.tarteel.ai/resources/translation/224) ("Indonesian Islamic affairs ministry"; berkas unduhannya bernama `quran-id-...`) | `quran-id-with-footnote-tags/` | Terjemahan |
+| 14 | Info surah bahasa lain (Italia `it`, Malayalam `ml`, Tamil `ta`, Urdu `ur`; Indonesia dan Inggris ada di baris 10-11) | [surah-info](https://qul.tarteel.ai/resources/surah-info), `surah-info-<kode>.db` | `surah-info/` (`python tools/qul_catch.py surah-info --existing`) | Belum dipakai build; kandidat tambahan bahasa layar info surah |
+| 15 | Tafsir (sekitar 108 sumber; unduh massal lewat `tools/qul_bulk_download.js` di Console halaman login) | [tafsir](https://qul.tarteel.ai/resources/tafsir) | `tafsir/` (`python tools/qul_catch.py tafsir --existing`) | Belum dipakai build; aplikasi belum punya fitur tafsir. Status lokal 2026-10-14: 107 dari 108 (lihat catatan di bawah) |
 | 14 | Terjemahan Indonesia, The Sabiq Company | [translation/194](https://qul.tarteel.ai/resources/translation/194) | `the-sabiq-company-with-footnote-tags/` | Terjemahan |
 | 15 | Terjemahan Indonesia, King Fahad Quran Complex | [translation/173](https://qul.tarteel.ai/resources/translation/173) | `king-fahad-quran-complex-with-footnote-tags/` | Terjemahan |
 | 16 | Terjemahan Inggris, Saheeh International | [translation/193](https://qul.tarteel.ai/resources/translation/193) | `en-sahih-international-with-footnote-tags/` | Terjemahan |
@@ -66,6 +68,11 @@ Lima sumber QUL untuk fitur Jelajahi (topik, tema ayat, ayat serupa, mutasyabiha
 Folder `morphology/` boleh berisi beberapa berkas (satu per jenis); `build_db.py` mengenali tabelnya dari nama (`roots`/`word_roots`,
 `lemmas`/`word_lemmas`, `stems`/`word_stems`).
 
+Sumber topik QUL yang dibundel menyediakan `name` dan `description` dalam bahasa Inggris serta `arabic_name`; tidak ada
+terjemahan Indonesia atau Melayu di skema sumber ini. UI Jelajahi memakai nama Arab ketika bahasa aplikasi Arab dan
+fallback nama Inggris untuk bahasa lain; deskripsi dan tema ayat tetap berbahasa Inggris karena terjemahan lokalnya tidak
+tersedia. Teks ayat Qur'an tidak diubah dan tetap ditampilkan dalam bahasa Arab.
+
 Skema yang dibaca skrip (dari berkas asli; nama kolom alternatif juga diterima, lihat `tools/build_db.py`):
 
 - **Topik** `topics/topics.db`: tabel `topics` (`topic_id`, `name`, `arabic_name`, `parent_id`, `thematic_parent_id`,
@@ -93,6 +100,21 @@ python tools/verify_quran.py
 ```
 
 Tabel dasar tidak disentuh. Ini juga menaikkan `user_version` ke `DATA_VERSION`.
+
+### Terjemahan topik dan tema (`tools/explore_i18n/`)
+
+QUL hanya menyediakan nama dan deskripsi topik serta teks tema dalam bahasa Inggris (nama topik juga dalam bahasa Arab).
+Terjemahan dibuat sendiri dan disimpan di git sebagai `tools/explore_i18n/<lang>.json`. Saat ini hanya ada `id.json`
+(lengkap per 2026-10-14: 2512/2512 topik, 1049/1049 tema).
+
+```json
+{"topics": {"<id topik>": {"name": "...", "description": "..."}}, "themes": {"<teks tema Inggris persis>": "..."}}
+```
+
+`build_db.py` (build penuh maupun `--explore-only`) memuatnya ke tabel `topics_i18n` dan `ayah_themes_i18n`. Aplikasi
+memilih baris sesuai bahasa UI (`in` dinormalisasi menjadi `id`). Entri yang belum diterjemahkan tidak perlu ditulis, karena
+aplikasi otomatis memakai teks Inggris. Terjemahannya hasil mesin (LLM), jadi istilah keagamaan perlu ditinjau sebelum rilis.
+Perubahan berkas ini baru sampai ke pengguna setelah `quran.db` dibangun ulang dan rilis `quran-data` diperbarui.
 
 ## Koleksi ayat (beranda)
 
@@ -221,3 +243,11 @@ QUL tidak memberi pemberitahuan. Periksa sendiri:
   mengubah berkas aslinya di APK. Atribusi ada di layar Tentang; pertahankan bila font diganti.
 - **Audio** (rencana): CDN audio Tarteel (`audio-cdn.tarteel.ai`) menurut dokumentasi QUL bukan dependensi produksi yang
   dijamin; simpan dan layani berkas audio sendiri.
+- **Unduhan tafsir bernama sama**: QUL memberi nama `tafsir-as-saadi.db.zip` ke beberapa bahasa, dan `qul_catch.py`
+  menamai salinan berikutnya `-1`, `-2`. Periksa isi (tag `lang=` pada kolom `text`) lalu beri awalan kode bahasa, misalnya
+  `ur-tafsir-as-saadi.db` dan `tr-tafsir-as-saadi.db`. Pada pengunduhan 2026-10-14, satu `tafsir-as-saadi.db.zip` ternyata
+  berisi Asseraj (hash sama dengan `asseraj-fi-bayan-gharib-alquran.db`). Akibatnya satu As-Sa'di versi bahasa lain belum ada;
+  unduh ulang manual dari halaman tafsir QUL. `tafsir-al-tha-alibi.db` dan `tafsir-al-tha-alibi-1.db` isinya berbeda dan
+  keduanya disimpan.
+- **Kategori tertukar**: file `surah-info-*.db` atau `phrases*.json` bisa tertangkap ke `tafsir/` bila diunduh saat skrip
+  kategori tafsir masih berjalan. Pindahkan ke `surah-info/` atau `phrases/`.

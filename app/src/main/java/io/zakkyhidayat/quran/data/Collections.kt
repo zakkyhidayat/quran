@@ -76,6 +76,14 @@ class Collections(private val context: Context) {
 
         fun pickForDay(pool: List<AyahRange>, day: LocalDate): AyahRange? =
             if (pool.isEmpty()) null else pool[Math.floorMod(day.toEpochDay(), pool.size.toLong()).toInt()]
+
+        /** Tiga potongan harian berurutan dan stabil, dipakai untuk pagi, siang, dan malam. */
+        fun picksForDay(pool: List<AyahRange>, day: LocalDate, count: Int = 3): List<AyahRange?> {
+            if (count <= 0) return emptyList()
+            if (pool.isEmpty()) return List(count) { null }
+            val start = Math.floorMod(day.toEpochDay() * count, pool.size.toLong()).toInt()
+            return List(count) { pool[(start + it) % pool.size] }
+        }
     }
 }
 

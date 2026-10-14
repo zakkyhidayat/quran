@@ -258,6 +258,9 @@
     <string name="topic_related">Related topics</string>
     <string name="tab_home">Home</string>
     <string name="home_votd">Ayah of the day</string>
+    <string name="home_votd_morning">Morning</string>
+    <string name="home_votd_afternoon">Afternoon</string>
+    <string name="home_votd_night">Night</string>
     <string name="home_sunnah">Sunnah readings</string>
     <string name="home_sunnah_now">Recommended now</string>
     <string name="home_history">Reading history</string>

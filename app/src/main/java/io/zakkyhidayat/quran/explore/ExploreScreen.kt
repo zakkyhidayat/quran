@@ -40,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -47,6 +48,7 @@ import io.zakkyhidayat.quran.AppViewModel
 import io.zakkyhidayat.quran.R
 import io.zakkyhidayat.quran.data.AyahRef
 import io.zakkyhidayat.quran.data.Topic
+import io.zakkyhidayat.quran.data.localizedName
 import io.zakkyhidayat.quran.ui.CenteredContent
 import io.zakkyhidayat.quran.ui.segmentedItemColors
 
@@ -57,6 +59,7 @@ private val ListPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, 
 @Composable
 fun ExploreScreen(vm: AppViewModel, onBack: () -> Unit, onOpenTopic: (Int) -> Unit) {
     val textState = rememberTextFieldState()
+    val language = LocalConfiguration.current.locales[0].language
     val searchBarState = androidx.compose.material3.rememberSearchBarState()
     val query = textState.text.toString()
     val topics by produceState<List<Topic>?>(null) { value = vm.mushaf.topics() }
@@ -98,7 +101,7 @@ fun ExploreScreen(vm: AppViewModel, onBack: () -> Unit, onOpenTopic: (Int) -> Un
                 }
             } else {
                 LazyColumn(Modifier.fillMaxSize().imePadding(), contentPadding = ListPadding, verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
-                    itemsIndexed(shown, key = { _, t -> t.id }) { index, t -> TopicRow(t, index, shown.size) { onOpenTopic(t.id) } }
+                    itemsIndexed(shown, key = { _, t -> t.id }) { index, t -> TopicRow(t, index, shown.size, language) { onOpenTopic(t.id) } }
                 }
             }
         }
@@ -107,14 +110,14 @@ fun ExploreScreen(vm: AppViewModel, onBack: () -> Unit, onOpenTopic: (Int) -> Un
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-internal fun TopicRow(t: Topic, index: Int, count: Int, onClick: () -> Unit) {
+internal fun TopicRow(t: Topic, index: Int, count: Int, language: String, onClick: () -> Unit) {
     SegmentedListItem(
         onClick = onClick,
         shapes = ListItemDefaults.segmentedShapes(index, count),
         colors = segmentedItemColors(),
         supportingContent = { Text(stringResource(R.string.topic_ayah_count, t.ayahCount)) },
-        trailingContent = t.nameAr?.let { { Text(it, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary) } },
-    ) { Text(t.name, maxLines = 2, overflow = TextOverflow.Ellipsis) }
+        trailingContent = t.nameAr?.takeIf { language != "ar" }?.let { { Text(it, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary) } },
+    ) { Text(t.localizedName(language), maxLines = 2, overflow = TextOverflow.Ellipsis) }
 }
 
 /** Satu topik: deskripsi, subtopik, dan ayat-ayatnya; ketuk ayat membuka pembaca di ayat itu. */
@@ -122,6 +125,7 @@ internal fun TopicRow(t: Topic, index: Int, count: Int, onClick: () -> Unit) {
 @Composable
 fun TopicScreen(vm: AppViewModel, topicId: Int, onBack: () -> Unit, onOpenTopic: (Int) -> Unit, onOpenAyah: (Int, Int) -> Unit) {
     val surahs by vm.surahs.collectAsStateWithLifecycle()
+    val language = LocalConfiguration.current.locales[0].language
     var loaded by remember(topicId) { mutableStateOf(false) }
     var topic by remember(topicId) { mutableStateOf<Topic?>(null) }
     var children by remember(topicId) { mutableStateOf(emptyList<Topic>()) }
@@ -137,7 +141,7 @@ fun TopicScreen(vm: AppViewModel, topicId: Int, onBack: () -> Unit, onOpenTopic:
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(topic?.name.orEmpty(), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                title = { Text(topic?.localizedName(language).orEmpty(), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                 navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back)) } },
             )
         },
@@ -149,11 +153,11 @@ fun TopicScreen(vm: AppViewModel, topicId: Int, onBack: () -> Unit, onOpenTopic:
                 }
                 if (children.isNotEmpty()) {
                     item { SectionTitle(stringResource(R.string.topic_subtopics)) }
-                    itemsIndexed(children, key = { _, t -> "c${t.id}" }) { index, t -> TopicRow(t, index, children.size) { onOpenTopic(t.id) } }
+                    itemsIndexed(children, key = { _, t -> "c${t.id}" }) { index, t -> TopicRow(t, index, children.size, language) { onOpenTopic(t.id) } }
                 }
                 if (related.isNotEmpty()) {
                     item { SectionTitle(stringResource(R.string.topic_related)) }
-                    itemsIndexed(related, key = { _, t -> "r${t.id}" }) { index, t -> TopicRow(t, index, related.size) { onOpenTopic(t.id) } }
+                    itemsIndexed(related, key = { _, t -> "r${t.id}" }) { index, t -> TopicRow(t, index, related.size, language) { onOpenTopic(t.id) } }
                 }
                 if (ayahs.isNotEmpty()) {
                     item { SectionTitle(stringResource(R.string.topic_ayahs)) }

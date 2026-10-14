@@ -257,6 +257,9 @@
     <string name="topic_related">متعلقہ موضوعات</string>
     <string name="tab_home">ہوم</string>
     <string name="home_votd">آج کی آیت</string>
+    <string name="home_votd_morning">صبح</string>
+    <string name="home_votd_afternoon">دوپہر</string>
+    <string name="home_votd_night">رات</string>
     <string name="home_sunnah">سنت قراءتیں</string>
     <string name="home_sunnah_now">ابھی مستحب ہے</string>
     <string name="home_history">تلاوت کی تاریخ</string>
