@@ -520,6 +520,490 @@
    "name": "Nabi Hud",
    "description": "Hud (هود) adalah nabi yang mulia dalam Islam (juga dikenal sebagai Eber) yang diutus kepada kaum Ad."
   },
+  "131": {
+   "name": "Tsamud",
+   "description": "Tsamud (ثمود) adalah nama kaum yang disebut dalam Al-Qur'an, yang memahat rumah dari batu di pegunungan Arab kuno. Kepada mereka diutus Nabi Saleh."
+  },
+  "132": {
+   "name": "Nabi Saleh",
+   "description": "Saleh (صالح) adalah nabi mulia dalam Islam yang diutus kepada kaum Tsamud."
+  },
+  "133": {
+   "name": "Madyan",
+   "description": "Madyan (مدين) adalah nama kaum yang disebut dalam Al-Qur'an, yang kepadanya diutus Nabi Syuaib."
+  },
+  "134": {
+   "name": "Nabi Syuaib",
+   "description": "Syuaib (شعيب) adalah nabi mulia dalam Islam yang oleh banyak orang dianggap sama dengan tokoh Yitro dalam Alkitab."
+  },
+  "135": {
+   "name": "Ular",
+   "description": "Ular (حية) adalah salah satu hewan yang disebut namanya dalam Al-Qur'an."
+  },
+  "136": {
+   "name": "Belalang",
+   "description": "Belalang (جرادة) adalah salah satu serangga yang disebut namanya dalam Al-Qur'an."
+  },
+  "137": {
+   "name": "Kutu",
+   "description": "Kutu (القمل) adalah salah satu serangga yang disebut namanya dalam Al-Qur'an."
+  },
+  "138": {
+   "name": "Katak",
+   "description": "Katak (ضفدع) adalah salah satu hewan yang disebut namanya dalam Al-Qur'an."
+  },
+  "139": {
+   "name": "Ikan",
+   "description": "Ikan (حوت) adalah salah satu ciptaan Allah yang disebut dalam Al-Qur'an."
+  },
+  "140": {
+   "name": "Anjing",
+   "description": "Anjing (كلب) adalah salah satu hewan yang disebut namanya dalam Al-Qur'an."
+  },
+  "141": {
+   "name": "Hunain",
+   "description": "Hunain (حنين) adalah nama tempat di Jazirah Arab yang disebut dalam Al-Qur'an, lokasi salah satu perang awal Islam."
+  },
+  "142": {
+   "name": "Uzair",
+   "description": "Uzair (عزير) adalah tokoh sejarah yang disebut dalam Al-Qur'an (dikenal juga sebagai Ezra), yang menurut keyakinan Islam dahulu secara keliru disebut \"putra Allah\"."
+  },
+  "143": {
+   "name": "Dahi",
+   "description": "Dahi (جبهة) adalah salah satu anggota tubuh yang disebut dalam Al-Qur'an."
+  },
+  "144": {
+   "name": "Surga Adn",
+   "description": "Surga Adn (جنات عدن) adalah nama tempat kenikmatan abadi di akhirat."
+  },
+  "145": {
+   "name": "Orang Arab Badui",
+   "description": "Orang Arab Badui (أعراب) disebut beberapa kali dalam Al-Qur'an."
+  },
+  "146": {
+   "name": "Kaum Ansar",
+   "description": "Kaum Ansar (أنصار) disebut dalam Al-Qur'an; mereka adalah penduduk Madinah yang menolong Nabi Muhammad saat hijrah dari Makkah (secara harfiah berarti \"para penolong\")."
+  },
+  "147": {
+   "name": "Madinah",
+   "description": "Madinah (المدينة المنورة) adalah kota suci dalam Islam (dikenal juga sebagai Yatsrib) yang terletak di wilayah Hijaz, Jazirah Arab."
+  },
+  "148": {
+   "name": "Kapal",
+   "description": "Kapal (سفينة) adalah salah satu benda buatan manusia yang disebut dalam Al-Qur'an."
+  },
+  "149": {
+   "name": "Mesir",
+   "description": "Mesir (مصر) adalah negeri yang disebut dalam Al-Qur'an, merujuk pada apa yang kini dikenal sebagai Mesir Kuno."
+  },
+  "150": {
+   "name": "Bukit Judi",
+   "description": "Al-Judi (الجودي) adalah gunung tempat bahtera Nabi Nuh berlabuh setelah banjir besar."
+  },
+  "151": {
+   "name": "Ubun-ubun",
+   "description": "Ubun-ubun (ناصية) adalah salah satu anggota tubuh yang disebut dalam Al-Qur'an."
+  },
+  "152": {
+   "name": "Bahasa Arab",
+   "description": "Bahasa Arab (العربية) disebut oleh Allah sebagai bahasa diturunkannya Al-Qur'an, dan merupakan bahasa bangsa Arab."
+  },
+  "153": {
+   "name": "Serigala",
+   "description": "Serigala (ذئب) adalah salah satu hewan yang disebut namanya dalam Al-Qur'an."
+  },
+  "154": {
+   "name": "Uang Dirham",
+   "description": "Uang dirham (دَراهِم) adalah salah satu benda buatan manusia yang disebut dalam Al-Qur'an."
+  },
+  "155": {
+   "name": "Pisau",
+   "description": "Pisau (سكينة) disebut dalam Al-Qur'an pada kisah Nabi Yusuf."
+  },
+  "156": {
+   "name": "Roti",
+   "description": "Roti (خبز) adalah salah satu makanan yang disebut dalam Al-Qur'an."
+  },
+  "157": {
+   "name": "Debu",
+   "description": "Debu (تراب) adalah salah satu zat fisik yang disebut dalam Al-Qur'an."
+  },
+  "158": {
+   "name": "Besi",
+   "description": "Besi (حديد) adalah salah satu jenis logam yang disebut namanya dalam Al-Qur'an."
+  },
+  "159": {
+   "name": "Bahasa",
+   "description": "Bahasa (لغة) adalah kategori untuk bahasa-bahasa yang disebut dalam Al-Qur'an."
+  },
+  "160": {
+   "name": "Gugusan Bintang",
+   "description": "Gugusan bintang (البروج) adalah salah satu benda langit yang disebut dalam Al-Qur'an; istilah Arabnya juga diterjemahkan sebagai \"bintang-bintang besar\"."
+  },
+  "161": {
+   "name": "Penduduk Aikah",
+   "description": "Penduduk Aikah (أصحاب الأيكة) adalah sebutan dalam Al-Qur'an untuk sekelompok orang dari kaum Nabi Syuaib."
+  },
+  "162": {
+   "name": "Penduduk Hijr",
+   "description": "Penduduk Hijr (أصحاب الحجر) adalah kelompok yang disebut dalam Al-Qur'an, sebagai nama lain kaum Tsamud."
+  },
+  "163": {
+   "name": "Bagal",
+   "description": "Bagal (بغل) adalah salah satu hewan yang disebut namanya dalam Al-Qur'an."
+  },
+  "164": {
+   "name": "Susu",
+   "description": "Susu (لبن) adalah salah satu makanan yang disebut dalam Al-Qur'an sebagai tanda penciptaan."
+  },
+  "165": {
+   "name": "Lebah",
+   "description": "Lebah (نحلة) adalah salah satu serangga yang disebut namanya dalam Al-Qur'an."
+  },
+  "166": {
+   "name": "Madu",
+   "description": "Madu (عسل) adalah salah satu makanan yang disebut dalam Al-Qur'an sebagai tanda penciptaan."
+  },
+  "167": {
+   "name": "Masjidil Aqsa",
+   "description": "Masjidil Aqsa (المسجد الأقصى) adalah masjid suci di Baitulmaqdis, tempat tersuci ketiga dalam Islam."
+  },
+  "168": {
+   "name": "Tanah",
+   "description": "Tanah (ثرى) adalah salah satu zat fisik yang disebut dalam Al-Qur'an."
+  },
+  "169": {
+   "name": "Ashabul Kahfi",
+   "description": "Ashabul Kahfi (أصحاب الكهف) adalah sekelompok orang yang kisahnya diceritakan dalam surah Al-Kahf (Gua)."
+  },
+  "170": {
+   "name": "Tembaga",
+   "description": "Tembaga (مهل) adalah salah satu jenis logam yang disebut dalam Al-Qur'an; istilah Arabnya juga diterjemahkan sebagai \"cairan tembaga\" atau \"minyak\"."
+  },
+  "171": {
+   "name": "Sutra",
+   "description": "Sutra (حرير) adalah salah satu bahan berharga yang disebut dalam Al-Qur'an."
+  },
+  "172": {
+   "name": "Zulkarnain",
+   "description": "Zulkarnain (ذو القرنين) adalah penguasa saleh yang disebut dalam Al-Qur'an, yang membangun tembok untuk menahan Yakjuj dan Makjuj. Kisahnya diceritakan dalam surah Al-Kahf (Gua)."
+  },
+  "173": {
+   "name": "Yakjuj dan Makjuj",
+   "description": "Yakjuj dan Makjuj (يأجوج ومأجوج) adalah kaum yang disebut dalam Al-Qur'an, yang tertahan di balik tembok besar."
+  },
+  "174": {
+   "name": "Firdaus",
+   "description": "Firdaus (الفردوس) adalah salah satu nama surga yang disebut dalam Al-Qur'an."
+  },
+  "175": {
+   "name": "Tinta",
+   "description": "Tinta (حبر) disebut dalam Al-Qur'an."
+  },
+  "176": {
+   "name": "Nabi Idris",
+   "description": "Idris (إدريس) adalah nabi mulia dalam Islam (dikenal juga sebagai Henokh) yang namanya disebut dalam Al-Qur'an."
+  },
+  "177": {
+   "name": "Samiri",
+   "description": "Samiri (السامرى) disebut dalam Al-Qur'an sebagai orang yang menentang Nabi Musa dan menyesatkan kaumnya untuk menyembah anak sapi emas."
+  },
+  "178": {
+   "name": "Alaqah",
+   "description": "Alaqah (علق) biasanya diterjemahkan sebagai sesuatu yang melekat atau segumpal darah, yaitu tahap awal perkembangan janin dalam rahim."
+  },
+  "179": {
+   "name": "Majusi",
+   "description": "Majusi (المجوس) adalah salah satu kelompok agama yang disebut dalam Al-Qur'an."
+  },
+  "180": {
+   "name": "Mutiara",
+   "description": "Mutiara (لؤلؤ) adalah salah satu bahan berharga yang disebut dalam Al-Qur'an."
+  },
+  "181": {
+   "name": "Biara",
+   "description": "Biara (صوامع) adalah salah satu tempat ibadah yang disebut dalam Al-Qur'an."
+  },
+  "182": {
+   "name": "Gereja",
+   "description": "Gereja (كنيسة) adalah salah satu tempat ibadah yang disebut dalam Al-Qur'an."
+  },
+  "183": {
+   "name": "Sinagoge",
+   "description": "Sinagoge (صلوات) adalah salah satu tempat ibadah yang disebut dalam Al-Qur'an."
+  },
+  "184": {
+   "name": "Lalat",
+   "description": "Lalat (ذباب) adalah salah satu serangga yang disebut namanya dalam Al-Qur'an."
+  },
+  "185": {
+   "name": "Bukit Sinai",
+   "description": "Bukit Sinai (طور سيناء) adalah gunung yang disebut dalam Al-Qur'an, terletak di Semenanjung Sinai, Mesir."
+  },
+  "186": {
+   "name": "Minyak",
+   "description": "Minyak (زيت) adalah salah satu zat fisik yang disebut dalam Al-Qur'an."
+  },
+  "187": {
+   "name": "Bibir",
+   "description": "Bibir (شفة) adalah salah satu anggota tubuh yang disebut dalam Al-Qur'an."
+  },
+  "188": {
+   "name": "Pelita",
+   "description": "Pelita (لمبة) disebut dalam beberapa ayat Al-Qur'an."
+  },
+  "189": {
+   "name": "Kaca",
+   "description": "Kaca (زجاج) adalah salah satu bahan yang disebut dalam Al-Qur'an."
+  },
+  "190": {
+   "name": "Garam",
+   "description": "Garam (ملح) disebut dalam Al-Qur'an sebagai salah satu tanda penciptaan, dalam konteks pemisahan laut menjadi air tawar dan air asin."
+  },
+  "191": {
+   "name": "Semut",
+   "description": "Semut (نمل) adalah salah satu serangga yang disebut namanya dalam Al-Qur'an."
+  },
+  "192": {
+   "name": "Burung Hud-hud",
+   "description": "Hud-hud (هدهد) adalah salah satu jenis burung yang disebut namanya dalam Al-Qur'an."
+  },
+  "193": {
+   "name": "Saba",
+   "description": "Saba (سبأ) adalah negeri kuno yang disebut dalam Al-Qur'an, diperintah oleh Balqis, Ratu Saba."
+  },
+  "194": {
+   "name": "Binatang Melata dari Bumi",
+   "description": "Dabbatul Ardh (دابة الارض) disebut dalam Al-Qur'an. Hakikat makhluk ini dijelaskan lebih lanjut dalam hadis Nabi Muhammad."
+  },
+  "195": {
+   "name": "Haman",
+   "description": "Haman (هامان) adalah nama menteri utama Firaun pada masa Nabi Musa."
+  },
+  "196": {
+   "name": "Qarun",
+   "description": "Qarun (قارون) adalah seorang Bani Israil yang disebut dalam Al-Qur'an, yang menentang Nabi Musa."
+  },
+  "197": {
+   "name": "Laba-laba",
+   "description": "Laba-laba (عنكبوت) adalah salah satu serangga yang disebut namanya dalam Al-Qur'an."
+  },
+  "198": {
+   "name": "Bangsa Romawi",
+   "description": "Bangsa Romawi (الروم) adalah bangsa kuno yang disebut dalam Al-Qur'an, pada ayat (30:2). Salah satu surah Al-Qur'an juga dinamai dengan nama mereka."
+  },
+  "199": {
+   "name": "Luqman",
+   "description": "Luqman (لقمان) adalah nama seorang laki-laki saleh dan bijak yang disebut dalam Al-Qur'an."
+  },
+  "200": {
+   "name": "Izrail",
+   "description": "Izrail (عزرائيل) adalah nama malaikat maut menurut keyakinan umum umat Islam, meskipun nama Izrail tidak disebut secara eksplisit dalam Al-Qur'an."
+  },
+  "201": {
+   "name": "Yatsrib",
+   "description": "Yatsrib (يثرب) adalah nama lain kota suci Madinah."
+  },
+  "202": {
+   "name": "Gurun",
+   "description": "Gurun (صحراء) adalah salah satu lokasi geografis yang disebut dalam Al-Qur'an."
+  },
+  "203": {
+   "name": "Zaid",
+   "description": "Zaid (زيد) disebut namanya dalam Al-Qur'an; ia adalah anak angkat Nabi Muhammad."
+  },
+  "204": {
+   "name": "Baju Besi",
+   "description": "Baju besi (سابغات) disebut dalam Al-Qur'an sebagai buatan Nabi Daud dari besi untuk dipakai sebagai pelindung."
+  },
+  "205": {
+   "name": "Sidratulmuntaha",
+   "description": "Pohon Sidrah (السدرة) adalah lokasi di alam akhirat yang disebut dalam Al-Qur'an, umumnya dianggap sebagai bagian dari surga."
+  },
+  "206": {
+   "name": "Zaqqum",
+   "description": "Zaqqum (زقوم) adalah nama pohon yang menurut keyakinan Islam tumbuh di neraka Jahanam."
+  },
+  "207": {
+   "name": "Ba'l",
+   "description": "Ba'l (بعل) adalah nama sesembahan palsu yang disebut dalam Al-Qur'an."
+  },
+  "208": {
+   "name": "Zulkifli",
+   "description": "Zulkifli (ذو الكفل) adalah laki-laki saleh yang oleh sebagian umat Islam juga dianggap nabi mulia, meskipun hal ini tidak disebut secara eksplisit dalam Al-Qur'an."
+  },
+  "209": {
+   "name": "Ufuk",
+   "description": "Ufuk (أفق) adalah salah satu lokasi geografis yang disebut dalam Al-Qur'an."
+  },
+  "210": {
+   "name": "Malaikat Malik",
+   "description": "Malik (مالك) adalah nama malaikat yang disebut dalam Al-Qur'an."
+  },
+  "211": {
+   "name": "Kaum Tubba'",
+   "description": "Tubba' (تبع) adalah kaum kuno yang disebut dalam Al-Qur'an."
+  },
+  "212": {
+   "name": "Al-Ahqaf",
+   "description": "Al-Ahqaf (الأحقاف) adalah wilayah bersejarah yang disebut dalam Al-Qur'an, merujuk pada bukit-bukit pasir melengkung di bagian selatan Jazirah Arab."
+  },
+  "213": {
+   "name": "Makkah",
+   "description": "Makkah (مكة) adalah kota tersuci dalam Islam (dikenal juga sebagai Mekah) yang terletak di wilayah Hijaz, Jazirah Arab."
+  },
+  "214": {
+   "name": "Penduduk Rass",
+   "description": "Penduduk Rass (أصحاب الرس) adalah kelompok yang disebut dalam Al-Qur'an (dikenal juga sebagai penduduk sumur)."
+  },
+  "215": {
+   "name": "Daging",
+   "description": "Daging (لحم) adalah salah satu makanan yang disebut dalam Al-Qur'an."
+  },
+  "216": {
+   "name": "Lata",
+   "description": "Lata (اللات) adalah nama dewi palsu pra-Islam yang disebut dalam Al-Qur'an."
+  },
+  "217": {
+   "name": "Uzza",
+   "description": "Uzza (العزى) adalah nama dewi palsu pra-Islam yang disebut dalam Al-Qur'an."
+  },
+  "218": {
+   "name": "Manat",
+   "description": "Manat (مناة) adalah nama dewi palsu pra-Islam yang disebut dalam Al-Qur'an."
+  },
+  "219": {
+   "name": "Janin",
+   "description": "Janin (أجنة) adalah salah satu tahap perkembangan manusia yang disebut dalam Al-Qur'an."
+  },
+  "220": {
+   "name": "Bintang Syi'ra",
+   "description": "Syi'ra (الشِّعرى) atau Sirius adalah salah satu benda langit yang disebut dalam Al-Qur'an."
+  },
+  "221": {
+   "name": "Saqar",
+   "description": "Saqar (سقر) adalah salah satu nama neraka (Jahanam) yang disebut dalam Al-Qur'an."
+  },
+  "222": {
+   "name": "Marjan",
+   "description": "Marjan (مرجان) adalah salah satu bahan berharga yang disebut dalam Al-Qur'an."
+  },
+  "223": {
+   "name": "Yakut",
+   "description": "Yakut (ياقوت) adalah salah satu batu mulia yang disebut dalam Al-Qur'an."
+  },
+  "224": {
+   "name": "Ahmad",
+   "description": "Ahmad (أحمد) adalah salah satu nama nabi dan rasul mulia, Muhammad."
+  },
+  "225": {
+   "name": "Hari Jumat",
+   "description": "Hari Jumat (الجمعة) adalah hari dalam sepekan saat salat Jumat dilaksanakan."
+  },
+  "226": {
+   "name": "Belalai",
+   "description": "Belalai (خرطوم) adalah salah satu anggota tubuh yang disebut dalam Al-Qur'an."
+  },
+  "227": {
+   "name": "Laza",
+   "description": "Laza (لظى) adalah salah satu nama neraka (Jahanam) yang disebut dalam Al-Qur'an."
+  },
+  "228": {
+   "name": "Wadd",
+   "description": "Wadd (واد) adalah nama sesembahan palsu yang disebut dalam Al-Qur'an, yang disembah pada masa Nabi Nuh."
+  },
+  "229": {
+   "name": "Suwa'",
+   "description": "Suwa' (سواع) adalah nama sesembahan palsu yang disebut dalam Al-Qur'an, yang disembah pada masa Nabi Nuh."
+  },
+  "230": {
+   "name": "Yagus",
+   "description": "Yagus (يغوث) adalah nama sesembahan palsu yang disebut dalam Al-Qur'an, yang disembah pada masa Nabi Nuh."
+  },
+  "231": {
+   "name": "Ya'uq",
+   "description": "Ya'uq (يعوق) adalah nama sesembahan palsu yang disebut dalam Al-Qur'an, yang disembah pada masa Nabi Nuh."
+  },
+  "232": {
+   "name": "Nasr",
+   "description": "Nasr (نسر) adalah nama sesembahan palsu yang disebut dalam Al-Qur'an, yang disembah pada masa Nabi Nuh."
+  },
+  "233": {
+   "name": "Singa",
+   "description": "Singa (أسد) adalah salah satu hewan yang disebut namanya dalam Al-Qur'an."
+  },
+  "234": {
+   "name": "Jahe",
+   "description": "Jahe (زنجبيل) adalah salah satu jenis tumbuhan yang disebut dalam Al-Qur'an."
+  },
+  "235": {
+   "name": "Salsabil",
+   "description": "Salsabil (سلسبيل) adalah nama mata air yang menurut Al-Qur'an berada di surga."
+  },
+  "236": {
+   "name": "Sijjin",
+   "description": "Sijjin (سجين) adalah nama yang merujuk pada catatan amal buruk sekaligus bagian dari neraka Jahanam."
+  },
+  "237": {
+   "name": "Ashabul Ukhdud",
+   "description": "Ashabul Ukhdud (أصحاب الأخدود) adalah kelompok orang yang disebut dalam Al-Qur'an."
+  },
+  "238": {
+   "name": "Tulang Dada",
+   "description": "Tulang dada (الترائب) disebut dalam Al-Qur'an; pada ayat tempat kata Arab ini muncul, istilah ini juga sering diterjemahkan sebagai \"tulang rusuk\"."
+  },
+  "239": {
+   "name": "Iram",
+   "description": "Iram (إرم) adalah nama tempat di Arab kuno yang disebut dalam Al-Qur'an (dikenal juga sebagai Iram yang memiliki tiang-tiang)."
+  },
+  "240": {
+   "name": "Tin",
+   "description": "Tin (تين) adalah salah satu jenis tumbuhan yang disebut dalam Al-Qur'an."
+  },
+  "241": {
+   "name": "Lailatulqadar",
+   "description": "Lailatulqadar (ليلة القدر) adalah malam di bulan Ramadan saat Al-Qur'an diturunkan kepada Nabi Muhammad (dikenal juga sebagai Malam Kemuliaan)."
+  },
+  "242": {
+   "name": "Pasukan Bergajah",
+   "description": "Pasukan Bergajah (أصحاب الفيل) adalah kelompok orang yang kisahnya diceritakan dalam surah Al-Fil (Gajah)."
+  },
+  "243": {
+   "name": "Quraisy",
+   "description": "Quraisy (قريش) adalah nama suku asal Nabi Muhammad."
+  },
+  "244": {
+   "name": "Abu Lahab",
+   "description": "Abu Lahab (أَبو لهب) disebut namanya dalam Al-Qur'an sebagai musuh Islam yang terkutuk."
+  },
+  "245": {
+   "name": "Ummu Jamil",
+   "description": "Ummu Jamil (أم جميل) adalah istri Abu Lahab, yang disebut dalam Al-Qur'an sebagai musuh Islam."
+  },
+  "246": {
+   "name": "Benda Buatan",
+   "description": "Benda buatan adalah kategori untuk konstruksi buatan manusia yang disebut dalam Al-Qur'an."
+  },
+  "247": {
+   "name": "Tempat Ibadah",
+   "description": "Tempat ibadah adalah kategori untuk tempat-tempat ibadah yang disebut dalam Al-Qur'an."
+  },
+  "248": {
+   "name": "Persenjataan",
+   "description": "Persenjataan adalah kategori untuk senjata yang disebut dalam Al-Qur'an, meskipun alat-alat ini juga bisa memiliki kegunaan lain."
+  },
+  "249": {
+   "name": "Benda Langit",
+   "description": "Benda langit adalah kategori untuk objek astronomi yang disebut dalam Al-Qur'an."
+  },
+  "250": {
+   "name": "Peristiwa",
+   "description": "Peristiwa adalah kategori yang merujuk pada kejadian-kejadian dalam waktu."
+  },
+  "251": {
+   "name": "Peristiwa Akhirat",
+   "description": "Peristiwa akhirat adalah kategori yang merujuk pada kejadian-kejadian di alam akhirat."
+  },
   "252": {
    "name": "Peristiwa Kalender",
    "description": "Peristiwa Kalender adalah kategori dalam ontologi yang merujuk pada peristiwa berulang dalam kalender Islam, atau peristiwa kalender keagamaan lain yang disebutkan dalam Al-Qur'an."
@@ -5550,6 +6034,1722 @@
   },
   "1509": {
    "name": "Warisan",
+   "description": ""
+  },
+  "1510": {
+   "name": "Hijab",
+   "description": ""
+  },
+  "1511": {
+   "name": "Bukit",
+   "description": ""
+  },
+  "1512": {
+   "name": "Suci",
+   "description": ""
+  },
+  "1513": {
+   "name": "Harapan",
+   "description": ""
+  },
+  "1514": {
+   "name": "Menjamu Tamu",
+   "description": ""
+  },
+  "1515": {
+   "name": "Permusuhan",
+   "description": ""
+  },
+  "1516": {
+   "name": "Hari Kiamat (As-Sa'ah)",
+   "description": ""
+  },
+  "1517": {
+   "name": "Bidadari",
+   "description": ""
+  },
+  "1518": {
+   "name": "Rumah",
+   "description": ""
+  },
+  "1519": {
+   "name": "Tubuh Manusia",
+   "description": ""
+  },
+  "1520": {
+   "name": "Rendah Hati",
+   "description": ""
+  },
+  "1521": {
+   "name": "Pandangan Tertunduk",
+   "description": ""
+  },
+  "1522": {
+   "name": "Kehinaan",
+   "description": ""
+  },
+  "1523": {
+   "name": "Kerendahan Hati",
+   "description": ""
+  },
+  "1524": {
+   "name": "Hunain",
+   "description": ""
+  },
+  "1525": {
+   "name": "Seratus",
+   "description": ""
+  },
+  "1526": {
+   "name": "Kelaparan",
+   "description": ""
+  },
+  "1527": {
+   "name": "Suami",
+   "description": ""
+  },
+  "1528": {
+   "name": "Orang Munafik",
+   "description": ""
+  },
+  "1529": {
+   "name": "Nabi Idris",
+   "description": ""
+  },
+  "1530": {
+   "name": "Kebodohan",
+   "description": ""
+  },
+  "1531": {
+   "name": "Sakit",
+   "description": ""
+  },
+  "1532": {
+   "name": "Penipu",
+   "description": ""
+  },
+  "1533": {
+   "name": "Najis",
+   "description": ""
+  },
+  "1534": {
+   "name": "Bayi",
+   "description": ""
+  },
+  "1535": {
+   "name": "Kemandulan",
+   "description": ""
+  },
+  "1536": {
+   "name": "Kekafiran",
+   "description": ""
+  },
+  "1537": {
+   "name": "Penduduk",
+   "description": ""
+  },
+  "1538": {
+   "name": "Bid'ah",
+   "description": ""
+  },
+  "1539": {
+   "name": "Kesombongan",
+   "description": ""
+  },
+  "1540": {
+   "name": "Ilham",
+   "description": ""
+  },
+  "1541": {
+   "name": "Naluri",
+   "description": ""
+  },
+  "1542": {
+   "name": "Niat",
+   "description": ""
+  },
+  "1543": {
+   "name": "Syafaat",
+   "description": ""
+  },
+  "1544": {
+   "name": "Tafsir",
+   "description": ""
+  },
+  "1545": {
+   "name": "Ajakan",
+   "description": ""
+  },
+  "1546": {
+   "name": "Nabi Yakub",
+   "description": ""
+  },
+  "1547": {
+   "name": "Perhiasan",
+   "description": ""
+  },
+  "1548": {
+   "name": "Yahudi",
+   "description": ""
+  },
+  "1549": {
+   "name": "Jihad",
+   "description": ""
+  },
+  "1550": {
+   "name": "Jizyah",
+   "description": ""
+  },
+  "1551": {
+   "name": "Nabi Yahya",
+   "description": ""
+  },
+  "1552": {
+   "name": "Kegembiraan",
+   "description": ""
+  },
+  "1553": {
+   "name": "Hakim",
+   "description": ""
+  },
+  "1554": {
+   "name": "Hari Pembalasan",
+   "description": ""
+  },
+  "1555": {
+   "name": "Penghakiman",
+   "description": ""
+  },
+  "1556": {
+   "name": "Keadilan",
+   "description": ""
+  },
+  "1557": {
+   "name": "Para Penjaga",
+   "description": ""
+  },
+  "1558": {
+   "name": "Khalifah",
+   "description": ""
+  },
+  "1559": {
+   "name": "Baik Hati",
+   "description": ""
+  },
+  "1560": {
+   "name": "Kekerabatan",
+   "description": ""
+  },
+  "1561": {
+   "name": "Pincang",
+   "description": ""
+  },
+  "1562": {
+   "name": "Daratan",
+   "description": ""
+  },
+  "1563": {
+   "name": "Cambukan",
+   "description": ""
+  },
+  "1564": {
+   "name": "Hari Akhir",
+   "description": ""
+  },
+  "1565": {
+   "name": "Tertawa",
+   "description": ""
+  },
+  "1566": {
+   "name": "Hukum",
+   "description": ""
+  },
+  "1567": {
+   "name": "Halal",
+   "description": ""
+  },
+  "1568": {
+   "name": "Pemimpin",
+   "description": ""
+  },
+  "1569": {
+   "name": "Kiri",
+   "description": ""
+  },
+  "1570": {
+   "name": "Penderita Kusta",
+   "description": ""
+  },
+  "1571": {
+   "name": "Pelajaran",
+   "description": ""
+  },
+  "1572": {
+   "name": "Dusta",
+   "description": ""
+  },
+  "1573": {
+   "name": "Cahaya",
+   "description": ""
+  },
+  "1574": {
+   "name": "Batas-batas",
+   "description": ""
+  },
+  "1575": {
+   "name": "Mata Pencaharian",
+   "description": ""
+  },
+  "1576": {
+   "name": "Utang",
+   "description": ""
+  },
+  "1577": {
+   "name": "Kesepian",
+   "description": ""
+  },
+  "1578": {
+   "name": "Tuhan",
+   "description": ""
+  },
+  "1579": {
+   "name": "Orang yang Merugi",
+   "description": ""
+  },
+  "1580": {
+   "name": "Kerugian",
+   "description": ""
+  },
+  "1581": {
+   "name": "Cinta",
+   "description": ""
+  },
+  "1582": {
+   "name": "Madinah",
+   "description": ""
+  },
+  "1583": {
+   "name": "Orang Gila",
+   "description": ""
+  },
+  "1584": {
+   "name": "Kegilaan",
+   "description": ""
+  },
+  "1585": {
+   "name": "Sihir",
+   "description": ""
+  },
+  "1586": {
+   "name": "Penyihir",
+   "description": ""
+  },
+  "1587": {
+   "name": "Gadis",
+   "description": ""
+  },
+  "1588": {
+   "name": "Kebanyakan Orang",
+   "description": ""
+  },
+  "1589": {
+   "name": "Tanda",
+   "description": ""
+  },
+  "1590": {
+   "name": "Pasar",
+   "description": ""
+  },
+  "1591": {
+   "name": "Syahid",
+   "description": ""
+  },
+  "1592": {
+   "name": "Kedewasaan",
+   "description": ""
+  },
+  "1593": {
+   "name": "Hidangan",
+   "description": ""
+  },
+  "1594": {
+   "name": "Makna",
+   "description": ""
+  },
+  "1595": {
+   "name": "Takaran",
+   "description": ""
+  },
+  "1596": {
+   "name": "Perenungan",
+   "description": ""
+  },
+  "1597": {
+   "name": "Rahmat",
+   "description": ""
+  },
+  "1598": {
+   "name": "Meteor",
+   "description": ""
+  },
+  "1599": {
+   "name": "Malaikat Mikail",
+   "description": ""
+  },
+  "1600": {
+   "name": "Pertengahan",
+   "description": ""
+  },
+  "1601": {
+   "name": "Keperkasaan",
+   "description": ""
+  },
+  "1602": {
+   "name": "Hijrah",
+   "description": ""
+  },
+  "1603": {
+   "name": "Kesalahan",
+   "description": ""
+  },
+  "1604": {
+   "name": "Kerahiban",
+   "description": ""
+  },
+  "1605": {
+   "name": "Harta",
+   "description": ""
+  },
+  "1606": {
+   "name": "Tauhid",
+   "description": ""
+  },
+  "1607": {
+   "name": "Bulan (Penanggalan)",
+   "description": ""
+  },
+  "1608": {
+   "name": "Nabi Musa",
+   "description": ""
+  },
+  "1609": {
+   "name": "Pagi",
+   "description": ""
+  },
+  "1610": {
+   "name": "Ibu",
+   "description": ""
+  },
+  "1611": {
+   "name": "Pembunuhan",
+   "description": ""
+  },
+  "1612": {
+   "name": "Muslim",
+   "description": ""
+  },
+  "1613": {
+   "name": "Salat",
+   "description": ""
+  },
+  "1614": {
+   "name": "Nama",
+   "description": ""
+  },
+  "1615": {
+   "name": "Umat",
+   "description": ""
+  },
+  "1616": {
+   "name": "Penduduk Asli",
+   "description": ""
+  },
+  "1617": {
+   "name": "Fitrah",
+   "description": ""
+  },
+  "1618": {
+   "name": "Kedekatan",
+   "description": ""
+  },
+  "1619": {
+   "name": "Tetangga",
+   "description": ""
+  },
+  "1620": {
+   "name": "Nepotisme",
+   "description": ""
+  },
+  "1621": {
+   "name": "Berita",
+   "description": ""
+  },
+  "1622": {
+   "name": "Ceruk (Misykat)",
+   "description": ""
+  },
+  "1623": {
+   "name": "Gelar Ejekan",
+   "description": ""
+  },
+  "1624": {
+   "name": "Tengah Hari",
+   "description": ""
+  },
+  "1625": {
+   "name": "Hidung",
+   "description": ""
+  },
+  "1626": {
+   "name": "Pemberitahuan",
+   "description": ""
+  },
+  "1627": {
+   "name": "Aurat Terbuka",
+   "description": ""
+  },
+  "1628": {
+   "name": "Bilangan",
+   "description": ""
+  },
+  "1629": {
+   "name": "Ibu Susu",
+   "description": ""
+  },
+  "1630": {
+   "name": "Menyusui",
+   "description": ""
+  },
+  "1631": {
+   "name": "Ketaatan",
+   "description": ""
+  },
+  "1632": {
+   "name": "Orang yang Taat",
+   "description": ""
+  },
+  "1633": {
+   "name": "Perbuatan Keji",
+   "description": ""
+  },
+  "1634": {
+   "name": "Keras Kepala",
+   "description": ""
+  },
+  "1635": {
+   "name": "Menghalang-halangi",
+   "description": ""
+  },
+  "1636": {
+   "name": "Tua",
+   "description": ""
+  },
+  "1637": {
+   "name": "Taurat (Perjanjian Lama)",
+   "description": ""
+  },
+  "1638": {
+   "name": "Satu",
+   "description": ""
+  },
+  "1639": {
+   "name": "Optimisme",
+   "description": ""
+  },
+  "1640": {
+   "name": "Perhiasan",
+   "description": ""
+  },
+  "1641": {
+   "name": "Lembaran",
+   "description": ""
+  },
+  "1642": {
+   "name": "Rasa Sakit",
+   "description": ""
+  },
+  "1643": {
+   "name": "Pasangan",
+   "description": ""
+  },
+  "1644": {
+   "name": "Istana",
+   "description": ""
+  },
+  "1645": {
+   "name": "Telapak Tangan",
+   "description": ""
+  },
+  "1646": {
+   "name": "Perumpamaan",
+   "description": ""
+  },
+  "1647": {
+   "name": "Orang Tua",
+   "description": ""
+  },
+  "1648": {
+   "name": "Sekat",
+   "description": ""
+  },
+  "1649": {
+   "name": "Sekutu",
+   "description": ""
+  },
+  "1650": {
+   "name": "Jalan",
+   "description": ""
+  },
+  "1651": {
+   "name": "Kesabaran",
+   "description": ""
+  },
+  "1652": {
+   "name": "Orang yang Sabar",
+   "description": ""
+  },
+  "1653": {
+   "name": "Pola",
+   "description": ""
+  },
+  "1654": {
+   "name": "Pembayaran",
+   "description": ""
+  },
+  "1655": {
+   "name": "Perdamaian",
+   "description": ""
+  },
+  "1656": {
+   "name": "Hukuman",
+   "description": ""
+  },
+  "1657": {
+   "name": "Pena",
+   "description": ""
+  },
+  "1658": {
+   "name": "Penganiayaan",
+   "description": ""
+  },
+  "1659": {
+   "name": "Ibadah Haji",
+   "description": ""
+  },
+  "1660": {
+   "name": "Merah Mawar",
+   "description": ""
+  },
+  "1661": {
+   "name": "Orang Bertakwa",
+   "description": ""
+  },
+  "1662": {
+   "name": "Planet",
+   "description": ""
+  },
+  "1663": {
+   "name": "Tipu Daya",
+   "description": ""
+  },
+  "1664": {
+   "name": "Penyair",
+   "description": ""
+  },
+  "1665": {
+   "name": "Orang Miskin",
+   "description": ""
+  },
+  "1666": {
+   "name": "Kemiskinan",
+   "description": ""
+  },
+  "1667": {
+   "name": "Ketidakberdayaan",
+   "description": ""
+  },
+  "1668": {
+   "name": "Pujian",
+   "description": ""
+  },
+  "1669": {
+   "name": "Waktu Salat",
+   "description": ""
+  },
+  "1670": {
+   "name": "Kewaspadaan",
+   "description": ""
+  },
+  "1671": {
+   "name": "Sesembahan Pra-Islam",
+   "description": ""
+  },
+  "1672": {
+   "name": "Kesombongan",
+   "description": ""
+  },
+  "1673": {
+   "name": "Pendeta",
+   "description": ""
+  },
+  "1674": {
+   "name": "Penjara",
+   "description": ""
+  },
+  "1675": {
+   "name": "Janji",
+   "description": ""
+  },
+  "1676": {
+   "name": "Sujud",
+   "description": ""
+  },
+  "1677": {
+   "name": "Perlindungan",
+   "description": ""
+  },
+  "1678": {
+   "name": "Penyucian",
+   "description": ""
+  },
+  "1679": {
+   "name": "Kesucian",
+   "description": ""
+  },
+  "1680": {
+   "name": "Pertengkaran",
+   "description": ""
+  },
+  "1681": {
+   "name": "Pertanyaan",
+   "description": ""
+  },
+  "1682": {
+   "name": "Pemeriksaan",
+   "description": ""
+  },
+  "1683": {
+   "name": "Selimut",
+   "description": ""
+  },
+  "1684": {
+   "name": "Rabi Yahudi",
+   "description": ""
+  },
+  "1685": {
+   "name": "Perlombaan",
+   "description": ""
+  },
+  "1686": {
+   "name": "Amarah",
+   "description": ""
+  },
+  "1687": {
+   "name": "Tebusan",
+   "description": ""
+  },
+  "1688": {
+   "name": "Balasan",
+   "description": ""
+  },
+  "1689": {
+   "name": "Perdamaian (Islah)",
+   "description": ""
+  },
+  "1690": {
+   "name": "Catatan Amal",
+   "description": ""
+  },
+  "1691": {
+   "name": "Laut Merah",
+   "description": ""
+  },
+  "1692": {
+   "name": "Perenungan",
+   "description": ""
+  },
+  "1693": {
+   "name": "Pengungsi",
+   "description": ""
+  },
+  "1694": {
+   "name": "Wilayah",
+   "description": ""
+  },
+  "1695": {
+   "name": "Penyesalan",
+   "description": ""
+  },
+  "1696": {
+   "name": "Bergembira",
+   "description": ""
+  },
+  "1697": {
+   "name": "Kerabat",
+   "description": ""
+  },
+  "1698": {
+   "name": "Zikir",
+   "description": ""
+  },
+  "1699": {
+   "name": "Peringatan",
+   "description": ""
+  },
+  "1700": {
+   "name": "Pelunasan",
+   "description": ""
+  },
+  "1701": {
+   "name": "Tobat",
+   "description": ""
+  },
+  "1702": {
+   "name": "Keturunan",
+   "description": ""
+  },
+  "1703": {
+   "name": "Permintaan",
+   "description": ""
+  },
+  "1704": {
+   "name": "Istirahat",
+   "description": ""
+  },
+  "1705": {
+   "name": "Pembalasan",
+   "description": ""
+  },
+  "1706": {
+   "name": "Balas Dendam",
+   "description": ""
+  },
+  "1707": {
+   "name": "Pahala",
+   "description": ""
+  },
+  "1708": {
+   "name": "Riba",
+   "description": ""
+  },
+  "1709": {
+   "name": "Orang Kaya",
+   "description": ""
+  },
+  "1710": {
+   "name": "Ejekan",
+   "description": ""
+  },
+  "1711": {
+   "name": "Berkendara",
+   "description": ""
+  },
+  "1712": {
+   "name": "Orang Saleh",
+   "description": ""
+  },
+  "1713": {
+   "name": "Kebajikan",
+   "description": ""
+  },
+  "1714": {
+   "name": "Syiar-syiar",
+   "description": ""
+  },
+  "1715": {
+   "name": "Sungai",
+   "description": ""
+  },
+  "1716": {
+   "name": "Batu Karang",
+   "description": ""
+  },
+  "1717": {
+   "name": "Atap",
+   "description": ""
+  },
+  "1718": {
+   "name": "Perputaran",
+   "description": ""
+  },
+  "1719": {
+   "name": "Permadani",
+   "description": ""
+  },
+  "1720": {
+   "name": "Saba",
+   "description": ""
+  },
+  "1721": {
+   "name": "Kaum Sabiin",
+   "description": ""
+  },
+  "1722": {
+   "name": "Bulan Haram",
+   "description": ""
+  },
+  "1723": {
+   "name": "Masjidilharam",
+   "description": ""
+  },
+  "1724": {
+   "name": "Safa dan Marwah",
+   "description": ""
+  },
+  "1725": {
+   "name": "Keselamatan",
+   "description": ""
+  },
+  "1726": {
+   "name": "Salat",
+   "description": ""
+  },
+  "1727": {
+   "name": "Jual Beli",
+   "description": ""
+  },
+  "1728": {
+   "name": "Terompah",
+   "description": ""
+  },
+  "1729": {
+   "name": "Juru Tulis",
+   "description": ""
+  },
+  "1730": {
+   "name": "Kitab-kitab Suci",
+   "description": ""
+  },
+  "1731": {
+   "name": "Rahasia",
+   "description": ""
+  },
+  "1732": {
+   "name": "Golongan-golongan",
+   "description": ""
+  },
+  "1733": {
+   "name": "Rasa Aman",
+   "description": ""
+  },
+  "1734": {
+   "name": "Benih",
+   "description": ""
+  },
+  "1735": {
+   "name": "Diri",
+   "description": ""
+  },
+  "1736": {
+   "name": "Mahakaya",
+   "description": ""
+  },
+  "1737": {
+   "name": "Perpisahan",
+   "description": ""
+  },
+  "1738": {
+   "name": "Permukiman",
+   "description": ""
+  },
+  "1739": {
+   "name": "Tujuh",
+   "description": ""
+  },
+  "1740": {
+   "name": "Tujuh Puluh",
+   "description": ""
+  },
+  "1741": {
+   "name": "Seksualitas",
+   "description": ""
+  },
+  "1742": {
+   "name": "Setan",
+   "description": ""
+  },
+  "1743": {
+   "name": "Rasa Malu",
+   "description": ""
+  },
+  "1744": {
+   "name": "Bentuk",
+   "description": ""
+  },
+  "1745": {
+   "name": "Bagian",
+   "description": ""
+  },
+  "1746": {
+   "name": "Mencukur",
+   "description": ""
+  },
+  "1747": {
+   "name": "Baju Gamis",
+   "description": ""
+  },
+  "1748": {
+   "name": "Riya",
+   "description": ""
+  },
+  "1749": {
+   "name": "Penyakit",
+   "description": ""
+  },
+  "1750": {
+   "name": "Tanda",
+   "description": ""
+  },
+  "1751": {
+   "name": "Sinai",
+   "description": ""
+  },
+  "1752": {
+   "name": "Ikhlas",
+   "description": ""
+  },
+  "1753": {
+   "name": "Saudara Perempuan",
+   "description": ""
+  },
+  "1754": {
+   "name": "Enam",
+   "description": ""
+  },
+  "1755": {
+   "name": "Terampil",
+   "description": ""
+  },
+  "1756": {
+   "name": "Fitnah",
+   "description": ""
+  },
+  "1757": {
+   "name": "Penyembelihan",
+   "description": ""
+  },
+  "1758": {
+   "name": "Hamba Sahaya",
+   "description": ""
+  },
+  "1759": {
+   "name": "Perbudakan",
+   "description": ""
+  },
+  "1760": {
+   "name": "Tidur",
+   "description": ""
+  },
+  "1761": {
+   "name": "Senyum",
+   "description": ""
+  },
+  "1762": {
+   "name": "Asap",
+   "description": ""
+  },
+  "1763": {
+   "name": "Sodom",
+   "description": ""
+  },
+  "1764": {
+   "name": "Bala Tentara",
+   "description": ""
+  },
+  "1765": {
+   "name": "Anak Laki-laki",
+   "description": ""
+  },
+  "1766": {
+   "name": "Tukang Tenung",
+   "description": ""
+  },
+  "1767": {
+   "name": "Jiwa",
+   "description": ""
+  },
+  "1768": {
+   "name": "Bunga Api",
+   "description": ""
+  },
+  "1769": {
+   "name": "Mayang",
+   "description": ""
+  },
+  "1770": {
+   "name": "Titik Kecil",
+   "description": ""
+  },
+  "1771": {
+   "name": "Berinfak",
+   "description": ""
+  },
+  "1772": {
+   "name": "Ruh",
+   "description": ""
+  },
+  "1773": {
+   "name": "Pasangan Hidup",
+   "description": ""
+  },
+  "1774": {
+   "name": "Mata Air",
+   "description": ""
+  },
+  "1775": {
+   "name": "Tangga",
+   "description": ""
+  },
+  "1776": {
+   "name": "Pasak",
+   "description": ""
+  },
+  "1777": {
+   "name": "Cap",
+   "description": ""
+  },
+  "1778": {
+   "name": "Bintang-bintang",
+   "description": ""
+  },
+  "1779": {
+   "name": "Patung",
+   "description": ""
+  },
+  "1780": {
+   "name": "Kekikiran",
+   "description": ""
+  },
+  "1781": {
+   "name": "Batu-batu",
+   "description": ""
+  },
+  "1782": {
+   "name": "Badai",
+   "description": ""
+  },
+  "1783": {
+   "name": "Kekuatan",
+   "description": ""
+  },
+  "1784": {
+   "name": "Bersungguh-sungguh",
+   "description": ""
+  },
+  "1785": {
+   "name": "Belajar",
+   "description": ""
+  },
+  "1786": {
+   "name": "Berserah Diri",
+   "description": ""
+  },
+  "1787": {
+   "name": "Keberhasilan",
+   "description": ""
+  },
+  "1788": {
+   "name": "Pergantian Generasi",
+   "description": ""
+  },
+  "1789": {
+   "name": "Penderitaan",
+   "description": ""
+  },
+  "1790": {
+   "name": "Bunuh Diri",
+   "description": ""
+  },
+  "1791": {
+   "name": "Matahari Terbit",
+   "description": ""
+  },
+  "1792": {
+   "name": "Matahari Terbenam",
+   "description": ""
+  },
+  "1793": {
+   "name": "Doa",
+   "description": ""
+  },
+  "1794": {
+   "name": "Sumpah",
+   "description": ""
+  },
+  "1795": {
+   "name": "Hidangan",
+   "description": ""
+  },
+  "1796": {
+   "name": "Lauh-lauh",
+   "description": ""
+  },
+  "1797": {
+   "name": "Pajak",
+   "description": ""
+  },
+  "1798": {
+   "name": "Sepuluh Perintah",
+   "description": ""
+  },
+  "1799": {
+   "name": "Pencurian",
+   "description": ""
+  },
+  "1800": {
+   "name": "Kehausan",
+   "description": ""
+  },
+  "1801": {
+   "name": "Tiga",
+   "description": ""
+  },
+  "1802": {
+   "name": "Kerongkongan",
+   "description": ""
+  },
+  "1803": {
+   "name": "Arasy",
+   "description": ""
+  },
+  "1804": {
+   "name": "Kabar Gembira",
+   "description": ""
+  },
+  "1805": {
+   "name": "Relativitas Waktu",
+   "description": ""
+  },
+  "1806": {
+   "name": "Kelelahan",
+   "description": ""
+  },
+  "1807": {
+   "name": "Perniagaan",
+   "description": ""
+  },
+  "1808": {
+   "name": "Ketenangan",
+   "description": ""
+  },
+  "1809": {
+   "name": "Transaksi",
+   "description": ""
+  },
+  "1810": {
+   "name": "Perjalanan",
+   "description": ""
+  },
+  "1811": {
+   "name": "Musafir",
+   "description": ""
+  },
+  "1812": {
+   "name": "Harta Karun",
+   "description": ""
+  },
+  "1813": {
+   "name": "Perjanjian",
+   "description": ""
+  },
+  "1814": {
+   "name": "Pohon Zaqqum",
+   "description": ""
+  },
+  "1815": {
+   "name": "Parit",
+   "description": ""
+  },
+  "1816": {
+   "name": "Ujian",
+   "description": ""
+  },
+  "1817": {
+   "name": "Suku-suku",
+   "description": ""
+  },
+  "1818": {
+   "name": "Upeti",
+   "description": ""
+  },
+  "1819": {
+   "name": "Pasukan",
+   "description": ""
+  },
+  "1820": {
+   "name": "Batang Pohon",
+   "description": ""
+  },
+  "1821": {
+   "name": "Amanah",
+   "description": ""
+  },
+  "1822": {
+   "name": "Dapat Dipercaya",
+   "description": ""
+  },
+  "1823": {
+   "name": "Kebenaran",
+   "description": ""
+  },
+  "1824": {
+   "name": "Tuwa",
+   "description": ""
+  },
+  "1825": {
+   "name": "Dua",
+   "description": ""
+  },
+  "1826": {
+   "name": "Penguasa Zalim",
+   "description": ""
+  },
+  "1827": {
+   "name": "Paman",
+   "description": ""
+  },
+  "1828": {
+   "name": "Najis",
+   "description": ""
+  },
+  "1829": {
+   "name": "Pemahaman",
+   "description": ""
+  },
+  "1830": {
+   "name": "Tidak Bersyukur",
+   "description": ""
+  },
+  "1831": {
+   "name": "Persatuan",
+   "description": ""
+  },
+  "1832": {
+   "name": "Alam Semesta",
+   "description": ""
+  },
+  "1833": {
+   "name": "Penciptaan Alam Semesta",
+   "description": ""
+  },
+  "1834": {
+   "name": "Pergerakan Alam Semesta",
+   "description": ""
+  },
+  "1835": {
+   "name": "Tidak Diketahui",
+   "description": ""
+  },
+  "1836": {
+   "name": "Ummi (Tidak Bisa Baca Tulis)",
+   "description": ""
+  },
+  "1837": {
+   "name": "Yang Gaib",
+   "description": ""
+  },
+  "1838": {
+   "name": "Lembah",
+   "description": ""
+  },
+  "1839": {
+   "name": "Sayur-sayuran",
+   "description": ""
+  },
+  "1840": {
+   "name": "Tabir",
+   "description": ""
+  },
+  "1841": {
+   "name": "Urat Nadi",
+   "description": ""
+  },
+  "1842": {
+   "name": "Pemenang",
+   "description": ""
+  },
+  "1843": {
+   "name": "Kemenangan",
+   "description": ""
+  },
+  "1844": {
+   "name": "Perawan",
+   "description": ""
+  },
+  "1845": {
+   "name": "Penglihatan",
+   "description": ""
+  },
+  "1846": {
+   "name": "Suara",
+   "description": ""
+  },
+  "1847": {
+   "name": "Nazar",
+   "description": ""
+  },
+  "1848": {
+   "name": "Upah",
+   "description": ""
+  },
+  "1849": {
+   "name": "Dinding",
+   "description": ""
+  },
+  "1850": {
+   "name": "Perang",
+   "description": ""
+  },
+  "1851": {
+   "name": "Pemberi Peringatan",
+   "description": ""
+  },
+  "1852": {
+   "name": "Peringatan",
+   "description": ""
+  },
+  "1853": {
+   "name": "Ombak",
+   "description": ""
+  },
+  "1854": {
+   "name": "Kelemahan",
+   "description": ""
+  },
+  "1855": {
+   "name": "Kekayaan",
+   "description": ""
+  },
+  "1856": {
+   "name": "Menyapih",
+   "description": ""
+  },
+  "1857": {
+   "name": "Menangis",
+   "description": ""
+  },
+  "1858": {
+   "name": "Sumur",
+   "description": ""
+  },
+  "1859": {
+   "name": "Barat",
+   "description": ""
+  },
+  "1860": {
+   "name": "Putih",
+   "description": ""
+  },
+  "1861": {
+   "name": "Orang Jahat",
+   "description": ""
+  },
+  "1862": {
+   "name": "Kehendak",
+   "description": ""
+  },
+  "1863": {
+   "name": "Angin",
+   "description": ""
+  },
+  "1864": {
+   "name": "Hikmah",
+   "description": ""
+  },
+  "1865": {
+   "name": "Saksi",
+   "description": ""
+  },
+  "1866": {
+   "name": "Istri-istri",
+   "description": ""
+  },
+  "1867": {
+   "name": "Rahim",
+   "description": ""
+  },
+  "1868": {
+   "name": "Wol",
+   "description": ""
+  },
+  "1869": {
+   "name": "Kata-kata",
+   "description": ""
+  },
+  "1870": {
+   "name": "Pekerjaan",
+   "description": ""
+  },
+  "1871": {
+   "name": "Dunia",
+   "description": ""
+  },
+  "1872": {
+   "name": "Ulat",
+   "description": ""
+  },
+  "1873": {
+   "name": "Ibadah",
+   "description": ""
+  },
+  "1874": {
+   "name": "Orang Celaka",
+   "description": ""
+  },
+  "1875": {
+   "name": "Orang Zalim",
+   "description": ""
+  },
+  "1876": {
+   "name": "Benang Pintalan",
+   "description": ""
+  },
+  "1877": {
+   "name": "Tahun",
+   "description": ""
+  },
+  "1878": {
+   "name": "Kuning",
+   "description": ""
+  },
+  "1879": {
+   "name": "Muda",
+   "description": ""
+  },
+  "1880": {
+   "name": "Pemuda",
+   "description": ""
+  },
+  "1881": {
+   "name": "Zakat",
+   "description": ""
+  },
+  "1882": {
+   "name": "Ajaran",
+   "description": "۩ Ajaran (mis. ibadah, interaksi antarmanusia, hubungan keluarga, dan muamalah), yang terutama membahas hubungan seorang Muslim dengan Allah, sesama manusia, dan seluruh ciptaan Allah."
+  },
+  "1883": {
+   "name": "Kisah-kisah",
+   "description": "⌛ Kisah-kisah (mis. kisah Nabi Musa, Nabi Nuh, dan Nabi Saleh), yang punya dua tujuan: menenteramkan hati Nabi saat beliau ditolak di Makkah, dan menjadi peringatan bagi kaum musyrik (lihat 11:120-123). Kisah lain (mis. Nabi Yusuf dan Nabi Ayub) berfokus pada pelajaran moral."
+  },
+  "1884": {
+   "name": "Perkara Gaib",
+   "description": "☼ Perkara gaib (mis. iman kepada Allah dan sifat-sifat-Nya, juga malaikat, kebangkitan, hari perhitungan, dan sebagainya), yang meneguhkan iman kepada Yang Mahakuasa melalui hati, bukan mata."
+  },
+  "1885": {
+   "name": "Pokok-pokok Ajaran",
+   "description": ""
+  },
+  "1886": {
+   "name": "Agama yang Disempurnakan",
+   "description": ""
+  },
+  "1887": {
+   "name": "Satu-satunya Jalan yang Diterima Allah",
+   "description": ""
+  },
+  "1888": {
+   "name": "Tidak Ada Paksaan dalam Memeluk Islam",
+   "description": ""
+  },
+  "1889": {
+   "name": "Satu Agama dengan Beragam Syariat",
+   "description": ""
+  },
+  "1890": {
+   "name": "Para Nabi dalam Islam",
+   "description": ""
+  },
+  "1891": {
+   "name": "Perintah (Beriman kepada Allah dan Beramal Saleh)",
+   "description": ""
+  },
+  "1892": {
+   "name": "Lima Tujuan Syariat: Menjaga Agama",
+   "description": ""
+  },
+  "1893": {
+   "name": "Menjaga Jiwa",
+   "description": ""
+  },
+  "1894": {
+   "name": "Menjaga Harta",
+   "description": ""
+  },
+  "1895": {
+   "name": "Menjaga Kehormatan",
+   "description": ""
+  },
+  "1896": {
+   "name": "Menjaga Akal",
+   "description": ""
+  },
+  "1897": {
+   "name": "Hubungan dengan Allah",
+   "description": ""
+  },
+  "1898": {
+   "name": "Lima Rukun Islam",
+   "description": ""
+  },
+  "1899": {
+   "name": "Iman kepada Allah dan Nabi ﷺ",
+   "description": ""
+  },
+  "1900": {
+   "name": "Iman kepada Allah",
+   "description": ""
+  },
+  "1901": {
+   "name": "Sifat-sifat Allah",
+   "description": ""
+  },
+  "1902": {
+   "name": "Asmaul Husna",
+   "description": ""
+  },
+  "1903": {
+   "name": "Satu-satunya Tuhan yang Layak Disembah",
+   "description": ""
+  },
+  "1904": {
+   "name": "Segala Kekuasaan Milik-Nya",
+   "description": ""
+  },
+  "1905": {
+   "name": "Arasy-Nya",
+   "description": ""
+  },
+  "1906": {
+   "name": "Kursi-Nya",
+   "description": ""
+  },
+  "1907": {
+   "name": "Nikmat-Nya yang Tak Terhitung bagi Manusia",
+   "description": ""
+  },
+  "1908": {
+   "name": "Menghidupkan dan Mematikan",
+   "description": ""
+  },
+  "1909": {
+   "name": "Mendatangkan Suka dan Duka",
+   "description": ""
+  },
+  "1910": {
+   "name": "Melapangkan dan Menyempitkan Rezeki",
+   "description": ""
+  },
+  "1911": {
+   "name": "Hakim yang Paling Adil",
+   "description": ""
+  },
+  "1912": {
+   "name": "Yang Paling Penyayang di antara Para Penyayang",
+   "description": ""
+  },
+  "1913": {
+   "name": "Maha Pengasih (Al-Wadud)",
+   "description": ""
+  },
+  "1914": {
+   "name": "Maha Pengampun dan Sangat Keras Siksa-Nya",
+   "description": ""
+  },
+  "1915": {
+   "name": "Yang Awal dan Yang Akhir",
+   "description": ""
+  },
+  "1916": {
+   "name": "Segala Kemuliaan dan Kekuatan Milik-Nya",
+   "description": ""
+  },
+  "1917": {
+   "name": "Mengetahui yang Tersembunyi dan Melihat yang Gaib",
+   "description": ""
+  },
+  "1918": {
+   "name": "Paling Mengetahui Isi Hati",
+   "description": ""
+  },
+  "1919": {
+   "name": "Mengetahui yang Telah Terjadi dan yang Akan Datang",
+   "description": ""
+  },
+  "1920": {
+   "name": "Menulis Segalanya di Lauhulmahfuz",
+   "description": ""
+  },
+  "1921": {
+   "name": "Mahakuasa atas Segala Sesuatu",
+   "description": ""
+  },
+  "1922": {
+   "name": "Kekuasaan-Nya yang Tak Terbatas",
+   "description": ""
+  },
+  "1923": {
+   "name": "Menciptakan Langit dan Bumi dalam Enam Masa tanpa Merasa Lelah",
+   "description": ""
+  },
+  "1924": {
+   "name": "Mencipta dengan Firman \"Jadilah!\"",
+   "description": ""
+  },
+  "1925": {
+   "name": "Tidak Pernah Zalim kepada Makhluk-Nya",
+   "description": ""
+  },
+  "1926": {
+   "name": "Perintah Merenungkan Keajaiban Ciptaan-Nya",
+   "description": ""
+  },
+  "1927": {
+   "name": "Tanda-tanda dalam Ciptaan",
+   "description": ""
+  },
+  "1928": {
+   "name": "Menciptakan Segalanya dengan Tujuan",
+   "description": ""
+  },
+  "1929": {
+   "name": "Alam Semesta yang Sempurna",
+   "description": ""
+  },
+  "1930": {
+   "name": "Memasukkan Siang ke dalam Malam",
+   "description": ""
+  },
+  "1931": {
+   "name": "Madu",
+   "description": ""
+  },
+  "1932": {
+   "name": "Susu",
+   "description": ""
+  },
+  "1933": {
+   "name": "Karunia Anak",
+   "description": ""
+  },
+  "1934": {
+   "name": "Planet dan Garis Edarnya",
+   "description": ""
+  },
+  "1935": {
+   "name": "Gempa Bumi",
+   "description": ""
+  },
+  "1936": {
+   "name": "Tanah Longsor",
+   "description": ""
+  },
+  "1937": {
+   "name": "Badai",
+   "description": ""
+  },
+  "1938": {
+   "name": "Gerimis, Hujan Es, dan Hujan",
    "description": ""
   }
  },
