@@ -60,9 +60,12 @@ fun SurahInfoScreen(vm: AppViewModel, surahId: Int, onBack: () -> Unit, onOpenAy
     val surahs by vm.surahs.collectAsStateWithLifecycle()
     val surah = surahs[surahId]
     val appLang = AppLanguage.effective(androidx.compose.ui.platform.LocalContext.current)
-    var lang by rememberSaveable { mutableStateOf(appLang) }
-    val languages by produceState(listOf("id", "en")) { value = vm.mushaf.surahInfoLanguages() }
-    val details by produceState<SurahDetails?>(null, surahId, lang) { value = vm.mushaf.surahDetails(surahId, lang) }
+    // Bahasa aplikasi yang punya info surah: pilih antara bahasa itu dan Inggris. Bahasa lain: langsung Inggris tanpa pilihan.
+    val available by produceState<List<String>?>(null) { value = vm.mushaf.surahInfoLanguages() }
+    val choices = if (appLang != "en" && available?.contains(appLang) == true) listOf(appLang, "en") else listOf("en")
+    var picked by rememberSaveable { mutableStateOf<String?>(null) }
+    val lang = picked?.takeIf { it in choices } ?: choices.first()
+    val details by produceState<SurahDetails?>(null, surahId, lang, available) { if (available != null) value = vm.mushaf.surahDetails(surahId, lang) }
     val font = remember { surahNameFontFamily(vm.getApplication()) }
 
     Scaffold(
@@ -102,14 +105,18 @@ fun SurahInfoScreen(vm: AppViewModel, surahId: Int, onBack: () -> Unit, onOpenAy
                 }
                 // Nama bahasa dari Locale (dalam bahasa UI), jadi bahasa info baru tidak butuh string tambahan.
                 val uiLocale = java.util.Locale.forLanguageTag(appLang)
-                FlowRow(Modifier.fillMaxWidth().padding(vertical = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    languages.forEach { code ->
-                        FilterChip(
-                            selected = lang == code,
-                            onClick = { lang = code },
-                            label = { Text(java.util.Locale.forLanguageTag(code).getDisplayLanguage(uiLocale).replaceFirstChar { it.titlecase(uiLocale) }) },
-                        )
+                if (choices.size > 1) {
+                    FlowRow(Modifier.fillMaxWidth().padding(vertical = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        choices.forEach { code ->
+                            FilterChip(
+                                selected = lang == code,
+                                onClick = { picked = code },
+                                label = { Text(java.util.Locale.forLanguageTag(code).getDisplayLanguage(uiLocale).replaceFirstChar { it.titlecase(uiLocale) }) },
+                            )
+                        }
                     }
+                } else {
+                    Spacer(Modifier.size(12.dp))
                 }
                 details?.let { d ->
                     if (d.infoHtml.isBlank()) {
