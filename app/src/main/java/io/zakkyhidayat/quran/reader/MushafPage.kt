@@ -91,6 +91,9 @@ fun MushafPage(
     val dark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val plainPalette = GlyphPalette.of(false, dark)
     val tajweedPalette = GlyphPalette.of(true, dark)
+    // Warna huruf dasar palet (putih di mode gelap, hitam di mode terang). Lapisan COLR ber-colorID 0xFFFF memakai warna
+    // teks, bukan palet; tanpa warna eksplisit drawText memakai hitam. Contoh: رَجَعۡتُمۡۗ (2:196) di font halaman 30.
+    val glyphColor = if (dark) Color.White else Color.Black
     // Kedua palet memiliki metrik glyph yang sama. Siapkan lapisan warna terpisah agar toggle tidak mengubah tata letak.
     val pageFont by produceState(cachedPageFont(page, plainPalette), page, plainPalette) { value = pageFontFamily(context, page, plainPalette) }
     val tajweedPageFont by produceState(cachedPageFont(page, tajweedPalette), page, tajweedPalette) { value = pageFontFamily(context, page, tajweedPalette) }
@@ -126,16 +129,16 @@ fun MushafPage(
         val nominal = lineAreaHeight / LINES_PER_PAGE
         // Semua pengukuran teks (ukuran glyph, ~130 kata) dikerjakan di thread latar belakang; thread utama hanya
         // menggambar hasilnya. Halaman tetangga disusun lebih dulu oleh pager, jadi biasanya siap sebelum terlihat.
-        val prepared by produceState<PreparedPage?>(null, page, lines, widthPx, font, basmalah, header, density, surahs) {
+        val prepared by produceState<PreparedPage?>(null, page, lines, widthPx, font, basmalah, header, density, surahs, glyphColor) {
             value = withContext(Dispatchers.Default) {
-                preparePage(TextMeasurer(resolver, density, LayoutDirection.Ltr, cacheSize = 0), density, lines, font, basmalah, header, surahs, widthPx)
+                preparePage(TextMeasurer(resolver, density, LayoutDirection.Ltr, cacheSize = 0), density, lines, font, basmalah, header, surahs, widthPx, glyphColor)
             }
         }
-        val tajweedPrepared by produceState<PreparedPage?>(null, page, lines, widthPx, tajweedFont, tajweedBasmalah, header, density, surahs) {
+        val tajweedPrepared by produceState<PreparedPage?>(null, page, lines, widthPx, tajweedFont, tajweedBasmalah, header, density, surahs, glyphColor) {
             val coloredFont = tajweedFont ?: return@produceState
             val coloredBasmalah = tajweedBasmalah ?: return@produceState
             value = withContext(Dispatchers.Default) {
-                preparePage(TextMeasurer(resolver, density, LayoutDirection.Ltr, cacheSize = 0), density, lines, coloredFont, coloredBasmalah, header, surahs, widthPx)
+                preparePage(TextMeasurer(resolver, density, LayoutDirection.Ltr, cacheSize = 0), density, lines, coloredFont, coloredBasmalah, header, surahs, widthPx, glyphColor)
             }
         }
         val ready = prepared ?: return@Box
@@ -209,13 +212,14 @@ private fun preparePage(
     headerFont: FontFamily,
     surahs: Map<Int, Surah>,
     widthPx: Int,
+    glyphColor: Color,
 ): PreparedPage {
     val size = fitFontSize(measurer, density, lines, font, widthPx)
-    val style = TextStyle(fontFamily = font, fontSize = size)
+    val style = TextStyle(color = glyphColor, fontFamily = font, fontSize = size)
     fun measure(text: String, style: TextStyle) =
         measurer.measure(text = text, style = style, softWrap = false, maxLines = 1, constraints = Constraints())
     val words = lines.filter { it.type == LineType.Ayah }.associateWith { line -> line.words.map { measure(it.text, style) } }
-    val basmalahStyle = TextStyle(fontFamily = basmalahFont, fontSize = size)
+    val basmalahStyle = TextStyle(color = glyphColor, fontFamily = basmalahFont, fontSize = size)
     val basmalah = BASMALAH_GLYPHS.map { measure(it.toString(), basmalahStyle) }
     val headerStyle = TextStyle(fontFamily = headerFont, fontSize = with(density) { headerFontPx(widthPx).toSp() })
     val headers = lines.filter { it.type == LineType.SurahName }.mapNotNull { line ->
