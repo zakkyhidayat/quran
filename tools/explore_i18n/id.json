@@ -7751,6 +7751,2302 @@
   "1938": {
    "name": "Gerimis, Hujan Es, dan Hujan",
    "description": ""
+  },
+  "1939": {
+   "name": "Guruh dan Kilat",
+   "description": ""
+  },
+  "1940": {
+   "name": "Rujukan Ilmiah",
+   "description": ""
+  },
+  "1941": {
+   "name": "Manusia Diciptakan dari Sel Kelamin Laki-laki dan Perempuan",
+   "description": ""
+  },
+  "1942": {
+   "name": "Pembentukan dan Tahap Perkembangan Janin",
+   "description": ""
+  },
+  "1943": {
+   "name": "Janin dalam Tiga Kegelapan",
+   "description": ""
+  },
+  "1944": {
+   "name": "Rotasi Bumi",
+   "description": ""
+  },
+  "1945": {
+   "name": "Alam Semesta yang Terus Mengembang",
+   "description": ""
+  },
+  "1946": {
+   "name": "Bentuk Bumi yang Bulat",
+   "description": ""
+  },
+  "1947": {
+   "name": "Dentuman Besar",
+   "description": ""
+  },
+  "1948": {
+   "name": "Lubang Hitam",
+   "description": ""
+  },
+  "1949": {
+   "name": "Air Payau",
+   "description": ""
+  },
+  "1950": {
+   "name": "Penyerbukan oleh Angin",
+   "description": ""
+  },
+  "1951": {
+   "name": "Sidik Jari",
+   "description": ""
+  },
+  "1952": {
+   "name": "Tekanan Udara",
+   "description": ""
+  },
+  "1953": {
+   "name": "Gunung sebagai Pasak",
+   "description": ""
+  },
+  "1954": {
+   "name": "Besi yang Diturunkan",
+   "description": ""
+  },
+  "1955": {
+   "name": "Reseptor Rasa Sakit",
+   "description": ""
+  },
+  "1956": {
+   "name": "Matahari sebagai Sumber Cahaya dan Bulan sebagai Pemantul Cahaya",
+   "description": ""
+  },
+  "1957": {
+   "name": "Terbelahnya Bulan",
+   "description": ""
+  },
+  "1958": {
+   "name": "Langit sebagai Atap yang Terpelihara",
+   "description": ""
+  },
+  "1959": {
+   "name": "Semua Makhluk Diciptakan dari Air",
+   "description": ""
+  },
+  "1960": {
+   "name": "Semut Berkomunikasi",
+   "description": ""
+  },
+  "1961": {
+   "name": "Gelombang Bawah Laut",
+   "description": ""
+  },
+  "1962": {
+   "name": "Terpeliharanya Jasad Firaun",
+   "description": ""
+  },
+  "1963": {
+   "name": "Makhluk Hidup",
+   "description": ""
+  },
+  "1964": {
+   "name": "Malaikat",
+   "description": ""
+  },
+  "1965": {
+   "name": "Manusia (Khalifah di Bumi)",
+   "description": ""
+  },
+  "1966": {
+   "name": "Jin",
+   "description": ""
+  },
+  "1967": {
+   "name": "Hewan",
+   "description": ""
+  },
+  "1968": {
+   "name": "Hidup Berkelompok seperti Manusia",
+   "description": ""
+  },
+  "1969": {
+   "name": "Anak Sapi",
+   "description": ""
+  },
+  "1970": {
+   "name": "Unta",
+   "description": ""
+  },
+  "1971": {
+   "name": "Anjing",
+   "description": ""
+  },
+  "1972": {
+   "name": "Gajah",
+   "description": ""
+  },
+  "1973": {
+   "name": "Kuda",
+   "description": ""
+  },
+  "1974": {
+   "name": "Bagal",
+   "description": ""
+  },
+  "1975": {
+   "name": "Keledai",
+   "description": ""
+  },
+  "1976": {
+   "name": "Singa dan Zebra",
+   "description": ""
+  },
+  "1977": {
+   "name": "Babi",
+   "description": ""
+  },
+  "1978": {
+   "name": "Unta Betina",
+   "description": ""
+  },
+  "1979": {
+   "name": "Domba dan Kambing",
+   "description": ""
+  },
+  "1980": {
+   "name": "Serigala",
+   "description": ""
+  },
+  "1981": {
+   "name": "Amfibi",
+   "description": ""
+  },
+  "1982": {
+   "name": "Katak",
+   "description": ""
+  },
+  "1983": {
+   "name": "Ular",
+   "description": ""
+  },
+  "1984": {
+   "name": "Burung",
+   "description": ""
+  },
+  "1985": {
+   "name": "Burung Gagak",
+   "description": ""
+  },
+  "1986": {
+   "name": "Burung Hud-hud",
+   "description": ""
+  },
+  "1987": {
+   "name": "Burung Puyuh (Salwa)",
+   "description": ""
+  },
+  "1988": {
+   "name": "Hewan Laut",
+   "description": ""
+  },
+  "1989": {
+   "name": "Ikan",
+   "description": ""
+  },
+  "1990": {
+   "name": "Ikan Paus",
+   "description": ""
+  },
+  "1991": {
+   "name": "Serangga",
+   "description": ""
+  },
+  "1992": {
+   "name": "Semut",
+   "description": ""
+  },
+  "1993": {
+   "name": "Lebah",
+   "description": ""
+  },
+  "1994": {
+   "name": "Nyamuk",
+   "description": ""
+  },
+  "1995": {
+   "name": "Lalat",
+   "description": ""
+  },
+  "1996": {
+   "name": "Kutu dan Belalang",
+   "description": ""
+  },
+  "1997": {
+   "name": "Laba-laba",
+   "description": ""
+  },
+  "1998": {
+   "name": "Makhluk Lain yang Tidak Kita Ketahui",
+   "description": ""
+  },
+  "1999": {
+   "name": "Tumbuhan dan Buah-buahan",
+   "description": ""
+  },
+  "2000": {
+   "name": "Pisang",
+   "description": ""
+  },
+  "2001": {
+   "name": "Kurma",
+   "description": ""
+  },
+  "2002": {
+   "name": "Sayuran Hijau",
+   "description": ""
+  },
+  "2003": {
+   "name": "Mentimun",
+   "description": ""
+  },
+  "2004": {
+   "name": "Bawang Putih",
+   "description": ""
+  },
+  "2005": {
+   "name": "Kacang Adas",
+   "description": ""
+  },
+  "2006": {
+   "name": "Bawang Merah",
+   "description": ""
+  },
+  "2007": {
+   "name": "Anggur",
+   "description": ""
+  },
+  "2008": {
+   "name": "Tin",
+   "description": ""
+  },
+  "2009": {
+   "name": "Delima",
+   "description": ""
+  },
+  "2010": {
+   "name": "Labu",
+   "description": ""
+  },
+  "2011": {
+   "name": "Iman kepada Nabi Muhammad ﷺ",
+   "description": ""
+  },
+  "2012": {
+   "name": "Sifat-sifat Beliau",
+   "description": ""
+  },
+  "2013": {
+   "name": "Menyampaikan Kebenaran",
+   "description": ""
+  },
+  "2014": {
+   "name": "Penutup Para Nabi",
+   "description": ""
+  },
+  "2015": {
+   "name": "Akhlak Mulia",
+   "description": ""
+  },
+  "2016": {
+   "name": "Teladan",
+   "description": ""
+  },
+  "2017": {
+   "name": "Karunia bagi Orang Beriman",
+   "description": ""
+  },
+  "2018": {
+   "name": "Rahmat bagi Seluruh Alam",
+   "description": ""
+  },
+  "2019": {
+   "name": "Rasul bagi Seluruh Umat Manusia",
+   "description": ""
+  },
+  "2020": {
+   "name": "Membimbing ke Jalan yang Lurus",
+   "description": ""
+  },
+  "2021": {
+   "name": "Peduli kepada Manusia",
+   "description": ""
+  },
+  "2022": {
+   "name": "Saksi pada Hari Kiamat",
+   "description": ""
+  },
+  "2023": {
+   "name": "Dinubuatkan dalam Taurat dan Injil",
+   "description": ""
+  },
+  "2024": {
+   "name": "Dikabarkan oleh Nabi Isa",
+   "description": ""
+  },
+  "2025": {
+   "name": "Tantangan yang Dihadapi Nabi ﷺ",
+   "description": ""
+  },
+  "2026": {
+   "name": "Tuntutan Kaum Musyrik yang Tidak Masuk Akal",
+   "description": ""
+  },
+  "2027": {
+   "name": "Tuduhan Palsu",
+   "description": ""
+  },
+  "2028": {
+   "name": "Upaya Pembunuhan terhadap Beliau",
+   "description": ""
+  },
+  "2029": {
+   "name": "Peringatan bagi yang Menyakiti atau Menentang Beliau",
+   "description": ""
+  },
+  "2030": {
+   "name": "Diperintahkan Menghadapi Pengingkaran dengan Sabar",
+   "description": ""
+  },
+  "2031": {
+   "name": "Diperintahkan Mencari Ketenangan dalam Salat",
+   "description": ""
+  },
+  "2032": {
+   "name": "Ditenangkan oleh Allah",
+   "description": ""
+  },
+  "2033": {
+   "name": "Pelajaran dari Kehidupan Nabi ﷺ",
+   "description": ""
+  },
+  "2034": {
+   "name": "Dari Hijrah Beliau ke Madinah",
+   "description": ""
+  },
+  "2035": {
+   "name": "Perang Badar",
+   "description": ""
+  },
+  "2036": {
+   "name": "Perang Uhud",
+   "description": ""
+  },
+  "2037": {
+   "name": "Perang Khandaq",
+   "description": ""
+  },
+  "2038": {
+   "name": "Perang Hunain",
+   "description": ""
+  },
+  "2039": {
+   "name": "Tabuk",
+   "description": ""
+  },
+  "2040": {
+   "name": "Bani Nadir",
+   "description": ""
+  },
+  "2041": {
+   "name": "Hamra'ul Asad",
+   "description": ""
+  },
+  "2042": {
+   "name": "Perjanjian Hudaibiyah",
+   "description": ""
+  },
+  "2043": {
+   "name": "Kemuliaan yang Dianugerahkan kepada Nabi ﷺ",
+   "description": ""
+  },
+  "2044": {
+   "name": "Allah dan Para Malaikat-Nya Bersalawat kepada Beliau",
+   "description": ""
+  },
+  "2045": {
+   "name": "Isra dari Makkah ke Baitulmaqdis",
+   "description": ""
+  },
+  "2046": {
+   "name": "Mikraj ke Langit",
+   "description": ""
+  },
+  "2047": {
+   "name": "Dimuliakan di Dunia dan Akhirat",
+   "description": ""
+  },
+  "2048": {
+   "name": "Menaati Beliau Berarti Menaati Allah",
+   "description": ""
+  },
+  "2049": {
+   "name": "Pahala Menaati Allah dan Rasul-Nya",
+   "description": ""
+  },
+  "2050": {
+   "name": "Keluarga Beliau Disucikan",
+   "description": ""
+  },
+  "2051": {
+   "name": "Melihat Jibril dalam Wujud Aslinya",
+   "description": ""
+  },
+  "2052": {
+   "name": "Orang Beriman Diperintahkan Menaati Beliau",
+   "description": ""
+  },
+  "2053": {
+   "name": "Adab Berbicara kepada Beliau",
+   "description": ""
+  },
+  "2054": {
+   "name": "Adab Bertamu kepada Beliau",
+   "description": ""
+  },
+  "2055": {
+   "name": "Adab terhadap Istri-istri Beliau",
+   "description": ""
+  },
+  "2056": {
+   "name": "Allah Rida kepada Beliau dan Para Sahabatnya",
+   "description": ""
+  },
+  "2057": {
+   "name": "Keutamaan Umat Beliau",
+   "description": ""
+  },
+  "2058": {
+   "name": "Salat Jumat Berjemaah",
+   "description": ""
+  },
+  "2059": {
+   "name": "Arah Kiblat",
+   "description": ""
+  },
+  "2060": {
+   "name": "Mencegah dari Perbuatan Keji",
+   "description": ""
+  },
+  "2061": {
+   "name": "Waktu-waktu Salat",
+   "description": ""
+  },
+  "2062": {
+   "name": "Saat dalam Bahaya atau Perjalanan",
+   "description": ""
+  },
+  "2063": {
+   "name": "Peringatan bagi yang Melalaikan Salat",
+   "description": ""
+  },
+  "2064": {
+   "name": "Salat Orang Munafik",
+   "description": ""
+  },
+  "2065": {
+   "name": "Wudu",
+   "description": ""
+  },
+  "2066": {
+   "name": "Mandi Wajib",
+   "description": ""
+  },
+  "2067": {
+   "name": "Tayamum",
+   "description": ""
+  },
+  "2068": {
+   "name": "Doa-doa",
+   "description": ""
+  },
+  "2069": {
+   "name": "Nabi Adam dan Hawa",
+   "description": ""
+  },
+  "2070": {
+   "name": "Nabi Muhammad (ﷺ)",
+   "description": ""
+  },
+  "2071": {
+   "name": "Nabi Nuh (ﷺ)",
+   "description": ""
+  },
+  "2072": {
+   "name": "Nabi Sulaiman (ﷺ)",
+   "description": ""
+  },
+  "2073": {
+   "name": "Nabi Syuaib (ﷺ)",
+   "description": ""
+  },
+  "2074": {
+   "name": "Nabi Zakaria (ﷺ)",
+   "description": ""
+  },
+  "2075": {
+   "name": "Ibu Maryam",
+   "description": ""
+  },
+  "2076": {
+   "name": "Istri Firaun",
+   "description": ""
+  },
+  "2077": {
+   "name": "Para Penyihir Firaun",
+   "description": ""
+  },
+  "2078": {
+   "name": "Raja Talut dan Orang Beriman Bersamanya",
+   "description": ""
+  },
+  "2079": {
+   "name": "Orang Beriman dari Bani Israil",
+   "description": ""
+  },
+  "2080": {
+   "name": "Ashabul Kahfi",
+   "description": ""
+  },
+  "2081": {
+   "name": "Orang-orang Saleh",
+   "description": ""
+  },
+  "2082": {
+   "name": "Orang-orang Tertindas",
+   "description": ""
+  },
+  "2083": {
+   "name": "Ayat-ayat Sajdah",
+   "description": ""
+  },
+  "2084": {
+   "name": "Zakat",
+   "description": ""
+  },
+  "2085": {
+   "name": "Sebagai Kewajiban",
+   "description": ""
+  },
+  "2086": {
+   "name": "Salah Satu Sifat Orang Beriman",
+   "description": ""
+  },
+  "2087": {
+   "name": "Penerima Zakat",
+   "description": ""
+  },
+  "2088": {
+   "name": "Sedekah",
+   "description": ""
+  },
+  "2089": {
+   "name": "Peringatan bagi yang Menahan Harta",
+   "description": ""
+  },
+  "2090": {
+   "name": "Di Bulan Ramadan",
+   "description": ""
+  },
+  "2091": {
+   "name": "Waktu Berpuasa",
+   "description": ""
+  },
+  "2092": {
+   "name": "Hubungan Suami Istri pada Malam Hari Puasa",
+   "description": ""
+  },
+  "2093": {
+   "name": "Berpuasa saat Haji",
+   "description": ""
+  },
+  "2094": {
+   "name": "Kewajiban bagi yang Mampu",
+   "description": ""
+  },
+  "2095": {
+   "name": "Manasik dan Hukum-hukumnya",
+   "description": ""
+  },
+  "2096": {
+   "name": "Hewan Kurban",
+   "description": ""
+  },
+  "2097": {
+   "name": "Larangan Berburu di Darat saat Ihram",
+   "description": ""
+  },
+  "2098": {
+   "name": "Bolehnya Berburu di Laut",
+   "description": ""
+  },
+  "2099": {
+   "name": "Umrah",
+   "description": ""
+  },
+  "2100": {
+   "name": "2:158,",
+   "description": ""
+  },
+  "2101": {
+   "name": "Enam Rukun Iman",
+   "description": ""
+  },
+  "2102": {
+   "name": "Pengabdian kepada Allah Yang Maha Esa",
+   "description": ""
+  },
+  "2103": {
+   "name": "Lihat Allah di bawah Ajaran",
+   "description": ""
+  },
+  "2104": {
+   "name": "Umat-umat Beragama",
+   "description": ""
+  },
+  "2105": {
+   "name": "Kaum Muslim",
+   "description": ""
+  },
+  "2106": {
+   "name": "Saling Melindungi",
+   "description": ""
+  },
+  "2107": {
+   "name": "Ahli Kitab (Terutama Yahudi dan Nasrani)",
+   "description": ""
+  },
+  "2108": {
+   "name": "Muslim Boleh Memakan Sembelihan Mereka dan Menikahi Perempuan Mereka",
+   "description": ""
+  },
+  "2109": {
+   "name": "Makanan yang Diharamkan bagi Yahudi",
+   "description": ""
+  },
+  "2110": {
+   "name": "Majusi",
+   "description": ""
+  },
+  "2111": {
+   "name": "Kaum Musyrik (Penyembah Berhala)",
+   "description": ""
+  },
+  "2112": {
+   "name": "Takhayul Kaum Musyrik",
+   "description": ""
+  },
+  "2113": {
+   "name": "Ateis",
+   "description": ""
+  },
+  "2114": {
+   "name": "Tradisi Jahiliah yang Dilarang",
+   "description": ""
+  },
+  "2115": {
+   "name": "Mengubur Anak Perempuan Hidup-hidup",
+   "description": ""
+  },
+  "2116": {
+   "name": "Membunuh Anak karena Takut Miskin",
+   "description": ""
+  },
+  "2117": {
+   "name": "Bersiul dan Bertepuk Tangan di Sekitar Ka'bah",
+   "description": ""
+  },
+  "2118": {
+   "name": "Mempersembahkan Unta untuk Berhala",
+   "description": ""
+  },
+  "2119": {
+   "name": "Menyembelih atas Nama Berhala",
+   "description": ""
+  },
+  "2120": {
+   "name": "Talak Zihar",
+   "description": ""
+  },
+  "2121": {
+   "name": "Ila' (Lebih dari Empat Bulan)",
+   "description": ""
+  },
+  "2122": {
+   "name": "Mengundi Nasib untuk Mengambil Keputusan",
+   "description": ""
+  },
+  "2123": {
+   "name": "Tawaf di Ka'bah Tanpa Busana",
+   "description": ""
+  },
+  "2124": {
+   "name": "Memasuki Rumah dari Pintu Belakang Sepulang Haji",
+   "description": ""
+  },
+  "2125": {
+   "name": "Sesembahan",
+   "description": ""
+  },
+  "2126": {
+   "name": "Malaikat (oleh Sebagian Musyrik Arab)",
+   "description": ""
+  },
+  "2127": {
+   "name": "Al-Aikah (oleh Kaum Nabi Syuaib ﷺ)",
+   "description": ""
+  },
+  "2128": {
+   "name": "Ba'l (oleh Kaum Nabi Ilyas ﷺ)",
+   "description": ""
+  },
+  "2129": {
+   "name": "Nabi Isa (dalam Agama Nasrani)",
+   "description": ""
+  },
+  "2130": {
+   "name": "Berhala (oleh Kaum Nabi Ibrahim ﷺ)",
+   "description": ""
+  },
+  "2131": {
+   "name": "Berhala Lata, Uzza, dan Manat (oleh Musyrik Arab)",
+   "description": ""
+  },
+  "2132": {
+   "name": "Berhala Wadd, Suwa', Yagus, Ya'uq, dan Nasr (oleh Kaum Nabi Nuh ﷺ)",
+   "description": ""
+  },
+  "2133": {
+   "name": "Matahari (oleh Kaum Saba)",
+   "description": ""
+  },
+  "2134": {
+   "name": "Bintang Syi'ra (oleh Sebagian Musyrik Arab)",
+   "description": ""
+  },
+  "2135": {
+   "name": "Firaun (di Mesir Kuno)",
+   "description": ""
+  },
+  "2136": {
+   "name": "Hawa Nafsu",
+   "description": ""
+  },
+  "2137": {
+   "name": "Bantahan atas Keyakinan Banyak Tuhan",
+   "description": ""
+  },
+  "2138": {
+   "name": "Tempat-tempat Ibadah",
+   "description": ""
+  },
+  "2139": {
+   "name": "Masjid",
+   "description": ""
+  },
+  "2140": {
+   "name": "Gereja",
+   "description": ""
+  },
+  "2141": {
+   "name": "Sinagoge",
+   "description": ""
+  },
+  "2142": {
+   "name": "Biara",
+   "description": ""
+  },
+  "2143": {
+   "name": "Tempat Suci",
+   "description": ""
+  },
+  "2144": {
+   "name": "Kuil",
+   "description": ""
+  },
+  "2145": {
+   "name": "Gelar Keagamaan",
+   "description": ""
+  },
+  "2146": {
+   "name": "Pendeta, Rahib, dan Rabi",
+   "description": ""
+  },
+  "2147": {
+   "name": "Bertanya tentang Penciptaan Adam",
+   "description": ""
+  },
+  "2148": {
+   "name": "Tidak Pernah Mendurhakai Allah",
+   "description": ""
+  },
+  "2149": {
+   "name": "Bukan Anak-anak Perempuan Allah",
+   "description": ""
+  },
+  "2150": {
+   "name": "Malaikat Penjaga",
+   "description": ""
+  },
+  "2151": {
+   "name": "Dua Malaikat Pencatat",
+   "description": ""
+  },
+  "2152": {
+   "name": "Delapan Malaikat Pemikul Arasy pada Hari Kiamat",
+   "description": ""
+  },
+  "2153": {
+   "name": "Sembilan Belas Penjaga Neraka",
+   "description": ""
+  },
+  "2154": {
+   "name": "Malaikat Maut",
+   "description": ""
+  },
+  "2155": {
+   "name": "Malik",
+   "description": ""
+  },
+  "2156": {
+   "name": "Para Rasul",
+   "description": ""
+  },
+  "2157": {
+   "name": "Lihat Para Nabi (di bawah Kisah-kisah)",
+   "description": ""
+  },
+  "2158": {
+   "name": "Dari Kalangan Malaikat dan Manusia",
+   "description": ""
+  },
+  "2159": {
+   "name": "Rasul Ulul Azmi (Ibrahim, Nuh, Musa, Isa, dan Muhammad)",
+   "description": ""
+  },
+  "2160": {
+   "name": "Wahyu dari Allah",
+   "description": ""
+  },
+  "2161": {
+   "name": "Peringatan bagi Seluruh Alam",
+   "description": ""
+  },
+  "2162": {
+   "name": "Petunjuk ke Jalan Hidup yang Paling Lurus",
+   "description": ""
+  },
+  "2163": {
+   "name": "Wahyu Mulai Turun di Bulan Ramadan",
+   "description": ""
+  },
+  "2164": {
+   "name": "Pada Malam yang Diberkahi",
+   "description": ""
+  },
+  "2165": {
+   "name": "Diturunkan Secara Bertahap",
+   "description": ""
+  },
+  "2166": {
+   "name": "Dimudahkan untuk Diingat",
+   "description": ""
+  },
+  "2167": {
+   "name": "Membenarkan Wahyu Sebelumnya",
+   "description": ""
+  },
+  "2168": {
+   "name": "Batu Uji bagi Kitab-kitab Terdahulu",
+   "description": ""
+  },
+  "2169": {
+   "name": "Tidak Ada Keraguan di Dalamnya",
+   "description": ""
+  },
+  "2170": {
+   "name": "Tidak Ada Pertentangan",
+   "description": ""
+  },
+  "2171": {
+   "name": "Bukan Rekaan",
+   "description": ""
+  },
+  "2172": {
+   "name": "Tidak Disalin dari Alkitab",
+   "description": ""
+  },
+  "2173": {
+   "name": "Tidak Dibawa Turun oleh Setan",
+   "description": ""
+  },
+  "2174": {
+   "name": "Tak Seorang Pun Mampu Membuat yang Serupa",
+   "description": ""
+  },
+  "2175": {
+   "name": "Terjaga dari Perubahan",
+   "description": ""
+  },
+  "2176": {
+   "name": "Terjaga di Lauhulmahfuz",
+   "description": ""
+  },
+  "2177": {
+   "name": "Tidak Dapat Dibuktikan Salah",
+   "description": ""
+  },
+  "2178": {
+   "name": "Mengabarkan Peristiwa Masa Depan",
+   "description": ""
+  },
+  "2179": {
+   "name": "Membuat Orang Beriman Menangis",
+   "description": ""
+  },
+  "2180": {
+   "name": "Menyentuh Hati",
+   "description": ""
+  },
+  "2181": {
+   "name": "Cahaya yang Terang",
+   "description": ""
+  },
+  "2182": {
+   "name": "Penawar dan Rahmat bagi Orang Beriman",
+   "description": ""
+  },
+  "2183": {
+   "name": "Suhuf Nabi Ibrahim",
+   "description": ""
+  },
+  "2184": {
+   "name": "Takdir",
+   "description": ""
+  },
+  "2185": {
+   "name": "Kebebasan Memilih",
+   "description": ""
+  },
+  "2186": {
+   "name": "Hari Kiamat",
+   "description": ""
+  },
+  "2187": {
+   "name": "Tidak Ada Kezaliman",
+   "description": ""
+  },
+  "2188": {
+   "name": "Kedahsyatan Hari Kehancuran",
+   "description": ""
+  },
+  "2189": {
+   "name": "Orang Saleh dan Orang Jahat pada Hari Itu",
+   "description": ""
+  },
+  "2190": {
+   "name": "Syafaat",
+   "description": ""
+  },
+  "2191": {
+   "name": "Catatan Amal",
+   "description": ""
+  },
+  "2192": {
+   "name": "Orang Beriman Menerima Catatan dengan Tangan Kanan",
+   "description": ""
+  },
+  "2193": {
+   "name": "Orang Kafir Menerima Catatan dengan Tangan Kiri",
+   "description": ""
+  },
+  "2194": {
+   "name": "Tidak Ada yang Tersembunyi dari Allah",
+   "description": ""
+  },
+  "2195": {
+   "name": "Penimbangan Amal",
+   "description": ""
+  },
+  "2196": {
+   "name": "Kesaksian Anggota Tubuh",
+   "description": ""
+  },
+  "2197": {
+   "name": "Balasan Amal Baik dan Buruk",
+   "description": ""
+  },
+  "2198": {
+   "name": "Golongan Manusia",
+   "description": ""
+  },
+  "2199": {
+   "name": "Orang Beriman",
+   "description": ""
+  },
+  "2200": {
+   "name": "Orang Kafir",
+   "description": ""
+  },
+  "2201": {
+   "name": "Orang Munafik",
+   "description": ""
+  },
+  "2202": {
+   "name": "Penghuni A'raf",
+   "description": ""
+  },
+  "2203": {
+   "name": "Penghuni Surga",
+   "description": ""
+  },
+  "2204": {
+   "name": "Orang-orang yang Paling Dahulu Beriman",
+   "description": ""
+  },
+  "2205": {
+   "name": "Golongan Kanan",
+   "description": ""
+  },
+  "2206": {
+   "name": "Penghuni Neraka",
+   "description": ""
+  },
+  "2207": {
+   "name": "Golongan Kiri",
+   "description": ""
+  },
+  "2208": {
+   "name": "Hubungan dengan Sesama Manusia",
+   "description": ""
+  },
+  "2209": {
+   "name": "Keuangan",
+   "description": ""
+  },
+  "2210": {
+   "name": "Suap",
+   "description": ""
+  },
+  "2211": {
+   "name": "Pedoman Berniaga",
+   "description": ""
+  },
+  "2212": {
+   "name": "Wasiat",
+   "description": ""
+  },
+  "2213": {
+   "name": "Wasiat Sukarela untuk Bukan Ahli Waris",
+   "description": ""
+  },
+  "2214": {
+   "name": "Menjelang Wafat dalam Perjalanan",
+   "description": ""
+  },
+  "2215": {
+   "name": "Utang",
+   "description": ""
+  },
+  "2216": {
+   "name": "Berlaku Baik dalam Menagih Utang",
+   "description": ""
+  },
+  "2217": {
+   "name": "Menulis dan Menyaksikan Akad Utang",
+   "description": ""
+  },
+  "2218": {
+   "name": "Mengambil Jaminan",
+   "description": ""
+  },
+  "2219": {
+   "name": "Pedoman",
+   "description": ""
+  },
+  "2220": {
+   "name": "Bagian Anak dan Orang Tua",
+   "description": ""
+  },
+  "2221": {
+   "name": "Pasangan dan Saudara Seibu",
+   "description": ""
+  },
+  "2222": {
+   "name": "Saudara Kandung",
+   "description": ""
+  },
+  "2223": {
+   "name": "Peringatan bagi yang Tidak Mematuhi",
+   "description": ""
+  },
+  "2224": {
+   "name": "Riba",
+   "description": ""
+  },
+  "2225": {
+   "name": "Larangan dan Peringatan",
+   "description": ""
+  },
+  "2226": {
+   "name": "Dihapus Keberkahannya",
+   "description": ""
+  },
+  "2227": {
+   "name": "Hukum",
+   "description": ""
+  },
+  "2228": {
+   "name": "Hukum Antiterorisme",
+   "description": ""
+  },
+  "2229": {
+   "name": "Menegakkan Keadilan",
+   "description": ""
+  },
+  "2230": {
+   "name": "Membela Hak Anak Yatim dan Perempuan",
+   "description": ""
+  },
+  "2231": {
+   "name": "Berlaku Adil kepada Orang Yahudi",
+   "description": ""
+  },
+  "2232": {
+   "name": "Berlaku Adil kepada Orang Musyrik",
+   "description": ""
+  },
+  "2233": {
+   "name": "Bersikap Adil kepada Non-Muslim",
+   "description": ""
+  },
+  "2234": {
+   "name": "Kisas",
+   "description": ""
+  },
+  "2235": {
+   "name": "Melalui Jalur Hukum (dengan Pilihan Memaafkan)",
+   "description": ""
+  },
+  "2236": {
+   "name": "Antara Suami dan Istri, Khuluk",
+   "description": ""
+  },
+  "2237": {
+   "name": "Li'an",
+   "description": ""
+  },
+  "2238": {
+   "name": "Politik",
+   "description": ""
+  },
+  "2239": {
+   "name": "Memelihara Anak Yatim",
+   "description": ""
+  },
+  "2240": {
+   "name": "Berbuat Baik kepada Non-Muslim",
+   "description": ""
+  },
+  "2241": {
+   "name": "Kesopanan",
+   "description": ""
+  },
+  "2242": {
+   "name": "Hijab",
+   "description": ""
+  },
+  "2243": {
+   "name": "Menundukkan Pandangan",
+   "description": ""
+  },
+  "2244": {
+   "name": "Juru Damai dan Islah",
+   "description": ""
+  },
+  "2245": {
+   "name": "Adab Perceraian",
+   "description": ""
+  },
+  "2246": {
+   "name": "Mahar dan Masa Idah",
+   "description": ""
+  },
+  "2247": {
+   "name": "Suami Tidak Mengambil Kembali Mahar",
+   "description": ""
+  },
+  "2248": {
+   "name": "Istri Tidak Boleh Disusahkan",
+   "description": ""
+  },
+  "2249": {
+   "name": "Istri Dinafkahi selama Hamil",
+   "description": ""
+  },
+  "2250": {
+   "name": "Bila Ia Menyusui Anak Mantan Suaminya,",
+   "description": ""
+  },
+  "2251": {
+   "name": "Orang Tua Tidak Boleh Menderita karena Anaknya",
+   "description": ""
+  },
+  "2252": {
+   "name": "Memilih Ibu Susu",
+   "description": ""
+  },
+  "2253": {
+   "name": "Amar Makruf Nahi Mungkar",
+   "description": ""
+  },
+  "2254": {
+   "name": "Tentang Manusia",
+   "description": ""
+  },
+  "2255": {
+   "name": "Kesetaraan Laki-laki dan Perempuan di Hadapan Allah dan Hukum",
+   "description": ""
+  },
+  "2256": {
+   "name": "Laki-laki Memiliki Tanggung Jawab Satu Tingkat di atas Perempuan",
+   "description": ""
+  },
+  "2257": {
+   "name": "Memberi Makan",
+   "description": ""
+  },
+  "2258": {
+   "name": "Orang Miskin, Anak Yatim, dan Tawanan",
+   "description": ""
+  },
+  "2259": {
+   "name": "Dan Menahan Amarah",
+   "description": ""
+  },
+  "2260": {
+   "name": "Memerdekakan Budak",
+   "description": ""
+  },
+  "2261": {
+   "name": "Dan Membantu Mereka",
+   "description": ""
+  },
+  "2262": {
+   "name": "Berbakti kepada Orang Tua",
+   "description": ""
+  },
+  "2263": {
+   "name": "Takwil Mimpi",
+   "description": ""
+  },
+  "2264": {
+   "name": "Nabi Yusuf",
+   "description": ""
+  },
+  "2265": {
+   "name": "Perempuan yang Halal dan Haram Dinikahi",
+   "description": ""
+  },
+  "2266": {
+   "name": "Adab Hubungan Suami Istri",
+   "description": ""
+  },
+  "2267": {
+   "name": "Hamil dan Menyusui",
+   "description": ""
+  },
+  "2268": {
+   "name": "Menikahi Kembali Mantan Istri",
+   "description": ""
+  },
+  "2269": {
+   "name": "Membantu yang Lajang untuk Menikah",
+   "description": ""
+  },
+  "2270": {
+   "name": "Menyampaikan Minat secara Halus selama Masa Idah",
+   "description": ""
+  },
+  "2271": {
+   "name": "Menebus Sumpah yang Dilanggar",
+   "description": ""
+  },
+  "2272": {
+   "name": "Sabar di Masa Sulit",
+   "description": ""
+  },
+  "2273": {
+   "name": "Izin",
+   "description": ""
+  },
+  "2274": {
+   "name": "Untuk Masuk",
+   "description": ""
+  },
+  "2275": {
+   "name": "Memasuki Rumah Orang Lain",
+   "description": ""
+  },
+  "2276": {
+   "name": "Memasuki Tempat Umum",
+   "description": ""
+  },
+  "2277": {
+   "name": "Adab Bermasyarakat",
+   "description": ""
+  },
+  "2278": {
+   "name": "Memeriksa Kebenaran Berita",
+   "description": ""
+  },
+  "2279": {
+   "name": "Menghormati Semua Orang",
+   "description": ""
+  },
+  "2280": {
+   "name": "Adab Bermajelis",
+   "description": ""
+  },
+  "2281": {
+   "name": "Pembicaraan Rahasia",
+   "description": ""
+  },
+  "2282": {
+   "name": "Nazar",
+   "description": ""
+  },
+  "2283": {
+   "name": "Boros dan Kikir",
+   "description": ""
+  },
+  "2284": {
+   "name": "Para Nabi (25 Disebut Namanya)",
+   "description": ""
+  },
+  "2285": {
+   "name": "Bersama Saudaranya Nabi Musa (ﷺ) sebagai Utusan kepada Firaun dan Kaumnya",
+   "description": ""
+  },
+  "2286": {
+   "name": "Meninggikan Fondasi Ka'bah",
+   "description": ""
+  },
+  "2287": {
+   "name": "Mengajak Kaumnya Menyembah Allah Yang Maha Esa",
+   "description": ""
+  },
+  "2288": {
+   "name": "Berdebat dengan Raja yang Sombong",
+   "description": ""
+  },
+  "2289": {
+   "name": "Bertanya tentang Kebangkitan",
+   "description": ""
+  },
+  "2290": {
+   "name": "Membantah Penyembahan Benda Langit",
+   "description": ""
+  },
+  "2291": {
+   "name": "Menerima Kabar Kelahiran Ishak",
+   "description": ""
+  },
+  "2292": {
+   "name": "Doanya di Ka'bah",
+   "description": ""
+  },
+  "2293": {
+   "name": "Dikunjungi Para Malaikat",
+   "description": ""
+  },
+  "2294": {
+   "name": "Mengajak Ayahnya kepada Kebenaran",
+   "description": ""
+  },
+  "2295": {
+   "name": "Menghancurkan Berhala dan Diselamatkan dari Api",
+   "description": ""
+  },
+  "2296": {
+   "name": "Menyeru Semua Orang untuk Berhaji",
+   "description": ""
+  },
+  "2297": {
+   "name": "Dimuliakan Allah, Digoda Setan",
+   "description": ""
+  },
+  "2298": {
+   "name": "Diampuni Allah",
+   "description": ""
+  },
+  "2299": {
+   "name": "Membunuh Jalut",
+   "description": ""
+  },
+  "2300": {
+   "name": "Memutuskan Perkara",
+   "description": ""
+  },
+  "2301": {
+   "name": "Dikaruniai Ilmu dan Kenabian",
+   "description": ""
+  },
+  "2302": {
+   "name": "Gunung dan Burung Ikut Bertasbih Bersamanya",
+   "description": ""
+  },
+  "2303": {
+   "name": "Mengadili Dua Orang",
+   "description": ""
+  },
+  "2304": {
+   "name": "Nabi Idris (Disebut Sekilas)",
+   "description": ""
+  },
+  "2305": {
+   "name": "Bersama Kaumnya",
+   "description": ""
+  },
+  "2306": {
+   "name": "Nabi Ilyasa (Disebut Sekilas)",
+   "description": ""
+  },
+  "2307": {
+   "name": "Nabi Ishak",
+   "description": ""
+  },
+  "2308": {
+   "name": "Kelahiran dan Kenabian",
+   "description": ""
+  },
+  "2309": {
+   "name": "Meninggikan Fondasi Ka'bah Bersama Ayahnya",
+   "description": ""
+  },
+  "2310": {
+   "name": "Kisah Penyembelihan",
+   "description": ""
+  },
+  "2311": {
+   "name": "Sebagai Nabi",
+   "description": ""
+  },
+  "2312": {
+   "name": "Dalam Kisah Putranya, Yusuf",
+   "description": ""
+  },
+  "2313": {
+   "name": "Diuji lalu Diberi Balasan",
+   "description": ""
+  },
+  "2314": {
+   "name": "Nabi Ayub dan Nabi Yahya (ﷺ)",
+   "description": ""
+  },
+  "2315": {
+   "name": "Nabi Yahya",
+   "description": ""
+  },
+  "2316": {
+   "name": "Ditelan Ikan Paus lalu Diselamatkan",
+   "description": ""
+  },
+  "2317": {
+   "name": "Kisah Terbaik",
+   "description": ""
+  },
+  "2318": {
+   "name": "Mimpi Yusuf Kecil",
+   "description": ""
+  },
+  "2319": {
+   "name": "Persekongkolan Saudara-saudaranya",
+   "description": ""
+  },
+  "2320": {
+   "name": "Dijual sebagai Budak",
+   "description": ""
+  },
+  "2321": {
+   "name": "Dibesarkan di Rumah Pembesar Mesir",
+   "description": ""
+  },
+  "2322": {
+   "name": "Istri Pembesar Mesir Menggodanya",
+   "description": ""
+  },
+  "2323": {
+   "name": "Peristiwa Jamuan",
+   "description": ""
+  },
+  "2324": {
+   "name": "Masuk Penjara",
+   "description": ""
+  },
+  "2325": {
+   "name": "Dua Teman Sepenjara",
+   "description": ""
+  },
+  "2326": {
+   "name": "Mimpi Raja",
+   "description": ""
+  },
+  "2327": {
+   "name": "Menjadi Bendaharawan Negeri",
+   "description": ""
+  },
+  "2328": {
+   "name": "Saudara-saudaranya Datang Meminta Bahan Makanan",
+   "description": ""
+  },
+  "2329": {
+   "name": "Menahan Saudaranya Bunyamin",
+   "description": ""
+  },
+  "2330": {
+   "name": "Kesedihan Ayahnya yang Kembali",
+   "description": ""
+  },
+  "2331": {
+   "name": "Mengungkapkan Jati Dirinya",
+   "description": ""
+  },
+  "2332": {
+   "name": "Mimpi Lama Menjadi Kenyataan",
+   "description": ""
+  },
+  "2333": {
+   "name": "Doa Penutup",
+   "description": ""
+  },
+  "2334": {
+   "name": "Masa Kecil",
+   "description": ""
+  },
+  "2335": {
+   "name": "Pertemuan di Semak yang Menyala",
+   "description": ""
+  },
+  "2336": {
+   "name": "Kisah dengan Firaun",
+   "description": ""
+  },
+  "2337": {
+   "name": "Sembilan Mukjizat bagi Firaun dan Kaumnya",
+   "description": ""
+  },
+  "2338": {
+   "name": "Mengalahkan Para Penyihir Firaun",
+   "description": ""
+  },
+  "2339": {
+   "name": "Tidak Sengaja Membunuh Orang Mesir",
+   "description": ""
+  },
+  "2340": {
+   "name": "Melarikan Diri ke Madyan dan Menikah",
+   "description": ""
+  },
+  "2341": {
+   "name": "Menerima Lauh-lauh",
+   "description": ""
+  },
+  "2342": {
+   "name": "Meminta Melihat Allah di Bukit",
+   "description": ""
+  },
+  "2343": {
+   "name": "Dimuliakan Allah",
+   "description": ""
+  },
+  "2344": {
+   "name": "Nikmat Allah kepada Bani Israil",
+   "description": ""
+  },
+  "2345": {
+   "name": "Menegur Kaumnya karena Menyembah Anak Sapi",
+   "description": ""
+  },
+  "2346": {
+   "name": "Bani Israil Menolak Memasuki Baitulmaqdis",
+   "description": ""
+  },
+  "2347": {
+   "name": "Diolok-olok",
+   "description": ""
+  },
+  "2348": {
+   "name": "Bahtera dan Banjir Besar",
+   "description": ""
+  },
+  "2349": {
+   "name": "Putranya Tenggelam",
+   "description": ""
+  },
+  "2350": {
+   "name": "Nabi Muhammad",
+   "description": ""
+  },
+  "2351": {
+   "name": "Lihat Ajaran",
+   "description": ""
+  },
+  "2352": {
+   "name": "Nabi Syuaib",
+   "description": ""
+  },
+  "2353": {
+   "name": "Membantu Ayahnya Nabi Daud (ﷺ) Memutuskan Perkara Lebih Adil",
+   "description": ""
+  },
+  "2354": {
+   "name": "Kisah dengan Semut",
+   "description": ""
+  },
+  "2355": {
+   "name": "Kisah dengan Burung Hud-hud",
+   "description": ""
+  },
+  "2356": {
+   "name": "Kisah dengan Ratu Saba",
+   "description": ""
+  },
+  "2357": {
+   "name": "Nikmat Allah kepadanya",
+   "description": ""
+  },
+  "2358": {
+   "name": "Kecintaannya pada Kuda-kuda Pilihan",
+   "description": ""
+  },
+  "2359": {
+   "name": "Berdoa Memohon Keturunan",
+   "description": ""
+  },
+  "2360": {
+   "name": "Nabi Zulkifli (Disebut Sekilas)",
+   "description": ""
+  },
+  "2361": {
+   "name": "Kisah-kisah Lain",
+   "description": ""
+  },
+  "2362": {
+   "name": "Habil dan Qabil",
+   "description": ""
+  },
+  "2363": {
+   "name": "Khidir dan Nabi Musa (ﷺ)",
+   "description": ""
+  },
+  "2364": {
+   "name": "Pasukan Bergajah",
+   "description": ""
+  },
+  "2365": {
+   "name": "Orang Beriman dari Kaum Firaun",
+   "description": ""
+  },
+  "2366": {
+   "name": "Kelahiran Maryam",
+   "description": ""
+  },
+  "2367": {
+   "name": "Sapi Betina Bani Israil",
+   "description": ""
+  },
+  "2368": {
+   "name": "Pemilik Kebun",
+   "description": ""
+  },
+  "2369": {
+   "name": "Harut dan Marut",
+   "description": ""
+  },
+  "2370": {
+   "name": "Qarun",
+   "description": ""
+  },
+  "2371": {
+   "name": "Nasihat Luqman kepada Anaknya",
+   "description": ""
+  },
+  "2372": {
+   "name": "Pemilik Dua Kebun",
+   "description": ""
+  },
+  "2373": {
+   "name": "Kaum Saba",
+   "description": ""
+  },
+  "2374": {
+   "name": "Ashabul Kahfi",
+   "description": ""
+  },
+  "2375": {
+   "name": "Ashabul Ukhdud",
+   "description": ""
+  },
+  "2376": {
+   "name": "Pelanggar Hari Sabat",
+   "description": ""
+  },
+  "2377": {
+   "name": "Samiri dan Anak Sapi Emas",
+   "description": ""
+  },
+  "2378": {
+   "name": "Talut dan Samuel",
+   "description": ""
+  },
+  "2379": {
+   "name": "Zulkarnain",
+   "description": ""
+  },
+  "2380": {
+   "name": "Perumpamaan",
+   "description": ""
+  },
+  "2381": {
+   "name": "Sedekah yang Diterima",
+   "description": ""
+  },
+  "2382": {
+   "name": "Allah dan Sesembahan Palsu",
+   "description": ""
+  },
+  "2383": {
+   "name": "Menyekutukan Allah dalam Ibadah",
+   "description": ""
+  },
+  "2384": {
+   "name": "Orang Beriman dan Orang Kafir",
+   "description": ""
+  },
+  "2385": {
+   "name": "Hati Orang Beriman",
+   "description": ""
+  },
+  "2386": {
+   "name": "Perumpamaan Orang Beriman dalam Taurat dan Injil",
+   "description": ""
+  },
+  "2387": {
+   "name": "Sedekah dan Biji-bijian",
+   "description": ""
+  },
+  "2388": {
+   "name": "Amal Orang Kafir",
+   "description": ""
+  },
+  "2389": {
+   "name": "Kalimat yang Buruk",
+   "description": ""
+  },
+  "2390": {
+   "name": "Kalimat yang Baik",
+   "description": ""
+  },
+  "2391": {
+   "name": "Dunia yang Fana",
+   "description": ""
+  },
+  "2392": {
+   "name": "Hati yang Keras",
+   "description": ""
+  },
+  "2393": {
+   "name": "Ulama yang Tersesat",
+   "description": ""
+  },
+  "2394": {
+   "name": "Ahli Tauhid dan Musyrik",
+   "description": ""
+  },
+  "2395": {
+   "name": "Kebangkitan",
+   "description": ""
+  },
+  "2396": {
+   "name": "Penggembala dan Domba",
+   "description": ""
+  },
+  "2397": {
+   "name": "Kebenaran dan Kebatilan",
+   "description": ""
+  },
+  "2398": {
+   "name": "Ilmu yang Tidak Bermanfaat",
+   "description": ""
+  },
+  "2399": {
+   "name": "Sedekah yang Sia-sia",
+   "description": ""
+  },
+  "2400": {
+   "name": "Menghapus Pahala Amal Baik",
+   "description": ""
+  },
+  "2401": {
+   "name": "Diciptakan dari Api",
+   "description": ""
+  },
+  "2402": {
+   "name": "Jin yang Beriman dan yang Kafir",
+   "description": ""
+  },
+  "2403": {
+   "name": "Sebagian Beriman kepada Risalah Al-Qur'an",
+   "description": ""
+  },
+  "2404": {
+   "name": "Manusia dan Jin Diciptakan dengan Tujuan",
+   "description": ""
+  },
+  "2405": {
+   "name": "Kesombongan",
+   "description": ""
+  },
+  "2406": {
+   "name": "Dari Golongan Jin",
+   "description": ""
+  },
+  "2407": {
+   "name": "Godaan terhadap Adam dan Kejatuhannya",
+   "description": ""
+  },
+  "2408": {
+   "name": "Tidak Berkuasa atas Orang Beriman",
+   "description": ""
+  },
+  "2409": {
+   "name": "Tujuannya",
+   "description": ""
+  },
+  "2410": {
+   "name": "Musuh Bebuyutan Manusia",
+   "description": ""
+  },
+  "2411": {
+   "name": "Golongannya",
+   "description": ""
+  },
+  "2412": {
+   "name": "Perbuatannya",
+   "description": ""
+  },
+  "2413": {
+   "name": "Menghalangi Amal Baik",
+   "description": ""
+  },
+  "2414": {
+   "name": "Orang Beriman Berlindung kepada Allah darinya",
+   "description": ""
+  },
+  "2415": {
+   "name": "Tipu Dayanya Lemah",
+   "description": ""
+  },
+  "2416": {
+   "name": "Meninggalkan Para Pengikutnya",
+   "description": ""
+  },
+  "2417": {
+   "name": "Berbicara kepada Pengikutnya di Neraka",
+   "description": ""
+  },
+  "2418": {
+   "name": "Setan-setan",
+   "description": ""
+  },
+  "2419": {
+   "name": "Setan dari Golongan Manusia dan Jin",
+   "description": ""
+  },
+  "2420": {
+   "name": "Langit Dijaga dari Setan",
+   "description": ""
+  },
+  "2421": {
+   "name": "Tidak Dapat Dicegah atau Ditunda",
+   "description": ""
+  },
+  "2422": {
+   "name": "Saudara Kembar Tidur",
+   "description": ""
+  },
+  "2423": {
+   "name": "Orang Beriman dan Orang Kafir saat Kematian",
+   "description": ""
+  },
+  "2424": {
+   "name": "Azab Kubur",
+   "description": ""
+  },
+  "2425": {
+   "name": "Hari Kiamat",
+   "description": ""
+  },
+  "2426": {
+   "name": "Tanda-tanda",
+   "description": ""
+  },
+  "2427": {
+   "name": "Nama-nama",
+   "description": ""
+  },
+  "2428": {
+   "name": "Waktunya Hanya Diketahui Allah",
+   "description": ""
+  },
+  "2429": {
+   "name": "Semakin Dekat",
+   "description": ""
+  },
+  "2430": {
+   "name": "Datang secara Tiba-tiba",
+   "description": ""
+  },
+  "2431": {
+   "name": "Sangkakala Akan Ditiup",
+   "description": ""
+  },
+  "2432": {
+   "name": "Contoh dalam Kisah Uzair",
+   "description": ""
+  },
+  "2433": {
+   "name": "Nabi Ibrahim (ﷺ)",
+   "description": ""
+  },
+  "2434": {
+   "name": "Peringatan bagi Pengingkar Kebangkitan",
+   "description": ""
+  },
+  "2435": {
+   "name": "Hari Pembalasan",
+   "description": ""
+  },
+  "2436": {
+   "name": "Seluas Langit dan Bumi",
+   "description": ""
+  },
+  "2437": {
+   "name": "Air Mengalir, Naungan Sejuk, Hidangan Lezat, dan Pasangan yang Suci",
+   "description": ""
+  },
+  "2438": {
+   "name": "Balasan bagi Orang Beriman",
+   "description": ""
+  },
+  "2439": {
+   "name": "Sungai Madu, Susu, Air, dan Khamar",
+   "description": ""
+  },
+  "2440": {
+   "name": "Doa dan Salam",
+   "description": ""
+  },
+  "2441": {
+   "name": "Disambut dengan Ucapan Salam",
+   "description": ""
+  },
+  "2442": {
+   "name": "Kekal dalam Kenikmatan",
+   "description": ""
+  },
+  "2443": {
+   "name": "Tidak Pernah Diminta Keluar",
+   "description": ""
+  },
+  "2444": {
+   "name": "Cahaya Bersinar di Depan dan di Sebelah Kanan Mereka",
+   "description": ""
+  },
+  "2445": {
+   "name": "Tidak Ada Panas atau Dingin",
+   "description": ""
+  },
+  "2446": {
+   "name": "Semua Keinginan Terpenuhi",
+   "description": ""
+  },
+  "2447": {
+   "name": "Gelang Emas dan Pakaian Sutra Halus",
+   "description": ""
+  },
+  "2448": {
+   "name": "Nampan Berisi Piala Emas",
+   "description": ""
+  },
+  "2449": {
+   "name": "Bejana Perak dan Buah-buahan yang Mudah Dipetik",
+   "description": ""
+  },
+  "2450": {
+   "name": "Bersandar di atas Dipan",
+   "description": ""
+  },
+  "2451": {
+   "name": "Orang Beriman Akan Melihat Tuhannya",
+   "description": ""
+  },
+  "2452": {
+   "name": "Air yang Membakar dan Mendidih",
+   "description": ""
+  },
+  "2453": {
+   "name": "Nanah",
+   "description": ""
+  },
+  "2454": {
+   "name": "Pohon Zaqqum",
+   "description": ""
+  },
+  "2455": {
+   "name": "Penghuninya Tidak Hidup dan Tidak Mati",
+   "description": ""
+  },
+  "2456": {
+   "name": "Saling Menyalahkan",
+   "description": ""
+  },
+  "2457": {
+   "name": "Meminta Dibinasakan Seketika",
+   "description": ""
+  },
+  "2458": {
+   "name": "Jeritan yang Memilukan",
+   "description": ""
+  },
+  "2459": {
+   "name": "Api yang Bergemuruh dan Menggelegak",
+   "description": ""
+  },
+  "2460": {
+   "name": "Kulit yang Hangus Diganti dengan yang Baru",
+   "description": ""
+  },
+  "2461": {
+   "name": "Belenggu dan Pakaian dari Ter",
+   "description": ""
+  },
+  "2462": {
+   "name": "Gada dari Besi",
+   "description": ""
+  },
+  "2463": {
+   "name": "Rantai",
+   "description": ""
+  },
+  "2464": {
+   "name": "Penjaga Neraka",
+   "description": ""
+  },
+  "2465": {
+   "name": "Tebusan Tidak Diterima",
+   "description": ""
+  },
+  "2466": {
+   "name": "Syafaat Ditolak",
+   "description": ""
+  },
+  "2467": {
+   "name": "Penyesalan",
+   "description": ""
+  },
+  "2468": {
+   "name": "Tidak Mengikuti Nabi",
+   "description": ""
+  },
+  "2469": {
+   "name": "Tidak Menaati Allah dan Rasul-Nya",
+   "description": ""
+  },
+  "2470": {
+   "name": "Bersahabat dengan Orang Jahat",
+   "description": ""
+  },
+  "2471": {
+   "name": "Mendustakan Ayat-ayat Allah",
+   "description": ""
+  },
+  "2472": {
+   "name": "Tidak Beramal untuk Akhirat",
+   "description": ""
+  },
+  "2473": {
+   "name": "Permohonan yang Putus Asa",
+   "description": ""
+  },
+  "2474": {
+   "name": "Memohon Dikembalikan ke Dunia",
+   "description": ""
+  },
+  "2475": {
+   "name": "Memohon Kesempatan Kedua",
+   "description": ""
+  },
+  "2476": {
+   "name": "Memohon Dikeluarkan dari Neraka",
+   "description": ""
+  },
+  "2477": {
+   "name": "Memohon Makanan dan Minuman",
+   "description": ""
+  },
+  "2478": {
+   "name": "Memohon Pemberi Syafaat",
+   "description": ""
+  },
+  "2479": {
+   "name": "Memohon Dijadikan Tanah",
+   "description": ""
+  },
+  "2480": {
+   "name": "Memohon Kematian",
+   "description": ""
+  },
+  "2481": {
+   "name": "Jalan Menuju Akhirat",
+   "description": ""
+  },
+  "2482": {
+   "name": "Sifat Orang Saleh",
+   "description": ""
+  },
+  "2483": {
+   "name": "Memenuhi Hak Sang Pencipta dan Makhluk-Nya",
+   "description": ""
+  },
+  "2484": {
+   "name": "Sifat Orang Jahat",
+   "description": ""
+  },
+  "2485": {
+   "name": "Tidak Bersyukur",
+   "description": ""
+  },
+  "2486": {
+   "name": "Kikir",
+   "description": ""
+  },
+  "2487": {
+   "name": "Tergesa-gesa",
+   "description": ""
+  },
+  "2488": {
+   "name": "Mengingat Allah Hanya di Masa Sulit",
+   "description": ""
+  },
+  "2489": {
+   "name": "Tidak Sabar",
+   "description": ""
+  },
+  "2490": {
+   "name": "Suka Membantah",
+   "description": ""
+  },
+  "2491": {
+   "name": "Dosa-dosa Besar",
+   "description": ""
+  },
+  "2492": {
+   "name": "Menyekutukan Allah dalam Ibadah (Syirik)",
+   "description": ""
+  },
+  "2493": {
+   "name": "Durhaka kepada Orang Tua",
+   "description": ""
+  },
+  "2494": {
+   "name": "Meninggalkan Salat Wajib",
+   "description": ""
+  },
+  "2495": {
+   "name": "Tidak Membayar Zakat",
+   "description": ""
+  },
+  "2496": {
+   "name": "Pembunuhan",
+   "description": ""
+  },
+  "2497": {
+   "name": "Membunuh Orang Beriman dengan Sengaja",
+   "description": ""
+  },
+  "2498": {
+   "name": "Pencurian",
+   "description": ""
+  },
+  "2499": {
+   "name": "Penipuan",
+   "description": ""
+  },
+  "2500": {
+   "name": "Berdusta",
+   "description": ""
+  },
+  "2501": {
+   "name": "Berdusta atas Nama Allah",
+   "description": ""
+  },
+  "2502": {
+   "name": "Hubungan Seksual yang Diharamkan",
+   "description": ""
+  },
+  "2503": {
+   "name": "Menuduh Berzina tanpa Bukti",
+   "description": ""
+  },
+  "2504": {
+   "name": "Murtad",
+   "description": ""
+  },
+  "2505": {
+   "name": "Memakan Babi dan Makanan Haram Lain (Bangkai, Darah, dll.)",
+   "description": ""
+  },
+  "2506": {
+   "name": "Khamar dan Judi",
+   "description": ""
+  },
+  "2507": {
+   "name": "Gibah",
+   "description": ""
+  },
+  "2508": {
+   "name": "Kesaksian Palsu",
+   "description": ""
+  },
+  "2509": {
+   "name": "Sihir",
+   "description": ""
+  },
+  "2510": {
+   "name": "Pintu-pintu Ampunan",
+   "description": ""
+  },
+  "2511": {
+   "name": "Terbuka Lebar",
+   "description": ""
+  },
+  "2512": {
+   "name": "Keburukan Diganti dengan Kebaikan",
+   "description": ""
   }
  },
  "themes": {
