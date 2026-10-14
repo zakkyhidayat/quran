@@ -41,6 +41,8 @@
     <string name="revelation_order">İniş sırası %1$d</string>
     <string name="read_surah">Bu sureyi oku</string>
     <string name="no_surah_info">Bu sure için bilgi yok.</string>
+    <string name="surah_info_download">%1$s dilinde bilgiyi indir (%2$s)</string>
+    <string name="surah_info_download_failed">İndirme başarısız. Bağlantınızı kontrol edin.</string>
     <string name="ayah_meta">Sayfa %1$d • Cüz %2$d • Hizb %3$d (Rub\' %4$d/4) • Menzil %5$d • Rükû %6$d</string>
     <string name="previous_ayah">Önceki ayet</string>
     <string name="next_ayah">Sonraki ayet</string>

@@ -41,6 +41,8 @@
     <string name="revelation_order">Turun ke-%1$d</string>
     <string name="read_surah">Baca surah ini</string>
     <string name="no_surah_info">Belum ada informasi untuk surah ini.</string>
+    <string name="surah_info_download">Unduh info dalam bahasa %1$s (%2$s)</string>
+    <string name="surah_info_download_failed">Unduhan gagal. Periksa koneksi Anda.</string>
     <string name="ayah_meta">Halaman %1$d • Juz %2$d • Hizb %3$d (rub\' %4$d/4) • Manzil %5$d • Ruku %6$d</string>
     <string name="previous_ayah">Ayat sebelumnya</string>
     <string name="next_ayah">Ayat berikutnya</string>

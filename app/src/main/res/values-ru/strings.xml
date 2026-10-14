@@ -41,6 +41,8 @@
     <string name="revelation_order">Порядок ниспослания %1$d</string>
     <string name="read_surah">Читать эту суру</string>
     <string name="no_surah_info">Нет сведений об этой суре.</string>
+    <string name="surah_info_download">Скачать информацию на языке %1$s (%2$s)</string>
+    <string name="surah_info_download_failed">Не удалось скачать. Проверьте подключение.</string>
     <string name="ayah_meta">Страница %1$d • Джуз %2$d • Хизб %3$d (Руб %4$d/4) • Манзиль %5$d • Руку %6$d</string>
     <string name="previous_ayah">Предыдущий аят</string>
     <string name="next_ayah">Следующий аят</string>

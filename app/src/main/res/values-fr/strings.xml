@@ -41,6 +41,8 @@
     <string name="revelation_order">Ordre de révélation %1$d</string>
     <string name="read_surah">Lire cette sourate</string>
     <string name="no_surah_info">Aucune information pour cette sourate.</string>
+    <string name="surah_info_download">Télécharger les infos en %1$s (%2$s)</string>
+    <string name="surah_info_download_failed">Échec du téléchargement. Vérifiez votre connexion.</string>
     <string name="ayah_meta">Page %1$d • Juz %2$d • Hizb %3$d (Rub\' %4$d/4) • Manzil %5$d • Ruku %6$d</string>
     <string name="previous_ayah">Verset précédent</string>
     <string name="next_ayah">Verset suivant</string>

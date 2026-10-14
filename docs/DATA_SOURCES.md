@@ -34,12 +34,12 @@ tombol unduhnya butuh login. Ambil format **SQLite** kecuali dicatat lain.
 | 7 | Font Hafs Uthmanic (KFGQPC V22) | [font](https://qul.tarteel.ai/resources/font) `UthmanicHafs_V22.ttf` | `fonts-extra/` | Teks Arab di sheet ayat dan hasil pencarian |
 | 8 | Font umum (judul juz, kata pembuka juz) | [font](https://qul.tarteel.ai/resources/font) `quran-common.ttf` | `fonts-extra/` | Judul juz di strip halaman, tab Juz |
 | 9 | Metadata: juz, hizb, rub, manzil, ruku, sajda, surah-name | [quran-metadata](https://qul.tarteel.ai/resources/quran-metadata) (tujuh berkas `quran-metadata-*.sqlite`) | `meta/` | Tab Hizb/Manzil/Sajdah, info ayat, tempat dan urutan turun |
-| 10 | Info surah Indonesia | [surah-info/454](https://qul.tarteel.ai/resources/surah-info/454) | `surah-info-id/surah-info-id.db` | Layar info surah |
+| 10 | Info surah Indonesia (di `quran.db` hanya dipakai mendeteksi tempat turun; isinya dibundel sebagai paket unduhan `info-id`) | [surah-info/454](https://qul.tarteel.ai/resources/surah-info/454) | `surah-info-id/surah-info-id.db` | Layar info surah |
 | 11 | Info surah Inggris | [surah-info/3](https://qul.tarteel.ai/resources/surah-info/3) | `surah-info-en/surah-info-en.db` | Layar info surah |
 | 12 | Transliterasi Latin (tajwid, simple) | [transliteration/469](https://qul.tarteel.ai/resources/transliteration/469), `english-transliteration-tajweed-simple` | `translit-tajweed-simple/` | Kartu transliterasi di sheet ayat |
 | 13 | Terjemahan Indonesia, Kemenag RI (berkas `quran-id-with-footnote-tags`) | [translation/224](https://qul.tarteel.ai/resources/translation/224) ("Indonesian Islamic affairs ministry"; berkas unduhannya bernama `quran-id-...`) | `quran-id-with-footnote-tags/` | Terjemahan |
-| 14 | Info surah bahasa lain (Italia `it`, Malayalam `ml`, Tamil `ta`, Urdu `ur`; Indonesia dan Inggris ada di baris 10-11) | [surah-info](https://qul.tarteel.ai/resources/surah-info), `surah-info-<kode>.db` | `surah-info/` (`python tools/qul_catch.py surah-info --existing`) | Opsional; `load_extra_surah_info` memuatnya ke `surah_info` (juga lewat `--explore-only`). Layar info surah: bila bahasa aplikasi punya info surah, pengguna memilih antara bahasa itu dan Inggris; bahasa lain langsung Inggris tanpa pilihan. Surah yang tidak ada (Italia: 112/114) memakai bahasa Inggris. Menambah sekitar 6 MB |
-| 15 | Tafsir (sekitar 108 sumber; unduh massal lewat `tools/qul_bulk_download.js` di Console halaman login) | [tafsir](https://qul.tarteel.ai/resources/tafsir) | `tafsir/` (`python tools/qul_catch.py tafsir --existing`) | Belum dipakai build; aplikasi belum punya fitur tafsir. Status lokal 2026-10-14: 107 dari 108 (lihat catatan di bawah) |
+| 14 | Info surah bahasa lain (Indonesia `id`, Italia `it`, Malayalam `ml`, Urdu `ur`; Tamil dikecualikan karena sumbernya rusak; Inggris dibundel, baris 11) | [surah-info](https://qul.tarteel.ai/resources/surah-info), `surah-info-<kode>.db` | `surah-info/` (`python tools/qul_catch.py surah-info --existing`) | Paket unduhan opsional (`tools/build_content_packs.py surah_info`); lihat "Paket info surah dan tafsir" |
+| 15 | Tafsir (108 sumber di QUL, 107 sudah terunduh; unduh massal lewat `tools/qul_bulk_download.js` di Console halaman login) | [tafsir](https://qul.tarteel.ai/resources/tafsir) | `tafsir/` (`python tools/qul_catch.py tafsir --existing`) | Paket unduhan opsional (`tools/build_content_packs.py tafsir`); lihat "Paket info surah dan tafsir". UI tafsir belum ada |
 | 14 | Terjemahan Indonesia, The Sabiq Company | [translation/194](https://qul.tarteel.ai/resources/translation/194) | `the-sabiq-company-with-footnote-tags/` | Terjemahan |
 | 15 | Terjemahan Indonesia, King Fahad Quran Complex | [translation/173](https://qul.tarteel.ai/resources/translation/173) | `king-fahad-quran-complex-with-footnote-tags/` | Terjemahan |
 | 16 | Terjemahan Inggris, Saheeh International | [translation/193](https://qul.tarteel.ai/resources/translation/193) | `en-sahih-international-with-footnote-tags/` | Terjemahan |
@@ -115,6 +115,31 @@ Terjemahan dibuat sendiri dan disimpan di git sebagai `tools/explore_i18n/<lang>
 memilih baris sesuai bahasa UI (`in` dinormalisasi menjadi `id`). Entri yang belum diterjemahkan tidak perlu ditulis, karena
 aplikasi otomatis memakai teks Inggris. Terjemahannya hasil mesin (LLM), jadi istilah keagamaan perlu ditinjau sebelum rilis.
 Perubahan berkas ini baru sampai ke pengguna setelah `quran.db` dibangun ulang dan rilis `quran-data` diperbarui.
+
+## Paket info surah dan tafsir
+
+Info surah selain Inggris dan semua tafsir tidak dibundel di `quran.db`; keduanya paket unduhan opsional, seperti terjemahan.
+Inggris tetap dibundel sebagai cadangan.
+
+```bash
+python tools/build_content_packs.py                 # semua; atau: surah_info | tafsir | id paket
+# hasil: build/translation-packs/<id>.db.gz dan larik surah_info/tafsir di catalog.json (tidak masuk git)
+```
+
+- **Katalog kurasi** `tools/content_catalog.json` (masuk git): `id`, `lang`, `name`, `author`, `file` (nama berkas di `data-src/`).
+  Bahasa tidak ditebak dari nama berkas atau tag HTML QUL karena sering keliru (tafsir As-Sa'di Prancis bertanda `fa`).
+  Kunci `excluded` (disertai alasan) melewati entri: `info-ta` (113 dari 114 surah berisi teks yang sama),
+  `id-jalalayn` (berkas unduhan kosong), `ar-dependency-graphs` (graf tata bahasa, bukan tafsir).
+- **Format paket**: SQLite di-gzip. Tabel `info(key,value)` memuat `id`, `kind`, `lang`, `name`, `version`. Info surah:
+  `surah_info(surah,name,short_text,text)`. Tafsir: `tafsir(start,end,text)` dengan `start`/`end` = `surah*1000+ayah`
+  (satu baris per kelompok ayat; QUL hanya mengisi teks di ayat pertama kelompok).
+- **Katalog rilis**: `catalog.json` yang sama dengan terjemahan (tag `translations`), larik terpisah `surah_info` dan `tafsir`
+  supaya aplikasi lama tidak menganggapnya terjemahan. Tiap entri memuat `bytes` dan `sha256` untuk berkas gzip, `size`
+  untuk database setelah dibuka. `build_translation_packs.py` mempertahankan larik ini saat membangun ulang terjemahan.
+- **Aplikasi** (`ContentPacks`): unduh, cocokkan sha256, buka dengan batas 1,25x `size`, periksa isi (`id`, `kind`, tidak
+  kosong), simpan di `filesDir/content/<jenis>/<id>.db`. Layar info surah menawarkan unduhan paket bahasa aplikasi bila
+  ada di katalog; bahasa tanpa paket memakai Inggris.
+- Unggah sama seperti terjemahan (`gh release upload translations build/translation-packs/* --clobber`), hanya bila siap rilis.
 
 ## Koleksi ayat (beranda)
 

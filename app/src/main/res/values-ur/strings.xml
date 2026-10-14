@@ -41,6 +41,8 @@
     <string name="revelation_order">ترتیبِ نزول %1$d</string>
     <string name="read_surah">یہ سورہ پڑھیں</string>
     <string name="no_surah_info">اس سورہ کے بارے میں معلومات دستیاب نہیں۔</string>
+    <string name="surah_info_download">%1$s زبان میں معلومات ڈاؤن لوڈ کریں (%2$s)</string>
+    <string name="surah_info_download_failed">ڈاؤن لوڈ ناکام رہا۔ اپنا کنکشن چیک کریں۔</string>
     <string name="ayah_meta">صفحہ %1$d • پارہ %2$d • حزب %3$d (ربع %4$d/4) • منزل %5$d • رکوع %6$d</string>
     <string name="previous_ayah">پچھلی آیت</string>
     <string name="next_ayah">اگلی آیت</string>

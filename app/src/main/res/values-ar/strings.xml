@@ -41,6 +41,8 @@
     <string name="revelation_order">ترتيب النزول %1$d</string>
     <string name="read_surah">اقرأ هذه السورة</string>
     <string name="no_surah_info">لا توجد معلومات عن هذه السورة.</string>
+    <string name="surah_info_download">تنزيل المعلومات بلغة %1$s (%2$s)</string>
+    <string name="surah_info_download_failed">فشل التنزيل. تحقق من اتصالك.</string>
     <string name="ayah_meta">الصفحة %1$d • الجزء %2$d • الحزب %3$d (الربع %4$d/4) • المنزل %5$d • الركوع %6$d</string>
     <string name="previous_ayah">الآية السابقة</string>
     <string name="next_ayah">الآية التالية</string>

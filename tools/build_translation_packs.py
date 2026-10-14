@@ -164,7 +164,9 @@ def main():
         merged.update({e["id"]: e for e in entries})
         order = [p["pack_id"] for p in packs]
         result = sorted(merged.values(), key=lambda e: order.index(e["id"]) if e["id"] in order else len(order))
-        catalog.write_text(json.dumps({"version": 1, "packs": result}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        # Larik lain di catalog.json (surah_info, tafsir) milik tools/build_content_packs.py; jangan dihapus.
+        others = {k: v for k, v in (json.loads(catalog.read_text(encoding="utf-8")) if catalog.exists() else {}).items() if k not in ("version", "packs")}
+        catalog.write_text(json.dumps({"version": 1, "packs": result, **others}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         total = sum(e["bytes"] for e in result)
         langs = len({e["lang"] for e in result})
         print(f"OK -> {catalog} ({len(result)} paket, {langs} bahasa, {total / 1e6:.1f} MB)")

@@ -8,6 +8,7 @@ import kotlinx.coroutines.withContext
 class MushafRepository(context: Context) {
     private val db = ContentDatabase.get(context)
     private val packs = TranslationPacks(context)
+    private val content = ContentPacks(context)
 
     @Volatile private var surahCache: Map<Int, Surah>? = null
     private val markerCache = java.util.concurrent.ConcurrentHashMap<MarkerKind, List<Marker>>()
@@ -161,13 +162,20 @@ class MushafRepository(context: Context) {
         list
     }
 
-    /** Kode bahasa yang punya info surah: id dan en lebih dulu, lalu sisanya urut abjad. */
-    suspend fun surahInfoLanguages(): List<String> = withContext(Dispatchers.IO) {
-        val list = mutableListOf<String>()
-        db.rawQuery("SELECT DISTINCT lang FROM surah_info ORDER BY lang NOT IN ('id', 'en'), lang <> 'id', lang", null)
-            .use { c -> while (c.moveToNext()) list += c.getString(0) }
-        list
-    }
+    // ---- Paket unduhan info surah dan tafsir ----
+
+    suspend fun contentCatalog(kind: ContentKind): List<ContentPack> = content.catalog(kind)
+
+    suspend fun installedContent(kind: ContentKind): List<InstalledContentPack> = content.installed(kind)
+
+    suspend fun installContent(kind: ContentKind, pack: ContentPack, onProgress: (Long, Long) -> Unit = { _, _ -> }) =
+        content.install(kind, pack, onProgress)
+
+    suspend fun deleteContent(kind: ContentKind, id: String) = withContext(Dispatchers.IO) { content.delete(kind, id) }
+
+    /** Kode bahasa info surah yang bisa dibaca sekarang: Inggris (bawaan) ditambah paket yang sudah diunduh. */
+    suspend fun surahInfoLanguages(): List<String> =
+        listOf("en") + content.installed(ContentKind.SurahInfo).map { it.lang }.filter { it != "en" }.distinct()
 
     suspend fun surahDetails(id: Int, lang: String): SurahDetails = withContext(Dispatchers.IO) {
         val surah = surahs().getValue(id)
@@ -181,11 +189,15 @@ class MushafRepository(context: Context) {
         }
         val lastPage = db.rawQuery("SELECT MAX(page) FROM words WHERE surah = ?", arrayOf(id.toString())).use { if (it.moveToFirst()) it.getInt(0) else surah.firstPage }
         val ruku = db.rawQuery("SELECT COUNT(*) FROM ruku WHERE surah = ?", arrayOf(id.toString())).use { if (it.moveToFirst()) it.getInt(0) else 0 }
-        // Bahasa tanpa info surah (atau sumber yang tidak lengkap, mis. Italia) memakai bahasa Inggris.
-        val html = db.rawQuery(
-            "SELECT text FROM surah_info WHERE lang IN (?, 'en') AND surah = ? AND text <> '' ORDER BY lang = 'en' LIMIT 1",
-            arrayOf(lang, id.toString()),
-        ).use { if (it.moveToFirst()) it.getString(0) else "" }
+        // Inggris dibundel di quran.db; bahasa lain dari paket unduhan. Surah yang kosong di paket (mis. Italia: 112/114)
+        // jatuh ke bahasa Inggris.
+        suspend fun fromPack(): String? = content.installed(ContentKind.SurahInfo).firstOrNull { it.lang == lang }
+            ?.let { content.database(ContentKind.SurahInfo, it.id) }
+            ?.rawQuery("SELECT text FROM surah_info WHERE surah = ? AND text <> ''", arrayOf(id.toString()))
+            ?.use { if (it.moveToFirst()) it.getString(0) else null }
+        val html = (if (lang == "en") null else fromPack())
+            ?: db.rawQuery("SELECT text FROM surah_info WHERE lang = 'en' AND surah = ?", arrayOf(id.toString()))
+                .use { if (it.moveToFirst()) it.getString(0) else "" }
         SurahDetails(
             place = place,
             ayahCount = surah.ayahCount,

@@ -42,6 +42,8 @@
     <string name="revelation_order">Revealed #%1$d</string>
     <string name="read_surah">Read this surah</string>
     <string name="no_surah_info">No information available for this surah.</string>
+    <string name="surah_info_download">Download info in %1$s (%2$s)</string>
+    <string name="surah_info_download_failed">Download failed. Check your connection.</string>
     <string name="ayah_meta">Page %1$d • Juz %2$d • Hizb %3$d (rub\' %4$d/4) • Manzil %5$d • Ruku %6$d</string>
     <string name="previous_ayah">Previous ayah</string>
     <string name="next_ayah">Next ayah</string>
