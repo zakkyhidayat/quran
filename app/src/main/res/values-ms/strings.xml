@@ -241,6 +241,7 @@
     <string name="tafsir_search_hint">Cari bahasa atau pengarang</string>
     <string name="tafsir_none_installed">Belum ada tafsir dipasang. Pilih satu di bawah untuk dimuat turun.</string>
     <string name="tafsir_all_added">Semua tafsir yang tersedia telah ditambah.</string>
+    <string name="tafsir_none_available">Belum ada tafsir yang tersedia untuk dimuat turun.</string>
     <string name="tafsir_no_match">Tiada tafsir yang sepadan dengan carian anda.</string>
     <string name="tafsir_catalog_error">Senarai tafsir yang boleh dimuat turun tidak dapat dimuatkan. Semak sambungan dan cuba lagi.</string>
     <string name="delete_tafsir_cd">Alih keluar tafsir %1$s</string>

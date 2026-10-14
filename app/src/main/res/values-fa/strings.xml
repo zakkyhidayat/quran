@@ -241,6 +241,7 @@
     <string name="tafsir_search_hint">جستجوی زبان یا مؤلف</string>
     <string name="tafsir_none_installed">هنوز تفسیری نصب نشده است. برای دانلود، یکی را از پایین انتخاب کنید.</string>
     <string name="tafsir_all_added">همه تفسیرهای موجود افزوده شده‌اند.</string>
+    <string name="tafsir_none_available">هنوز تفسیری برای دانلود موجود نیست.</string>
     <string name="tafsir_no_match">هیچ تفسیری با جستجوی شما مطابقت ندارد.</string>
     <string name="tafsir_catalog_error">فهرست تفسیرهای قابل دانلود بارگذاری نشد. اتصال را بررسی کنید و دوباره تلاش کنید.</string>
     <string name="delete_tafsir_cd">حذف تفسیر %1$s</string>

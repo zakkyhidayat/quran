@@ -241,6 +241,7 @@
     <string name="tafsir_search_hint">Поиск по языку или автору</string>
     <string name="tafsir_none_installed">Тафсиры ещё не установлены. Выберите один ниже, чтобы скачать.</string>
     <string name="tafsir_all_added">Все доступные тафсиры добавлены.</string>
+    <string name="tafsir_none_available">Тафсиры для скачивания пока недоступны.</string>
     <string name="tafsir_no_match">Нет тафсиров, соответствующих запросу.</string>
     <string name="tafsir_catalog_error">Не удалось загрузить список тафсиров для скачивания. Проверьте подключение и повторите попытку.</string>
     <string name="delete_tafsir_cd">Удалить тафсир %1$s</string>

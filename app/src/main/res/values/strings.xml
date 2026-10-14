@@ -242,6 +242,7 @@
     <string name="tafsir_search_hint">Search language or author</string>
     <string name="tafsir_none_installed">No tafsir installed yet. Choose one below to download.</string>
     <string name="tafsir_all_added">All available tafsir have been added.</string>
+    <string name="tafsir_none_available">No tafsir are available to download yet.</string>
     <string name="tafsir_no_match">No tafsir match your search.</string>
     <string name="tafsir_catalog_error">Could not load the list of downloadable tafsir. Check your connection and try again.</string>
     <string name="delete_tafsir_cd">Remove tafsir %1$s</string>

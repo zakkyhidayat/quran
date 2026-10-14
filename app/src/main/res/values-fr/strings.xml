@@ -241,6 +241,7 @@
     <string name="tafsir_search_hint">Rechercher une langue ou un auteur</string>
     <string name="tafsir_none_installed">Aucun tafsir installé pour l’instant. Choisissez-en un ci-dessous pour le télécharger.</string>
     <string name="tafsir_all_added">Tous les tafsirs disponibles ont été ajoutés.</string>
+    <string name="tafsir_none_available">Aucun tafsir n’est encore disponible au téléchargement.</string>
     <string name="tafsir_no_match">Aucun tafsir ne correspond à votre recherche.</string>
     <string name="tafsir_catalog_error">Impossible de charger la liste des tafsirs téléchargeables. Vérifiez votre connexion et réessayez.</string>
     <string name="delete_tafsir_cd">Supprimer le tafsir %1$s</string>

@@ -241,6 +241,7 @@
     <string name="tafsir_search_hint">زبان یا مصنف تلاش کریں</string>
     <string name="tafsir_none_installed">ابھی کوئی تفسیر انسٹال نہیں ہے۔ ڈاؤن لوڈ کے لیے نیچے سے ایک چنیں۔</string>
     <string name="tafsir_all_added">تمام دستیاب تفاسیر شامل ہو چکی ہیں۔</string>
+    <string name="tafsir_none_available">ڈاؤن لوڈ کے لیے ابھی کوئی تفسیر دستیاب نہیں ہے۔</string>
     <string name="tafsir_no_match">آپ کی تلاش سے کوئی تفسیر نہیں ملی۔</string>
     <string name="tafsir_catalog_error">ڈاؤن لوڈ کے قابل تفاسیر کی فہرست لوڈ نہیں ہو سکی۔ کنکشن چیک کر کے دوبارہ کوشش کریں۔</string>
     <string name="delete_tafsir_cd">تفسیر %1$s ہٹائیں</string>

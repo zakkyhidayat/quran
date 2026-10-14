@@ -241,6 +241,7 @@
     <string name="tafsir_search_hint">ভাষা বা লেখক খুঁজুন</string>
     <string name="tafsir_none_installed">এখনও কোনো তাফসীর ইনস্টল করা নেই। ডাউনলোড করতে নিচ থেকে একটি বেছে নিন।</string>
     <string name="tafsir_all_added">সব উপলব্ধ তাফসীর যোগ করা হয়েছে।</string>
+    <string name="tafsir_none_available">ডাউনলোডের জন্য এখনও কোনো তাফসীর উপলব্ধ নেই।</string>
     <string name="tafsir_no_match">আপনার অনুসন্ধানের সাথে কোনো তাফসীর মেলেনি।</string>
     <string name="tafsir_catalog_error">ডাউনলোডযোগ্য তাফসীরের তালিকা লোড করা যায়নি। সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।</string>
     <string name="delete_tafsir_cd">তাফসীর %1$s সরান</string>

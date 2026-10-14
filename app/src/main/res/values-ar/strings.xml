@@ -241,6 +241,7 @@
     <string name="tafsir_search_hint">ابحث عن لغة أو مؤلف</string>
     <string name="tafsir_none_installed">لا توجد تفاسير مثبّتة بعد. اختر تفسيرًا من الأسفل لتنزيله.</string>
     <string name="tafsir_all_added">أُضيفت كل التفاسير المتاحة.</string>
+    <string name="tafsir_none_available">لا توجد تفاسير متاحة للتنزيل بعد.</string>
     <string name="tafsir_no_match">لا توجد تفاسير مطابقة لبحثك.</string>
     <string name="tafsir_catalog_error">تعذّر تحميل قائمة التفاسير المتاحة للتنزيل. تحقّق من الاتصال وحاول مرة أخرى.</string>
     <string name="delete_tafsir_cd">إزالة التفسير %1$s</string>

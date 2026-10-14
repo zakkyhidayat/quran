@@ -194,6 +194,9 @@ internal fun TafsirControls(vm: AppViewModel, modifier: Modifier = Modifier) {
                         item {
                             if (query.isNotBlank()) {
                                 Text(stringResource(R.string.tafsir_no_match), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 8.dp))
+                            } else if (installed.isEmpty()) {
+                                // Katalog rilis belum memuat satu pun tafsir.
+                                Text(stringResource(R.string.tafsir_none_available), style = MaterialTheme.typography.bodyMedium)
                             } else {
                                 Text(stringResource(R.string.tafsir_all_added), style = MaterialTheme.typography.bodyMedium)
                             }
