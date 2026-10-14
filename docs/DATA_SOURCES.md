@@ -104,7 +104,8 @@ Tabel dasar tidak disentuh. Ini juga menaikkan `user_version` ke `DATA_VERSION`.
 ### Terjemahan topik dan tema (`tools/explore_i18n/`)
 
 QUL hanya menyediakan nama dan deskripsi topik serta teks tema dalam bahasa Inggris (nama topik juga dalam bahasa Arab).
-Terjemahan dibuat sendiri dan disimpan di git sebagai `tools/explore_i18n/<lang>.json`. Saat ini hanya ada `id.json`.
+Terjemahan dibuat sendiri dan disimpan di git sebagai `tools/explore_i18n/<lang>.json`. Saat ini hanya ada `id.json`
+(lengkap per 2026-10-14: 2512/2512 topik, 1049/1049 tema).
 
 ```json
 {"topics": {"<id topik>": {"name": "...", "description": "..."}}, "themes": {"<teks tema Inggris persis>": "..."}}
