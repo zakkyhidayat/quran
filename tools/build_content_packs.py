@@ -75,7 +75,12 @@ def read_tafsir(src: Path):
         start = key(first or group)
         members = [key(k) for k in (keys or "").split(",") if k.strip()]
         end = max([start] + members + ([key(last)] if last else []))
-        rows.append((start, end, clean_html(text)))
+        cleaned = clean_html(text)
+        # Beberapa sumber (Al-Nashr, Ibn al-Qayyim, Ad-Durr al-Masun, ...) mengisi ayat tanpa tafsir dengan penampung kosong
+        # seperti <div class=ar lang=ar></div>; baris tanpa huruf atau angka tidak berguna dan dibuang.
+        if not re.search(r"\w", re.sub(r"<[^>]+>|&\w+;", "", cleaned)):
+            continue
+        rows.append((start, end, cleaned))
     rows.sort()
     # Kelompok tidak boleh tumpang tindih; sumber yang punya dua teks untuk ayat awal yang sama digabung.
     merged = []

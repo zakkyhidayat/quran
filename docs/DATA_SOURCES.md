@@ -139,7 +139,20 @@ python tools/build_content_packs.py                 # semua; atau: surah_info | 
 - **Aplikasi** (`ContentPacks`): unduh, cocokkan sha256, buka dengan batas 1,25x `size`, periksa isi (`id`, `kind`, tidak
   kosong), simpan di `filesDir/content/<jenis>/<id>.db`. Layar info surah menawarkan unduhan paket bahasa aplikasi bila
   ada di katalog; bahasa tanpa paket memakai Inggris.
-- Unggah sama seperti terjemahan (`gh release upload translations build/translation-packs/* --clobber`), hanya bila siap rilis.
+- **Judul rilis** `translations` kini "Language packs" (memuat terjemahan, info surah, dan tafsir). Tag TIDAK BOLEH diganti:
+  aplikasi membaca katalog dari `.../releases/download/translations/catalog.json` (`TRANSLATION_CATALOG_URL`).
+- **Mengunggah** (hanya bila siap rilis): jangan unggah `catalog.json` hasil `build_content_packs.py` apa adanya; berkas itu
+  hanya memuat larik `surah_info` dan `tafsir` (dan `packs` hasil build lokal yang bisa tidak lengkap). Unduh katalog yang
+  tayang, ganti hanya larik `surah_info`/`tafsir`, biarkan `packs` apa adanya, unggah paket `.db.gz` dulu lalu `catalog.json`
+  terakhir (`--clobber`) supaya katalog tidak pernah menyebut berkas yang belum ada. Simpan salinan katalog lama untuk rollback.
+- **Cache CDN**: setelah katalog diganti, GitHub masih bisa menyajikan versi lama beberapa menit (teramati sekitar 3 menit);
+  aplikasi ikut menerimanya sampai cache habis.
+- **Baris dibuang**: sumber QUL mengisi ayat tanpa tafsir dengan penampung kosong (`<div class=ar lang=ar></div>`, mis. 4.609
+  baris di Al-Nashr); `build_content_packs.py` membuang baris tanpa huruf atau angka. Beberapa paket (Ad-Durr al-Manthur,
+  Al-Kashshaf, As-Siraj, Ibn Utsaimin, As-Sa'di Urdu) punya kelompok ayat yang tumpang tindih di sumbernya; pembaca tafsir
+  memilih kelompok dengan `start` terbesar yang `<=` ayat dan `end` yang `>=` ayat.
+- Status rilis 2026-10-14: 167 terjemahan, 4 info surah (id, it, ml, ur), 105 tafsir (279 MB gzip); `info-ta`, `id-jalalayn`,
+  dan `ar-dependency-graphs` dikecualikan (lihat katalog kurasi).
 
 ## Koleksi ayat (beranda)
 
@@ -209,7 +222,7 @@ python tools/build_translation_packs.py              # semua paket di katalog; a
 
 ```bash
 # pertama kali: buat rilis (tag translations)
-gh release create translations build/translation-packs/* --title "Paket terjemahan" --notes "Paket terjemahan unduhan untuk aplikasi"
+gh release create translations build/translation-packs/* --title "Language packs" --notes "Downloadable language packs for the app: translations, surah info, and tafsir"
 # pembaruan berikutnya
 gh release upload translations build/translation-packs/* --clobber
 ```
