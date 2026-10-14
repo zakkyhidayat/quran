@@ -612,13 +612,42 @@ def load_morphology(db):
     print("morfologi:", counts)
 
 
+def load_explore_i18n(db):
+    """Terjemahan topik dan tema dari tools/explore_i18n/<lang>.json (dibuat sendiri; QUL hanya menyediakan Inggris).
+
+    Format: {"topics": {"<id>": {"name": ..., "description": ...}}, "themes": {"<tema Inggris>": "<terjemahan>"}}.
+    Entri yang belum diterjemahkan cukup tidak ditulis; aplikasi jatuh ke teks Inggris.
+    """
+    files = sorted((ROOT / "tools" / "explore_i18n").glob("*.json"))
+    have = {r[0] for r in db.execute("SELECT name FROM sqlite_master WHERE type = 'table'")}
+    if not files or "topics" not in have:
+        return
+    db.executescript("""
+        CREATE TABLE topics_i18n (id INTEGER NOT NULL, lang TEXT NOT NULL, name TEXT NOT NULL, description TEXT,
+                                  PRIMARY KEY (id, lang)) WITHOUT ROWID;
+        CREATE TABLE ayah_themes_i18n (theme TEXT NOT NULL, lang TEXT NOT NULL, text TEXT NOT NULL,
+                                       PRIMARY KEY (theme, lang)) WITHOUT ROWID;
+    """)
+    ids = {r[0] for r in db.execute("SELECT id FROM topics")}
+    themes = {r[0] for r in db.execute("SELECT DISTINCT theme FROM ayah_themes")} if "ayah_themes" in have else set()
+    for f in files:
+        lang, data = f.stem, json.loads(f.read_text(encoding="utf-8"))
+        t = [(int(k), lang, v["name"].strip(), (v.get("description") or "").strip() or None)
+             for k, v in data.get("topics", {}).items() if int(k) in ids and v.get("name", "").strip()]
+        h = [(k, lang, v.strip()) for k, v in data.get("themes", {}).items() if k in themes and v.strip()]
+        db.executemany("INSERT INTO topics_i18n VALUES (?,?,?,?)", t)
+        db.executemany("INSERT INTO ayah_themes_i18n VALUES (?,?,?)", h)
+        print(f"explore_i18n {lang}: topik {len(t)}/{len(ids)}, tema {len(h)}/{len(themes)}")
+
+
 def load_explore(db):
     """Data penjelajahan tematik; tiap sumber opsional dan dilewati bila foldernya tidak ada."""
-    for loader in (load_topics, load_ayah_themes, load_similar_ayahs, load_mutashabihat, load_morphology):
+    for loader in (load_topics, load_ayah_themes, load_similar_ayahs, load_mutashabihat, load_morphology,
+                   load_explore_i18n):
         loader(db)
 
 
-EXPLORE_TABLES = ["topic_links", "topic_ayahs", "topics", "ayah_themes", "similar_ayahs", "mutashabihat_ayahs", "mutashabihat",
+EXPLORE_TABLES = ["topics_i18n", "ayah_themes_i18n", "topic_links", "topic_ayahs", "topics", "ayah_themes", "similar_ayahs", "mutashabihat_ayahs", "mutashabihat",
                   "word_morph", "morph_roots", "morph_lemmas", "morph_stems"]
 
 

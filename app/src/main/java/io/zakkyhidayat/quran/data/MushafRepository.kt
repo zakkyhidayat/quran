@@ -334,6 +334,18 @@ class MushafRepository(context: Context) {
     }
 
     val hasTopics get() = "topics" in optionalTables
+
+    // Terjemahan nama/deskripsi topik dan tema (tabel *_i18n dari tools/explore_i18n/). Bila tabel atau barisnya tidak ada,
+    // COALESCE jatuh ke teks Inggris QUL. Bahasa diambil dari locale aplikasi; Android memakai kode lama "in" untuk Indonesia.
+    private fun contentLanguage(): String = java.util.Locale.getDefault().language.let { if (it == "in") "id" else it }
+    private val hasTopicI18n get() = "topics_i18n" in optionalTables
+    private val hasThemeI18n get() = "ayah_themes_i18n" in optionalTables
+    private val TOPIC_NAME get() = if (hasTopicI18n) "COALESCE(i.name, t.name)" else "t.name"
+    private val TOPIC_COLS get() = "t.id, $TOPIC_NAME, t.name_ar, " + (if (hasTopicI18n) "COALESCE(i.description, t.description)" else "t.description") + ", t.parent_id"
+    private val topicJoin get() = if (hasTopicI18n) "LEFT JOIN topics_i18n i ON i.id = t.id AND i.lang = ?" else ""
+    private fun topicArgs(vararg rest: String): Array<String> = if (hasTopicI18n) arrayOf(contentLanguage(), *rest) else arrayOf(*rest)
+    private val themeCol get() = if (hasThemeI18n) "COALESCE((SELECT n.text FROM ayah_themes_i18n n WHERE n.theme = ayah_themes.theme AND n.lang = ?), theme)" else "theme"
+    private fun themeArgs(vararg rest: String): Array<String> = if (hasThemeI18n) arrayOf(contentLanguage(), *rest) else arrayOf(*rest)
     val hasMorphology get() = "word_morph" in optionalTables
 
     /** Apakah pintu masuk Jelajahi perlu tampil (saat ini: ada tabel topik). Query sqlite_master berjalan di thread IO. */
@@ -344,9 +356,9 @@ class MushafRepository(context: Context) {
         if (!hasTopics) return@withContext emptyList()
         val list = mutableListOf<Topic>()
         db.rawQuery(
-            "SELECT t.id, t.name, t.name_ar, t.description, t.parent_id, " +
-                "(SELECT COUNT(*) FROM topic_ayahs a WHERE a.topic_id = t.id) FROM topics t ORDER BY t.name COLLATE NOCASE",
-            null,
+            "SELECT $TOPIC_COLS, " +
+                "(SELECT COUNT(*) FROM topic_ayahs a WHERE a.topic_id = t.id) FROM topics t $topicJoin ORDER BY $TOPIC_NAME COLLATE NOCASE",
+            topicArgs(),
         ).use { c -> while (c.moveToNext()) list += topic(c) }
         list
     }
@@ -358,9 +370,9 @@ class MushafRepository(context: Context) {
     suspend fun topic(id: Int): Topic? = withContext(Dispatchers.IO) {
         if (!hasTopics) return@withContext null
         db.rawQuery(
-            "SELECT t.id, t.name, t.name_ar, t.description, t.parent_id, " +
-                "(SELECT COUNT(*) FROM topic_ayahs a WHERE a.topic_id = t.id) FROM topics t WHERE t.id = ?",
-            arrayOf(id.toString()),
+            "SELECT $TOPIC_COLS, " +
+                "(SELECT COUNT(*) FROM topic_ayahs a WHERE a.topic_id = t.id) FROM topics t $topicJoin WHERE t.id = ?",
+            topicArgs(id.toString()),
         ).use { if (it.moveToFirst()) topic(it) else null }
     }
 
@@ -368,9 +380,9 @@ class MushafRepository(context: Context) {
         if (!hasTopics) return@withContext emptyList()
         val list = mutableListOf<Topic>()
         db.rawQuery(
-            "SELECT t.id, t.name, t.name_ar, t.description, t.parent_id, " +
-                "(SELECT COUNT(*) FROM topic_ayahs a WHERE a.topic_id = t.id) FROM topics t WHERE t.parent_id = ? ORDER BY t.name COLLATE NOCASE",
-            arrayOf(id.toString()),
+            "SELECT $TOPIC_COLS, " +
+                "(SELECT COUNT(*) FROM topic_ayahs a WHERE a.topic_id = t.id) FROM topics t $topicJoin WHERE t.parent_id = ? ORDER BY $TOPIC_NAME COLLATE NOCASE",
+            topicArgs(id.toString()),
         ).use { c -> while (c.moveToNext()) list += topic(c) }
         list
     }
@@ -395,17 +407,17 @@ class MushafRepository(context: Context) {
         val themes = mutableListOf<AyahTheme>()
         if ("ayah_themes" in optionalTables) {
             db.rawQuery(
-                "SELECT surah, ayah_from, ayah_to, theme, keywords FROM ayah_themes WHERE surah = ? AND ayah_from <= ? AND ayah_to >= ? ORDER BY ayah_to - ayah_from",
-                arrayOf(key[0], key[1], key[1]),
+                "SELECT surah, ayah_from, ayah_to, $themeCol, keywords FROM ayah_themes WHERE surah = ? AND ayah_from <= ? AND ayah_to >= ? ORDER BY ayah_to - ayah_from",
+                themeArgs(key[0], key[1], key[1]),
             ).use { c -> while (c.moveToNext()) themes += AyahTheme(c.getInt(0), c.getInt(1), c.getInt(2), c.getString(3), c.getString(4)) }
         }
         val topics = mutableListOf<Topic>()
         if (hasTopics) {
             db.rawQuery(
-                "SELECT t.id, t.name, t.name_ar, t.description, t.parent_id, " +
-                    "(SELECT COUNT(*) FROM topic_ayahs x WHERE x.topic_id = t.id) FROM topics t " +
-                    "JOIN topic_ayahs a ON a.topic_id = t.id WHERE a.surah = ? AND a.ayah = ? ORDER BY t.name COLLATE NOCASE",
-                key,
+                "SELECT $TOPIC_COLS, " +
+                    "(SELECT COUNT(*) FROM topic_ayahs x WHERE x.topic_id = t.id) FROM topics t $topicJoin " +
+                    "JOIN topic_ayahs a ON a.topic_id = t.id WHERE a.surah = ? AND a.ayah = ? ORDER BY $TOPIC_NAME COLLATE NOCASE",
+                topicArgs(*key),
             ).use { c -> while (c.moveToNext()) topics += topic(c) }
         }
         val similar = mutableListOf<SimilarAyah>()
@@ -468,10 +480,10 @@ class MushafRepository(context: Context) {
         if ("topic_links" !in optionalTables) return@withContext emptyList()
         val list = mutableListOf<Topic>()
         db.rawQuery(
-            "SELECT t.id, t.name, t.name_ar, t.description, t.parent_id, " +
-                "(SELECT COUNT(*) FROM topic_ayahs a WHERE a.topic_id = t.id) FROM topics t " +
-                "JOIN topic_links l ON l.related_id = t.id WHERE l.topic_id = ? ORDER BY t.name COLLATE NOCASE",
-            arrayOf(id.toString()),
+            "SELECT $TOPIC_COLS, " +
+                "(SELECT COUNT(*) FROM topic_ayahs a WHERE a.topic_id = t.id) FROM topics t $topicJoin " +
+                "JOIN topic_links l ON l.related_id = t.id WHERE l.topic_id = ? ORDER BY $TOPIC_NAME COLLATE NOCASE",
+            topicArgs(id.toString()),
         ).use { c -> while (c.moveToNext()) list += topic(c) }
         list
     }
@@ -482,6 +494,7 @@ class MushafRepository(context: Context) {
     @Volatile private var phraseCache: List<PhraseSummary>? = null
     @Volatile private var rootCache: List<RootSummary>? = null
     @Volatile private var themeCache: List<AyahTheme>? = null
+    @Volatile private var themeCacheLang: String? = null
     @Volatile private var similarCache: List<SimilarSource>? = null
 
     private fun scalar(sql: String): Int = db.rawQuery(sql, null).use { if (it.moveToFirst()) it.getInt(0) else 0 }
@@ -498,14 +511,14 @@ class MushafRepository(context: Context) {
     }
 
     /** Semua tema tanpa duplikat (QUL menyimpan satu tema per ayat-rentang berulang), urut surah lalu ayat. */
-    suspend fun allThemes(): List<AyahTheme> = themeCache ?: withContext(Dispatchers.IO) {
+    suspend fun allThemes(): List<AyahTheme> = themeCache?.takeIf { themeCacheLang == contentLanguage() } ?: withContext(Dispatchers.IO) {
         if ("ayah_themes" !in optionalTables) return@withContext emptyList()
         val list = mutableListOf<AyahTheme>()
         db.rawQuery(
-            "SELECT surah, ayah_from, ayah_to, theme, MIN(keywords) FROM ayah_themes GROUP BY surah, ayah_from, ayah_to, theme ORDER BY surah, ayah_from, ayah_to",
-            null,
+            "SELECT surah, ayah_from, ayah_to, $themeCol, MIN(keywords) FROM ayah_themes GROUP BY surah, ayah_from, ayah_to, theme ORDER BY surah, ayah_from, ayah_to",
+            themeArgs(),
         ).use { c -> while (c.moveToNext()) list += AyahTheme(c.getInt(0), c.getInt(1), c.getInt(2), c.getString(3), c.getString(4)) }
-        list.also { themeCache = it }
+        list.also { themeCacheLang = contentLanguage(); themeCache = it }
     }
 
     /** Semua frasa mutasyabihat, urut jumlah ayat terbanyak. Teks frasa dipotong dari ayat sumber (lihat [phraseWords]). */

@@ -101,6 +101,20 @@ python tools/verify_quran.py
 
 Tabel dasar tidak disentuh. Ini juga menaikkan `user_version` ke `DATA_VERSION`.
 
+### Terjemahan topik dan tema (`tools/explore_i18n/`)
+
+QUL hanya menyediakan nama dan deskripsi topik serta teks tema dalam bahasa Inggris (nama topik juga dalam bahasa Arab).
+Terjemahan dibuat sendiri dan disimpan di git sebagai `tools/explore_i18n/<lang>.json`. Saat ini hanya ada `id.json`.
+
+```json
+{"topics": {"<id topik>": {"name": "...", "description": "..."}}, "themes": {"<teks tema Inggris persis>": "..."}}
+```
+
+`build_db.py` (build penuh maupun `--explore-only`) memuatnya ke tabel `topics_i18n` dan `ayah_themes_i18n`. Aplikasi
+memilih baris sesuai bahasa UI (`in` dinormalisasi menjadi `id`). Entri yang belum diterjemahkan tidak perlu ditulis, karena
+aplikasi otomatis memakai teks Inggris. Terjemahannya hasil mesin (LLM), jadi istilah keagamaan perlu ditinjau sebelum rilis.
+Perubahan berkas ini baru sampai ke pengguna setelah `quran.db` dibangun ulang dan rilis `quran-data` diperbarui.
+
 ## Koleksi ayat (beranda)
 
 `app/src/main/assets/collections.json` berisi rujukan ayat dan judul koleksi doa, solusi, adab, dan dosa besar dari

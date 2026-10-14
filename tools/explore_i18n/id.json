@@ -1,0 +1,5739 @@
+{
+ "topics": {
+  "1": {
+   "name": "Allah",
+   "description": "Allah (الله) adalah nama dalam Al-Qur'an yang digunakan untuk Tuhan Yang Maha Esa, sesuai dengan sifat tauhid dalam Islam."
+  },
+  "2": {
+   "name": "Hari Kiamat",
+   "description": "Hari Kiamat (يوم القيامة) adalah waktu di akhirat ketika Allah membangkitkan dan mengadili manusia."
+  },
+  "3": {
+   "name": "Hati",
+   "description": "Hati (قلب) adalah salah satu anggota tubuh yang disebutkan dalam Al-Qur'an."
+  },
+  "4": {
+   "name": "Hari Akhir",
+   "description": "Hari Akhir (اليوم الآخر) adalah nama yang disebutkan dalam Al-Qur'an yang merujuk pada Hari Kebangkitan."
+  },
+  "5": {
+   "name": "Bumi",
+   "description": "Bumi (أرض) disebutkan dalam banyak ayat Al-Qur'an sebagai tempat tinggal manusia dalam kehidupan dunia."
+  },
+  "6": {
+   "name": "Setan",
+   "description": "Setan (الشيطان) adalah iblis dalam teologi Islam, dan merupakan jin yang juga dikenal sebagai Iblis."
+  },
+  "7": {
+   "name": "Guntur",
+   "description": "Guntur (رعد) adalah salah satu jenis fenomena cuaca yang disebutkan dalam Al-Qur'an."
+  },
+  "8": {
+   "name": "Kilat",
+   "description": "Kilat (برق) adalah salah satu jenis fenomena cuaca yang disebutkan dalam Al-Qur'an."
+  },
+  "9": {
+   "name": "Jari",
+   "description": "Jari (أصابع) adalah salah satu anggota tubuh yang disebutkan dalam Al-Qur'an."
+  },
+  "10": {
+   "name": "Telinga",
+   "description": "Telinga (أذن) adalah salah satu anggota tubuh yang disebutkan dalam Al-Qur'an."
+  },
+  "11": {
+   "name": "Hujan",
+   "description": "Hujan (مطر) adalah salah satu jenis fenomena cuaca yang disebutkan dalam Al-Qur'an."
+  },
+  "12": {
+   "name": "Nyamuk",
+   "description": "Nyamuk (بعوضة) adalah salah satu serangga yang disebutkan namanya dalam Al-Qur'an."
+  },
+  "13": {
+   "name": "Nabi Adam",
+   "description": "Adam (آدم) adalah manusia pertama yang diciptakan Allah, nabi pertama dalam Islam, dan ayah Qabil dan Habil."
+  },
+  "14": {
+   "name": "Iblis",
+   "description": "Iblis (إبليس) adalah nama lain untuk Setan (iblis), yaitu jin yang menolak bersujud kepada Adam."
+  },
+  "15": {
+   "name": "Surga",
+   "description": "Surga (الجنة) adalah tempat pahala dan kedamaian di akhirat."
+  },
+  "16": {
+   "name": "Pohon",
+   "description": "Pohon (شجرة) adalah salah satu jenis tumbuhan yang disebutkan dalam Al-Qur'an."
+  },
+  "17": {
+   "name": "Bani Israil",
+   "description": "Bani Israil (بنى إسرائيل) disebutkan dalam Al-Qur'an untuk merujuk pada bangsa Israil. Menurut keyakinan Islam, dua belas suku Israil adalah keturunan Nabi Yakub (juga dikenal sebagai Israil), putra Nabi Ishaq."
+  },
+  "18": {
+   "name": "Israil",
+   "description": "Israil (إسرائيل) adalah nama Nabi Yakub yang mulia yang digunakan ketika merujuk pada bangsa Israil, yang dikenal sebagai Bani Israil dalam Al-Qur'an."
+  },
+  "19": {
+   "name": "Firaun",
+   "description": "Firaun (فرعون) adalah nama penguasa Mesir Kuno pada masa kisah Nabi Musa dalam Al-Qur'an."
+  },
+  "20": {
+   "name": "Nabi Musa",
+   "description": "Musa (موسى) adalah seorang nabi yang mulia dalam Islam, yang namanya disebut dalam Al-Qur'an lebih sering daripada nabi atau rasul mana pun."
+  },
+  "21": {
+   "name": "Anak Sapi Emas",
+   "description": "Anak Sapi Emas (عجل الذهب) disebutkan dalam Al-Qur'an, dan merujuk pada berhala palsu yang disembah bangsa Israil saat Nabi Musa tidak ada."
+  },
+  "22": {
+   "name": "Awan",
+   "description": "Awan (سحاب) adalah salah satu jenis fenomena cuaca yang disebutkan dalam Al-Qur'an."
+  },
+  "23": {
+   "name": "Burung Puyuh",
+   "description": "Burung puyuh (سلوى) adalah salah satu jenis burung yang disebutkan namanya dalam Al-Qur'an."
+  },
+  "24": {
+   "name": "Sayur-sayuran",
+   "description": "Sayur-sayuran (بقل) adalah salah satu jenis tumbuhan yang disebutkan dalam Al-Qur'an."
+  },
+  "25": {
+   "name": "Mentimun",
+   "description": "Mentimun (قثاء) adalah salah satu jenis tumbuhan yang disebutkan dalam Al-Qur'an."
+  },
+  "26": {
+   "name": "Bawang Putih",
+   "description": "Bawang putih (ثوم) adalah salah satu jenis tumbuhan yang disebutkan dalam Al-Qur'an."
+  },
+  "27": {
+   "name": "Kacang Adas",
+   "description": "Kacang adas (عدس) adalah salah satu jenis tumbuhan yang disebutkan dalam Al-Qur'an."
+  },
+  "28": {
+   "name": "Bawang Merah",
+   "description": "Bawang merah (بصل) adalah salah satu jenis tumbuhan yang disebutkan dalam Al-Qur'an."
+  },
+  "29": {
+   "name": "Yahudi",
+   "description": "Yahudi (اليهود) adalah salah satu agama besar yang disebutkan dalam Al-Qur'an."
+  },
+  "30": {
+   "name": "Nasrani",
+   "description": "Nasrani (النصارى) adalah salah satu agama besar yang disebutkan dalam Al-Qur'an."
+  },
+  "31": {
+   "name": "Shabiin",
+   "description": "Shabiin (الصابئين) adalah salah satu golongan agama yang disebutkan dalam Al-Qur'an."
+  },
+  "32": {
+   "name": "Sabat",
+   "description": "Sabat (السبت) adalah hari dalam sepekan yang ditetapkan dalam wahyu-wahyu sebelum Al-Qur'an."
+  },
+  "33": {
+   "name": "Kera",
+   "description": "Kera (قرد) adalah salah satu hewan yang disebutkan namanya dalam Al-Qur'an."
+  },
+  "34": {
+   "name": "Sapi",
+   "description": "Sapi (بقرة) adalah salah satu hewan yang disebutkan namanya dalam Al-Qur'an."
+  },
+  "35": {
+   "name": "Warna",
+   "description": "Warna (لَون) adalah kategori yang merujuk pada berbagai warna yang disebutkan dalam Al-Qur'an."
+  },
+  "36": {
+   "name": "Nabi Isa",
+   "description": "Isa (عيسى) adalah putra Maryam serta nabi dan rasul yang mulia dalam Islam."
+  },
+  "37": {
+   "name": "Maryam",
+   "description": "Maryam (مريم) adalah ibu Nabi Isa dan putri Imran, serta salah satu wanita yang paling dimuliakan dalam Islam."
+  },
+  "38": {
+   "name": "Jibril",
+   "description": "Jibril (جبريل) adalah malaikat wahyu (juga dikenal sebagai Gabriel) yang membacakan Al-Qur'an kepada Nabi Muhammad."
+  },
+  "39": {
+   "name": "Mikail",
+   "description": "Mikail (ميكائيل) adalah nama malaikat yang disebutkan dalam Al-Qur'an (juga dikenal sebagai Michael)."
+  },
+  "40": {
+   "name": "Nabi Sulaiman",
+   "description": "Sulaiman (سليمان) adalah nabi yang mulia dalam Islam, putra Nabi Daud."
+  },
+  "41": {
+   "name": "Babilonia",
+   "description": "Babilonia (بابل) disebutkan dalam Al-Qur'an. Kota kuno di Mesopotamia (sekitar 3000 SM) ini dianggap luas sebagai tempat lahirnya peradaban."
+  },
+  "42": {
+   "name": "Harut",
+   "description": "Harut (هاروت) adalah nama malaikat yang disebutkan dalam Al-Qur'an, yang bersama Marut turun ke kota kuno Babilonia."
+  },
+  "43": {
+   "name": "Marut",
+   "description": "Marut (ماروت) adalah nama malaikat yang disebutkan dalam Al-Qur'an, yang bersama Harut turun ke kota kuno Babilonia."
+  },
+  "44": {
+   "name": "Nabi Ibrahim",
+   "description": "Ibrahim (إبراهيم) adalah nabi yang mulia dalam Islam (juga dikenal sebagai Abraham), putra Azar dan ayah Nabi Ismail dan Nabi Ishaq."
+  },
+  "45": {
+   "name": "Kakbah",
+   "description": "Kakbah (الكعبة) terletak di masjid utama di Makkah, Masjidil Haram. Secara harfiah berarti \"kubus\", Kakbah adalah kiblat saat ini, yaitu arah salat dalam Islam."
+  },
+  "46": {
+   "name": "Nabi Ismail",
+   "description": "Ismail (إسماعيل) adalah nabi dan rasul yang mulia dalam Islam serta putra sulung Nabi Ibrahim."
+  },
+  "47": {
+   "name": "Islam",
+   "description": "Islam (الإسلام) adalah agama tauhid yang berdasarkan Al-Qur'an dan ajaran Nabi Muhammad."
+  },
+  "48": {
+   "name": "Nabi Yakub",
+   "description": "Yakub (يعقوب) adalah nabi yang mulia dalam Islam, putra Nabi Ishaq dan ayah Nabi Yusuf."
+  },
+  "49": {
+   "name": "Nabi Ishaq",
+   "description": "Ishaq (إسحاق) adalah nabi yang mulia dalam Islam, putra kedua Nabi Ibrahim dan ayah Nabi Yakub."
+  },
+  "50": {
+   "name": "Kiblat",
+   "description": "Kiblat (قبلة) adalah arah salat dalam Islam."
+  },
+  "51": {
+   "name": "Tumit",
+   "description": "Tumit (كَعب) adalah salah satu anggota tubuh yang disebutkan dalam Al-Qur'an."
+  },
+  "52": {
+   "name": "Masjidil Haram",
+   "description": "Masjidil Haram (المسجد الحرام) adalah masjid utama di Makkah. Mengelilingi Kakbah, masjid ini adalah masjid terbesar di dunia dan tempat paling suci dalam Islam."
+  },
+  "53": {
+   "name": "Safa",
+   "description": "Safa (الصفا) adalah bukit kecil di luar Makkah yang bersama Marwah dikunjungi dalam ibadah haji."
+  },
+  "54": {
+   "name": "Marwah",
+   "description": "Marwah (المروة) adalah bukit kecil di luar Makkah yang bersama Safa dikunjungi dalam ibadah haji."
+  },
+  "55": {
+   "name": "Haji",
+   "description": "Haji (حج) adalah ibadah ke Makkah dan salah satu dari lima rukun Islam. Ibadah ini berlangsung pada bulan ke-12 kalender Hijriah."
+  },
+  "56": {
+   "name": "Umrah",
+   "description": "Umrah (عمرة) adalah ibadah ke Makkah yang dapat dilaksanakan kapan saja sepanjang tahun."
+  },
+  "57": {
+   "name": "Kapal",
+   "description": "Kapal (سفينة) adalah salah satu benda buatan manusia yang disebutkan dalam Al-Qur'an."
+  },
+  "58": {
+   "name": "Bangkai",
+   "description": "Bangkai (الميتة) adalah salah satu makanan terlarang yang disebutkan dalam Al-Qur'an (sisa-sisa hewan yang mati)."
+  },
+  "59": {
+   "name": "Daging Babi",
+   "description": "Daging babi (لَحم الخنزير) adalah salah satu makanan terlarang yang disebutkan dalam Al-Qur'an (daging babi)."
+  },
+  "60": {
+   "name": "Ramadan",
+   "description": "Ramadan (رمضان) adalah bulan suci puasa dalam kalender Hijriah, dan bulan terjadinya Lailatulkadar."
+  },
+  "61": {
+   "name": "Al-Qur'an",
+   "description": "Al-Qur'an (القرآن) adalah kitab suci utama Islam, yang ditulis dalam bahasa Arab Al-Qur'an."
+  },
+  "62": {
+   "name": "Fajar",
+   "description": "Fajar (فجر) disebutkan dalam beberapa ayat Al-Qur'an, biasanya dalam konteks beribadah kepada Allah."
+  },
+  "63": {
+   "name": "Masjid",
+   "description": "Masjid (مسجد) adalah kategori yang merujuk pada masjid-masjid yang disebutkan dalam Al-Qur'an."
+  },
+  "64": {
+   "name": "Bulan",
+   "description": "Bulan (القمر) adalah salah satu benda langit yang disebutkan dalam Al-Qur'an, biasanya disebut bersama Matahari."
+  },
+  "65": {
+   "name": "Gunung Arafah",
+   "description": "Gunung Arafah (عرفات) adalah bukit kecil di luar Makkah yang dikunjungi dalam ibadah haji."
+  },
+  "66": {
+   "name": "Neraka",
+   "description": "Neraka (جهنم) adalah tempat hukuman dan siksaan di akhirat."
+  },
+  "67": {
+   "name": "Raja",
+   "description": "Raja (ملك) adalah kategori yang merujuk pada para raja yang disebutkan dalam Al-Qur'an."
+  },
+  "68": {
+   "name": "Talut",
+   "description": "Talut (طالوت) adalah nama salah satu raja bangsa Israil (juga dikenal sebagai Saul) yang disebutkan dalam Al-Qur'an."
+  },
+  "69": {
+   "name": "Tabut Perjanjian",
+   "description": "Tabut Perjanjian (تابوت العهد) disebutkan dalam Al-Qur'an berisi peninggalan keluarga Nabi Musa dan Nabi Harun."
+  },
+  "70": {
+   "name": "Nabi Harun",
+   "description": "Harun (هارون) adalah nabi yang mulia dalam Islam, adik Nabi Musa."
+  },
+  "71": {
+   "name": "Jalut",
+   "description": "Jalut (جالوت) juga dikenal sebagai Goliath, dan disebutkan dalam Al-Qur'an sebagai pemimpin pasukan. Ia dibunuh oleh Nabi Daud."
+  },
+  "72": {
+   "name": "Nabi Daud",
+   "description": "Daud (داود) adalah nabi yang mulia dalam Islam, dan ayah Nabi Sulaiman."
+  },
+  "73": {
+   "name": "Arsy Allah",
+   "description": "Arsy Allah (العرش) disebutkan dalam beberapa ayat Al-Qur'an, dan juga dikenal sebagai Kursi."
+  },
+  "74": {
+   "name": "Matahari",
+   "description": "Matahari (الشمس) adalah salah satu benda langit yang disebutkan dalam Al-Qur'an, biasanya disebut bersama Bulan."
+  },
+  "75": {
+   "name": "Tulang",
+   "description": "Tulang (عظم) paling sering disebutkan dalam Al-Qur'an berkaitan dengan manusia yang dibangkitkan setelah menjadi tanah dan tulang belulang."
+  },
+  "76": {
+   "name": "Burung",
+   "description": "Burung (طائر) adalah salah satu ciptaan Allah yang disebutkan namanya dalam Al-Qur'an. Kategori ini dalam ontologi mencakup konsep umum burung, serta jenis-jenis burung tertentu yang disebutkan dalam Al-Qur'an."
+  },
+  "77": {
+   "name": "Biji-bijian",
+   "description": "Biji-bijian (حبة) adalah salah satu makanan yang disebutkan dalam Al-Qur'an."
+  },
+  "78": {
+   "name": "Pohon Kurma",
+   "description": "Pohon kurma (نخلة) adalah salah satu jenis tumbuhan yang disebutkan dalam Al-Qur'an."
+  },
+  "79": {
+   "name": "Anggur",
+   "description": "Anggur (عنب) adalah salah satu jenis tumbuhan yang disebutkan dalam Al-Qur'an."
+  },
+  "80": {
+   "name": "Taurat",
+   "description": "Taurat (التوراة) adalah nama kitab suci berisi hukum yang diberikan Allah kepada Nabi Musa, menurut keyakinan Islam."
+  },
+  "81": {
+   "name": "Injil",
+   "description": "Injil (الإنجيل) adalah nama kitab suci yang diwahyukan Allah kepada Nabi Isa, menurut keyakinan Islam."
+  },
+  "82": {
+   "name": "Mata",
+   "description": "Mata (عين) adalah salah satu anggota tubuh yang disebutkan dalam Al-Qur'an."
+  },
+  "83": {
+   "name": "Emas",
+   "description": "Emas (ذهب) adalah salah satu jenis logam yang disebutkan namanya dalam Al-Qur'an."
+  },
+  "84": {
+   "name": "Perak",
+   "description": "Perak (فضة) adalah salah satu jenis logam yang disebutkan namanya dalam Al-Qur'an."
+  },
+  "85": {
+   "name": "Kuda",
+   "description": "Kuda (حصان) adalah salah satu hewan yang disebutkan namanya dalam Al-Qur'an."
+  },
+  "86": {
+   "name": "Nabi Nuh",
+   "description": "Nuh (نوح) adalah nabi yang mulia dalam Islam yang disebutkan dalam Al-Qur'an hidup sekitar 950 tahun, pada masa banjir besar."
+  },
+  "87": {
+   "name": "Imran",
+   "description": "Imran (عمران) dikenal dalam Al-Qur'an sebagai ayah Maryam."
+  },
+  "88": {
+   "name": "Nabi Zakaria",
+   "description": "Zakaria (زكريا) adalah nabi yang mulia dalam Islam dan ayah Yahya. Zakaria juga adalah pengasuh Maryam."
+  },
+  "89": {
+   "name": "Nabi Yahya",
+   "description": "Yahya (يحيى) adalah nabi yang mulia dalam Islam (dikenal dalam Alkitab sebagai Yohanes Pembaptis) dan putra Zakaria."
+  },
+  "90": {
+   "name": "Pena",
+   "description": "Pena (قلم) disebutkan dalam beberapa ayat Al-Qur'an."
+  },
+  "91": {
+   "name": "Al-Masih",
+   "description": "Al-Masih (المسيح) adalah nama yang digunakan dalam Al-Qur'an untuk Nabi Isa."
+  },
+  "92": {
+   "name": "Tanah Liat",
+   "description": "Tanah liat (صلصال) adalah bahan asal manusia diciptakan, menurut Al-Qur'an dan keyakinan Islam."
+  },
+  "93": {
+   "name": "Kusta",
+   "description": "Kusta (الأبرص) adalah salah satu penyakit yang disebutkan dalam Al-Qur'an dalam konteks mukjizat Nabi Isa yang mulia, putra Maryam."
+  },
+  "94": {
+   "name": "Lidah",
+   "description": "Lidah (لسان) adalah salah satu anggota tubuh yang disebutkan dalam Al-Qur'an."
+  },
+  "95": {
+   "name": "Bakkah",
+   "description": "Bakkah (بكة) adalah nama lain untuk kota suci Makkah."
+  },
+  "96": {
+   "name": "Badar",
+   "description": "Badar (بدر) adalah nama sebuah kota di Arab yang disebutkan dalam Al-Qur'an, tempat terjadinya salah satu perang Islam yang awal."
+  },
+  "97": {
+   "name": "Nabi Muhammad",
+   "description": "Muhammad (محمد) adalah nama nabi dan rasul Allah yang terakhir."
+  },
+  "98": {
+   "name": "Nabi Ayyub",
+   "description": "Ayyub (أيوب) adalah nabi dan rasul yang mulia dalam Islam (juga dikenal sebagai Ayub) yang disebutkan dalam Al-Qur'an."
+  },
+  "99": {
+   "name": "Nabi Yunus",
+   "description": "Yunus (يونس) adalah nabi yang mulia dalam Islam yang kisahnya bersama ikan disebutkan dalam Al-Qur'an."
+  },
+  "100": {
+   "name": "Zabur",
+   "description": "Zabur (زبور) adalah nama kitab suci yang diwahyukan Allah kepada Nabi Daud (Kitab Mazmur), menurut keyakinan Islam."
+  },
+  "101": {
+   "name": "Anak Panah",
+   "description": "Anak panah (سهم) disebutkan dalam Al-Qur'an dalam konteks anak panah untuk mengundi nasib, yang dilarang menurut hukum Islam."
+  },
+  "102": {
+   "name": "Habil",
+   "description": "Habil (هابيل) adalah saudara Qabil dan putra Adam. Kisah Qabil dan Habil disebutkan dalam Al-Qur'an."
+  },
+  "103": {
+   "name": "Qabil",
+   "description": "Qabil (قابيل) adalah saudara Habil dan putra Adam. Kisah Qabil dan Habil disebutkan dalam Al-Qur'an."
+  },
+  "104": {
+   "name": "Burung Gagak",
+   "description": "Burung gagak (غراب) adalah salah satu jenis burung yang disebutkan namanya dalam Al-Qur'an."
+  },
+  "105": {
+   "name": "Jahiliah",
+   "description": "Jahiliah (الجاهلية) adalah masa kebodohan sebelum Islam."
+  },
+  "106": {
+   "name": "Babi",
+   "description": "Babi (خنزير) adalah salah satu hewan yang disebutkan namanya dalam Al-Qur'an."
+  },
+  "107": {
+   "name": "Khamar",
+   "description": "Khamar (خمر) adalah salah satu makanan terlarang yang disebutkan dalam Al-Qur'an, bersama zat memabukkan lainnya."
+  },
+  "108": {
+   "name": "Tangga",
+   "description": "Tangga (سلم) disebutkan dalam Al-Qur'an, dan dalam bahasa Inggris juga diterjemahkan sebagai \"stairway\"."
+  },
+  "109": {
+   "name": "Sayap",
+   "description": "Sayap (جناح) adalah salah satu anggota tubuh yang disebutkan dalam Al-Qur'an."
+  },
+  "110": {
+   "name": "Kunci",
+   "description": "Kunci (مفتاح) disebutkan dalam beberapa ayat Al-Qur'an."
+  },
+  "111": {
+   "name": "Daun",
+   "description": "Daun (ورقة) adalah salah satu bagian tumbuhan yang disebutkan dalam Al-Qur'an."
+  },
+  "112": {
+   "name": "Azar",
+   "description": "Azar (آزر) disebutkan dalam Al-Qur'an sebagai ayah Nabi Ibrahim."
+  },
+  "113": {
+   "name": "Berhala",
+   "description": "Berhala (الأصنام) adalah kategori yang merujuk pada berhala dan sesembahan palsu lainnya yang disebutkan dalam Al-Qur'an."
+  },
+  "114": {
+   "name": "Bintang",
+   "description": "Bintang (نجم) adalah salah satu benda langit yang disebutkan dalam Al-Qur'an."
+  },
+  "115": {
+   "name": "Nabi Yusuf",
+   "description": "Yusuf (يوسف) adalah nabi yang mulia dalam Islam dan salah satu putra Nabi Yakub."
+  },
+  "116": {
+   "name": "Nabi Ilyas",
+   "description": "Ilyas (إلياس) adalah nabi yang mulia dalam Islam yang namanya disebutkan dalam Al-Qur'an."
+  },
+  "117": {
+   "name": "Nabi Ilyasa",
+   "description": "Ilyasa (اليسع) adalah nabi yang mulia dalam Islam yang namanya disebutkan dalam Al-Qur'an."
+  },
+  "118": {
+   "name": "Nabi Lut",
+   "description": "Lut (لوط) adalah nabi yang mulia dalam Islam yang diutus Allah untuk memperingatkan kaumnya agar menjauhi perbuatan jahat."
+  },
+  "119": {
+   "name": "Hijau",
+   "description": "Hijau (أخضر) adalah salah satu warna yang disebutkan dalam Al-Qur'an."
+  },
+  "120": {
+   "name": "Zaitun",
+   "description": "Zaitun (زيتون) adalah salah satu jenis tumbuhan yang disebutkan dalam Al-Qur'an."
+  },
+  "121": {
+   "name": "Delima",
+   "description": "Delima (رمان) adalah salah satu jenis tumbuhan yang disebutkan dalam Al-Qur'an."
+  },
+  "122": {
+   "name": "Jin",
+   "description": "Jin (الجن) adalah kategori dalam ontologi yang merujuk pada makhluk ciptaan Allah yang disebutkan dalam Al-Qur'an, yang dikenal sebagai jin."
+  },
+  "123": {
+   "name": "Domba",
+   "description": "Domba (غنم) adalah salah satu hewan yang disebutkan namanya dalam Al-Qur'an."
+  },
+  "124": {
+   "name": "Kambing",
+   "description": "Kambing (ماعز) adalah salah satu hewan yang disebutkan namanya dalam Al-Qur'an."
+  },
+  "125": {
+   "name": "Unta",
+   "description": "Unta (جمل) adalah salah satu hewan yang disebutkan namanya dalam Al-Qur'an."
+  },
+  "126": {
+   "name": "Usus",
+   "description": "Usus (أمعاء) adalah salah satu anggota tubuh yang disebutkan dalam Al-Qur'an."
+  },
+  "127": {
+   "name": "Bani Adam",
+   "description": "Bani Adam (بنى آدم) adalah nama lain yang disebutkan dalam Al-Qur'an yang merujuk pada umat manusia, keturunan Adam."
+  },
+  "128": {
+   "name": "Bahtera Nuh",
+   "description": "Bahtera Nuh (سفينة نوح) disebutkan dalam Al-Qur'an sebagai tanda dari Allah."
+  },
+  "129": {
+   "name": "Kaum Ad",
+   "description": "Kaum Ad (عاد) adalah bangsa dalam sejarah yang disebutkan dalam Al-Qur'an yang diutus kepada mereka Nabi Hud."
+  },
+  "130": {
+   "name": "Nabi Hud",
+   "description": "Hud (هود) adalah nabi yang mulia dalam Islam (juga dikenal sebagai Eber) yang diutus kepada kaum Ad."
+  },
+  "252": {
+   "name": "Peristiwa Kalender",
+   "description": "Peristiwa Kalender adalah kategori dalam ontologi yang merujuk pada peristiwa berulang dalam kalender Islam, atau peristiwa kalender keagamaan lain yang disebutkan dalam Al-Qur'an."
+  },
+  "253": {
+   "name": "Peristiwa Sejarah",
+   "description": "Peristiwa Sejarah adalah kategori yang merujuk pada peristiwa bersejarah yang disebutkan dalam Al-Qur'an."
+  },
+  "254": {
+   "name": "Peristiwa Fisik",
+   "description": "Peristiwa Fisik adalah kategori yang merujuk pada peristiwa temporal yang disebutkan dalam Al-Qur'an, yang terjadi secara alami di dunia fisik."
+  },
+  "255": {
+   "name": "Tuhan Palsu",
+   "description": "Tuhan Palsu adalah kategori yang berkaitan dengan penyembahan tuhan-tuhan palsu yang disebutkan dalam Al-Qur'an."
+  },
+  "256": {
+   "name": "Kitab Suci",
+   "description": "Kitab Suci adalah kategori yang merujuk pada kitab-kitab suci dan teks keagamaan lain yang disebutkan dalam Al-Qur'an."
+  },
+  "257": {
+   "name": "Makhluk Hidup",
+   "description": "Makhluk Hidup adalah kategori yang merujuk pada makhluk hidup ciptaan Allah yang disebutkan dalam Al-Qur'an."
+  },
+  "258": {
+   "name": "Benda Organik",
+   "description": "Benda Organik adalah kategori yang merujuk pada benda organik dan entitas biologis lainnya."
+  },
+  "259": {
+   "name": "Organisme Biologis",
+   "description": "Organisme Biologis adalah kategori yang merujuk pada organisme biologis yang disebutkan dalam Al-Qur'an."
+  },
+  "260": {
+   "name": "Hewan",
+   "description": "Hewan adalah kategori yang merujuk pada hewan-hewan yang disebutkan dalam Al-Qur'an."
+  },
+  "261": {
+   "name": "Serangga",
+   "description": "Serangga adalah kategori yang merujuk pada serangga yang disebutkan dalam Al-Qur'an."
+  },
+  "262": {
+   "name": "Tumbuhan",
+   "description": "Tumbuhan adalah kategori yang merujuk pada tumbuhan yang disebutkan dalam Al-Qur'an."
+  },
+  "263": {
+   "name": "Anggota Tubuh",
+   "description": "Anggota Tubuh adalah kategori yang merujuk pada bagian-bagian makhluk hidup yang disebutkan dalam Al-Qur'an."
+  },
+  "264": {
+   "name": "Penyakit",
+   "description": "Penyakit adalah kategori yang merujuk pada penyakit yang disebutkan dalam Al-Qur'an."
+  },
+  "265": {
+   "name": "Makanan",
+   "description": "Makanan adalah kategori yang merujuk pada makanan yang disebutkan dalam Al-Qur'an, mencakup makanan yang halal maupun makanan yang diharamkan menurut hukum Islam."
+  },
+  "266": {
+   "name": "Makhluk Berakal",
+   "description": "Makhluk Berakal adalah kategori yang merujuk pada para malaikat, jin, manusia, dan makhluk berakal lainnya yang disebutkan dalam Al-Qur'an."
+  },
+  "267": {
+   "name": "Malaikat",
+   "description": "Malaikat (الملائكة) adalah kategori dalam ontologi yang merujuk pada ciptaan Allah yang disebutkan dalam Al-Qur'an yang dikenal sebagai malaikat. Menurut keyakinan Islam, malaikat diciptakan dari cahaya, sebagaimana jin diciptakan dari api, dan manusia dari tanah liat."
+  },
+  "268": {
+   "name": "Manusia",
+   "description": "Manusia adalah kategori dalam ontologi yang merujuk pada individu manusia atau kelompok orang yang disebutkan dalam Al-Qur'an."
+  },
+  "269": {
+   "name": "Kaum Terdahulu",
+   "description": "Kaum Terdahulu adalah kategori yang merujuk pada bangsa, suku, dan kelompok manusia terdahulu lainnya yang disebutkan dalam Al-Qur'an."
+  },
+  "270": {
+   "name": "Tokoh Sejarah",
+   "description": "Tokoh Sejarah adalah kategori dalam ontologi yang merujuk pada individu bersejarah yang disebutkan namanya dalam Al-Qur'an, atau yang terkenal dalam Islam."
+  },
+  "271": {
+   "name": "Rasul",
+   "description": "Rasul adalah kategori yang merujuk pada para rasul Allah yang disebutkan dalam Al-Qur'an."
+  },
+  "272": {
+   "name": "Nabi",
+   "description": "Nabi adalah kategori yang merujuk pada para nabi Allah yang disebutkan dalam Al-Qur'an."
+  },
+  "273": {
+   "name": "Lokasi",
+   "description": "Lokasi adalah kategori yang merujuk pada tempat dan lokasi lain yang disebutkan namanya dalam Al-Qur'an."
+  },
+  "274": {
+   "name": "Lokasi Akhirat",
+   "description": "Lokasi Akhirat adalah kategori yang merujuk pada lokasi di akhirat."
+  },
+  "275": {
+   "name": "Lokasi Geografis",
+   "description": "Lokasi Geografis adalah kategori yang merujuk pada lokasi geografis yang disebutkan dalam Al-Qur'an."
+  },
+  "276": {
+   "name": "Kota",
+   "description": "Kota adalah kategori yang merujuk pada kota-kota yang disebutkan dalam Al-Qur'an."
+  },
+  "277": {
+   "name": "Negeri Terdahulu",
+   "description": "Negeri Terdahulu adalah kategori yang merujuk pada negeri kuno dan lokasi bersejarah lainnya yang disebutkan dalam Al-Qur'an."
+  },
+  "278": {
+   "name": "Gunung",
+   "description": "Gunung adalah kategori yang merujuk pada gunung dan bukit kecil lainnya yang disebutkan namanya dalam Al-Qur'an."
+  },
+  "279": {
+   "name": "Sifat Fisik",
+   "description": "Sifat Fisik adalah kategori yang merujuk pada sifat-sifat benda fisik."
+  },
+  "280": {
+   "name": "Zat Fisik",
+   "description": "Zat Fisik adalah kategori yang merujuk pada zat fisik yang disebutkan dalam Al-Qur'an."
+  },
+  "281": {
+   "name": "Logam",
+   "description": "Logam adalah kategori yang merujuk pada jenis-jenis logam yang disebutkan dalam Al-Qur'an."
+  },
+  "282": {
+   "name": "Mineral",
+   "description": "Mineral adalah kategori yang merujuk pada berbagai mineral yang disebutkan dalam Al-Qur'an."
+  },
+  "283": {
+   "name": "Agama",
+   "description": "Agama adalah kategori yang merujuk pada agama-agama besar, atau sistem kepercayaan kuno lainnya, yang disebutkan namanya dalam Al-Qur'an."
+  },
+  "284": {
+   "name": "Fenomena Cuaca",
+   "description": "Fenomena Cuaca adalah kategori yang merujuk pada berbagai jenis fenomena cuaca yang disebutkan dalam Al-Qur'an."
+  },
+  "285": {
+   "name": "Nabi Harun",
+   "description": ""
+  },
+  "286": {
+   "name": "Keluarga",
+   "description": ""
+  },
+  "287": {
+   "name": "Wudu",
+   "description": ""
+  },
+  "288": {
+   "name": "keadaan yang mewajibkan",
+   "description": ""
+  },
+  "289": {
+   "name": "Nabi Ibrahim",
+   "description": ""
+  },
+  "290": {
+   "name": "bukan Yahudi maupun Nasrani",
+   "description": ""
+  },
+  "291": {
+   "name": "berdiri di rumah ibadah pertama di Bakkah",
+   "description": ""
+  },
+  "292": {
+   "name": "Nasakh (penghapusan hukum)",
+   "description": ""
+  },
+  "293": {
+   "name": "Abu Lahab (Abdul Uzza)",
+   "description": ""
+  },
+  "294": {
+   "name": "istrinya",
+   "description": ""
+  },
+  "295": {
+   "name": "Bunga akasia",
+   "description": ""
+  },
+  "296": {
+   "name": "Kaum Ad",
+   "description": ""
+  },
+  "297": {
+   "name": "malaikat diperintahkan bersujud kepadanya",
+   "description": ""
+  },
+  "298": {
+   "name": "pohon pengetahuan",
+   "description": ""
+  },
+  "299": {
+   "name": "pengusiran dari surga (Hawa tidak dipersalahkan)",
+   "description": ""
+  },
+  "300": {
+   "name": "Zina (lihat Pernikahan)",
+   "description": ""
+  },
+  "301": {
+   "name": "Kesulitan",
+   "description": ""
+  },
+  "302": {
+   "name": "tidak dibebani melebihi kemampuan menanggungnya",
+   "description": ""
+  },
+  "303": {
+   "name": "tidak memikul beban orang lain",
+   "description": ""
+  },
+  "304": {
+   "name": "bersabar ketika menghadapi",
+   "description": ""
+  },
+  "305": {
+   "name": "Penuaan",
+   "description": ""
+  },
+  "306": {
+   "name": "sikap terhadap orang tua lanjut usia dalam asuhanmu",
+   "description": ""
+  },
+  "307": {
+   "name": "Ar-Rass",
+   "description": ""
+  },
+  "308": {
+   "name": "Alkohol (lihat Zat Memabukkan)",
+   "description": ""
+  },
+  "309": {
+   "name": "satu hari bagi-Nya adalah",
+   "description": ""
+  },
+  "310": {
+   "name": "seribu tahun menurut hitungan manusia",
+   "description": ""
+  },
+  "311": {
+   "name": "lima puluh ribu tahun",
+   "description": ""
+  },
+  "312": {
+   "name": "kemampuan melakukan apa saja",
+   "description": ""
+  },
+  "313": {
+   "name": "hakim yang paling adil",
+   "description": ""
+  },
+  "314": {
+   "name": "di luar batas definisi",
+   "description": ""
+  },
+  "315": {
+   "name": "menggagalkan tipu daya orang-orang kafir",
+   "description": ""
+  },
+  "316": {
+   "name": "mampu melenyapkan manusia dan mendatangkan makhluk lain",
+   "description": ""
+  },
+  "317": {
+   "name": "menjadikan tertawa dan menangis",
+   "description": ""
+  },
+  "318": {
+   "name": "menidurkan seseorang selama seratus tahun",
+   "description": ""
+  },
+  "319": {
+   "name": "musuh bagi orang-orang yang mengingkari kebenaran",
+   "description": ""
+  },
+  "320": {
+   "name": "bertasbih memuji-Nya dari pagi hingga petang",
+   "description": ""
+  },
+  "321": {
+   "name": "anak-anak perempuan palsu bagi",
+   "description": ""
+  },
+  "322": {
+   "name": "dengan nama",
+   "description": ""
+  },
+  "323": {
+   "name": "memberi manusia kehendak bebas",
+   "description": ""
+  },
+  "324": {
+   "name": "menyerahkan segalanya kepada-Nya",
+   "description": ""
+  },
+  "325": {
+   "name": "yang baik dan yang buruk berasal dari-Nya",
+   "description": ""
+  },
+  "326": {
+   "name": "memberi hidup dan mati",
+   "description": ""
+  },
+  "327": {
+   "name": "orang yang bersungguh-sungguh diberi pahala lebih baik",
+   "description": ""
+  },
+  "328": {
+   "name": "tidak memiliki pasangan",
+   "description": ""
+  },
+  "329": {
+   "name": "tidak memiliki anak laki-laki",
+   "description": ""
+  },
+  "330": {
+   "name": "tidak meninggalkanmu pada masa-masa sulitmu",
+   "description": ""
+  },
+  "331": {
+   "name": "ada di mana-mana",
+   "description": ""
+  },
+  "332": {
+   "name": "adalah",
+   "description": ""
+  },
+  "333": {
+   "name": "Yang Awal dan Yang Akhir (alfa dan omega)",
+   "description": ""
+  },
+  "334": {
+   "name": "Yang Zahir dan Yang Batin",
+   "description": ""
+  },
+  "335": {
+   "name": "mengetahui apa yang di luar jangkauan pemahaman",
+   "description": ""
+  },
+  "336": {
+   "name": "mencintai orang-orang yang berlaku adil",
+   "description": ""
+  },
+  "337": {
+   "name": "tidak menetapkan hukum atas hal yang tidak Dia firmankan",
+   "description": ""
+  },
+  "338": {
+   "name": "kasih sayang terhadap tawanan perang yang memiliki kebaikan",
+   "description": ""
+  },
+  "339": {
+   "name": "hakikat",
+   "description": ""
+  },
+  "340": {
+   "name": "tidak ada manusia yang bersifat ilahi",
+   "description": ""
+  },
+  "341": {
+   "name": "bukan trinitas",
+   "description": ""
+  },
+  "342": {
+   "name": "berlindung dari kejahatan kepada",
+   "description": ""
+  },
+  "343": {
+   "name": "mengingat-Nya sambil berdiri, duduk, dan berbaring",
+   "description": ""
+  },
+  "344": {
+   "name": "membentukmu dalam rahim",
+   "description": ""
+  },
+  "345": {
+   "name": "singgasana-Nya di atas air",
+   "description": ""
+  },
+  "346": {
+   "name": "akan menciptakan hal-hal yang tidak kamu ketahui",
+   "description": ""
+  },
+  "347": {
+   "name": "tidak menghendaki kezaliman terhadap ciptaan-Nya",
+   "description": ""
+  },
+  "348": {
+   "name": "Persekutuan",
+   "description": ""
+  },
+  "349": {
+   "name": "Nasrani dan Yahudi",
+   "description": ""
+  },
+  "350": {
+   "name": "terlarang dengan kerabat yang kafir",
+   "description": ""
+  },
+  "351": {
+   "name": "terlarang dengan orang-orang munafik",
+   "description": ""
+  },
+  "352": {
+   "name": "Malaikat",
+   "description": ""
+  },
+  "353": {
+   "name": "delapan malaikat akan memikul singgasana Allah pada Hari Kiamat",
+   "description": ""
+  },
+  "354": {
+   "name": "tuduhan palsu bahwa mereka perempuan",
+   "description": ""
+  },
+  "355": {
+   "name": "\"penjaga\"",
+   "description": ""
+  },
+  "356": {
+   "name": "sembilan belas malaikat menjaga neraka",
+   "description": ""
+  },
+  "357": {
+   "name": "tidak diutus untuk memuaskan hawa nafsu",
+   "description": ""
+  },
+  "358": {
+   "name": "diutus untuk memberi ilham",
+   "description": ""
+  },
+  "359": {
+   "name": "Amarah",
+   "description": ""
+  },
+  "360": {
+   "name": "menahan",
+   "description": ""
+  },
+  "361": {
+   "name": "Semut",
+   "description": ""
+  },
+  "362": {
+   "name": "Kera",
+   "description": ""
+  },
+  "363": {
+   "name": "hina",
+   "description": ""
+  },
+  "364": {
+   "name": "Murtad",
+   "description": ""
+  },
+  "365": {
+   "name": "jangan meminta azab yang segera bagi orang murtad",
+   "description": ""
+  },
+  "366": {
+   "name": "hanya Allah yang akan menghukum mereka",
+   "description": ""
+  },
+  "367": {
+   "name": "hukuman di akhirat",
+   "description": ""
+  },
+  "368": {
+   "name": "penolakan oleh orang lain",
+   "description": ""
+  },
+  "369": {
+   "name": "tobat",
+   "description": ""
+  },
+  "370": {
+   "name": "pada Hari Kiamat sudah terlambat",
+   "description": ""
+  },
+  "371": {
+   "name": "di bawah paksaan",
+   "description": ""
+  },
+  "372": {
+   "name": "Perdebatan/Serangan",
+   "description": ""
+  },
+  "373": {
+   "name": "membalas setimpal",
+   "description": ""
+  },
+  "374": {
+   "name": "bersabar jauh lebih baik",
+   "description": ""
+  },
+  "375": {
+   "name": "Bahtera (lihat Nabi Nuh)",
+   "description": ""
+  },
+  "376": {
+   "name": "Baju besi",
+   "description": ""
+  },
+  "377": {
+   "name": "Astronomi",
+   "description": ""
+  },
+  "378": {
+   "name": "mekanika benda langit",
+   "description": ""
+  },
+  "379": {
+   "name": "bulan",
+   "description": ""
+  },
+  "380": {
+   "name": "orbit matahari dan bulan",
+   "description": ""
+  },
+  "381": {
+   "name": "matahari",
+   "description": ""
+  },
+  "382": {
+   "name": "navigasi benda langit",
+   "description": ""
+  },
+  "383": {
+   "name": "rasi bintang",
+   "description": ""
+  },
+  "384": {
+   "name": "gerak benda-benda di alam semesta",
+   "description": ""
+  },
+  "385": {
+   "name": "benda yang menghantam Bumi",
+   "description": ""
+  },
+  "386": {
+   "name": "planet",
+   "description": ""
+  },
+  "387": {
+   "name": "Sirius (Alfa Canis Major)",
+   "description": ""
+  },
+  "388": {
+   "name": "bintang",
+   "description": ""
+  },
+  "389": {
+   "name": "lingkungan Bumi yang dihiasi oleh",
+   "description": ""
+  },
+  "390": {
+   "name": "gerak sejati",
+   "description": ""
+  },
+  "391": {
+   "name": "berputar",
+   "description": ""
+  },
+  "392": {
+   "name": "terbit matahari",
+   "description": ""
+  },
+  "393": {
+   "name": "terbenam matahari",
+   "description": ""
+  },
+  "394": {
+   "name": "Atom (mungkin semula dimaksudkan \"semut\"?)",
+   "description": ""
+  },
+  "395": {
+   "name": "rumah ibadah pertama",
+   "description": ""
+  },
+  "396": {
+   "name": "Binatang buas",
+   "description": ""
+  },
+  "397": {
+   "name": "Lebah",
+   "description": ""
+  },
+  "398": {
+   "name": "Perilaku",
+   "description": ""
+  },
+  "399": {
+   "name": "berdebat dengan cara yang baik terhadap mereka yang menerima wahyu terdahulu",
+   "description": ""
+  },
+  "400": {
+   "name": "jangan terlibat dalam hal yang tidak kamu ketahui",
+   "description": ""
+  },
+  "401": {
+   "name": "jauhi dosa besar dan perbuatan keji",
+   "description": ""
+  },
+  "402": {
+   "name": "hindari prasangka terhadap satu sama lain",
+   "description": ""
+  },
+  "403": {
+   "name": "berlaku adil dalam pendapatmu",
+   "description": ""
+  },
+  "404": {
+   "name": "umat hendaknya bersikap moderat",
+   "description": ""
+  },
+  "405": {
+   "name": "kesombongan tidak dianjurkan",
+   "description": ""
+  },
+  "406": {
+   "name": "jangan menghardik orang yang meminta bantuanmu",
+   "description": ""
+  },
+  "407": {
+   "name": "jangan menganggap dirimu suci",
+   "description": ""
+  },
+  "408": {
+   "name": "jangan mengolok-olok orang lain",
+   "description": ""
+  },
+  "409": {
+   "name": "jangan menyebut keburukan secara terang-terangan",
+   "description": ""
+  },
+  "410": {
+   "name": "jangan saling menjelekkan",
+   "description": ""
+  },
+  "411": {
+   "name": "jangan saling memata-matai",
+   "description": ""
+  },
+  "412": {
+   "name": "setiap kelompok diberi aturan dan jalan hidup",
+   "description": ""
+  },
+  "413": {
+   "name": "dan seorang nabi",
+   "description": ""
+  },
+  "414": {
+   "name": "dan tata cara ibadah",
+   "description": ""
+  },
+  "415": {
+   "name": "Allah dapat menjadikan mereka satu umat",
+   "description": ""
+  },
+  "416": {
+   "name": "satu umat di bawah Allah",
+   "description": ""
+  },
+  "417": {
+   "name": "maafkan orang Yahudi yang mengubah Al-Qur'an",
+   "description": ""
+  },
+  "418": {
+   "name": "maafkan orang-orang yang tidak beriman",
+   "description": ""
+  },
+  "419": {
+   "name": "mudah memaafkan",
+   "description": ""
+  },
+  "420": {
+   "name": "mencemarkan nama baik orang beriman adalah dosa",
+   "description": ""
+  },
+  "421": {
+   "name": "laki-laki (terhadap perempuan)",
+   "description": ""
+  },
+  "422": {
+   "name": "pendamai diberi pahala",
+   "description": ""
+  },
+  "423": {
+   "name": "penguasa mengambil keputusan setelah bermusyawarah",
+   "description": ""
+  },
+  "424": {
+   "name": "jika tidak bisa berbuat lain, berkatalah dengan adil kepada yang membutuhkan",
+   "description": ""
+  },
+  "425": {
+   "name": "terhadap orang tua lanjut usia dalam asuhanmu",
+   "description": ""
+  },
+  "426": {
+   "name": "terhadap sesama Muslim",
+   "description": ""
+  },
+  "427": {
+   "name": "terhadap orang lain",
+   "description": ""
+  },
+  "428": {
+   "name": "terhadap orang tua",
+   "description": ""
+  },
+  "429": {
+   "name": "terhadap budak",
+   "description": ""
+  },
+  "430": {
+   "name": "berlaku adil terhadap orang tidak beriman yang tidak memerangi",
+   "description": ""
+  },
+  "431": {
+   "name": "istri-istri Nabi",
+   "description": ""
+  },
+  "432": {
+   "name": "perempuan (terhadap laki-laki)",
+   "description": ""
+  },
+  "433": {
+   "name": "Iman",
+   "description": ""
+  },
+  "434": {
+   "name": "kepada semua wahyu",
+   "description": ""
+  },
+  "435": {
+   "name": "Orang-orang beriman",
+   "description": ""
+  },
+  "436": {
+   "name": "Alkitab",
+   "description": ""
+  },
+  "437": {
+   "name": "penyimpangan terhadap",
+   "description": ""
+  },
+  "438": {
+   "name": "Biologi",
+   "description": ""
+  },
+  "439": {
+   "name": "makhluk hidup diciptakan dari air?",
+   "description": ""
+  },
+  "440": {
+   "name": "Burung",
+   "description": ""
+  },
+  "441": {
+   "name": "Perbatasan (batas yurisdiksi)",
+   "description": ""
+  },
+  "442": {
+   "name": "Botani",
+   "description": ""
+  },
+  "443": {
+   "name": "dua jenis kelamin pada setiap tumbuhan",
+   "description": ""
+  },
+  "444": {
+   "name": "Harta rampasan perang",
+   "description": ""
+  },
+  "445": {
+   "name": "nikmatilah yang halal dan baik",
+   "description": ""
+  },
+  "446": {
+   "name": "tidak boleh hanya menguntungkan orang yang sudah kaya",
+   "description": ""
+  },
+  "447": {
+   "name": "seperlima untuk amal",
+   "description": ""
+  },
+  "448": {
+   "name": "Para pembangun",
+   "description": ""
+  },
+  "449": {
+   "name": "Beban (lihat Kesulitan)",
+   "description": ""
+  },
+  "450": {
+   "name": "Pemakaman",
+   "description": ""
+  },
+  "451": {
+   "name": "rujukan tidak langsung?",
+   "description": ""
+  },
+  "452": {
+   "name": "Perniagaan",
+   "description": ""
+  },
+  "453": {
+   "name": "berlaku jujur dalam bermuamalah",
+   "description": ""
+  },
+  "454": {
+   "name": "Bangsa Romawi (Bizantium)",
+   "description": ""
+  },
+  "455": {
+   "name": "Qabil dan Habil",
+   "description": ""
+  },
+  "456": {
+   "name": "Kalender",
+   "description": ""
+  },
+  "457": {
+   "name": "kamariah",
+   "description": ""
+  },
+  "458": {
+   "name": "ketepatan",
+   "description": ""
+  },
+  "459": {
+   "name": "orang-orang kafir mengutak-atik penambahan bulan tahunan (nasi')",
+   "description": ""
+  },
+  "460": {
+   "name": "Kanaan",
+   "description": ""
+  },
+  "461": {
+   "name": "Ternak",
+   "description": ""
+  },
+  "462": {
+   "name": "Tawanan",
+   "description": ""
+  },
+  "463": {
+   "name": "Sedekah",
+   "description": ""
+  },
+  "464": {
+   "name": "ketika berbicara dengan Nabi",
+   "description": ""
+  },
+  "465": {
+   "name": "selama haji",
+   "description": ""
+  },
+  "466": {
+   "name": "kekikiran",
+   "description": ""
+  },
+  "467": {
+   "name": "bukan pembayaran atas kebaikan yang diterima",
+   "description": ""
+  },
+  "468": {
+   "name": "prioritas dalam berinfak",
+   "description": ""
+  },
+  "469": {
+   "name": "berbagi makanan",
+   "description": ""
+  },
+  "470": {
+   "name": "berinfak demi mendapat pujian dilarang",
+   "description": ""
+  },
+  "471": {
+   "name": "orang yang tidak puas dengan pembagian",
+   "description": ""
+  },
+  "472": {
+   "name": "Kesucian diri",
+   "description": ""
+  },
+  "473": {
+   "name": "Anak-anak",
+   "description": ""
+  },
+  "474": {
+   "name": "anak angkat hendaknya dinisbahkan kepada ayah mereka",
+   "description": ""
+  },
+  "475": {
+   "name": "bayi perempuan keliru dianggap pertanda buruk",
+   "description": ""
+  },
+  "476": {
+   "name": "menyusui selama dua tahun",
+   "description": ""
+  },
+  "477": {
+   "name": "jangan membunuh karena takut miskin",
+   "description": ""
+  },
+  "478": {
+   "name": "bayi perempuan yang dikubur hidup-hidup akan ditanya karena dosa apa ia dibunuh",
+   "description": ""
+  },
+  "479": {
+   "name": "anugerah anak perempuan",
+   "description": ""
+  },
+  "480": {
+   "name": "anugerah anak laki-laki",
+   "description": ""
+  },
+  "481": {
+   "name": "tidak berdaya",
+   "description": ""
+  },
+  "482": {
+   "name": "tidak mengetahui apa pun saat dilahirkan",
+   "description": ""
+  },
+  "483": {
+   "name": "di surga",
+   "description": ""
+  },
+  "484": {
+   "name": "Bani Adam",
+   "description": ""
+  },
+  "485": {
+   "name": "Bani Israil",
+   "description": ""
+  },
+  "486": {
+   "name": "perintah mengenai pembunuhan oleh",
+   "description": ""
+  },
+  "487": {
+   "name": "kebiasaan membunuh anak pada masa pra-Islam",
+   "description": ""
+  },
+  "488": {
+   "name": "ibu susuan",
+   "description": ""
+  },
+  "489": {
+   "name": "Nasrani",
+   "description": ""
+  },
+  "490": {
+   "name": "dan Yahudi (lihat Yahudi)",
+   "description": ""
+  },
+  "491": {
+   "name": "diminta tidak menuhankan Nabi Isa",
+   "description": ""
+  },
+  "492": {
+   "name": "paling dekat rasa kasih sayangnya kepada kaum Muslim",
+   "description": ""
+  },
+  "493": {
+   "name": "kebanyakan telah melupakan apa yang diperintahkan untuk mereka ingat",
+   "description": ""
+  },
+  "494": {
+   "name": "kini telah datang kepadamu seorang rasul",
+   "description": ""
+  },
+  "495": {
+   "name": "orang yang saleh akan diberi pahala",
+   "description": ""
+  },
+  "496": {
+   "name": "mengatakan \"Isa adalah putra Allah\"",
+   "description": ""
+  },
+  "497": {
+   "name": "Gereja",
+   "description": ""
+  },
+  "498": {
+   "name": "Pakaian",
+   "description": ""
+  },
+  "499": {
+   "name": "dari api",
+   "description": ""
+  },
+  "500": {
+   "name": "\"cadar\" atau pakaian perempuan di luar lingkungan rumah",
+   "description": ""
+  },
+  "501": {
+   "name": "jilbab perempuan mencegah gangguan dari orang munafik",
+   "description": ""
+  },
+  "502": {
+   "name": "Perintah",
+   "description": ""
+  },
+  "503": {
+   "name": "keagamaan umum",
+   "description": ""
+  },
+  "504": {
+   "name": "berbuat baik kepada sesama",
+   "description": ""
+  },
+  "505": {
+   "name": "tinggalkan orang-orang yang sedang memperolok hukum Allah",
+   "description": ""
+  },
+  "506": {
+   "name": "Komunikasi (berusaha meramal masa depan dilarang)",
+   "description": ""
+  },
+  "507": {
+   "name": "menguping pembicaraan para malaikat di tempat tinggi",
+   "description": ""
+  },
+  "508": {
+   "name": "Pelestarian",
+   "description": ""
+  },
+  "509": {
+   "name": "Hukum Perjanjian",
+   "description": ""
+  },
+  "510": {
+   "name": "perjanjian harus tertulis",
+   "description": ""
+  },
+  "511": {
+   "name": "dalam perjalanan, “ucapan” seseorang dapat diterima",
+   "description": ""
+  },
+  "512": {
+   "name": "bila terjadi masalah, jangan menghukum penulis atau saksi",
+   "description": ""
+  },
+  "513": {
+   "name": "para saksi diperintahkan berkata benar",
+   "description": ""
+  },
+  "514": {
+   "name": "persaksian (dua laki-laki, atau satu laki-laki dan dua perempuan)",
+   "description": ""
+  },
+  "515": {
+   "name": "Kerusakan",
+   "description": ""
+  },
+  "516": {
+   "name": "Kosmologi",
+   "description": ""
+  },
+  "517": {
+   "name": "usia alam semesta",
+   "description": ""
+  },
+  "518": {
+   "name": "alam semesta yang mengembang",
+   "description": ""
+  },
+  "519": {
+   "name": "Dentuman Besar",
+   "description": ""
+  },
+  "520": {
+   "name": "Perjanjian",
+   "description": ""
+  },
+  "521": {
+   "name": "pelanggaran terhadapnya (lihat juga Sumpah)",
+   "description": ""
+  },
+  "522": {
+   "name": "dengan orang-orang kafir",
+   "description": ""
+  },
+  "523": {
+   "name": "pelanggaran terhadapnya",
+   "description": ""
+  },
+  "524": {
+   "name": "Penciptaan segala sesuatu",
+   "description": ""
+  },
+  "525": {
+   "name": "dengan ukuran dan perbandingan yang tepat",
+   "description": ""
+  },
+  "526": {
+   "name": "berpasang-pasangan yang berlawanan",
+   "description": ""
+  },
+  "527": {
+   "name": "Makhluk",
+   "description": ""
+  },
+  "528": {
+   "name": "Kristal",
+   "description": ""
+  },
+  "529": {
+   "name": "Adat kebiasaan",
+   "description": ""
+  },
+  "530": {
+   "name": "dipakai tetapi tidak berdasarkan riwayat yang dapat diandalkan atau perintah Al-Qur'an",
+   "description": ""
+  },
+  "531": {
+   "name": "Bahaya",
+   "description": ""
+  },
+  "532": {
+   "name": "bersiaplah menghadapinya",
+   "description": ""
+  },
+  "533": {
+   "name": "Pohon kurma",
+   "description": ""
+  },
+  "534": {
+   "name": "Kurma",
+   "description": ""
+  },
+  "535": {
+   "name": "dan Batsyeba",
+   "description": ""
+  },
+  "536": {
+   "name": "dan Jalut",
+   "description": ""
+  },
+  "537": {
+   "name": "diberi Zabur",
+   "description": ""
+  },
+  "538": {
+   "name": "Kematian",
+   "description": ""
+  },
+  "539": {
+   "name": "dan lari dari pertempuran",
+   "description": ""
+  },
+  "540": {
+   "name": "di jalan Allah",
+   "description": ""
+  },
+  "541": {
+   "name": "kaum yang belum menerima wahyu tidak akan dibinasakan",
+   "description": ""
+  },
+  "542": {
+   "name": "mereka yang gugur di jalan Allah itu hidup",
+   "description": ""
+  },
+  "543": {
+   "name": "ketika berlari dari kejahatan menuju Allah",
+   "description": ""
+  },
+  "544": {
+   "name": "Sesembahan",
+   "description": ""
+  },
+  "545": {
+   "name": "tidak ada selain Allah",
+   "description": ""
+  },
+  "546": {
+   "name": "Orang-orang kafir (lihat juga Orang-orang munafik)",
+   "description": ""
+  },
+  "547": {
+   "name": "meminta Muhammad memohon murka Allah atas mereka sebagai bukti",
+   "description": ""
+  },
+  "548": {
+   "name": "bergaullah dengan mereka secara baik",
+   "description": ""
+  },
+  "549": {
+   "name": "sabarlah terhadap apa yang mereka katakan",
+   "description": ""
+  },
+  "550": {
+   "name": "perjanjian dengan mereka",
+   "description": ""
+  },
+  "551": {
+   "name": "Allah menggagalkan tipu daya mereka",
+   "description": ""
+  },
+  "552": {
+   "name": "lindungilah mereka jika meminta perlindunganmu",
+   "description": ""
+  },
+  "553": {
+   "name": "hukuman",
+   "description": ""
+  },
+  "554": {
+   "name": "selama perang",
+   "description": ""
+  },
+  "555": {
+   "name": "di akhirat",
+   "description": ""
+  },
+  "556": {
+   "name": "tidak boleh mengunjungi atau memakmurkan masjid",
+   "description": ""
+  },
+  "557": {
+   "name": "bertuturlah dengan santun kepada mereka",
+   "description": ""
+  },
+  "558": {
+   "name": "berjuang sungguh-sungguh melawan mereka",
+   "description": ""
+  },
+  "559": {
+   "name": "bersikap adil terhadap yang tidak memerangi",
+   "description": ""
+  },
+  "560": {
+   "name": "hanya akan bersekutu dengan sesama orang kafir",
+   "description": ""
+  },
+  "561": {
+   "name": "Para Hawari (pengikut Nabi Isa)",
+   "description": ""
+  },
+  "562": {
+   "name": "Penyelam",
+   "description": ""
+  },
+  "563": {
+   "name": "Keragaman",
+   "description": ""
+  },
+  "564": {
+   "name": "manusia",
+   "description": ""
+  },
+  "565": {
+   "name": "kehidupan",
+   "description": ""
+  },
+  "566": {
+   "name": "Perceraian",
+   "description": ""
+  },
+  "567": {
+   "name": "setelah masa tunggu, lanjutkan atau berdamai",
+   "description": ""
+  },
+  "568": {
+   "name": "dua saksi",
+   "description": ""
+  },
+  "569": {
+   "name": "nafkah cerai",
+   "description": ""
+  },
+  "570": {
+   "name": "berlaku juga bagi ahli waris mantan suami",
+   "description": ""
+  },
+  "571": {
+   "name": "dapat dirujuk dua kali",
+   "description": ""
+  },
+  "572": {
+   "name": "status mahar",
+   "description": ""
+  },
+  "573": {
+   "name": "carilah perempuan penyusu bila perlu",
+   "description": ""
+  },
+  "574": {
+   "name": "Laki-laki",
+   "description": ""
+  },
+  "575": {
+   "name": "menceraikan satu istri untuk menikahi yang lain - jangan mengambil kembali apa yang telah diberikan sebelumnya",
+   "description": ""
+  },
+  "576": {
+   "name": "jangan menyusahkan istri",
+   "description": ""
+  },
+  "577": {
+   "name": "jangan menahan istri di luar kehendaknya",
+   "description": ""
+  },
+  "578": {
+   "name": "empat bulan untuk mengubah pendiriannya",
+   "description": ""
+  },
+  "579": {
+   "name": "nafkahi istri sepenuhnya",
+   "description": ""
+  },
+  "580": {
+   "name": "selama masa kehamilannya",
+   "description": ""
+  },
+  "581": {
+   "name": "selama masa idahnya",
+   "description": ""
+  },
+  "582": {
+   "name": "jika ia menyusui anakmu",
+   "description": ""
+  },
+  "583": {
+   "name": "ibu tidak boleh menderita karena anaknya yang yatim",
+   "description": ""
+  },
+  "584": {
+   "name": "masa pra-Islam",
+   "description": ""
+  },
+  "585": {
+   "name": "penyesalan untuk berdamai",
+   "description": ""
+  },
+  "586": {
+   "name": "berpuasa dua bulan berturut-turut",
+   "description": ""
+  },
+  "587": {
+   "name": "memberi makan 60 orang miskin",
+   "description": ""
+  },
+  "588": {
+   "name": "memerdekakan seorang budak",
+   "description": ""
+  },
+  "589": {
+   "name": "upaya perdamaian",
+   "description": ""
+  },
+  "590": {
+   "name": "tidak berdosa jika pernikahan belum dicampuri",
+   "description": ""
+  },
+  "591": {
+   "name": "pengantin perempuan berhak atas setengah mahar",
+   "description": ""
+  },
+  "592": {
+   "name": "Perempuan",
+   "description": ""
+  },
+  "593": {
+   "name": "setelah talak ketiga (dengan suami lain) boleh kembali kepada suami semula",
+   "description": ""
+  },
+  "594": {
+   "name": "berhak atas nafkah",
+   "description": ""
+  },
+  "595": {
+   "name": "hak yang sama untuk bercerai",
+   "description": ""
+  },
+  "596": {
+   "name": "khawatir diperlakukan buruk oleh suami",
+   "description": ""
+  },
+  "597": {
+   "name": "boleh menyimpan apa yang diberikan suaminya",
+   "description": ""
+  },
+  "598": {
+   "name": "tidak boleh diusir dari rumah mereka",
+   "description": ""
+  },
+  "599": {
+   "name": "menunggu tiga kali haid untuk memastikan tidak hamil",
+   "description": ""
+  },
+  "600": {
+   "name": "menunggu tiga bulan bagi yang tidak haid",
+   "description": ""
+  },
+  "601": {
+   "name": "kecuali pernikahan belum dicampuri",
+   "description": ""
+  },
+  "602": {
+   "name": "Anjing",
+   "description": ""
+  },
+  "603": {
+   "name": "Keledai",
+   "description": ""
+  },
+  "604": {
+   "name": "Obat-obatan (lihat Zat memabukkan)",
+   "description": ""
+  },
+  "605": {
+   "name": "diganti dengan bumi yang lain",
+   "description": ""
+  },
+  "606": {
+   "name": "penciptaan",
+   "description": ""
+  },
+  "607": {
+   "name": "dalam enam “hari”",
+   "description": ""
+  },
+  "608": {
+   "name": "dalam dua “hari”",
+   "description": ""
+  },
+  "609": {
+   "name": "selebihnya dalam empat hari yang lain",
+   "description": ""
+  },
+  "610": {
+   "name": "kemiringan sumbu rotasi terhadap bidang orbit",
+   "description": ""
+  },
+  "611": {
+   "name": "rotasi",
+   "description": ""
+  },
+  "612": {
+   "name": "Gempa bumi",
+   "description": ""
+  },
+  "613": {
+   "name": "Gajah",
+   "description": ""
+  },
+  "614": {
+   "name": "Embriologi",
+   "description": ""
+  },
+  "615": {
+   "name": "Evolusi (?)",
+   "description": ""
+  },
+  "616": {
+   "name": "Uzair",
+   "description": ""
+  },
+  "617": {
+   "name": "Keluarga",
+   "description": ""
+  },
+  "618": {
+   "name": "Puasa",
+   "description": ""
+  },
+  "619": {
+   "name": "selama Ramadan",
+   "description": ""
+  },
+  "620": {
+   "name": "keringanan",
+   "description": ""
+  },
+  "621": {
+   "name": "jam puasa",
+   "description": ""
+  },
+  "622": {
+   "name": "Berperang",
+   "description": ""
+  },
+  "623": {
+   "name": "agresi",
+   "description": ""
+  },
+  "624": {
+   "name": "dilarang",
+   "description": ""
+  },
+  "625": {
+   "name": "dosa",
+   "description": ""
+  },
+  "626": {
+   "name": "jadilah berani",
+   "description": ""
+  },
+  "627": {
+   "name": "antara dua golongan orang beriman",
+   "description": ""
+  },
+  "628": {
+   "name": "jangan memperoleh budak kecuali melalui perang",
+   "description": ""
+  },
+  "629": {
+   "name": "jangan mengemis perdamaian",
+   "description": ""
+  },
+  "630": {
+   "name": "menginginkannya karena alasan yang salah",
+   "description": ""
+  },
+  "631": {
+   "name": "demi mereka yang tak berdaya",
+   "description": ""
+  },
+  "632": {
+   "name": "bagi yang sakit",
+   "description": ""
+  },
+  "633": {
+   "name": "jika musuh berhenti, kamu pun harus berhenti",
+   "description": ""
+  },
+  "634": {
+   "name": "dilarang selama empat bulan haram",
+   "description": ""
+  },
+  "635": {
+   "name": "kecuali jika diserang",
+   "description": ""
+  },
+  "636": {
+   "name": "bebaskan budak setelah perang berakhir",
+   "description": ""
+  },
+  "637": {
+   "name": "berangkatlah dengan rendah hati",
+   "description": ""
+  },
+  "638": {
+   "name": "membunuh hanya ketika permusuhan sedang berlangsung",
+   "description": ""
+  },
+  "639": {
+   "name": "bukan untuk keuntungan duniawi",
+   "description": ""
+  },
+  "640": {
+   "name": "bersiaplah dengan baik",
+   "description": ""
+  },
+  "641": {
+   "name": "tobat orang-orang yang baru saja memerangi",
+   "description": ""
+  },
+  "642": {
+   "name": "ketika diwajibkan",
+   "description": ""
+  },
+  "643": {
+   "name": "Api",
+   "description": ""
+  },
+  "644": {
+   "name": "Makanan (lihat juga Aturan kesehatan)",
+   "description": ""
+  },
+  "645": {
+   "name": "berkah",
+   "description": ""
+  },
+  "646": {
+   "name": "halal",
+   "description": ""
+  },
+  "647": {
+   "name": "Lupa",
+   "description": ""
+  },
+  "648": {
+   "name": "Zina (lihat Pernikahan)",
+   "description": ""
+  },
+  "649": {
+   "name": "Sahabat",
+   "description": ""
+  },
+  "650": {
+   "name": "jauhi orang kafir yang aktif memusuhi",
+   "description": ""
+  },
+  "651": {
+   "name": "yang dilarang adalah mereka yang memerangimu karena agamamu",
+   "description": ""
+  },
+  "652": {
+   "name": "Masa depan",
+   "description": ""
+  },
+  "653": {
+   "name": "mengetahuinya melalui ramalan dilarang",
+   "description": ""
+  },
+  "654": {
+   "name": "Jibril",
+   "description": ""
+  },
+  "655": {
+   "name": "Permainan untung-untungan",
+   "description": ""
+  },
+  "656": {
+   "name": "Lokasi geografis dan Sejarah",
+   "description": ""
+  },
+  "657": {
+   "name": "Safa dan Marwah",
+   "description": ""
+  },
+  "658": {
+   "name": "rumah ibadah pertama di Bakkah",
+   "description": ""
+  },
+  "659": {
+   "name": "Dewi-dewi bangsa Arab penyembah berhala",
+   "description": ""
+  },
+  "660": {
+   "name": "nama-nama",
+   "description": ""
+  },
+  "661": {
+   "name": "Tuhan-tuhan bangsa Arab pra-Islam menurut namanya",
+   "description": ""
+  },
+  "662": {
+   "name": "Gelang emas",
+   "description": ""
+  },
+  "663": {
+   "name": "dan petir azab",
+   "description": ""
+  },
+  "664": {
+   "name": "diampuni setelah kebinasaan",
+   "description": ""
+  },
+  "665": {
+   "name": "Jalut",
+   "description": ""
+  },
+  "666": {
+   "name": "dan Nabi Daud",
+   "description": ""
+  },
+  "667": {
+   "name": "Injil",
+   "description": ""
+  },
+  "668": {
+   "name": "Pemerintahan",
+   "description": ""
+  },
+  "669": {
+   "name": "pengambilan keputusan dalam urusan publik",
+   "description": ""
+  },
+  "670": {
+   "name": "Kubur",
+   "description": ""
+  },
+  "671": {
+   "name": "Ketamakan (lihat Materialisme)",
+   "description": ""
+  },
+  "672": {
+   "name": "Salam",
+   "description": ""
+  },
+  "673": {
+   "name": "Perwalian",
+   "description": ""
+  },
+  "674": {
+   "name": "tata cara yang benar",
+   "description": ""
+  },
+  "675": {
+   "name": "hukuman bagi wali yang buruk",
+   "description": ""
+  },
+  "676": {
+   "name": "kapan berakhir",
+   "description": ""
+  },
+  "677": {
+   "name": "saksi yang diperlukan untuk mengakhirinya",
+   "description": ""
+  },
+  "678": {
+   "name": "Hajar",
+   "description": ""
+  },
+  "679": {
+   "name": "dan Nabi Ismail",
+   "description": ""
+  },
+  "680": {
+   "name": "menahan diri dari bertengkar selama haji",
+   "description": ""
+  },
+  "681": {
+   "name": "kewajiban mengunjungi Makkah",
+   "description": ""
+  },
+  "682": {
+   "name": "keringanan dari haji",
+   "description": ""
+  },
+  "683": {
+   "name": "berpuasa selama haji",
+   "description": ""
+  },
+  "684": {
+   "name": "berburu dilarang",
+   "description": ""
+  },
+  "685": {
+   "name": "hewan buruan air diperbolehkan selama haji",
+   "description": ""
+  },
+  "686": {
+   "name": "melanggarnya sekali? Jangan mengulanginya!",
+   "description": ""
+  },
+  "687": {
+   "name": "tebusan atas pelanggaran sekali",
+   "description": ""
+  },
+  "688": {
+   "name": "aturan",
+   "description": ""
+  },
+  "689": {
+   "name": "kurban selama haji",
+   "description": ""
+  },
+  "690": {
+   "name": "Harut dan Marut",
+   "description": ""
+  },
+  "691": {
+   "name": "Aturan kesehatan",
+   "description": ""
+  },
+  "692": {
+   "name": "anak-anak",
+   "description": ""
+  },
+  "693": {
+   "name": "makanan",
+   "description": ""
+  },
+  "694": {
+   "name": "yang ditangkap oleh hewan pemburumu",
+   "description": ""
+  },
+  "695": {
+   "name": "zat memabukkan dilarang (lihat Zat memabukkan)",
+   "description": ""
+  },
+  "696": {
+   "name": "haid",
+   "description": ""
+  },
+  "697": {
+   "name": "Pendengaran",
+   "description": ""
+  },
+  "698": {
+   "name": "Surga",
+   "description": ""
+  },
+  "699": {
+   "name": "dipenuhi penjaga yang kuat dan nyala api",
+   "description": ""
+  },
+  "700": {
+   "name": "pemuda abadi di dalamnya",
+   "description": ""
+  },
+  "701": {
+   "name": "orang tua dikumpulkan bersama keturunannya",
+   "description": ""
+  },
+  "702": {
+   "name": "pasangan yang suci di dalamnya",
+   "description": ""
+  },
+  "703": {
+   "name": "beberapa tingkat",
+   "description": ""
+  },
+  "704": {
+   "name": "pasangan perawan yang menundukkan pandangan",
+   "description": ""
+  },
+  "705": {
+   "name": "Neraka (api, nyala yang berkobar)",
+   "description": ""
+  },
+  "706": {
+   "name": "keputusasaan yang membakar dan kegelapan sedingin es di dalamnya",
+   "description": ""
+  },
+  "707": {
+   "name": "rantai sepanjang 70 hasta",
+   "description": ""
+  },
+  "708": {
+   "name": "penghuninya tidak mati dan tidak pula hidup",
+   "description": ""
+  },
+  "709": {
+   "name": "tinggal untuk waktu yang terbatas",
+   "description": ""
+  },
+  "710": {
+   "name": "Sejarah",
+   "description": ""
+  },
+  "711": {
+   "name": "pelajarilah",
+   "description": ""
+  },
+  "712": {
+   "name": "Homoseksualitas",
+   "description": ""
+  },
+  "713": {
+   "name": "dipandang sebagai kejahatan",
+   "description": ""
+  },
+  "714": {
+   "name": "Kuda",
+   "description": ""
+  },
+  "715": {
+   "name": "Perumahan",
+   "description": ""
+  },
+  "716": {
+   "name": "Umat manusia",
+   "description": ""
+  },
+  "717": {
+   "name": "dilahirkan dengan watak yang gelisah",
+   "description": ""
+  },
+  "718": {
+   "name": "diciptakan dalam bentuk yang sebaik-baiknya",
+   "description": ""
+  },
+  "719": {
+   "name": "diciptakan berpasang-pasangan",
+   "description": ""
+  },
+  "720": {
+   "name": "dari setetes mani",
+   "description": ""
+  },
+  "721": {
+   "name": "dari tanah liat",
+   "description": ""
+  },
+  "722": {
+   "name": "dengan air",
+   "description": ""
+  },
+  "723": {
+   "name": "dari lumpur hitam yang berubah bentuk",
+   "description": ""
+  },
+  "724": {
+   "name": "dari debu",
+   "description": ""
+  },
+  "725": {
+   "name": "dari bumi",
+   "description": ""
+  },
+  "726": {
+   "name": "dari air mani",
+   "description": ""
+  },
+  "727": {
+   "name": "dari laki-laki dan perempuan",
+   "description": ""
+  },
+  "728": {
+   "name": "keragaman di dalamnya",
+   "description": ""
+  },
+  "729": {
+   "name": "diberi kehendak bebas",
+   "description": ""
+  },
+  "730": {
+   "name": "tumbuh berangsur-angsur dari bumi",
+   "description": ""
+  },
+  "731": {
+   "name": "tidak berarti dibandingkan alam semesta",
+   "description": ""
+  },
+  "732": {
+   "name": "pasangan dari jenismu sendiri",
+   "description": ""
+  },
+  "733": {
+   "name": "sifat mementingkan diri selalu ada dalam jiwa",
+   "description": ""
+  },
+  "734": {
+   "name": "yang paling hina adalah mereka yang tidak menggunakan akal",
+   "description": ""
+  },
+  "735": {
+   "name": "Berburu",
+   "description": ""
+  },
+  "736": {
+   "name": "tentang hewan yang dilatih berburu",
+   "description": ""
+  },
+  "737": {
+   "name": "Bidadari (disebut juga Houri)",
+   "description": ""
+  },
+  "738": {
+   "name": "Hidrologi",
+   "description": ""
+  },
+  "739": {
+   "name": "buih",
+   "description": ""
+  },
+  "740": {
+   "name": "Orang-orang munafik",
+   "description": ""
+  },
+  "741": {
+   "name": "mendoakan mereka tidak ada gunanya",
+   "description": ""
+  },
+  "742": {
+   "name": "Iblis (Setan)",
+   "description": ""
+  },
+  "743": {
+   "name": "Penyembahan berhala",
+   "description": ""
+  },
+  "744": {
+   "name": "Kemaksiatan",
+   "description": ""
+  },
+  "745": {
+   "name": "hukumlah keduanya",
+   "description": ""
+  },
+  "746": {
+   "name": "tobat menghapus hukuman",
+   "description": ""
+  },
+  "747": {
+   "name": "tobat pada saat sakaratul maut dikecualikan",
+   "description": ""
+  },
+  "748": {
+   "name": "perempuan",
+   "description": ""
+  },
+  "749": {
+   "name": "diperlukan empat saksi untuk “menyatakan bersalah”",
+   "description": ""
+  },
+  "750": {
+   "name": "Penipu",
+   "description": ""
+  },
+  "751": {
+   "name": "keagamaan",
+   "description": ""
+  },
+  "752": {
+   "name": "hukuman bagi mereka",
+   "description": ""
+  },
+  "753": {
+   "name": "Keluarga Imran",
+   "description": ""
+  },
+  "754": {
+   "name": "In sya Allah",
+   "description": ""
+  },
+  "755": {
+   "name": "Warisan",
+   "description": ""
+  },
+  "756": {
+   "name": "pembagian kepada",
+   "description": ""
+  },
+  "757": {
+   "name": "anak dan orang tua",
+   "description": ""
+  },
+  "758": {
+   "name": "kerabat lain, anak yatim, dan orang miskin",
+   "description": ""
+  },
+  "759": {
+   "name": "saudara kandung",
+   "description": ""
+  },
+  "760": {
+   "name": "janda dan duda",
+   "description": ""
+  },
+  "761": {
+   "name": "jangan menahan istri yang tidak dicintai demi warisan",
+   "description": ""
+  },
+  "762": {
+   "name": "untuk laki-laki",
+   "description": ""
+  },
+  "763": {
+   "name": "untuk perempuan",
+   "description": ""
+  },
+  "764": {
+   "name": "ringkasan",
+   "description": ""
+  },
+  "765": {
+   "name": "Bunga pinjaman (lihat Riba)",
+   "description": ""
+  },
+  "766": {
+   "name": "Zat memabukkan",
+   "description": ""
+  },
+  "767": {
+   "name": "jangan salat dalam keadaan mabuk",
+   "description": ""
+  },
+  "768": {
+   "name": "dilarang kecuali dalam keadaan darurat",
+   "description": ""
+  },
+  "769": {
+   "name": "dan Hajar",
+   "description": ""
+  },
+  "770": {
+   "name": "Nabi Yakub (Israil)",
+   "description": ""
+  },
+  "771": {
+   "name": "menjadi saksi pada Hari Kiamat",
+   "description": ""
+  },
+  "772": {
+   "name": "orang Kristen diminta tidak mendewakannya",
+   "description": ""
+  },
+  "773": {
+   "name": "para Hawari",
+   "description": ""
+  },
+  "774": {
+   "name": "perbedaan pandangan tentangnya",
+   "description": ""
+  },
+  "775": {
+   "name": "para pengikutnya di atas yang lain pada Hari Kiamat",
+   "description": ""
+  },
+  "776": {
+   "name": "menyembuhkan orang buta dan penderita kusta, menghidupkan orang mati",
+   "description": ""
+  },
+  "777": {
+   "name": "ilham sucinya",
+   "description": ""
+  },
+  "778": {
+   "name": "keadaannya seperti Adam",
+   "description": ""
+  },
+  "779": {
+   "name": "menjadi tanda untuk mengetahui Hari Kiamat (terjemahan alternatif)",
+   "description": ""
+  },
+  "780": {
+   "name": "orang Yahudi membanggakan telah membunuhnya",
+   "description": ""
+  },
+  "781": {
+   "name": "bukan Allah",
+   "description": ""
+  },
+  "782": {
+   "name": "hanya seorang rasul",
+   "description": ""
+  },
+  "783": {
+   "name": "hanya tampak terbunuh dan disalib",
+   "description": ""
+  },
+  "784": {
+   "name": "dibangkitkan",
+   "description": ""
+  },
+  "785": {
+   "name": "kebangkitan dinubuatkan",
+   "description": ""
+  },
+  "786": {
+   "name": "kebenaran tentangnya akan disadari ketika manusia mati",
+   "description": ""
+  },
+  "787": {
+   "name": "Orang Yahudi",
+   "description": ""
+  },
+  "788": {
+   "name": "dan orang Nasrani",
+   "description": ""
+  },
+  "789": {
+   "name": "rasul datang kepada mereka",
+   "description": ""
+  },
+  "790": {
+   "name": "permusuhan dan kebencian di antara mereka",
+   "description": ""
+  },
+  "791": {
+   "name": "pertikaian di antara mereka",
+   "description": ""
+  },
+  "792": {
+   "name": "larangan makanan",
+   "description": ""
+  },
+  "793": {
+   "name": "tidak berhak mengklaim karunia Allah hanya untuk mereka",
+   "description": ""
+  },
+  "794": {
+   "name": "surga bukan hanya untuk mereka",
+   "description": ""
+  },
+  "795": {
+   "name": "mengatakan mereka “anak-anak Allah”",
+   "description": ""
+  },
+  "796": {
+   "name": "hanya beriman kepada sedikit hal",
+   "description": ""
+  },
+  "797": {
+   "name": "mengklaim hanya merekalah yang dekat dengan Allah",
+   "description": ""
+  },
+  "798": {
+   "name": "diharamkan dari hal-hal baik dalam kehidupan",
+   "description": ""
+  },
+  "799": {
+   "name": "sebab-sebabnya",
+   "description": ""
+  },
+  "800": {
+   "name": "makanan yang diharamkan bagi mereka",
+   "description": ""
+  },
+  "801": {
+   "name": "amal baik leluhur tidak diperhitungkan",
+   "description": ""
+  },
+  "802": {
+   "name": "mencelakakan diri sendiri karena salah menafsirkan",
+   "description": ""
+  },
+  "803": {
+   "name": "keliru karena hanya meyakini wahyu mereka sendiri",
+   "description": ""
+  },
+  "804": {
+   "name": "paling memusuhi kaum Muslimin",
+   "description": ""
+  },
+  "805": {
+   "name": "saling menebus tawanan pada masa Nabi",
+   "description": ""
+  },
+  "806": {
+   "name": "perintah-perintah agama",
+   "description": ""
+  },
+  "807": {
+   "name": "pembalasan yang ditetapkan dalam Taurat",
+   "description": ""
+  },
+  "808": {
+   "name": "mengatakan “Uzair adalah putra Allah”",
+   "description": ""
+  },
+  "809": {
+   "name": "mengatakan “Hati kami penuh dengan ilmu.”",
+   "description": ""
+  },
+  "810": {
+   "name": "membunuh para nabi",
+   "description": ""
+  },
+  "811": {
+   "name": "sebagian memutarbalikkan makna semua wahyu",
+   "description": ""
+  },
+  "812": {
+   "name": "maafkanlah mereka",
+   "description": ""
+  },
+  "813": {
+   "name": "peringatan kepada mereka",
+   "description": ""
+  },
+  "814": {
+   "name": "Jihad (berperang, berjuang, bersungguh-sungguh, berikhtiar)",
+   "description": ""
+  },
+  "815": {
+   "name": "orang tua yang tidak beriman berusaha membujuk seorang mukmin agar menyekutukan Allah",
+   "description": ""
+  },
+  "816": {
+   "name": "berjuang sungguh-sungguh melawan orang-orang kafir",
+   "description": ""
+  },
+  "817": {
+   "name": "berjuang sungguh-sungguh di jalan Allah",
+   "description": ""
+  },
+  "818": {
+   "name": "diciptakan dari api",
+   "description": ""
+  },
+  "819": {
+   "name": "Nabi Ayyub",
+   "description": ""
+  },
+  "820": {
+   "name": "Nabi Yahya",
+   "description": ""
+  },
+  "821": {
+   "name": "Nabi Yunus",
+   "description": ""
+  },
+  "822": {
+   "name": "Yordania",
+   "description": ""
+  },
+  "823": {
+   "name": "masuklah dengan rendah hati",
+   "description": ""
+  },
+  "824": {
+   "name": "memasuki",
+   "description": ""
+  },
+  "825": {
+   "name": "orang Yahudi diizinkan di sana, bukan hak mereka",
+   "description": ""
+  },
+  "826": {
+   "name": "Nabi Yusuf",
+   "description": ""
+  },
+  "827": {
+   "name": "upaya merayunya",
+   "description": ""
+  },
+  "828": {
+   "name": "dijual kepada seorang Mesir",
+   "description": ""
+  },
+  "829": {
+   "name": "Pengadilan",
+   "description": ""
+  },
+  "830": {
+   "name": "berlaku adillah",
+   "description": ""
+  },
+  "831": {
+   "name": "jangan biarkan kebencian menyesatkan keputusan",
+   "description": ""
+  },
+  "832": {
+   "name": "Hari",
+   "description": ""
+  },
+  "833": {
+   "name": "para rasul dikumpulkan",
+   "description": ""
+  },
+  "834": {
+   "name": "apakah orang-orang kafir benar-benar siap menghadapinya",
+   "description": ""
+  },
+  "835": {
+   "name": "tobat pada saat itu sudah terlambat",
+   "description": ""
+  },
+  "836": {
+   "name": "“rambut anak-anak memutih”",
+   "description": ""
+  },
+  "837": {
+   "name": "bumi",
+   "description": ""
+  },
+  "838": {
+   "name": "dan gunung-gunung diangkat lalu dihancurkan",
+   "description": ""
+  },
+  "839": {
+   "name": "diratakan",
+   "description": ""
+  },
+  "840": {
+   "name": "terbelah",
+   "description": ""
+  },
+  "841": {
+   "name": "diguncangkan dengan dahsyat",
+   "description": ""
+  },
+  "842": {
+   "name": "akan diguncang dan menjadi seperti bukit pasir yang bergerak",
+   "description": ""
+  },
+  "843": {
+   "name": "kilatan api disusul asap",
+   "description": ""
+  },
+  "844": {
+   "name": "bulan terbelah",
+   "description": ""
+  },
+  "845": {
+   "name": "gunung-gunung",
+   "description": ""
+  },
+  "846": {
+   "name": "seperti bulu yang dihambur-hamburkan",
+   "description": ""
+  },
+  "847": {
+   "name": "bertebaran seperti debu",
+   "description": ""
+  },
+  "848": {
+   "name": "dihancurkan",
+   "description": ""
+  },
+  "849": {
+   "name": "lenyap",
+   "description": ""
+  },
+  "850": {
+   "name": "akan berjalan",
+   "description": ""
+  },
+  "851": {
+   "name": "lautan akan meluap melampaui batasnya",
+   "description": ""
+  },
+  "852": {
+   "name": "langit",
+   "description": ""
+  },
+  "853": {
+   "name": "dan awan akan terbelah",
+   "description": ""
+  },
+  "854": {
+   "name": "dibukakan",
+   "description": ""
+  },
+  "855": {
+   "name": "seperti cairan timah",
+   "description": ""
+  },
+  "856": {
+   "name": "merah seperti minyak yang terbakar",
+   "description": ""
+  },
+  "857": {
+   "name": "terbelah",
+   "description": ""
+  },
+  "858": {
+   "name": "akan digulung",
+   "description": ""
+  },
+  "859": {
+   "name": "akan mendatangkan asap yang pekat",
+   "description": ""
+  },
+  "860": {
+   "name": "dihapus",
+   "description": ""
+  },
+  "861": {
+   "name": "berhamburan",
+   "description": ""
+  },
+  "862": {
+   "name": "tiga golongan jiwa yang diadili",
+   "description": ""
+  },
+  "863": {
+   "name": "mereka yang dekat dengan Allah",
+   "description": ""
+  },
+  "864": {
+   "name": "mereka yang jahat",
+   "description": ""
+  },
+  "865": {
+   "name": "mereka yang saleh",
+   "description": ""
+  },
+  "866": {
+   "name": "gunakan akal",
+   "description": ""
+  },
+  "867": {
+   "name": "periksalah kabar dan desas-desus",
+   "description": ""
+  },
+  "868": {
+   "name": "Kakbah",
+   "description": ""
+  },
+  "869": {
+   "name": "memasukinya dengan kepala dicukur atau rambut dipendekkan",
+   "description": ""
+  },
+  "870": {
+   "name": "Pembunuhan",
+   "description": ""
+  },
+  "871": {
+   "name": "membunuh sesama mukmin tidak terbayangkan kecuali karena kesalahan",
+   "description": ""
+  },
+  "872": {
+   "name": "tebusan (diat) untuknya",
+   "description": ""
+  },
+  "873": {
+   "name": "membunuh mukmin dengan sengaja dan hukumannya",
+   "description": ""
+  },
+  "874": {
+   "name": "jangan",
+   "description": ""
+  },
+  "875": {
+   "name": "jangan mencelakai mereka yang menawarkan perdamaian",
+   "description": ""
+  },
+  "876": {
+   "name": "anak perempuan yang dikubur hidup-hidup akan ditanya karena dosa apa ia dibunuh",
+   "description": ""
+  },
+  "877": {
+   "name": "orang munafik akan dibunuh di Madinah pada “Perang Ahzab”",
+   "description": ""
+  },
+  "878": {
+   "name": "hanya ketika permusuhan sedang berlangsung",
+   "description": ""
+  },
+  "879": {
+   "name": "penindasan lebih besar daripada pembunuhan",
+   "description": ""
+  },
+  "880": {
+   "name": "hukuman bagi pembunuhan dan membuat kerusakan di bumi",
+   "description": ""
+  },
+  "881": {
+   "name": "kisas",
+   "description": ""
+  },
+  "882": {
+   "name": "Ilmu",
+   "description": ""
+  },
+  "883": {
+   "name": "melek huruf",
+   "description": ""
+  },
+  "884": {
+   "name": "pelajari alam untuk memperolehnya",
+   "description": ""
+  },
+  "885": {
+   "name": "bepergian untuk menuntut ilmu",
+   "description": ""
+  },
+  "886": {
+   "name": "Kufur (pengingkaran terhadap kebenaran)",
+   "description": ""
+  },
+  "887": {
+   "name": "Hukum-hukum yang ditetapkan oleh Allah dan Rasul",
+   "description": ""
+  },
+  "888": {
+   "name": "Kehidupan",
+   "description": ""
+  },
+  "889": {
+   "name": "daya tarik kehidupan dunia",
+   "description": ""
+  },
+  "890": {
+   "name": "makhluk hidup sebagian besar terdiri dari air (lihat Biologi)",
+   "description": ""
+  },
+  "891": {
+   "name": "keragaman",
+   "description": ""
+  },
+  "892": {
+   "name": "di luar bumi",
+   "description": ""
+  },
+  "893": {
+   "name": "adalah sesuatu yang suci",
+   "description": ""
+  },
+  "894": {
+   "name": "hal-hal baik dihalalkan",
+   "description": ""
+  },
+  "895": {
+   "name": "jalan menuju ketenteraman dimudahkan",
+   "description": ""
+  },
+  "896": {
+   "name": "Melek huruf",
+   "description": ""
+  },
+  "897": {
+   "name": "Pihak yang berperkara",
+   "description": ""
+  },
+  "898": {
+   "name": "Ternak",
+   "description": ""
+  },
+  "899": {
+   "name": "Belalang",
+   "description": ""
+  },
+  "900": {
+   "name": "Nabi Luth",
+   "description": ""
+  },
+  "901": {
+   "name": "Pohon sidrah",
+   "description": ""
+  },
+  "902": {
+   "name": "Madyan",
+   "description": ""
+  },
+  "903": {
+   "name": "Manna",
+   "description": ""
+  },
+  "904": {
+   "name": "Pernikahan",
+   "description": ""
+  },
+  "905": {
+   "name": "perzinaan",
+   "description": ""
+  },
+  "906": {
+   "name": "bukti yang diperlukan (empat saksi)",
+   "description": ""
+  },
+  "907": {
+   "name": "hukuman bagi penuduh palsu",
+   "description": ""
+  },
+  "908": {
+   "name": "jika tidak ada empat saksi",
+   "description": ""
+  },
+  "909": {
+   "name": "pernikahan setelahnya",
+   "description": ""
+  },
+  "910": {
+   "name": "hukumannya",
+   "description": ""
+  },
+  "911": {
+   "name": "tunjuklah juru damai dari antara kamu bila dikhawatirkan terjadi perpecahan",
+   "description": ""
+  },
+  "912": {
+   "name": "keluhan",
+   "description": ""
+  },
+  "913": {
+   "name": "mahar",
+   "description": ""
+  },
+  "914": {
+   "name": "kesepakatan lain yang disetujui bersama",
+   "description": ""
+  },
+  "915": {
+   "name": "perempuan boleh mengembalikannya",
+   "description": ""
+  },
+  "916": {
+   "name": "kepada kerabat tertentu",
+   "description": ""
+  },
+  "917": {
+   "name": "kepada orang yang tidak beriman",
+   "description": ""
+  },
+  "918": {
+   "name": "zina dilarang",
+   "description": ""
+  },
+  "919": {
+   "name": "jika tidak mampu",
+   "description": ""
+  },
+  "920": {
+   "name": "jika perempuan khawatir diperlakukan buruk oleh suaminya",
+   "description": ""
+  },
+  "921": {
+   "name": "cinta dan kelembutan",
+   "description": ""
+  },
+  "922": {
+   "name": "poligami",
+   "description": ""
+  },
+  "923": {
+   "name": "pembatasan mengenainya",
+   "description": ""
+  },
+  "924": {
+   "name": "peringatan terhadapnya",
+   "description": ""
+  },
+  "925": {
+   "name": "bersandar bersama pasangan di surga",
+   "description": ""
+  },
+  "926": {
+   "name": "suami istri adalah pakaian bagi satu sama lain",
+   "description": ""
+  },
+  "927": {
+   "name": "dengan mantan istri anak angkat diperbolehkan",
+   "description": ""
+  },
+  "928": {
+   "name": "dengan anak yatim",
+   "description": ""
+  },
+  "929": {
+   "name": "hanya dengan perempuan yang belum menikah",
+   "description": ""
+  },
+  "930": {
+   "name": "dengan budak",
+   "description": ""
+  },
+  "931": {
+   "name": "dan di antara para budak",
+   "description": ""
+  },
+  "932": {
+   "name": "perempuan jika diperlukan",
+   "description": ""
+  },
+  "933": {
+   "name": "lebih baik jika laki-laki tidak menikah",
+   "description": ""
+  },
+  "934": {
+   "name": "meskipun ia sudah menikah sebelum ditawan",
+   "description": ""
+  },
+  "935": {
+   "name": "hukumannya hanya setengah dari hukuman perempuan merdeka jika berbuat keji",
+   "description": ""
+  },
+  "936": {
+   "name": "hanya dengan yang belum menikah",
+   "description": ""
+  },
+  "937": {
+   "name": "Maryam",
+   "description": ""
+  },
+  "938": {
+   "name": "bukan tuhan",
+   "description": ""
+  },
+  "939": {
+   "name": "Materialisme",
+   "description": ""
+  },
+  "940": {
+   "name": "dan istri-istri Nabi",
+   "description": ""
+  },
+  "941": {
+   "name": "iri hati dilarang",
+   "description": ""
+  },
+  "942": {
+   "name": "keserakahan membawa kebinasaan",
+   "description": ""
+  },
+  "943": {
+   "name": "merugikan orang lain dilarang",
+   "description": ""
+  },
+  "944": {
+   "name": "pemborosan",
+   "description": ""
+  },
+  "945": {
+   "name": "Makkah",
+   "description": ""
+  },
+  "946": {
+   "name": "kewajiban mengunjungi Makkah untuk haji",
+   "description": ""
+  },
+  "947": {
+   "name": "menghadap dan salat ke arahnya",
+   "description": ""
+  },
+  "948": {
+   "name": "tidak mutlak diperlukan (Allah ada di mana-mana)",
+   "description": ""
+  },
+  "949": {
+   "name": "lembah",
+   "description": ""
+  },
+  "950": {
+   "name": "Haid",
+   "description": ""
+  },
+  "951": {
+   "name": "Metalurgi",
+   "description": ""
+  },
+  "952": {
+   "name": "besi",
+   "description": ""
+  },
+  "953": {
+   "name": "tembaga cair",
+   "description": ""
+  },
+  "954": {
+   "name": "kerak logam",
+   "description": ""
+  },
+  "955": {
+   "name": "Mineralogi",
+   "description": ""
+  },
+  "956": {
+   "name": "Olok-olok",
+   "description": ""
+  },
+  "957": {
+   "name": "Kerahiban",
+   "description": ""
+  },
+  "958": {
+   "name": "beberapa jenisnya dikritik",
+   "description": ""
+  },
+  "959": {
+   "name": "Rahib",
+   "description": ""
+  },
+  "960": {
+   "name": "sebagian memakan harta orang",
+   "description": ""
+  },
+  "961": {
+   "name": "sebagian menghalangi manusia dari jalan Allah",
+   "description": ""
+  },
+  "962": {
+   "name": "dijadikan tuhan oleh sebagian orang",
+   "description": ""
+  },
+  "963": {
+   "name": "Bulan",
+   "description": ""
+  },
+  "964": {
+   "name": "empat bulan haram",
+   "description": ""
+  },
+  "965": {
+   "name": "berperang dilarang selama",
+   "description": ""
+  },
+  "966": {
+   "name": "dua belas bulan (kamariah) dalam setahun",
+   "description": ""
+  },
+  "967": {
+   "name": "Nabi Musa",
+   "description": ""
+  },
+  "968": {
+   "name": "memancarkan air dari batu",
+   "description": ""
+  },
+  "969": {
+   "name": "perintah-perintahnya kepada kaumnya",
+   "description": ""
+  },
+  "970": {
+   "name": "adu sihir dengan para penyihir Firaun",
+   "description": ""
+  },
+  "971": {
+   "name": "empat puluh malam di Gunung Sinai",
+   "description": ""
+  },
+  "972": {
+   "name": "terbelahnya Laut Merah",
+   "description": ""
+  },
+  "973": {
+   "name": "bencana",
+   "description": ""
+  },
+  "974": {
+   "name": "orang kafir tidak boleh mengunjungi atau memakmurkan masjid",
+   "description": ""
+  },
+  "975": {
+   "name": "masjid tandingan di Quba dilarang",
+   "description": ""
+  },
+  "976": {
+   "name": "Gunung",
+   "description": ""
+  },
+  "977": {
+   "name": "Muhammad",
+   "description": ""
+  },
+  "978": {
+   "name": "ditegur",
+   "description": ""
+  },
+  "979": {
+   "name": "sebagai hakim bagi para pengikutnya",
+   "description": ""
+  },
+  "980": {
+   "name": "tidak berani mengubah Al-Qur'an maupun bertindak menyalahinya",
+   "description": ""
+  },
+  "981": {
+   "name": "perceraian",
+   "description": ""
+  },
+  "982": {
+   "name": "pengecualian dari hukum pernikahan “biasa”",
+   "description": ""
+  },
+  "983": {
+   "name": "menyukai perempuan yang cantik",
+   "description": ""
+  },
+  "984": {
+   "name": "pernikahan",
+   "description": ""
+  },
+  "985": {
+   "name": "kelonggaran hubungan kekerabatan di dalamnya",
+   "description": ""
+  },
+  "986": {
+   "name": "pembatasan",
+   "description": ""
+  },
+  "987": {
+   "name": "perjalanan mikraj",
+   "description": ""
+  },
+  "988": {
+   "name": "bukan orang gila",
+   "description": ""
+  },
+  "989": {
+   "name": "hanya seorang nabi",
+   "description": ""
+  },
+  "990": {
+   "name": "mendoakan pamannya yang tidak beriman (dilarang melakukannya)",
+   "description": ""
+  },
+  "991": {
+   "name": "bereaksi menentang sesuatu yang halal",
+   "description": ""
+  },
+  "992": {
+   "name": "“penutup” para nabi",
+   "description": ""
+  },
+  "993": {
+   "name": "panggilan kepada",
+   "description": ""
+  },
+  "994": {
+   "name": "mohon pamit kepada",
+   "description": ""
+  },
+  "995": {
+   "name": "nabi yang ummi",
+   "description": ""
+  },
+  "996": {
+   "name": "mengunjungi istri-istri",
+   "description": ""
+  },
+  "997": {
+   "name": "istri-istri yang ditinggal wafat tidak boleh menikah lagi",
+   "description": ""
+  },
+  "998": {
+   "name": "Bagal",
+   "description": ""
+  },
+  "999": {
+   "name": "Penduduk asli",
+   "description": ""
+  },
+  "1000": {
+   "name": "jangan mengusir mereka",
+   "description": ""
+  },
+  "1001": {
+   "name": "tolaklah orang yang melakukannya",
+   "description": ""
+  },
+  "1002": {
+   "name": "diusir dari tanah air mereka",
+   "description": ""
+  },
+  "1003": {
+   "name": "Keadaan terpaksa",
+   "description": ""
+  },
+  "1004": {
+   "name": "keadaan darurat dapat menghapus ketentuan yang melarang sesuatu",
+   "description": ""
+  },
+  "1005": {
+   "name": "Nepotisme tidak diperbolehkan",
+   "description": ""
+  },
+  "1006": {
+   "name": "Malam",
+   "description": ""
+  },
+  "1007": {
+   "name": "Nabi Nuh",
+   "description": ""
+  },
+  "1008": {
+   "name": "bahtera",
+   "description": ""
+  },
+  "1009": {
+   "name": "berlabuh di Gunung Judi",
+   "description": ""
+  },
+  "1010": {
+   "name": "banjir",
+   "description": ""
+  },
+  "1011": {
+   "name": "Fisika nuklir",
+   "description": ""
+  },
+  "1012": {
+   "name": "hal-hal yang lebih kecil dari atom (semula dimaksudkan sebagai \"semut kecil\"?)",
+   "description": ""
+  },
+  "1013": {
+   "name": "Sumpah",
+   "description": ""
+  },
+  "1014": {
+   "name": "kafarat untuk sumpah yang dilanggar",
+   "description": ""
+  },
+  "1015": {
+   "name": "memberi makan atau pakaian kepada 10 orang, memerdekakan budak, berpuasa 3 hari",
+   "description": ""
+  },
+  "1016": {
+   "name": "Perjanjian Lama",
+   "description": ""
+  },
+  "1017": {
+   "name": "pengikut",
+   "description": ""
+  },
+  "1018": {
+   "name": "Pohon zaitun",
+   "description": ""
+  },
+  "1019": {
+   "name": "Penindasan",
+   "description": ""
+  },
+  "1020": {
+   "name": "kesalahan ada pada para penindas",
+   "description": ""
+  },
+  "1021": {
+   "name": "membela diri dari",
+   "description": ""
+  },
+  "1022": {
+   "name": "lebih besar (dahsyat) daripada pembunuhan",
+   "description": ""
+  },
+  "1023": {
+   "name": "Anak yatim",
+   "description": ""
+  },
+  "1024": {
+   "name": "harta peninggalan mereka",
+   "description": ""
+  },
+  "1025": {
+   "name": "Patriarki",
+   "description": ""
+  },
+  "1026": {
+   "name": "Mutiara",
+   "description": ""
+  },
+  "1027": {
+   "name": "Orang yang dianiaya",
+   "description": ""
+  },
+  "1028": {
+   "name": "kaum",
+   "description": ""
+  },
+  "1029": {
+   "name": "lindungilah mereka, kecuali mereka berada di bawah suatu kaum yang terikat perjanjian denganmu",
+   "description": ""
+  },
+  "1030": {
+   "name": "orang-orang yang menjadi pelindung bagi",
+   "description": ""
+  },
+  "1031": {
+   "name": "Penganiaya",
+   "description": ""
+  },
+  "1032": {
+   "name": "hukuman bagi",
+   "description": ""
+  },
+  "1033": {
+   "name": "siksaan oleh mereka dan penyelamatan darinya",
+   "description": ""
+  },
+  "1034": {
+   "name": "Ketakwaan",
+   "description": ""
+  },
+  "1035": {
+   "name": "Pencemaran",
+   "description": ""
+  },
+  "1036": {
+   "name": "Para penyair",
+   "description": ""
+  },
+  "1037": {
+   "name": "Buah delima",
+   "description": ""
+  },
+  "1038": {
+   "name": "Salat",
+   "description": ""
+  },
+  "1039": {
+   "name": "berhiaslah untuk",
+   "description": ""
+  },
+  "1040": {
+   "name": "ketenangan",
+   "description": ""
+  },
+  "1041": {
+   "name": "hari berkumpul (Jumat)",
+   "description": ""
+  },
+  "1042": {
+   "name": "dengan alasan yang benar",
+   "description": ""
+  },
+  "1043": {
+   "name": "Nabi Ibrahim",
+   "description": ""
+  },
+  "1044": {
+   "name": "Nabi Yusuf",
+   "description": ""
+  },
+  "1045": {
+   "name": "Nabi Musa",
+   "description": ""
+  },
+  "1046": {
+   "name": "Nabi Nuh",
+   "description": ""
+  },
+  "1047": {
+   "name": "Nabi Sulaiman",
+   "description": ""
+  },
+  "1048": {
+   "name": "Nabi Zakaria",
+   "description": ""
+  },
+  "1049": {
+   "name": "tidak dalam keadaan mabuk",
+   "description": ""
+  },
+  "1050": {
+   "name": "sujud",
+   "description": ""
+  },
+  "1051": {
+   "name": "mencegah dari perbuatan keji",
+   "description": ""
+  },
+  "1052": {
+   "name": "kewajiban suci yang terkait dengan waktu dalam sehari",
+   "description": ""
+  },
+  "1053": {
+   "name": "berdiri",
+   "description": ""
+  },
+  "1054": {
+   "name": "tata cara",
+   "description": ""
+  },
+  "1055": {
+   "name": "waktu-waktu dalam sehari untuk",
+   "description": ""
+  },
+  "1056": {
+   "name": "dalam keadaan bahaya",
+   "description": ""
+  },
+  "1057": {
+   "name": "Kehamilan",
+   "description": ""
+  },
+  "1058": {
+   "name": "ruh dari Allah ditiupkan ke dalam janin",
+   "description": ""
+  },
+  "1059": {
+   "name": "Privasi",
+   "description": ""
+  },
+  "1060": {
+   "name": "keadaan tanpa pakaian pada tengah hari",
+   "description": ""
+  },
+  "1061": {
+   "name": "Keluarga Nabi",
+   "description": ""
+  },
+  "1062": {
+   "name": "terimalah orang yang membenarkan wahyu terdahulu",
+   "description": ""
+  },
+  "1063": {
+   "name": "sedekah ketika bermusyawarah dengan",
+   "description": ""
+  },
+  "1064": {
+   "name": "jangan memperoleh budak kecuali melalui perang",
+   "description": ""
+  },
+  "1065": {
+   "name": "jangan meninggikan suaramu melebihi",
+   "description": ""
+  },
+  "1066": {
+   "name": "telah datang kepadamu",
+   "description": ""
+  },
+  "1067": {
+   "name": "lebih utama bagi orang-orang beriman daripada diri mereka sendiri",
+   "description": ""
+  },
+  "1068": {
+   "name": "terjaga salat malam dua pertiga, setengah, atau sepertiga malam",
+   "description": ""
+  },
+  "1069": {
+   "name": "mukjizat hanya dengan izin Allah",
+   "description": ""
+  },
+  "1070": {
+   "name": "hanya manusia biasa",
+   "description": ""
+  },
+  "1071": {
+   "name": "orang yang menjadi nabi palsu adalah orang zalim",
+   "description": ""
+  },
+  "1072": {
+   "name": "kenabian dengan bahasa kaum yang dituju",
+   "description": ""
+  },
+  "1073": {
+   "name": "tujuan",
+   "description": ""
+  },
+  "1074": {
+   "name": "sebagian tidak disebutkan",
+   "description": ""
+  },
+  "1075": {
+   "name": "sebagian lebih utama",
+   "description": ""
+  },
+  "1076": {
+   "name": "orang-orang sebelumnya memiliki istri dan anak",
+   "description": ""
+  },
+  "1077": {
+   "name": "istri-istri",
+   "description": ""
+  },
+  "1078": {
+   "name": "pahala dan hukuman",
+   "description": ""
+  },
+  "1079": {
+   "name": "akan dilepaskan jika mereka menghendaki",
+   "description": ""
+  },
+  "1080": {
+   "name": "Zabur",
+   "description": ""
+  },
+  "1081": {
+   "name": "diberikan kepada Nabi Daud",
+   "description": ""
+  },
+  "1082": {
+   "name": "Al-Qur'an",
+   "description": ""
+  },
+  "1083": {
+   "name": "diturunkan pada malam yang diberkahi",
+   "description": ""
+  },
+  "1084": {
+   "name": "ketetapan yang jelas",
+   "description": ""
+  },
+  "1085": {
+   "name": "penyempurnaan",
+   "description": ""
+  },
+  "1086": {
+   "name": "disampaikan dengan jelas",
+   "description": ""
+  },
+  "1087": {
+   "name": "sifat ilahi",
+   "description": ""
+  },
+  "1088": {
+   "name": "jangan tergesa-gesa mendekatinya",
+   "description": ""
+  },
+  "1089": {
+   "name": "mudah dipahami",
+   "description": ""
+  },
+  "1090": {
+   "name": "penuh hikmah",
+   "description": ""
+  },
+  "1091": {
+   "name": "petunjuk bagi manusia",
+   "description": ""
+  },
+  "1092": {
+   "name": "tabir tak terlihat saat pembacaan",
+   "description": ""
+  },
+  "1093": {
+   "name": "bukan perkataan Muhammad",
+   "description": ""
+  },
+  "1094": {
+   "name": "bukan dari kekuatan setan",
+   "description": ""
+  },
+  "1095": {
+   "name": "bukan syair",
+   "description": ""
+  },
+  "1096": {
+   "name": "bacalah sekadar yang mudah bagimu",
+   "description": ""
+  },
+  "1097": {
+   "name": "diturunkan dalam bahasa Arab",
+   "description": ""
+  },
+  "1098": {
+   "name": "diturunkan \"secara bergelombang\" (berangsur-angsur)",
+   "description": ""
+  },
+  "1099": {
+   "name": "sebagian ayat jelas, sebagian bersifat kiasan",
+   "description": ""
+  },
+  "1100": {
+   "name": "sumber kesehatan",
+   "description": ""
+  },
+  "1101": {
+   "name": "pada lauh yang tidak akan binasa",
+   "description": ""
+  },
+  "1102": {
+   "name": "Para rabi",
+   "description": ""
+  },
+  "1103": {
+   "name": "sebagian",
+   "description": ""
+  },
+  "1104": {
+   "name": "memakan harta orang",
+   "description": ""
+  },
+  "1105": {
+   "name": "dijadikan sebagai tuhan",
+   "description": ""
+  },
+  "1106": {
+   "name": "memalingkan manusia dari jalan Allah",
+   "description": ""
+  },
+  "1107": {
+   "name": "Ramadan",
+   "description": ""
+  },
+  "1108": {
+   "name": "dan hubungan suami istri pada malam hari",
+   "description": ""
+  },
+  "1109": {
+   "name": "Catatan amal pribadi",
+   "description": ""
+  },
+  "1110": {
+   "name": "-",
+   "description": ""
+  },
+  "1111": {
+   "name": "Laut Merah",
+   "description": ""
+  },
+  "1112": {
+   "name": "terbelahnya",
+   "description": ""
+  },
+  "1113": {
+   "name": "Pengungsi",
+   "description": ""
+  },
+  "1114": {
+   "name": "perbedaan pendapat",
+   "description": ""
+  },
+  "1115": {
+   "name": "mempersatukan bekas musuh",
+   "description": ""
+  },
+  "1116": {
+   "name": "anggapan keliru tentang hal yang dihalalkan dan diharamkan",
+   "description": ""
+  },
+  "1117": {
+   "name": "keliru mengikuti dugaan orang lain",
+   "description": ""
+  },
+  "1118": {
+   "name": "keliru dituntun oleh anggapan nenek moyang tentang",
+   "description": ""
+  },
+  "1119": {
+   "name": "bukan permainan dan kesenangan yang fana",
+   "description": ""
+  },
+  "1120": {
+   "name": "adalah berserah diri kepada Allah",
+   "description": ""
+  },
+  "1121": {
+   "name": "tidak ada paksaan dalam agama",
+   "description": ""
+  },
+  "1122": {
+   "name": "tidak ada kesulitan dalam",
+   "description": ""
+  },
+  "1123": {
+   "name": "sama seperti bagi orang-orang sebelum kamu",
+   "description": ""
+  },
+  "1124": {
+   "name": "berusahalah menyelami makna terdalam dari",
+   "description": ""
+  },
+  "1125": {
+   "name": "gunakan akal dalam",
+   "description": ""
+  },
+  "1126": {
+   "name": "kejahatan menisbatkan kebohongan rekaan sendiri kepada Allah",
+   "description": ""
+  },
+  "1127": {
+   "name": "Keagamaan",
+   "description": ""
+  },
+  "1128": {
+   "name": "golongan",
+   "description": ""
+  },
+  "1129": {
+   "name": "hendaknya tetap bersatu",
+   "description": ""
+  },
+  "1130": {
+   "name": "Hari Kebangkitan",
+   "description": ""
+  },
+  "1131": {
+   "name": "pengikut Nabi Isa di atas orang-orang yang tidak beriman",
+   "description": ""
+  },
+  "1132": {
+   "name": "bulan menjadi gelap",
+   "description": ""
+  },
+  "1133": {
+   "name": "jiwa",
+   "description": ""
+  },
+  "1134": {
+   "name": "matahari dan bulan dikumpulkan (gerhana matahari atau pengembangan matahari?)",
+   "description": ""
+  },
+  "1135": {
+   "name": "Wahyu",
+   "description": ""
+  },
+  "1136": {
+   "name": "setiap zaman memiliki wahyunya sendiri",
+   "description": ""
+  },
+  "1137": {
+   "name": "dari balik tabir",
+   "description": ""
+  },
+  "1138": {
+   "name": "menyebut perang",
+   "description": ""
+  },
+  "1139": {
+   "name": "cara penyampaian",
+   "description": ""
+  },
+  "1140": {
+   "name": "pelanggar",
+   "description": ""
+  },
+  "1141": {
+   "name": "orang saleh akan diberi pahala",
+   "description": ""
+  },
+  "1142": {
+   "name": "Kurban",
+   "description": ""
+  },
+  "1143": {
+   "name": "Samiri",
+   "description": ""
+  },
+  "1144": {
+   "name": "Thalut",
+   "description": ""
+  },
+  "1145": {
+   "name": "Laut",
+   "description": ""
+  },
+  "1146": {
+   "name": "kegelapan di kedalaman",
+   "description": ""
+  },
+  "1147": {
+   "name": "Hubungan seksual",
+   "description": ""
+  },
+  "1148": {
+   "name": "pembuahan dan kehamilan (lihat Kehamilan)",
+   "description": ""
+  },
+  "1149": {
+   "name": "bergaullah dengan istri secara patut",
+   "description": ""
+  },
+  "1150": {
+   "name": "jangan paksa budak perempuan melakukan pelacuran",
+   "description": ""
+  },
+  "1151": {
+   "name": "adalah untuk pasangan hidupmu",
+   "description": ""
+  },
+  "1152": {
+   "name": "dengan budak adalah halal (tafsiran lain)",
+   "description": ""
+  },
+  "1153": {
+   "name": "Jenis kelamin",
+   "description": ""
+  },
+  "1154": {
+   "name": "diciptakan dari satu jiwa",
+   "description": ""
+  },
+  "1155": {
+   "name": "masing-masing berhak atas hasil usahanya sendiri",
+   "description": ""
+  },
+  "1156": {
+   "name": "kesetaraan",
+   "description": ""
+  },
+  "1157": {
+   "name": "dalam perceraian",
+   "description": ""
+  },
+  "1158": {
+   "name": "saling menjadi penuntun satu sama lain",
+   "description": ""
+  },
+  "1159": {
+   "name": "laki-laki menafkahi perempuan",
+   "description": ""
+  },
+  "1160": {
+   "name": "Kapal",
+   "description": ""
+  },
+  "1161": {
+   "name": "Nabi Syuaib",
+   "description": ""
+  },
+  "1162": {
+   "name": "Penglihatan",
+   "description": ""
+  },
+  "1163": {
+   "name": "Dosa",
+   "description": ""
+  },
+  "1164": {
+   "name": "menjauhi",
+   "description": ""
+  },
+  "1165": {
+   "name": "menyalahkan orang lain",
+   "description": ""
+  },
+  "1166": {
+   "name": "Gunung Sinai",
+   "description": ""
+  },
+  "1167": {
+   "name": "Kulit",
+   "description": ""
+  },
+  "1168": {
+   "name": "Langit",
+   "description": ""
+  },
+  "1169": {
+   "name": "asap yang tenang",
+   "description": ""
+  },
+  "1170": {
+   "name": "Budak",
+   "description": ""
+  },
+  "1171": {
+   "name": "perolehan hanya melalui perang",
+   "description": ""
+  },
+  "1172": {
+   "name": "memerdekakan",
+   "description": ""
+  },
+  "1173": {
+   "name": "setelah perang berakhir",
+   "description": ""
+  },
+  "1174": {
+   "name": "sebagai kafarat sumpah yang dilanggar",
+   "description": ""
+  },
+  "1175": {
+   "name": "sebagai kafarat atas kematian orang beriman yang memerangimu",
+   "description": ""
+  },
+  "1176": {
+   "name": "sedekah antara lain untuk memerdekakan budak",
+   "description": ""
+  },
+  "1177": {
+   "name": "adalah perbuatan orang yang benar-benar bertakwa",
+   "description": ""
+  },
+  "1178": {
+   "name": "mereka yang memintanya darimu, yang ada kebaikan pada diri mereka",
+   "description": ""
+  },
+  "1179": {
+   "name": "dan Ratu Saba",
+   "description": ""
+  },
+  "1180": {
+   "name": "terungkapnya kematian",
+   "description": ""
+  },
+  "1181": {
+   "name": "Sihir",
+   "description": ""
+  },
+  "1182": {
+   "name": "adalah keburukan",
+   "description": ""
+  },
+  "1183": {
+   "name": "Pasangan (suatu masa ketika mereka menjadi musuh bagimu)",
+   "description": ""
+  },
+  "1184": {
+   "name": "Pencurian",
+   "description": ""
+  },
+  "1185": {
+   "name": "memotong tangan sebagai hukuman",
+   "description": ""
+  },
+  "1186": {
+   "name": "pengampunan bagi (sebelum diketahui)",
+   "description": ""
+  },
+  "1187": {
+   "name": "salah meskipun melalui jalur peradilan",
+   "description": ""
+  },
+  "1188": {
+   "name": "Babi",
+   "description": ""
+  },
+  "1189": {
+   "name": "Sinagoge",
+   "description": ""
+  },
+  "1190": {
+   "name": "Tabuk",
+   "description": ""
+  },
+  "1191": {
+   "name": "rahmat Allah kepada mereka yang berangkat dalam ekspedisi ke",
+   "description": ""
+  },
+  "1192": {
+   "name": "Sepuluh Perintah",
+   "description": ""
+  },
+  "1193": {
+   "name": "tempat tinggal di bebatuan",
+   "description": ""
+  },
+  "1194": {
+   "name": "unta betina",
+   "description": ""
+  },
+  "1195": {
+   "name": "pembunuhan",
+   "description": ""
+  },
+  "1196": {
+   "name": "Waktu",
+   "description": ""
+  },
+  "1197": {
+   "name": "kisas dalam (juga diadopsi umat Islam)",
+   "description": ""
+  },
+  "1198": {
+   "name": "melepaskannya akan lebih baik",
+   "description": ""
+  },
+  "1199": {
+   "name": "Pengkhianatan",
+   "description": ""
+  },
+  "1200": {
+   "name": "di Hudaibiyah",
+   "description": ""
+  },
+  "1201": {
+   "name": "neraka",
+   "description": ""
+  },
+  "1202": {
+   "name": "Pohon",
+   "description": ""
+  },
+  "1203": {
+   "name": "Trinitas",
+   "description": ""
+  },
+  "1204": {
+   "name": "Allah bukan",
+   "description": ""
+  },
+  "1205": {
+   "name": "Dua belas suku",
+   "description": ""
+  },
+  "1206": {
+   "name": "terpencarnya",
+   "description": ""
+  },
+  "1207": {
+   "name": "Dzulkarnain",
+   "description": ""
+  },
+  "1208": {
+   "name": "Uhud",
+   "description": ""
+  },
+  "1209": {
+   "name": "perang",
+   "description": ""
+  },
+  "1210": {
+   "name": "Riba",
+   "description": ""
+  },
+  "1211": {
+   "name": "menunda pembayaran (membebaskan utang lebih baik)",
+   "description": ""
+  },
+  "1212": {
+   "name": "membebaskan utang",
+   "description": ""
+  },
+  "1213": {
+   "name": "orang Yahudi memakannya padahal dilarang",
+   "description": ""
+  },
+  "1214": {
+   "name": "Air",
+   "description": ""
+  },
+  "1215": {
+   "name": "dua massa besar",
+   "description": ""
+  },
+  "1216": {
+   "name": "Cuaca",
+   "description": ""
+  },
+  "1217": {
+   "name": "awan",
+   "description": ""
+  },
+  "1218": {
+   "name": "dan pola-polanya",
+   "description": ""
+  },
+  "1219": {
+   "name": "hujan es",
+   "description": ""
+  },
+  "1220": {
+   "name": "mengangkat",
+   "description": ""
+  },
+  "1221": {
+   "name": "petir",
+   "description": ""
+  },
+  "1222": {
+   "name": "menimpa manusia",
+   "description": ""
+  },
+  "1223": {
+   "name": "hujan",
+   "description": ""
+  },
+  "1224": {
+   "name": "dan peperangan",
+   "description": ""
+  },
+  "1225": {
+   "name": "badai",
+   "description": ""
+  },
+  "1226": {
+   "name": "guruh",
+   "description": ""
+  },
+  "1227": {
+   "name": "angin",
+   "description": ""
+  },
+  "1228": {
+   "name": "untuk penyerbukan",
+   "description": ""
+  },
+  "1229": {
+   "name": "Janda",
+   "description": ""
+  },
+  "1230": {
+   "name": "nafkah selama satu tahun",
+   "description": ""
+  },
+  "1231": {
+   "name": "satu tahun di rumah suami",
+   "description": ""
+  },
+  "1232": {
+   "name": "menunggu empat bulan sepuluh hari sebelum menikah lagi",
+   "description": ""
+  },
+  "1233": {
+   "name": "boleh merencanakan pernikahan kembali selama masa idah",
+   "description": ""
+  },
+  "1234": {
+   "name": "Wasiat",
+   "description": ""
+  },
+  "1235": {
+   "name": "mengubahnya dilarang",
+   "description": ""
+  },
+  "1236": {
+   "name": "dua saksi ketika engkau menyatakannya",
+   "description": ""
+  },
+  "1237": {
+   "name": "jika kedua saksi itu ragu",
+   "description": ""
+  },
+  "1238": {
+   "name": "Bulu domba",
+   "description": ""
+  },
+  "1239": {
+   "name": "Perempuan",
+   "description": ""
+  },
+  "1240": {
+   "name": "terimalah mereka yang mencari perlindungan dari suami yang tidak beriman",
+   "description": ""
+  },
+  "1241": {
+   "name": "kebejatan moral yang berat",
+   "description": ""
+  },
+  "1242": {
+   "name": "berniat buruk",
+   "description": ""
+  },
+  "1243": {
+   "name": "keringanan tidak memakai pakaian luar bagi yang sudah tua",
+   "description": ""
+  },
+  "1244": {
+   "name": "baiat perempuan-perempuan beriman",
+   "description": ""
+  },
+  "1245": {
+   "name": "perempuan saleh menjaga rahasia yang diamanatkan kepada mereka",
+   "description": ""
+  },
+  "1246": {
+   "name": "masa kehamilan (lihat Kehamilan)",
+   "description": ""
+  },
+  "1247": {
+   "name": "Nabi Zakaria",
+   "description": ""
+  },
+  "1248": {
+   "name": "Kehinaan",
+   "description": ""
+  },
+  "1249": {
+   "name": "Abu Lahab",
+   "description": ""
+  },
+  "1250": {
+   "name": "Kelimpahan",
+   "description": ""
+  },
+  "1251": {
+   "name": "Akasia",
+   "description": ""
+  },
+  "1252": {
+   "name": "Dapat diterima",
+   "description": ""
+  },
+  "1253": {
+   "name": "Penginapan",
+   "description": ""
+  },
+  "1254": {
+   "name": "Nasihat",
+   "description": ""
+  },
+  "1255": {
+   "name": "Adopsi (pengangkatan anak)",
+   "description": ""
+  },
+  "1256": {
+   "name": "Perhiasan",
+   "description": ""
+  },
+  "1257": {
+   "name": "Orang dewasa",
+   "description": ""
+  },
+  "1258": {
+   "name": "Perzinaan",
+   "description": ""
+  },
+  "1259": {
+   "name": "Nasihat",
+   "description": ""
+  },
+  "1260": {
+   "name": "Penasihat",
+   "description": ""
+  },
+  "1261": {
+   "name": "Urusan",
+   "description": ""
+  },
+  "1262": {
+   "name": "Kasih sayang",
+   "description": ""
+  },
+  "1263": {
+   "name": "Orang kaya",
+   "description": ""
+  },
+  "1264": {
+   "name": "Sore hari",
+   "description": ""
+  },
+  "1265": {
+   "name": "Kesepakatan",
+   "description": ""
+  },
+  "1266": {
+   "name": "Ali Imran",
+   "description": ""
+  },
+  "1267": {
+   "name": "Minuman keras",
+   "description": ""
+  },
+  "1268": {
+   "name": "Nama-nama Allah",
+   "description": ""
+  },
+  "1269": {
+   "name": "Kesetiaan",
+   "description": ""
+  },
+  "1270": {
+   "name": "Sekutu",
+   "description": ""
+  },
+  "1271": {
+   "name": "Sendirian",
+   "description": ""
+  },
+  "1272": {
+   "name": "Mezbah",
+   "description": ""
+  },
+  "1273": {
+   "name": "Nenek moyang",
+   "description": ""
+  },
+  "1274": {
+   "name": "Marah",
+   "description": ""
+  },
+  "1275": {
+   "name": "Kecemasan",
+   "description": ""
+  },
+  "1276": {
+   "name": "Murtad (kemurtadan)",
+   "description": ""
+  },
+  "1277": {
+   "name": "Orang murtad",
+   "description": ""
+  },
+  "1278": {
+   "name": "Mendekati",
+   "description": ""
+  },
+  "1279": {
+   "name": "Bangsa Arab",
+   "description": ""
+  },
+  "1280": {
+   "name": "Bahtera",
+   "description": ""
+  },
+  "1281": {
+   "name": "Pasukan",
+   "description": ""
+  },
+  "1282": {
+   "name": "Kesombongan",
+   "description": ""
+  },
+  "1283": {
+   "name": "Anak panah",
+   "description": ""
+  },
+  "1284": {
+   "name": "Mikraj",
+   "description": ""
+  },
+  "1285": {
+   "name": "Anggapan",
+   "description": ""
+  },
+  "1286": {
+   "name": "Tersesat",
+   "description": ""
+  },
+  "1287": {
+   "name": "Atom",
+   "description": ""
+  },
+  "1288": {
+   "name": "Menarik",
+   "description": ""
+  },
+  "1289": {
+   "name": "Bibi",
+   "description": ""
+  },
+  "1290": {
+   "name": "Otoritas",
+   "description": ""
+  },
+  "1291": {
+   "name": "Nabi Ayyub",
+   "description": ""
+  },
+  "1292": {
+   "name": "Bayi",
+   "description": ""
+  },
+  "1293": {
+   "name": "Punggung",
+   "description": ""
+  },
+  "1294": {
+   "name": "Menggunjing",
+   "description": ""
+  },
+  "1295": {
+   "name": "Bakkah",
+   "description": ""
+  },
+  "1296": {
+   "name": "Keseimbangan",
+   "description": ""
+  },
+  "1297": {
+   "name": "Pohon pisang",
+   "description": ""
+  },
+  "1298": {
+   "name": "Mandul",
+   "description": ""
+  },
+  "1299": {
+   "name": "Penghalang",
+   "description": ""
+  },
+  "1300": {
+   "name": "Pertempuran",
+   "description": ""
+  },
+  "1301": {
+   "name": "Janggut",
+   "description": ""
+  },
+  "1302": {
+   "name": "Binatang",
+   "description": ""
+  },
+  "1303": {
+   "name": "Tempat tidur",
+   "description": ""
+  },
+  "1304": {
+   "name": "Orang beriman",
+   "description": ""
+  },
+  "1305": {
+   "name": "Perut",
+   "description": ""
+  },
+  "1306": {
+   "name": "Doa berkat",
+   "description": ""
+  },
+  "1307": {
+   "name": "Dermawan",
+   "description": ""
+  },
+  "1308": {
+   "name": "Pengkhianatan",
+   "description": ""
+  },
+  "1309": {
+   "name": "Tersihir",
+   "description": ""
+  },
+  "1310": {
+   "name": "Dentuman Besar (Big Bang)",
+   "description": ""
+  },
+  "1311": {
+   "name": "Basmalah",
+   "description": ""
+  },
+  "1312": {
+   "name": "Hitam",
+   "description": ""
+  },
+  "1313": {
+   "name": "Celaan",
+   "description": ""
+  },
+  "1314": {
+   "name": "Ledakan",
+   "description": ""
+  },
+  "1315": {
+   "name": "Kobaran api",
+   "description": ""
+  },
+  "1316": {
+   "name": "Berkah",
+   "description": ""
+  },
+  "1317": {
+   "name": "Buta",
+   "description": ""
+  },
+  "1318": {
+   "name": "Darah",
+   "description": ""
+  },
+  "1319": {
+   "name": "Biru",
+   "description": ""
+  },
+  "1320": {
+   "name": "Membanggakan diri",
+   "description": ""
+  },
+  "1321": {
+   "name": "Tubuh",
+   "description": ""
+  },
+  "1322": {
+   "name": "Anggota tubuh",
+   "description": ""
+  },
+  "1323": {
+   "name": "Kitab",
+   "description": ""
+  },
+  "1324": {
+   "name": "Rukuk",
+   "description": ""
+  },
+  "1325": {
+   "name": "Gelang",
+   "description": ""
+  },
+  "1326": {
+   "name": "Sutra brokat",
+   "description": ""
+  },
+  "1327": {
+   "name": "Saudara laki-laki",
+   "description": ""
+  },
+  "1328": {
+   "name": "Persaudaraan",
+   "description": ""
+  },
+  "1329": {
+   "name": "Bangunan",
+   "description": ""
+  },
+  "1330": {
+   "name": "Bencana",
+   "description": ""
+  },
+  "1331": {
+   "name": "Anak sapi",
+   "description": ""
+  },
+  "1332": {
+   "name": "Tongkat",
+   "description": ""
+  },
+  "1333": {
+   "name": "Kafilah",
+   "description": ""
+  },
+  "1334": {
+   "name": "Istana",
+   "description": ""
+  },
+  "1335": {
+   "name": "Gua",
+   "description": ""
+  },
+  "1336": {
+   "name": "Mekanika benda langit",
+   "description": ""
+  },
+  "1337": {
+   "name": "Keyakinan",
+   "description": ""
+  },
+  "1338": {
+   "name": "Tantangan",
+   "description": ""
+  },
+  "1339": {
+   "name": "Perubahan",
+   "description": ""
+  },
+  "1340": {
+   "name": "Dada",
+   "description": ""
+  },
+  "1341": {
+   "name": "Anak",
+   "description": ""
+  },
+  "1342": {
+   "name": "Pilihan",
+   "description": ""
+  },
+  "1343": {
+   "name": "Klan",
+   "description": ""
+  },
+  "1344": {
+   "name": "Jelas",
+   "description": ""
+  },
+  "1345": {
+   "name": "Awan",
+   "description": ""
+  },
+  "1346": {
+   "name": "Kedinginan",
+   "description": ""
+  },
+  "1347": {
+   "name": "Tiang",
+   "description": ""
+  },
+  "1348": {
+   "name": "Perintah",
+   "description": ""
+  },
+  "1349": {
+   "name": "Komunitas",
+   "description": ""
+  },
+  "1350": {
+   "name": "Sahabat",
+   "description": ""
+  },
+  "1351": {
+   "name": "Persaingan",
+   "description": ""
+  },
+  "1352": {
+   "name": "Paksaan",
+   "description": ""
+  },
+  "1353": {
+   "name": "Dugaan",
+   "description": ""
+  },
+  "1354": {
+   "name": "Akibat",
+   "description": ""
+  },
+  "1355": {
+   "name": "Gugusan bintang",
+   "description": ""
+  },
+  "1356": {
+   "name": "Musyawarah",
+   "description": ""
+  },
+  "1357": {
+   "name": "Perenungan",
+   "description": ""
+  },
+  "1358": {
+   "name": "Pertentangan",
+   "description": ""
+  },
+  "1359": {
+   "name": "Jenazah",
+   "description": ""
+  },
+  "1360": {
+   "name": "Dipan",
+   "description": ""
+  },
+  "1361": {
+   "name": "Perjanjian",
+   "description": ""
+  },
+  "1362": {
+   "name": "Penutup",
+   "description": ""
+  },
+  "1363": {
+   "name": "Sifat pengecut",
+   "description": ""
+  },
+  "1364": {
+   "name": "Buaian",
+   "description": ""
+  },
+  "1365": {
+   "name": "Penciptaan",
+   "description": ""
+  },
+  "1366": {
+   "name": "Makhluk",
+   "description": ""
+  },
+  "1367": {
+   "name": "Kejahatan",
+   "description": ""
+  },
+  "1368": {
+   "name": "Tanaman",
+   "description": ""
+  },
+  "1369": {
+   "name": "Cawan",
+   "description": ""
+  },
+  "1370": {
+   "name": "Kutukan",
+   "description": ""
+  },
+  "1371": {
+   "name": "Bantal",
+   "description": ""
+  },
+  "1372": {
+   "name": "Penjaga",
+   "description": ""
+  },
+  "1373": {
+   "name": "Gelap",
+   "description": ""
+  },
+  "1374": {
+   "name": "Kegelapan",
+   "description": ""
+  },
+  "1375": {
+   "name": "Anak perempuan",
+   "description": ""
+  },
+  "1376": {
+   "name": "Fajar",
+   "description": ""
+  },
+  "1377": {
+   "name": "Orang mati",
+   "description": ""
+  },
+  "1378": {
+   "name": "Tuli",
+   "description": ""
+  },
+  "1379": {
+   "name": "Tipu daya",
+   "description": ""
+  },
+  "1380": {
+   "name": "Ketetapan",
+   "description": ""
+  },
+  "1381": {
+   "name": "Kekalahan",
+   "description": ""
+  },
+  "1382": {
+   "name": "Kesenangan",
+   "description": ""
+  },
+  "1383": {
+   "name": "Delusi",
+   "description": ""
+  },
+  "1384": {
+   "name": "Tempat penyimpanan",
+   "description": ""
+  },
+  "1385": {
+   "name": "Orang yang terhalang",
+   "description": ""
+  },
+  "1386": {
+   "name": "Keturunan",
+   "description": ""
+  },
+  "1387": {
+   "name": "Keinginan",
+   "description": ""
+  },
+  "1388": {
+   "name": "Putus asa",
+   "description": ""
+  },
+  "1389": {
+   "name": "Tujuan akhir",
+   "description": ""
+  },
+  "1390": {
+   "name": "Takdir",
+   "description": ""
+  },
+  "1391": {
+   "name": "Penyimpang",
+   "description": ""
+  },
+  "1392": {
+   "name": "Setan",
+   "description": ""
+  },
+  "1393": {
+   "name": "Perbedaan",
+   "description": ""
+  },
+  "1394": {
+   "name": "Kesulitan",
+   "description": ""
+  },
+  "1395": {
+   "name": "Malapetaka",
+   "description": ""
+  },
+  "1396": {
+   "name": "Orang kafir",
+   "description": ""
+  },
+  "1397": {
+   "name": "Hawariyyun (pengikut setia)",
+   "description": ""
+  },
+  "1398": {
+   "name": "Pengungkapan",
+   "description": ""
+  },
+  "1399": {
+   "name": "Perselisihan",
+   "description": ""
+  },
+  "1400": {
+   "name": "Tempat yang jauh",
+   "description": ""
+  },
+  "1401": {
+   "name": "Pembeda",
+   "description": ""
+  },
+  "1402": {
+   "name": "Kesusahan",
+   "description": ""
+  },
+  "1403": {
+   "name": "Penyelam",
+   "description": ""
+  },
+  "1404": {
+   "name": "Pengalih perhatian",
+   "description": ""
+  },
+  "1405": {
+   "name": "Keledai",
+   "description": ""
+  },
+  "1406": {
+   "name": "Keraguan",
+   "description": ""
+  },
+  "1407": {
+   "name": "Mahar",
+   "description": ""
+  },
+  "1408": {
+   "name": "Mimpi",
+   "description": ""
+  },
+  "1409": {
+   "name": "Minuman",
+   "description": ""
+  },
+  "1410": {
+   "name": "Tetesan",
+   "description": ""
+  },
+  "1411": {
+   "name": "Mabuk",
+   "description": ""
+  },
+  "1412": {
+   "name": "Doa",
+   "description": ""
+  },
+  "1413": {
+   "name": "Bisu",
+   "description": ""
+  },
+  "1414": {
+   "name": "Senja",
+   "description": ""
+  },
+  "1415": {
+   "name": "Kewajiban",
+   "description": ""
+  },
+  "1416": {
+   "name": "Tempat tinggal",
+   "description": ""
+  },
+  "1417": {
+   "name": "Timur",
+   "description": ""
+  },
+  "1418": {
+   "name": "Surga Adn",
+   "description": ""
+  },
+  "1419": {
+   "name": "Pendidikan",
+   "description": ""
+  },
+  "1420": {
+   "name": "Delapan puluh",
+   "description": ""
+  },
+  "1421": {
+   "name": "Nabi Ilyas",
+   "description": ""
+  },
+  "1422": {
+   "name": "Kaum Muhajirin",
+   "description": ""
+  },
+  "1423": {
+   "name": "Ketahanan",
+   "description": ""
+  },
+  "1424": {
+   "name": "Musuh",
+   "description": ""
+  },
+  "1425": {
+   "name": "Kenikmatan",
+   "description": ""
+  },
+  "1426": {
+   "name": "Pencerahan",
+   "description": ""
+  },
+  "1427": {
+   "name": "Iri hati",
+   "description": ""
+  },
+  "1428": {
+   "name": "Kesetaraan",
+   "description": ""
+  },
+  "1429": {
+   "name": "Kehormatan",
+   "description": ""
+  },
+  "1430": {
+   "name": "Abadi",
+   "description": ""
+  },
+  "1431": {
+   "name": "Bukti",
+   "description": ""
+  },
+  "1432": {
+   "name": "Kejahatan",
+   "description": ""
+  },
+  "1433": {
+   "name": "Evolusi",
+   "description": ""
+  },
+  "1434": {
+   "name": "Ketepatan",
+   "description": ""
+  },
+  "1435": {
+   "name": "Peninggian",
+   "description": ""
+  },
+  "1436": {
+   "name": "Teladan",
+   "description": ""
+  },
+  "1437": {
+   "name": "Berlebihan",
+   "description": ""
+  },
+  "1438": {
+   "name": "Mengusir",
+   "description": ""
+  },
+  "1439": {
+   "name": "Penebusan",
+   "description": ""
+  },
+  "1440": {
+   "name": "Pembeberan",
+   "description": ""
+  },
+  "1441": {
+   "name": "Kegembiraan",
+   "description": ""
+  },
+  "1442": {
+   "name": "Wajah",
+   "description": ""
+  },
+  "1443": {
+   "name": "Golongan",
+   "description": ""
+  },
+  "1444": {
+   "name": "Kegagalan",
+   "description": ""
+  },
+  "1445": {
+   "name": "Pingsan",
+   "description": ""
+  },
+  "1446": {
+   "name": "Iman",
+   "description": ""
+  },
+  "1447": {
+   "name": "Kebohongan",
+   "description": ""
+  },
+  "1448": {
+   "name": "Lemak",
+   "description": ""
+  },
+  "1449": {
+   "name": "Ayah",
+   "description": ""
+  },
+  "1450": {
+   "name": "Para ayah",
+   "description": ""
+  },
+  "1451": {
+   "name": "Karunia",
+   "description": ""
+  },
+  "1452": {
+   "name": "Takut",
+   "description": ""
+  },
+  "1453": {
+   "name": "Perempuan",
+   "description": ""
+  },
+  "1454": {
+   "name": "Kotoran",
+   "description": ""
+  },
+  "1455": {
+   "name": "Kayu bakar",
+   "description": ""
+  },
+  "1456": {
+   "name": "Lima",
+   "description": ""
+  },
+  "1457": {
+   "name": "Cela",
+   "description": ""
+  },
+  "1458": {
+   "name": "Banjir",
+   "description": ""
+  },
+  "1459": {
+   "name": "Bunga",
+   "description": ""
+  },
+  "1460": {
+   "name": "Orang bodoh",
+   "description": ""
+  },
+  "1461": {
+   "name": "Kaki",
+   "description": ""
+  },
+  "1462": {
+   "name": "Langkah kaki",
+   "description": ""
+  },
+  "1463": {
+   "name": "Terlarang",
+   "description": ""
+  },
+  "1464": {
+   "name": "Waktu duha",
+   "description": ""
+  },
+  "1465": {
+   "name": "Ampunan",
+   "description": ""
+  },
+  "1466": {
+   "name": "Melepaskan hak",
+   "description": ""
+  },
+  "1467": {
+   "name": "Zina",
+   "description": ""
+  },
+  "1468": {
+   "name": "Benteng",
+   "description": ""
+  },
+  "1469": {
+   "name": "Mata air",
+   "description": ""
+  },
+  "1470": {
+   "name": "Empat",
+   "description": ""
+  },
+  "1471": {
+   "name": "Buah",
+   "description": ""
+  },
+  "1472": {
+   "name": "Bahan bakar",
+   "description": ""
+  },
+  "1473": {
+   "name": "Perjudian",
+   "description": ""
+  },
+  "1474": {
+   "name": "Taman",
+   "description": ""
+  },
+  "1475": {
+   "name": "Perkumpulan",
+   "description": ""
+  },
+  "1476": {
+   "name": "Generasi",
+   "description": ""
+  },
+  "1477": {
+   "name": "Kemurahan hati",
+   "description": ""
+  },
+  "1478": {
+   "name": "Hadiah",
+   "description": ""
+  },
+  "1479": {
+   "name": "Anak perempuan",
+   "description": ""
+  },
+  "1480": {
+   "name": "Pengagungan",
+   "description": ""
+  },
+  "1481": {
+   "name": "Kemuliaan",
+   "description": ""
+  },
+  "1482": {
+   "name": "Tuhan-tuhan",
+   "description": ""
+  },
+  "1483": {
+   "name": "Anak sapi emas",
+   "description": ""
+  },
+  "1484": {
+   "name": "Harta benda",
+   "description": ""
+  },
+  "1485": {
+   "name": "Bergunjing",
+   "description": ""
+  },
+  "1486": {
+   "name": "Gubernur",
+   "description": ""
+  },
+  "1487": {
+   "name": "Cucu",
+   "description": ""
+  },
+  "1488": {
+   "name": "Pengabulan",
+   "description": ""
+  },
+  "1489": {
+   "name": "Anggur",
+   "description": ""
+  },
+  "1490": {
+   "name": "Pohon anggur",
+   "description": ""
+  },
+  "1491": {
+   "name": "Bersyukur",
+   "description": ""
+  },
+  "1492": {
+   "name": "Ketamakan",
+   "description": ""
+  },
+  "1493": {
+   "name": "Salam",
+   "description": ""
+  },
+  "1494": {
+   "name": "Penjamin",
+   "description": ""
+  },
+  "1495": {
+   "name": "Wali",
+   "description": ""
+  },
+  "1496": {
+   "name": "Petunjuk",
+   "description": ""
+  },
+  "1497": {
+   "name": "Halal",
+   "description": ""
+  },
+  "1498": {
+   "name": "Tangan",
+   "description": ""
+  },
+  "1499": {
+   "name": "Kebahagiaan",
+   "description": ""
+  },
+  "1500": {
+   "name": "Haram",
+   "description": ""
+  },
+  "1501": {
+   "name": "Kesukaran",
+   "description": ""
+  },
+  "1502": {
+   "name": "Panen",
+   "description": ""
+  },
+  "1503": {
+   "name": "Kebencian",
+   "description": ""
+  },
+  "1504": {
+   "name": "Penyembuhan",
+   "description": ""
+  },
+  "1505": {
+   "name": "Kesehatan",
+   "description": ""
+  },
+  "1506": {
+   "name": "Lalai",
+   "description": ""
+  },
+  "1507": {
+   "name": "Pertolongan",
+   "description": ""
+  },
+  "1508": {
+   "name": "Akhirat",
+   "description": ""
+  },
+  "1509": {
+   "name": "Warisan",
+   "description": ""
+  }
+ },
+ "themes": {
+  "Ka'bah in Makkah was made the new Qiblah": "Ka'bah di Makkah dijadikan kiblat yang baru",
+  "Keep on passing the message of Allah and bear the disbelievers with patience": "Teruslah menyampaikan risalah Allah dan bersabarlah menghadapi orang-orang kafir",
+  "King of Egypt had a dream and asked for its interpretation and Yusuf's interpretation of the King's dream": "Raja Mesir bermimpi dan meminta takwilnya, serta takwil Yusuf atas mimpi sang raja",
+  "King of Egypt heard the case of Yusuf and declared him innocent": "Raja Mesir mendengar perkara Yusuf dan menyatakannya tidak bersalah",
+  "Kingdom of the universe belong to Allah and Lower heaven is decorated with the lamps (stars) and Conversation between the dwellers of hell and her guards": "Kerajaan alam semesta milik Allah, langit dunia dihiasi pelita-pelita (bintang), serta percakapan antara penghuni neraka dan para penjaganya",
+  "Last will and testament, and testimony of witnesses": "Wasiat dan kesaksian para saksi",
+  "Lat, Uzza and Manat (goddesses of Arabs) are nothing but names invented by pagan Arabs": "Lat, Uzza, dan Manat (berhala-berhala Arab) hanyalah nama-nama yang dibuat-buat oleh orang-orang musyrik Arab",
+  "Lawful and unlawful food for the Children of Israel": "Makanan halal dan haram bagi Bani Israil",
+  "Laws of Taurat (Torah) and Those who do not judge by the laws of Allah, They are unbelievers, They are wrongdoers": "Hukum-hukum Taurat dan orang-orang yang tidak memutuskan perkara menurut hukum Allah adalah orang-orang kafir dan orang-orang zalim",
+  "Laws of divorce and Iddat (waiting period) before the divorce   take effect and Iddat (waiting period) is three menstruation periods or three months and delivery in case of pregnancy": "Hukum talak dan iddah sebelum talak berlaku, serta iddah adalah tiga kali haid atau tiga bulan, dan sampai melahirkan bagi perempuan hamil",
+  "Laws of inheritance": "Hukum waris",
+  "Laws of inheritance are fixed": "Hukum waris telah ditetapkan",
+  "Laws relating to divorce": "Hukum-hukum tentang talak",
+  "Layan (accusing wife when there is no other witness in a case of adultery)": "Li'an (menuduh istri berzina ketika tidak ada saksi lain)",
+  "Legal decision relating to the inheritance of childless persons": "Ketetapan hukum tentang warisan orang yang tidak memiliki anak (kalalah)",
+  "Lessons from the Battle of Uhud and Allah's help to the believers and Prophet does not have the authority to pardon the sinners": "Pelajaran dari Perang Uhud, pertolongan Allah kepada orang-orang beriman, dan Nabi tidak berwenang memaafkan para pendosa",
+  "Lessons to be learned from the Battle of Uhud and Those who are slain in the cause of Allah are not dead": "Pelajaran dari Perang Uhud dan orang-orang yang gugur di jalan Allah tidaklah mati",
+  "Lessons to be learned from the story of Prophet Musa and the people of Fir'on": "Pelajaran dari kisah Nabi Musa dan kaum Fir'aun",
+  "Let all those who are seeking honor know that real honor is in the obedience of Allah": "Hendaklah siapa yang menginginkan kemuliaan tahu bahwa kemuliaan sejati ada dalam ketaatan kepada Allah",
+  "Let each soul see what it is sending for the hereafter": "Hendaklah setiap jiwa memperhatikan apa yang telah ia persiapkan untuk hari esok (akhirat)",
+  "Let not your riches or children divert you from the remembrance of Allah, lest you become a real loser": "Janganlah harta dan anak-anakmu melalaikanmu dari mengingat Allah, agar kamu tidak menjadi orang yang benar-benar rugi",
+  "Life after death is a reality and there is nothing strange about it": "Kehidupan setelah mati adalah kenyataan dan tidak ada yang mengherankan padanya",
+  "Life and death is from Allah": "Hidup dan mati berasal dari Allah",
+  "Life cycle, life in this world and the life in the Hereafter": "Siklus kehidupan, kehidupan dunia, dan kehidupan akhirat",
+  "Life in the Hereafter and the Day of Judgement are real": "Kehidupan akhirat dan Hari Kiamat adalah nyata",
+  "Life of this world is but a play, amusement and illusion and  Do not grieve for the things that you miss, nor overjoy at what you gain": "Kehidupan dunia hanyalah permainan, senda gurau, dan tipuan; janganlah bersedih atas apa yang luput darimu dan jangan terlalu gembira atas apa yang kamu peroleh",
+  "Likewise the Nations of 'Ad, Thamud, Madyan and Fir'on rejected the Rasools of Allah, which resulted in their destruction": "Demikian pula kaum 'Ad, Tsamud, Madyan, dan Fir'aun mendustakan para rasul Allah sehingga mereka binasa",
+  "Limitation for renouncing conjugal rights": "Batas waktu bagi suami yang bersumpah tidak menggauli istrinya (ila')",
+  "Live Islam, die as a Muslim, and be not divided amon yourselves": "Hiduplah dalam Islam, matilah sebagai Muslim, dan janganlah berpecah belah di antara kamu",
+  "Living and dead are not alike You cannot make those who are buried in the grave hear you": "Orang yang hidup dan orang yang mati tidak sama; engkau tidak dapat memperdengarkan (seruan) kepada orang-orang yang berada di dalam kubur",
+  "Luqman advised his son not to commit Shirk": "Luqman menasihati putranya agar tidak berbuat syirik",
+  "Lut was also a Rasool of Allah": "Luth juga seorang rasul Allah",
+  "Lut was appointed as a Rasool towards the nation of homosexuals": "Luth diutus sebagai rasul kepada kaum yang melakukan homoseksual",
+  "Main reason of misguidance is the blind following of ones forefathers": "Penyebab utama kesesatan adalah ikut-ikutan membabi buta kepada nenek moyang",
+  "Make Jihad to help the oppressed": "Berjihadlah untuk menolong orang-orang yang tertindas",
+  "Man is made the best creatures of all except the disbelievers": "Manusia dijadikan sebaik-baik makhluk, kecuali orang-orang kafir",
+  "Man's cause of destruction is mutual rivalry of worldly gains, and real success is in working for the life hereafter": "Penyebab kebinasaan manusia adalah saling bersaing dalam urusan dunia, sedangkan keberhasilan sejati ada pada beramal untuk kehidupan akhirat",
+  "Mankind call upon Allah in their sufferings but plot against Him in their happiness": "Manusia berdoa kepada Allah saat tertimpa kesusahan, tetapi berbuat makar terhadap-Nya saat bersenang-senang",
+  "Mankind is asked to believe in the message of Al-Quran": "Manusia diminta beriman kepada risalah Al-Qur'an",
+  "Mankind is but one brotherhood": "Manusia adalah satu persaudaraan",
+  "Mankind is ever ungrateful to Allah except the believers and Al-Quran is not forged by the Prophet Muhammad (pbuh)": "Manusia selalu mengingkari nikmat Allah kecuali orang-orang beriman, dan Al-Qur'an bukanlah buatan Nabi Muhammad saw.",
+  "Mankind is in need of Allah, while He is not in need of any one": "Manusia membutuhkan Allah, sedangkan Dia tidak membutuhkan siapa pun",
+  "Mankind was one nation having one religion": "Manusia dahulu adalah satu umat yang memiliki satu agama",
+  "Mankind's testimony that Allah is their Rabb at the time of Adam's creation": "Kesaksian manusia bahwa Allah adalah Tuhan mereka pada saat penciptaan Adam",
+  "Martyrs are not dead": "Para syuhada tidaklah mati",
+  "Maryem brought her baby (Jesus) to her people, and the baby spoke to his people in the cradle to defend his mother and proclaim his assignment to be their Prophet": "Maryam membawa bayinya (Isa) kepada kaumnya, dan bayi itu berbicara kepada mereka di dalam buaian untuk membela ibunya dan menyatakan tugasnya sebagai nabi bagi mereka",
+  "Men are given authority over women and Corrective measures for disobedient women and Arbitration in family disputes": "Laki-laki diberi kepemimpinan atas perempuan, langkah-langkah mendidik istri yang durhaka, dan penengahan dalam perselisihan keluarga",
+  "Miracle of providing water in the desert from a rock": "Mukjizat memancarkan air di padang pasir dari batu",
+  "Miracle of putting the dead body alive and their reaction to the miracle": "Mukjizat menghidupkan jenazah dan tanggapan mereka terhadap mukjizat itu",
+  "Mischief in the land is the result of Man's own misdeeds, that's how Allah let them taste the fruit of their deeds": "Kerusakan di bumi akibat perbuatan manusia sendiri; begitulah Allah membuat mereka merasakan sebagian akibat perbuatan mereka",
+  "Misguided people are like animals or even worse": "Orang-orang yang sesat seperti binatang ternak, bahkan lebih sesat",
+  "Mission of the Prophet and the response to the disbelievers' arguments": "Tugas Nabi dan jawaban atas bantahan orang-orang kafir",
+  "Moses' confrontation with the magicians of Pharaoh": "Musa menghadapi para penyihir Fir'aun",
+  "Mosques are built for the worship of Allah, so invoke no one else besides Him": "Masjid-masjid dibangun untuk beribadah kepada Allah, maka janganlah menyeru siapa pun selain Dia",
+  "Most of the ignorant people who believe in Allah also commit shirk": "Kebanyakan orang bodoh yang beriman kepada Allah juga berbuat syirik",
+  "Mountains and birds use to sing Allah's Rhymes with Prophet Dawood and Allah subjected the winds and Jinns to Prophet Sulaiman and Claim of people that Jinns know the unseen is wrong": "Muhammad saw. hanyalah seorang rasul Allah",
+  "Muhammad (pbuh) is no more than a Rasool of Allah": "Muhammad saw. adalah nabi bagi seluruh umat manusia",
+  "Muhammad (pbuh) is the Prophet for the whole of mankind": "Muhammad hanyalah manusia seperti kamu",
+  "Muhammad is but a human being like you": "Musa diberi Al-Furqan (pembeda antara yang benar dan yang batil), demikian pula Al-Qur'an ini",
+  "Musa was given AL-Furqan (the criterion of right and wrong), so is this AL-Quran": "Musa diberi sembilan tanda, namun orang-orang tetap tidak beriman kepadanya",
+  "Musa was given NINE signs; people still did not believe him": "Musa diberi lauh-lauh Taurat yang tertulis, dan orang-orang yang sombong tidak dapat memperoleh petunjuk",
+  "Musa was given the written tablets of Taurat (Torah) and Arrogant people cannot get guidance": "Musa diutus kepada Fir'aun dan para pembesarnya; mereka juga ingkar dan mengalami kebinasaan",
+  "Musa was sent to Fir'on and his chiefs; they also disbelieved and faced destruction": "Percakapan Musa dengan Allah",
+  "Musa's communication with Allah": "Pertanyaan Musa tentang penyembahan berhala, keputusannya terhadap Samiri, anak sapi emas, dan seruannya kepada kaumnya",
+  "Musa's inquiry about the idol worshipping, his decision about Samiri, Golden Calf and his address to his people": "Masa muda Musa, kekhilafannya membunuh seorang laki-laki, dan pelariannya dari pembalasan Fir'aun",
+  "Musa's youth, his folly of killing a man, and his escape from Fir'on's retribution": "Orang musyrik adalah Yahudi dan Nasrani yang menyebut Uzair dan Isa sebagai anak Allah",
+  "Mushrik are the Jews and Christians who call Azra and Jesus the sons of God": "Anggapan orang musyrik bahwa malaikat adalah anak perempuan Allah dan jin memiliki hubungan darah dengan Allah adalah dusta belaka",
+  "Mushrik's claim of Angels being daughters of Allah and Jinns having blood relations with Allah are utterly false": "Orang-orang musyrik dilarang memakmurkan masjid-masjid",
+  "Mushrikin are forbidden to be the caretakers of Masajid": "Orang-orang musyrik tidak mengikuti apa pun kecuali dugaan dan tidak mengatakan apa pun kecuali kedustaan",
+  "Mushrikin follow nothing but conjecture, preach nothing but falsehood": "Orang-orang musyrik lebih mengutamakan sesembahan mereka daripada Allah dan menisbahkan secara dusta larangan yang mereka buat sendiri kepada Allah",
+  "Mushrikin give their deities preference over Allah and Mushrikin falsely attribute their self-imposed prohibitions to Allah": "Orang-orang musyrik membenarkan penyembahan mereka kepada para wali dengan alasan agar mendekatkan mereka kepada Allah, dan pada Hari Kiamat tidak seorang pun yang berdosa memikul dosa orang lain",
+  "Mushrikin try to justify their worship to saints saying that it may bring us closer to Allah and On the Day of Judgement no bearer of burden shall bear the burden of another": "Orang-orang musyrik akan mendapat azab yang berat, dan para pengikut pemimpin sesat akan menyesal pada Hari Kiamat",
+  "Mushrikin will have sever punishment and Followers of misguided leaders will regret on the Day of Judgement": "Alasan orang-orang musyrik atas kemusyrikan mereka",
+  "Mushrikin' excuse for being Mushrikin": "Kaum Muslimin adalah umat terbaik yang dilahirkan untuk menyuruh kepada kebaikan dan mencegah kemungkaran, serta sebagian Ahli Kitab yang saleh",
+  "Muslims are the best nation ever evolved to enjoin good and forbid evil and Some righteous People of the Book": "Kaum 'Ad menolak risalah Allah sehingga mereka binasa",
+  "Nation of A'd rejected Allah's message, as a result she faced destruction": "Hakikat keyakinan orang-orang Yahudi",
+  "Nature of the Jews' belief": "Kebutuhan akan wahyu Allah sebagai petunjuk",
+  "Need of Allah's revelations for guidance": "Jangan mengira Allah lengah terhadap perbuatan orang-orang zalim, atau bahwa Dia akan menyalahi janji-Nya kepada para rasul-Nya",
+  "Never think that Allah is unaware of the unjust, or that He will ever break His promise made to His Rasools": "Kabar tentang kelahiran Isa",
+  "News of Isa (Jesus) birth": "Malam-malam bulan puasa dan waktu berpuasa",
+  "Nights of the Fasting month and Timings of fasting": "Tidak ada musibah yang menimpa kecuali dengan izin Allah, dan di antara istri-istri dan anak-anakmu ada yang menjadi musuh bagimu, maka waspadalah terhadap mereka",
+  "No affliction can ever befall except by the leave of Allah and Among your wives and children there are some who are your enemies, be aware of them": "Tidak boleh ada kompromi dalam hukum dan prinsip Islam",
+  "No compromise is allowed in matters of Islamic law and principles": "Tidak ada sesembahan yang dapat menyelamatkan manusia dari murka Allah",
+  "No deity can save people from the wrath of Allah": "Tidak ada tuhan selain Allah yang dapat menyelamatkanmu pada Hari Kiamat; orang-orang yang mengatakan Allah mempunyai anak telah mengucapkan kedustaan yang amat besar hingga langit hampir pecah, bumi terbelah, dan gunung-gunung runtuh; dan Allah telah memudahkan Al-Qur'an bagi manusia",
+  "No god other than Allah will be able to save you on the Day of Judgement and Those who say Allah has begotten as son preach such a monstrous lie that even the heavens may crack, earth split and mountains crumble to pieces and Allah has made the Quran easy for Mankind": "Tidak ada syafaat di sisi Allah yang bermanfaat bagi siapa pun kecuali bagi orang yang Dia izinkan, dan Nabi Muhammad diutus untuk seluruh umat manusia",
+  "No intercession before Allah can avail any one except for   whom He permits it and Prophet Muhammad is sent for the entire mankind": "Tidak ada yang dapat menolongmu dari Allah, tidak ada yang dapat memberimu rezeki selain Allah, dan tidak ada yang dapat menyelamatkanmu dari azab Allah",
+  "No one can help you against Allah and No one can provide you sustenance besides Allah and No one can save you from the punishment of Allah": "Tidak ada yang dapat menyelamatkan orang yang telah ditetapkan atasnya vonis azab",
+  "No one can rescue the one against whom the sentence of punishment has been decreed": "Tidak seorang pun dapat lari dari kekuasaan Allah, dan para pendosa akan diazab di neraka",
+  "No one can run away from the jurisdiction of Allah and Sinners will be punished in hell": "Tidak ada yang membantah ayat-ayat Allah kecuali orang-orang kafir, dan para malaikat pemikul Arasy Allah memohonkan ampun bagi orang-orang yang bertobat dan mengikuti jalan yang lurus",
+  "No one disputes the revelations of Allah except the kafirs (unbelievers) and The angels who bear the Throne of Allah pray for those who repent and follow the Right Way": "Tidak ada yang berhak disembah kecuali Allah, Sang Pencipta dan Tuhan semesta alam",
+  "No one has the right to be worshipped except Allah, the Creator and the Rabb of the worlds": "Tidak seorang pun berhak mengubah firman Allah, dan katakanlah, \"Kebenaran telah datang dari Allah, pilihan ada padamu, beriman atau kafir\"",
+  "No one is authorized to change the Word of Allah and Proclaim, \"Truth from Allah has come, choice is yours, believe or disbelieve\"": "Tidak ada yang lebih baik daripada seorang Muslim",
+  "No one is better than a Muslim": "Tidak ada selain Allah yang dapat memberi mudarat atau manfaat kepadamu",
+  "No one other than Allah can harm or benefit you": "Tidak ada surga tanpa ujian",
+  "No paradise without trial": "Tidak ada agama yang diterima Allah selain Islam",
+  "No religion is acceptable to Allah other than Al-Islam": "Tidak ada jiwa yang memikul dosa jiwa lain, dan manusia hanya memperoleh apa yang telah diusahakannya",
+  "No soul shall bear the burden of another, there shall be nothing for a person except what he strived for": "Tidak ada yang dapat menahan atau memberikan rahmat selain Allah, dan setan adalah musuhmu, maka jadikanlah ia musuh",
+  "None can withhold or award blessings besides Allah and Shaitan is your enemy, so take him as your enemy": "Nuh menyeru kaumnya selama 950 tahun agar tidak berbuat syirik; demikian pula Ibrahim menyeru kaumnya agar tidak berbuat syirik",
+  "Nuh admonished his people not to commit shirk for 950 years Likewise, Ibrahim admonished his people not to commit shirk": "Seruan Nuh kepada kaumnya, dan kaum Nuh menantangnya agar mendatangkan azab Allah",
+  "Nuh's address to his people and Nuh's people challenged him and asked for the scourge of Allah": "Wahai orang-orang beriman, bertakwalah kepada Allah dan ucapkanlah perkataan yang benar; langit, bumi, dan gunung-gunung enggan memikul amanah Allah, tetapi manusia memikulnya",
+  "O Believers! Fear Allah and always say the right thing and Heavens, Earth and Mountains refuse to take Allah's Trust but the Man took it": "Wahai manusia, takutlah kepada hari ketika seorang ayah tidak dapat menolong anaknya dan seorang anak tidak dapat menolong ayahnya; jangan sampai setan menipumu tentang hal ini",
+  "O Mankind, fear that Day when no father shall avail his son nor a son his father Let not the Shaitan deceive you concerning this fact": "Wahai Muhammad, \"engkau bukan satu-satunya yang didustakan; semua nabi telah didustakan sebelum engkau\"",
+  "O Muhammad, \"you are not the only one being denied, all Prophets were denied before you\"": "Wahai orang-orang beriman, masuklah ke dalam Islam secara menyeluruh",
+  "O believers enter into Islam completely": "Wahai orang-orang beriman, bertobatlah kepada Allah dengan tobat yang sungguh-sungguh jika ingin diampuni; contoh istri Nuh dan Luth yang masuk neraka, serta contoh istri Fir'aun dan Maryam yang masuk surga",
+  "O believers! Turn to Allah in sincere repentance if you want to be forgiven and Example of the wives of Nuh and Lut who will go to hell and example of Fir'on's wife and Maryem who will go to paradise": "Wahai orang-orang beriman, janganlah mengatakan apa yang tidak kamu kerjakan; Nabi Isa menyampaikan kabar gembira tentang seorang rasul sesudahnya yang bernama Ahmad (Muhammad)",
+  "O believers, do not say something that you don't do and Prophet Isa (Jesus) gave a good news of a Rasool coming after him whose name is Ahmed (Muhammad)": "Menaati rasul sesungguhnya adalah menaati Allah",
+  "Obedience of the Rasool is in fact the obedience of Allah": "Kewajiban membayar mahar",
+  "Obligation of dowry": "Kewajiban melaksanakan wasiat",
+  "Obligation of executing the \"Last Will and Testament\"": "Kewajiban berpuasa",
+  "Obligation of fasting": "Pada hari kiamat langit terbelah dan bumi dibentangkan, buku-buku amal dibagikan, orang-orang saleh berbahagia, sedangkan orang-orang kafir meminta kematian",
+  "On doomsday heaven will split asunder and earth will be spread out, and Books of deeds will be distributed, righteous will be happy while disbelievers will be calling for death": "Pada hari itu cahaya orang-orang mukmin yang sejati bersinar di hadapan mereka, sedangkan nasib orang-orang munafik tidak berbeda dengan orang-orang kafir; orang-orang yang berinfak akan dibalas berlipat ganda dan diberi pahala yang mulia di samping itu",
+  "On that day the true believers will have their light shining before them while the hypocrites will have their fate no different than the disbelievers and Those who spend in charity will be repaid manyfold and also be given liberal reward besides it": "Pada hari itu orang-orang kafir akan disuruh berjalan menuju neraka yang dahulu mereka dustakan",
+  "On that day, The disbelievers will be asked to walk towards hell which they used to deny": "Pada Hari Kiamat Allah akan menghinakan orang-orang yang sombong dan melemparkan mereka ke neraka, sedangkan orang-orang saleh akan diberi surga",
+  "On the Day of Judgement Allah will humiliate the arrogant and cast them into hell, while the righteous will be awarded paradise": "Pada Hari Kiamat seorang saksi akan didatangkan dari setiap umat, dan orang-orang kafir akan menghadapi kenyataan tentang sesembahan palsu yang mereka ada-adakan",
+  "On the Day of Judgement a witness will be called from each nation and the unbelievers will face the reality of their invented false gods": "Pada Hari Kiamat semua sesembahan selain Allah akan lenyap",
+  "On the Day of Judgement all other gods to whom people worship besides Allah shall vanish": "Pada Hari Kiamat orang-orang beriman tidak akan takut dan tidak akan bersedih, mereka akan dimasukkan ke surga dan dibahagiakan; dan wahai Nabi, katakanlah kepada kaum Nasrani, jika Allah mempunyai anak, aku orang pertama yang menyembahnya",
+  "On the Day of Judgement believers will have no fear or regret, they will be warded paradise and made happy and O Prophet tell the Christians, if Allah had a son, I would have been the first one to worship him": "Pada Hari Kiamat orang-orang kafir berharap seandainya mereka menerima petunjuk",
+  "On the Day of Judgement disbelievers will wish that they had accepted Guidance": "Pada Hari Kiamat orang-orang kafir mengakui bahwa mereka memang kafir",
+  "On the Day of Judgement kafirs (unbelievers) will confess that they were indeed kafirs": "Pada Hari Kiamat telinga, mata, dan kulit manusia sendiri akan menjadi saksi atas perbuatan buruk mereka",
+  "On the Day of Judgement people's own ears, eyes and skins will bear witness against them relating to their misdeeds": "Pada Hari Kiamat orang-orang kafir akan beriman, tetapi keimanan itu tidak bermanfaat bagi mereka",
+  "On the Day of Judgement the unbelievers shall believe but that belief will be of no benefit to them": "Pada Hari Kiamat orang-orang kafir ingin beriman, tetapi hal itu tidak berguna bagi mereka",
+  "On the Day of Judgement unbelievers would like to believe but it will be of no avail to them": "Pada Hari Kiamat orang-orang kafir berharap seandainya mereka Muslim, dan Allah sendiri yang menjamin pemeliharaan Al-Qur'an",
+  "On the Day of Judgement, the unbelievers will wish that they were Muslims and Allah Himself has taken the responsibility of preserving Al-Quran": "Pada Hari Kiamat kehidupan dunia terasa seakan tidak sampai sehari",
+  "On the day of Judgement it will appear as if the life of this world was less than a day": "Pada Hari Kiamat sesembahan yang diseru orang-orang musyrik akan menyangkal klaim ketuhanan dan menyalahkan orang-orang musyrik atas kesyirikan mereka",
+  "On the day of Judgement, those deities whom the Mushrikin invoke will deny any claim of divinity and hold the Mushrikin responsible for their shirk": "Pada hari kiamat tidak seorang pun peduli kepada ibu, ayah, saudara, atau anak-anaknya",
+  "On the day of judgement no one shall care about his own mother, father, brother or children": "Sebuah kafilah menculiknya, membawanya ke Mesir, dan menjualnya",
+  "One caravan kidnapped him, brought him to Egypt, and sold him": "Orang yang menolak keputusan Nabi bukanlah orang beriman",
+  "One who disputes the decision of the Prophet is not a believer": "Hanya orang-orang beriman yang akan masuk surga",
+  "Only believers shall enter paradise": "Rekening kredit tanpa batas untuk akhirat",
+  "Open-end credit account for the Hereafter": "Orang yang tertindas hendaknya berhijrah jika mampu, dan ganjaran hijrah di jalan Allah",
+  "Oppressed should migrate if possible and Reward for migration in the cause of Allah": "Perintah berwudu dan keringanan bertayamum",
+  "Order for making wudhu (ablution) and Permission of Tayammum": "Perintah agar tidak menghalangi orang datang ke masjid-masjid",
+  "Order not to prevent people from coming to the Masajid": "Perintah Allah agar tidak menyakiti Nabi",
+  "Order of Allah not to molest the Prophet": "Perintah Allah untuk beriman kepada semua nabi tanpa membeda-bedakan",
+  "Order of Allah to believe in all Prophets without discrimination": "Perintah Allah untuk mengubah kiblat",
+  "Order of Allah to change Qiblah": "Perintah Allah untuk tetap teguh dalam pertempuran melawan musuh",
+  "Order of Allah to remain firm during combat against enemy": "Perintah menghadap Ka'bah sebagai kiblat dalam salat",
+  "Order to face towards Ka'bah as Qiblah durin Salah (prayers)": "Perintah berperang demi tujuan yang adil",
+  "Order to fight for a just cause": "Perintah bersedekah",
+  "Order to give charity": "Perintah menaati dan mengikuti Nabi",
+  "Order to obey and follow the Prophet": "Perintah bersiap siaga menghadapi orang-orang kafir, dan berdamailah jika musuh condong kepada damai",
+  "Order to remain prepared for war against the unbelievers and Make peace if enemy is willing to make peace": "Setiap jiwa memiliki malaikat penjaga yang ditugaskan, dan Al-Qur'an adalah firman Allah yang tegas",
+  "Over each soul there is and appointed guardian angel and Al-Quran is a decisive word of Allah": "Larangan praktik talak jahiliah dengan zihar (menyamakan istri dengan ibunya) dan hukuman bagi yang melakukan zihar",
+  "Pagans practice of divorce through 'Zihar' (calling his wife as his mother) is prohibited and Penalty for practicing 'Zihar'": "Perumpamaan orang beriman dan orang kafir",
+  "Parable of a believer and a disbeliever": "Perumpamaan nyamuk dapat menyesatkan banyak orang dan memberi petunjuk kepada banyak orang",
+  "Parable of gnat may confound many and enlighten many": "Perumpamaan surga dan neraka",
+  "Parable of paradise and hell": "Perumpamaan berinfak di jalan Allah",
+  "Parable of spending in Charity": "Perumpamaan orang-orang yang mengambil pelindung selain Allah",
+  "Parable of those who take protectors other than Allah": "Surga bukan untuk orang-orang kafir, dan orang-orang kafir akan tertunduk pandangannya dan wajahnya hina karena malu",
+  "Paradise is not for the disbelievers and Disbelievers will have downcast eyes and countenances distorted with shame": "Manusia diseru untuk beriman selagi masih ada waktu",
+  "People are asked to believe while they have time": "Manusia menyeru sesembahan selain Allah tanpa ilmu dan petunjuk",
+  "People invoke other deities besides Allah, without knowledge and guidance": "Kaum Fir'aun ditimpa azab karena mengingkari peringatan Allah; peringatan yang sama telah datang kepadamu, tidakkah kamu mengambil pelajaran?",
+  "People of Fir'on were seized for disbelieving Allah's warning The same warning has come to you, will you not take admonition?": "Kaum Tsamud yang berbuat kerusakan diratakan dengan tanah",
+  "People of Thamud who corrupted, were levelled to the ground": "Ahli Kitab (Yahudi dan Nasrani) terdiri dari dua golongan: yang melihat kebenaran dan yang memilih tidak melihatnya",
+  "People of the Book (Jews and Christians) are of two kinds, those who can see the Truth, and those who choose not to": "Ahli Kitab tidak berpecah-belah menjadi golongan-golongan kecuali setelah datang petunjuk kepada mereka, dan Ahli Kitab juga diperintahkan menegakkan salat dan menunaikan zakat",
+  "People of the Book did not get divided into sets until after receiving the guidance and People of the Book were also commanded to establish Salah and pay Zakah": "Ahli Kitab cenderung memihak setan",
+  "People of the Book tend to take side of Shaitan": "Kebolehan menikahi budak perempuan",
+  "Permission for marriage with slave girls": "Izin berperang diberikan kepada orang-orang beriman untuk membela diri dan di jalan Allah",
+  "Permission is granted to the believers to fight in self defence, and for the cause of Allah": "Balas dendam Fir'aun terhadap kaum Musa",
+  "Pharaoh's revenge against the people of Moses": "Rencana membunuh Isa",
+  "Plot to kill Isa (Jesus)": "Makar jahat hanya menimpa pelakunya sendiri, dan seandainya Allah menghukum manusia karena kezaliman mereka, niscaya Dia tidak akan menyisakan satu makhluk melata pun",
+  "Plotting evil recoil none but the author of it and If Allah was to punish people for their wrong doings, He would have not left even and animal around": "Puji bagi Allah dan salam sejahtera atas para rasul-Nya",
+  "Praise to Allah and peace be on His Rasools": "Fanatisme membuat orang menyembah sesembahan selain Allah",
+  "Prejudice has made the people worship deities other than Allah": "Bagian-bagian warisan yang telah ditetapkan",
+  "Prescribed shares in inheritance": "Petunjuk untuk memohon pertolongan Allah",
+  "Prescription to seek Allah's help": "Umat-umat terdahulu dibinasakan karena kedurhakaan yang serupa",
+  "Prior nations were destroyed due to similar iniquities": "Pengumuman pembatalan \"Perjanjian Hudaibiyah\"",
+  "Proclamation to dissolve the \"Treaty of Hudeybiyah\"": "Makanan haram",
+  "Prohibited (Haram) food": "Lanjutan tentang pernikahan yang diharamkan dan dibolehkan",
+  "Prohibited and permitted marriages continued": "Larangan menikahi istri ayah",
+  "Prohibition from marring the wife of one's father": "Larangan bagi orang-orang musyrik memasuki Masjidil Haram",
+  "Prohibition of Mushrikin from entering Masjid-al-Haram": "Larangan minum khamar - perintah kedua, dan tayamum sebagai pengganti wudu",
+  "Prohibition of drinking liquor - 2nd Order and Tayammum - a substitute for ablution": "Larangan berburu saat ihram haji (mengenakan pakaian ihram) dan kafarat (denda) berburu saat ihram haji",
+  "Prohibition of hunting during Hajj Ihram (wearing pilgrim garb) and Kaffarah (penalty) for hunting during Hajj Ihram": "Larangan minuman memabukkan (khamar dan narkotika) dan judi, serta tugas rasul hanyalah menyampaikan risalah Allah",
+  "Prohibition of intoxicants (liquor and drugs) and gambling and Rasool's duty is only to pass on the Message of Allah": "Larangan menjadikan orang-orang kafir sebagai pelindung",
+  "Prohibition of taking unbelievers as protectors": "Larangan riba",
+  "Prohibition of usury": "Larangan riba dan Allah mencintai orang-orang yang dermawan",
+  "Prohibition of usury and Allah loves the charitable people": "Janji Allah - siapakah yang lebih benar janjinya daripada Allah?",
+  "Promise of Allah - who can be truer than Allah in promise?": "Janji ketaatan (Islam), dan ucapan baik yang tidak diikuti perbuatan dilaknat Allah",
+  "Promise of obedience (Islam) and good talk which is not followed by action is cursed by Allah": "Bukti bahwa Al-Qur'an adalah wahyu Ilahi, dan melaporkan kabar penting kepada orang yang berwenang",
+  "Proof of Al-Quran being the Divine revelation and report the important news to responsible persons": "Harta anak yatim"
+ }
+}
