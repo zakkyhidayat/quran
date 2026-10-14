@@ -8,6 +8,7 @@ File di Downloads tidak diubah atau dihapus.
 Contoh:
     python tools/qul_catch.py translation          # buka halaman QUL di browser, lalu awasi Downloads
     python tools/qul_catch.py tafsir --no-open
+    python tools/qul_catch.py surah-info --existing
     python tools/qul_catch.py recitation --existing  # proses juga file yang sudah ada di Downloads
     python tools/qul_catch.py --list                # tampilkan isi data-src per kategori
 
@@ -32,6 +33,7 @@ PAGES = {
     "translation": "https://qul.tarteel.ai/resources/translation",
     "tafsir": "https://qul.tarteel.ai/resources/tafsir",
     "transliteration": "https://qul.tarteel.ai/resources/transliteration",
+    "surah-info": "https://qul.tarteel.ai/resources/surah-info",
 }
 KEEP = (".db", ".sqlite", ".sqlite3", ".json")
 PARTIAL = (".crdownload", ".part", ".download", ".tmp")
@@ -150,7 +152,7 @@ def list_data() -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("category", nargs="?", help="recitation, translation, tafsir, transliteration, atau nama folder lain")
+    ap.add_argument("category", nargs="?", help="recitation, translation, tafsir, transliteration, surah-info, atau nama folder lain")
     ap.add_argument("--downloads", type=Path, default=Path.home() / "Downloads")
     ap.add_argument("--no-open", action="store_true", help="jangan buka halaman QUL di browser")
     ap.add_argument("--existing", action="store_true", help="proses juga file yang sudah ada di Downloads")
