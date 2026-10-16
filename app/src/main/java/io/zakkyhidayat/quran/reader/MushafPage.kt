@@ -12,6 +12,7 @@ import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.platform.LocalFontFamilyResolver
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -107,7 +108,7 @@ fun MushafPage(
         Box(modifier.fillMaxSize())
         return
     }
-    val tajweedAlpha by animateFloatAsState(
+    val tajweedAlphaState = animateFloatAsState(
         targetValue = if (tajweed && tajweedFont != null && tajweedBasmalah != null) 1f else 0f,
         animationSpec = spring(
             dampingRatio = 0.9f,
@@ -115,6 +116,9 @@ fun MushafPage(
         ),
         label = "tajweed fade",
     )
+    // Alpha diteruskan sebagai lambda dan baru dibaca di fase layer/gambar: selama fade halaman tidak dikomposisi ulang
+    // dan teks tidak digambar ulang tiap frame.
+    val tajweedAlpha = remember(tajweedAlphaState) { { tajweedAlphaState.value } }
     val density = LocalDensity.current
     val resolver = LocalFontFamilyResolver.current
 
@@ -132,11 +136,15 @@ fun MushafPage(
                 preparePage(TextMeasurer(resolver, density, LayoutDirection.Ltr, cacheSize = 0), density, lines, font, basmalah, header, surahs, widthPx, glyphColor)
             }
         }
-        val tajweedPrepared by produceState<PreparedPage?>(null, page, lines, widthPx, tajweedFont, tajweedBasmalah, header, density, surahs, glyphColor) {
+        // Lapisan tajwid memakai ukuran huruf lapisan hitam, tidak menghitungnya ulang: satu pass pengukuran lebih sedikit,
+        // dan kedua lapisan dijamin seukuran sehingga huruf berwarna menumpuk tepat di atas huruf hitam.
+        val plainFontSize = prepared?.fontSize
+        val tajweedPrepared by produceState<PreparedPage?>(null, page, lines, widthPx, tajweedFont, tajweedBasmalah, header, density, surahs, glyphColor, plainFontSize) {
             val coloredFont = tajweedFont ?: return@produceState
             val coloredBasmalah = tajweedBasmalah ?: return@produceState
+            val fontSize = plainFontSize ?: return@produceState
             value = withContext(Dispatchers.Default) {
-                preparePage(TextMeasurer(resolver, density, LayoutDirection.Ltr, cacheSize = 0), density, lines, coloredFont, coloredBasmalah, header, surahs, widthPx, glyphColor)
+                preparePage(TextMeasurer(resolver, density, LayoutDirection.Ltr, cacheSize = 0), density, lines, coloredFont, coloredBasmalah, header, surahs, widthPx, glyphColor, fontSize)
             }
         }
         val ready = prepared ?: return@Box
@@ -165,7 +173,8 @@ fun MushafPage(
                     if (index > 0) top += MushafLineSpacing.toPx()
                     val cell = (if (line.type == LineType.SurahName) headerLineHeight else lineHeight).toPx()
                     val glyphs = ready.words[line]
-                    if (line.type == LineType.Ayah && glyphs != null) {
+                    // Baris tanpa ayat terpilih dilewati sebelum geometrinya dihitung.
+                    if (line.type == LineType.Ayah && glyphs != null && line.words.any { it.surah == current.surah && it.ayah == current.ayah }) {
                         val words = line.words
                         val bounds = FloatArray(words.size * 2)
                         layoutGlyphBounds(glyphs, size.width, line.centered, ready.gapPx, bounds)
@@ -237,14 +246,19 @@ fun MushafPage(
 internal const val BASMALAH_GLYPHS = "ﱁﱂﱃﱄ"
 
 
-/** Hasil persiapan satu halaman: tata letak tiap kata per baris ayat, glyph basmalah, dan jarak minimum antarkata. */
+/**
+ * Hasil persiapan satu halaman: tata letak tiap kata per baris ayat, glyph basmalah, jarak minimum antarkata, dan ukuran
+ * huruf yang dipakai.
+ */
 private class PreparedPage(
     val words: Map<PageLine, List<TextLayoutResult>>,
     val basmalah: List<TextLayoutResult>,
     val headers: Map<PageLine, TextLayoutResult>,
     val gapPx: Float,
+    val fontSize: TextUnit,
 )
 
+/** [fontSize] null berarti ukuran huruf dihitung dari [font] agar baris terlebar pas selebar halaman. */
 private fun preparePage(
     measurer: TextMeasurer,
     density: Density,
@@ -255,8 +269,9 @@ private fun preparePage(
     surahs: Map<Int, Surah>,
     widthPx: Int,
     glyphColor: Color,
+    fontSize: TextUnit? = null,
 ): PreparedPage {
-    val size = fitFontSize(measurer, density, lines, font, widthPx)
+    val size = fontSize ?: fitFontSize(measurer, density, lines, font, widthPx)
     val style = TextStyle(color = glyphColor, fontFamily = font, fontSize = size)
     fun measure(text: String, style: TextStyle) =
         measurer.measure(text = text, style = style, softWrap = false, maxLines = 1, constraints = Constraints())
@@ -267,7 +282,7 @@ private fun preparePage(
     val headers = lines.filter { it.type == LineType.SurahName }.mapNotNull { line ->
         surahs[line.surah]?.let { line to measure(it.nameGlyph.toString(), headerStyle) }
     }.toMap()
-    return PreparedPage(words, basmalah, headers, with(density) { size.toPx() * 0.25f })
+    return PreparedPage(words, basmalah, headers, with(density) { size.toPx() * 0.25f }, size)
 }
 
 /** Mengisi [bounds] dengan batas kiri dan kanan tiap glyph pada baris selebar [width], dibaca dari kanan ke kiri. */
@@ -294,7 +309,7 @@ private fun layoutGlyphBounds(layouts: List<TextLayoutResult>, width: Float, cen
 private fun GlyphRow(
     layouts: List<TextLayoutResult>,
     overlayLayouts: List<TextLayoutResult>? = null,
-    overlayAlpha: Float = 0f,
+    overlayAlpha: () -> Float = { 0f },
     centered: Boolean,
     minGapPx: Float,
     bounds: FloatArray,
@@ -302,28 +317,36 @@ private fun GlyphRow(
 ) {
     val height = layouts.maxOfOrNull { it.size.height } ?: 0
     val rowHeight = with(LocalDensity.current) { height.toDp() }
+    val overlay = overlayLayouts.orEmpty()
+    // Keduanya hanya berubah di awal atau akhir fade, jadi baris dikomposisi ulang atau digambar ulang sekali, bukan tiap frame.
+    val overlayVisible by remember(overlayAlpha) { derivedStateOf { overlayAlpha() > 0f } }
+    val overlayOpaque by remember(overlayAlpha) { derivedStateOf { overlayAlpha() >= 1f } }
+    val overlayBounds = remember(overlay) { FloatArray(overlay.size * 2) }
     Box(modifier.fillMaxWidth().height(rowHeight)) {
         Spacer(
             Modifier
                 .fillMaxSize()
                 .drawBehind {
+                // Batas tetap dihitung walau lapisan hitam disembunyikan: ketukan dan sorotan memakainya.
                 layoutGlyphBounds(layouts, size.width, centered, minGapPx, bounds)
+                // Lapisan tajwid yang sudah penuh menutup lapisan hitam (bentuk glyph sama), jadi lapisan hitam tidak
+                // digambar. Selama fade lapisan hitam tetap digambar di bawahnya agar teks tidak hilang sesaat.
+                if (overlay.isNotEmpty() && overlayOpaque) return@drawBehind
                 layouts.forEachIndexed { i, layout ->
                     drawText(layout, topLeft = Offset(bounds[2 * i], (size.height - layout.size.height) / 2f))
                 }
             },
         )
-        if (overlayAlpha > 0f && !overlayLayouts.isNullOrEmpty()) {
+        if (overlay.isNotEmpty() && overlayVisible) {
             Spacer(
                 Modifier
                     .fillMaxSize()
-                    .graphicsLayer { alpha = overlayAlpha }
+                    .graphicsLayer { alpha = overlayAlpha() }
                     .drawBehind {
                         // Lapisan tajwid memakai lebarnya sendiri. Memakai batas lapisan hitam membuat seluruh baris
                         // bergeser dan menumpuk di kiri bila lebar kedua lapisan tidak persis sama.
-                        val overlayBounds = FloatArray(overlayLayouts.size * 2)
-                        layoutGlyphBounds(overlayLayouts, size.width, centered, minGapPx, overlayBounds)
-                        overlayLayouts.forEachIndexed { i, layout ->
+                        layoutGlyphBounds(overlay, size.width, centered, minGapPx, overlayBounds)
+                        overlay.forEachIndexed { i, layout ->
                             if (i < layouts.size) {
                                 drawText(layout, topLeft = Offset(overlayBounds[2 * i], (size.height - layout.size.height) / 2f))
                             }
@@ -339,7 +362,7 @@ private fun AyahLine(
     line: PageLine,
     layouts: List<TextLayoutResult>,
     overlayLayouts: List<TextLayoutResult>,
-    overlayAlpha: Float,
+    overlayAlpha: () -> Float,
     gapPx: Float,
     onAyahClick: (AyahRef) -> Unit,
 ) {
@@ -406,14 +429,14 @@ private fun fitFontSize(
     font: FontFamily,
     widthPx: Int,
 ): TextUnit {
-    val referenceSp = with(density) { REFERENCE_PX.toSp() }
+    val referenceStyle = TextStyle(fontFamily = font, fontSize = with(density) { REFERENCE_PX.toSp() })
     var widest = 0f
     for (line in lines) {
         if (line.type != LineType.Ayah) continue
         val wordWidth = line.words.sumOf { word ->
             measurer.measure(
                 text = word.text,
-                style = TextStyle(fontFamily = font, fontSize = referenceSp),
+                style = referenceStyle,
                 softWrap = false,
                 maxLines = 1,
                 constraints = Constraints(),
