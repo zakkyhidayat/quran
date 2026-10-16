@@ -327,4 +327,8 @@
     <string name="times_count">%1$d×</string>
     <string name="roots_lemmas">Lemmas</string>
     <string name="roots_ayahs">Ayahs with this root</string>
+    <string name="doa_back_title">Go back to…</string>
+    <string name="doa_back_text">The reader was opened from “%1$s”.</string>
+    <string name="doa_back_collection">Back to collection</string>
+    <string name="doa_back_main">Main page</string>
 </resources>

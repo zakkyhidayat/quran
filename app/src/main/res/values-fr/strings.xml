@@ -325,4 +325,8 @@
     <string name="times_count">%1$d×</string>
     <string name="roots_lemmas">Lemmes</string>
     <string name="roots_ayahs">Versets contenant cette racine</string>
+    <string name="doa_back_title">Retourner à…</string>
+    <string name="doa_back_text">Le lecteur a été ouvert depuis « %1$s ».</string>
+    <string name="doa_back_collection">Retour à la collection</string>
+    <string name="doa_back_main">Page principale</string>
 </resources>

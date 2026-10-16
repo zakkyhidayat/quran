@@ -325,4 +325,8 @@
     <string name="times_count">%1$d×</string>
     <string name="roots_lemmas">لمّه‌ها</string>
     <string name="roots_ayahs">آیات دارای این ریشه</string>
+    <string name="doa_back_title">بازگشت به…</string>
+    <string name="doa_back_text">صفحه قرائت از «%1$s» باز شد.</string>
+    <string name="doa_back_collection">بازگشت به مجموعه</string>
+    <string name="doa_back_main">صفحه اصلی</string>
 </resources>

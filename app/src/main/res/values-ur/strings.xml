@@ -325,4 +325,8 @@
     <string name="times_count">%1$d×</string>
     <string name="roots_lemmas">لیمہ</string>
     <string name="roots_ayahs">اس مادّے والی آیات</string>
+    <string name="doa_back_title">واپس جائیں…</string>
+    <string name="doa_back_text">پڑھنے کا صفحہ «%1$s» سے کھولا گیا۔</string>
+    <string name="doa_back_collection">مجموعے پر واپس</string>
+    <string name="doa_back_main">مرکزی صفحہ</string>
 </resources>

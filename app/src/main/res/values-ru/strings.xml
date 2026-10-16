@@ -325,4 +325,8 @@
     <string name="times_count">%1$d×</string>
     <string name="roots_lemmas">Леммы</string>
     <string name="roots_ayahs">Аяты с этим корнем</string>
+    <string name="doa_back_title">Вернуться…</string>
+    <string name="doa_back_text">Чтение открыто из «%1$s».</string>
+    <string name="doa_back_collection">К подборке</string>
+    <string name="doa_back_main">На главную</string>
 </resources>

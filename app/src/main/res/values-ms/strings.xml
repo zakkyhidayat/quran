@@ -325,4 +325,8 @@
     <string name="times_count">%1$d×</string>
     <string name="roots_lemmas">Lema</string>
     <string name="roots_ayahs">Ayat dengan akar ini</string>
+    <string name="doa_back_title">Kembali ke…</string>
+    <string name="doa_back_text">Pembaca dibuka dari “%1$s”.</string>
+    <string name="doa_back_collection">Kembali ke koleksi</string>
+    <string name="doa_back_main">Halaman utama</string>
 </resources>

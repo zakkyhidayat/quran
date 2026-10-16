@@ -28,22 +28,19 @@ import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.zakkyhidayat.quran.AppLanguage
@@ -53,7 +50,8 @@ import io.zakkyhidayat.quran.data.AyahDetail
 import io.zakkyhidayat.quran.data.AyahRange
 import io.zakkyhidayat.quran.data.CollectionItem
 import io.zakkyhidayat.quran.data.CollectionKind
-import io.zakkyhidayat.quran.reader.arabicFontFamily
+import io.zakkyhidayat.quran.reader.AyahArabicText
+import io.zakkyhidayat.quran.reader.TajweedReaderControls
 import io.zakkyhidayat.quran.reader.translationText
 import io.zakkyhidayat.quran.settings.AppSettings
 import io.zakkyhidayat.quran.ui.CenteredContent
@@ -61,6 +59,7 @@ import io.zakkyhidayat.quran.ui.LocalReadingTextScale
 import io.zakkyhidayat.quran.ui.NumberBadge
 import io.zakkyhidayat.quran.ui.scaled
 import io.zakkyhidayat.quran.ui.segmentedItemColors
+import kotlinx.coroutines.launch
 
 private val ListPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp)
 
@@ -111,6 +110,7 @@ fun CollectionScreen(vm: AppViewModel, kind: CollectionKind, onBack: () -> Unit,
 fun PassageScreen(vm: AppViewModel, target: HomeTarget.Passage, onBack: () -> Unit, onOpenReader: () -> Unit) {
     val surahs by vm.surahs.collectAsStateWithLifecycle()
     val settings by vm.settingsRepository.settings.collectAsStateWithLifecycle(AppSettings())
+    val scope = rememberCoroutineScope()
     // Rentang "seluruh surah" diisi jumlah ayatnya setelah daftar surah termuat.
     val ranges = remember(target.refs, surahs) {
         AyahRange.parseList(target.refs).map { r -> if (r.to == 0) r.copy(to = surahs[r.surah]?.ayahCount ?: 0) else r }.filter { it.to > 0 }
@@ -125,6 +125,14 @@ fun PassageScreen(vm: AppViewModel, target: HomeTarget.Passage, onBack: () -> Un
     ) { padding ->
         CenteredContent(Modifier.padding(padding)) {
             LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 24.dp)) {
+                // Sakelar yang sama dengan di pembaca (pengaturan satu untuk seluruh aplikasi), lengkap dengan legenda warna.
+                item(key = "tajweed") {
+                    TajweedReaderControls(
+                        enabled = settings.tajweed,
+                        onEnabledChange = { scope.launch { vm.settingsRepository.setTajweed(it) } },
+                        modifier = Modifier.padding(start = 16.dp, top = 8.dp),
+                    )
+                }
                 target.subtitle?.let { note ->
                     item(key = "note") {
                         Text(note, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(16.dp))
@@ -140,7 +148,7 @@ fun PassageScreen(vm: AppViewModel, target: HomeTarget.Passage, onBack: () -> Un
                         }
                     }
                     items((r.from..r.to).toList(), key = { a -> "a$i-$a" }) { ayah ->
-                        PassageAyah(vm, r.surah, ayah, settings.translationIds) { vm.goToAyah(r.surah, ayah); onOpenReader() }
+                        PassageAyah(vm, r.surah, ayah, settings.translationIds, settings.tajweed) { vm.goToAyah(r.surah, ayah); onOpenReader() }
                     }
                 }
             }
@@ -149,27 +157,18 @@ fun PassageScreen(vm: AppViewModel, target: HomeTarget.Passage, onBack: () -> Un
 }
 
 @Composable
-private fun PassageAyah(vm: AppViewModel, surah: Int, ayah: Int, translationIds: List<String>, onClick: () -> Unit) {
+private fun PassageAyah(vm: AppViewModel, surah: Int, ayah: Int, translationIds: List<String>, tajweed: Boolean, onClick: () -> Unit) {
     val translations by vm.translations.collectAsStateWithLifecycle()
     val detail by produceState<AyahDetail?>(null, surah, ayah, translationIds, translations) {
         value = vm.mushaf.ayahDetail(surah, ayah, translationIds)
     }
-    val context = LocalContext.current
-    val arabicFont = remember { arabicFontFamily(context) }
     Column(Modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 12.dp)) {
         val d = detail
         if (d == null) {
             Spacer(Modifier.height(48.dp))
             return@Column
         }
-        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-            Text(
-                d.arabic,
-                style = MaterialTheme.typography.headlineSmall.scaled(LocalReadingTextScale.current.arabic, 1.9f).copy(fontFamily = arabicFont),
-                textAlign = TextAlign.Start,
-                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
-            )
-        }
+        AyahArabicText(vm, surah, ayah, d.page, d.arabic, tajweed, Modifier.fillMaxWidth().padding(bottom = 8.dp))
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             d.translations.forEach { tr ->
                 if (d.translations.size > 1) {

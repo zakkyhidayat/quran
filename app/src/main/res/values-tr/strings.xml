@@ -325,4 +325,8 @@
     <string name="times_count">%1$d×</string>
     <string name="roots_lemmas">Lemmalar</string>
     <string name="roots_ayahs">Bu kökü içeren ayetler</string>
+    <string name="doa_back_title">Geri dön…</string>
+    <string name="doa_back_text">Okuyucu “%1$s” bölümünden açıldı.</string>
+    <string name="doa_back_collection">Koleksiyona dön</string>
+    <string name="doa_back_main">Ana sayfa</string>
 </resources>
