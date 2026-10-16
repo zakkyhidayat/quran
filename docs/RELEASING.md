@@ -95,3 +95,9 @@ entri rilis baru. Untuk memperbarui font halaman, ganti `page-fonts.zip` di rili
 Untuk menerbitkan ulang APK dari perbaikan yang tidak mengubah versi, jalankan workflow pada `main`, isi tag yang sama,
 dan aktifkan `replace_existing`. Opsi ini hanya menerima rilis untuk tag versi terbaru; tag tidak dipindah dan aset
 `Quran.apk` pada rilis tersebut diganti setelah build release bertanda tangan berhasil.
+
+Untuk menguji APK sebelum rilis publik, jalankan workflow dari tab Actions dengan `draft` aktif. Rilis tampil sebagai draf:
+hanya terlihat oleh pemilik repositori dan bukan rilis "terbaru", jadi tautan `releases/latest/download/Quran.apk` di README
+tidak berubah. Unduh `Quran.apk` dari halaman draf (masuk ke GitHub dulu). Bila sudah baik, buka draf itu di Releases lalu
+pilih **Publish release**; bila tidak, hapus draf, perbaiki, dan jalankan lagi dengan tag berikutnya (tag yang sudah dibuat
+workflow tidak dipindah).

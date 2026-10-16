@@ -17,6 +17,11 @@ on:
         type: boolean
         required: true
         default: false
+      draft:
+        description: "Terbitkan sebagai draf: hanya terlihat oleh pemilik repositori dan bukan rilis terbaru (untuk uji sebelum rilis publik)"
+        type: boolean
+        required: false
+        default: false
 
 env:
   TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
@@ -105,7 +110,11 @@ jobs:
           if [[ "${{ inputs.replace_existing }}" == "true" ]]; then
             gh release upload "$TAG" out/Quran.apk --clobber
           else
-            gh release create "$TAG" out/Quran.apk --title "$TAG" --generate-notes
+            if [[ "${{ inputs.draft }}" == "true" ]]; then
+              gh release create "$TAG" out/Quran.apk --title "$TAG" --generate-notes --draft
+            else
+              gh release create "$TAG" out/Quran.apk --title "$TAG" --generate-notes
+            fi
           fi
           # AAB untuk Play Console disimpan sebagai artefak workflow, bukan aset rilis publik.
 
