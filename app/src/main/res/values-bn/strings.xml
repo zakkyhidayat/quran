@@ -325,4 +325,8 @@
     <string name="times_count">%1$d×</string>
     <string name="roots_lemmas">লেমা</string>
     <string name="roots_ayahs">এই মূলযুক্ত আয়াত</string>
+    <string name="doa_back_title">ফিরে যান…</string>
+    <string name="doa_back_text">পাঠ পৃষ্ঠা “%1$s” থেকে খোলা হয়েছে।</string>
+    <string name="doa_back_collection">সংকলনে ফিরুন</string>
+    <string name="doa_back_main">মূল পৃষ্ঠা</string>
 </resources>

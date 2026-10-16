@@ -325,4 +325,8 @@
     <string name="times_count">%1$d×</string>
     <string name="roots_lemmas">اللمّات</string>
     <string name="roots_ayahs">آيات فيها هذا الجذر</string>
+    <string name="doa_back_title">العودة إلى…</string>
+    <string name="doa_back_text">تم فتح القارئ من «%1$s».</string>
+    <string name="doa_back_collection">العودة إلى المجموعة</string>
+    <string name="doa_back_main">الصفحة الرئيسية</string>
 </resources>

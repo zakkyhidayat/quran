@@ -1,10 +1,12 @@
 package io.zakkyhidayat.quran
 
 import io.zakkyhidayat.quran.settings.SettingsPage
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.LayoutDirection
@@ -48,6 +50,7 @@ import io.zakkyhidayat.quran.explore.SurahThemesScreen
 import io.zakkyhidayat.quran.explore.ThemesScreen
 import io.zakkyhidayat.quran.explore.TopicScreen
 import io.zakkyhidayat.quran.home.CollectionScreen
+import io.zakkyhidayat.quran.home.DoaBackDialog
 import io.zakkyhidayat.quran.home.HomeTarget
 import io.zakkyhidayat.quran.home.PassageScreen
 import io.zakkyhidayat.quran.index.ExploreEntry
@@ -83,6 +86,12 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
                 launchSingleTop = true
             }
         }
+    }
+    // Dari kumpulan ayat (ponsel) pembaca ditumpuk di atasnya tanpa membuang halaman doa dan koleksi dari back stack, supaya
+    // Back bisa kembali ke sana. Di layar lebar (pembaca adalah layar awal) tetap memakai openReader.
+    val openReaderFromPassage: () -> Unit = {
+        if (expanded) openReader()
+        else if (nav.currentDestination?.route != "reader") nav.navigate("reader") { launchSingleTop = true }
     }
     val openHome: (HomeTarget) -> Unit = { target ->
         when (target) {
@@ -149,15 +158,29 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
                     onOpenHome = openHome,
                 )
             }
-            screen("reader") {
+            screen("reader") { entry ->
+                // Pembaca yang dibuka dari kumpulan ayat: Back (tombol, ketuk, atau geser) menawarkan pilihan, bukan langsung
+                // keluar ke satu tujuan.
+                val previousRoute = remember(entry.id) { nav.previousBackStackEntry?.destination?.route }
+                val fromPassage = !expanded && previousRoute == "passage"
+                var backChoiceOpen by rememberSaveable { mutableStateOf(false) }
+                BackHandler(enabled = fromPassage) { backChoiceOpen = true }
                 ReaderScreen(
                     vm = vm,
                     settings = settings,
-                    onBack = if (expanded) null else ({ nav.popBackStack() }),
+                    onBack = if (expanded) null else (if (fromPassage) ({ backChoiceOpen = true }) else ({ nav.popBackStack() })),
                     onOpenSearch = { nav.navigate("search") },
                     onOpenSettings = openSettings,
                     onOpenSurahInfo = { nav.navigate("surah/$it") },
                 )
+                if (fromPassage && backChoiceOpen) {
+                    DoaBackDialog(
+                        passageTitle = vm.passage.collectAsState().value?.title.orEmpty(),
+                        onBackToCollection = { backChoiceOpen = false; nav.popBackStack() },
+                        onBackToMain = { backChoiceOpen = false; nav.popBackStack("index", inclusive = false) },
+                        onDismiss = { backChoiceOpen = false },
+                    )
+                }
             }
             screen("surah/{id}", arguments = listOf(navArgument("id") { type = NavType.IntType })) { entry ->
                 SurahInfoScreen(
@@ -205,7 +228,7 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
                 }
                 screen("passage") {
                     val target = vm.passage.collectAsState().value
-                    if (target != null) PassageScreen(vm, target, onBack = { nav.popBackStack() }, onOpenReader = openReader)
+                    if (target != null) PassageScreen(vm, target, onBack = { nav.popBackStack() }, onOpenReader = openReaderFromPassage)
                 }
             screen("search") { SearchScreen(vm, settings, onBack = { nav.popBackStack() }) }
             SettingsPage.entries.filter { it != SettingsPage.Main }.forEach { page ->

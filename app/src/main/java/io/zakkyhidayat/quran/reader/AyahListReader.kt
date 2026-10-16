@@ -263,27 +263,6 @@ private fun AyahRow(
     val detail by produceState<AyahDetail?>(null, pos, translationIds) {
         value = vm.mushaf.ayahDetail(pos.surah, pos.ayah, translationIds)
     }
-    val glyphText by produceState<String?>(null, pos) {
-        value = vm.mushaf.ayahGlyphText(pos.surah, pos.ayah).takeIf { it.isNotBlank() }
-    }
-    val arabicFont = remember { arabicFontFamily(context) }
-    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
-    val plainPalette = GlyphPalette.of(false, isDark)
-    val tajweedPalette = GlyphPalette.of(true, isDark)
-    val plainGlyphFont by produceState<FontFamily?>(
-        cachedPageFont(pos.page, plainPalette).takeIf { hasPageFont(context, pos.page) },
-        pos.page,
-        plainPalette,
-    ) {
-        value = if (hasPageFont(context, pos.page)) pageFontFamily(context, pos.page, plainPalette) else null
-    }
-    val tajweedGlyphFont by produceState<FontFamily?>(
-        cachedPageFont(pos.page, tajweedPalette).takeIf { hasPageFont(context, pos.page) },
-        pos.page,
-        tajweedPalette,
-    ) {
-        value = if (hasPageFont(context, pos.page)) pageFontFamily(context, pos.page, tajweedPalette) else null
-    }
     Column(
         Modifier
             .fillMaxWidth()
@@ -303,26 +282,7 @@ private fun AyahRow(
             enter = if (animateArabic) expandVertically(motion.defaultSpatialSpec()) + fadeIn(motion.defaultEffectsSpec()) else EnterTransition.None,
             exit = if (animateArabic) shrinkVertically(motion.defaultSpatialSpec()) + fadeOut(motion.defaultEffectsSpec()) else ExitTransition.None,
         ) {
-            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                val style = MaterialTheme.typography.headlineSmall.scaled(LocalReadingTextScale.current.arabic, 1.9f)
-                val glyphs = glyphText?.takeIf { plainGlyphFont != null }
-                if (glyphs == null) {
-                    Text(
-                        d.arabic,
-                        style = style.copy(fontFamily = arabicFont),
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
-                    )
-                } else {
-                    // Tajwid berganti seketika: font berwarna dipakai begitu siap, tanpa lapisan dan animasi.
-                    Text(
-                        glyphs,
-                        style = style.copy(fontFamily = (if (tajweed) tajweedGlyphFont else null) ?: plainGlyphFont),
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
-                    )
-                }
-            }
+            AyahArabicText(vm, pos.surah, pos.ayah, pos.page, d.arabic, tajweed, Modifier.fillMaxWidth().padding(bottom = 8.dp))
         }
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             d.translations.forEach { tr ->

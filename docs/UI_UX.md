@@ -76,6 +76,11 @@ Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pu
   mengambang di daftar. Pengingat terpisah pukul 21.00 membuka rangkaian As-Sajdah lalu Al-Mulk.
 - Histori bacaan: satu baris per surah, 5 tampil, langsung setelah Ayat Hari Ini.
 - Kumpulan ayat: doa, solusi, adab, dosa besar; layar kumpulan dengan teks Arab, terjemahan, dan "Buka di pembaca".
+  Teks Arab memakai glyph mushaf dan mengikuti sakelar tajwid yang sama dengan pembaca (pengaturan satu untuk seluruh
+  aplikasi), lengkap dengan legenda warna di atas daftar.
+- Pembaca yang dibuka dari kumpulan ayat (ponsel) ditumpuk di atas halaman doa tanpa membuang back stack. Back (tombol,
+  ketuk, atau geser) menampilkan dialog di tengah layar: "Kembali ke kumpulan" (ke kumpulan ayat yang dipilih) atau
+  "Halaman utama"; ketuk di luar dialog tetap di pembaca. Dari tempat lain, Back tetap satu langkah mundur seperti biasa.
 - Kartu Ayat Hari Ini memasangkan latar `primaryContainer` dengan `onPrimaryContainer` di tema terang/gelap; daftar
   Sunnah, histori, dan koleksi memakai wadah ikon tonal dengan pasangan warna yang sesuai.
 - Kategori Pengaturan memakai kartu terpisah dengan jarak antarkelompok agar tidak tampak berjejal. Paket terjemahan
