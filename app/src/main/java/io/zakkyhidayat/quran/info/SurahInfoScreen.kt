@@ -23,12 +23,24 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import kotlinx.coroutines.launch
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.LinearProgressIndicator
+import android.text.format.Formatter
+import io.zakkyhidayat.quran.data.ContentPack
+import io.zakkyhidayat.quran.data.ContentKind
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.core.text.TextUtilsCompat
+import androidx.core.view.ViewCompat
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -57,8 +69,24 @@ fun SurahInfoScreen(vm: AppViewModel, surahId: Int, onBack: () -> Unit, onOpenAy
     val surahs by vm.surahs.collectAsStateWithLifecycle()
     val surah = surahs[surahId]
     val appLang = AppLanguage.effective(androidx.compose.ui.platform.LocalContext.current)
-    var lang by rememberSaveable { mutableStateOf(appLang) }
-    val details by produceState<SurahDetails?>(null, surahId, lang) { value = vm.mushaf.surahDetails(surahId, lang) }
+    // Info surah selain Inggris adalah paket unduhan. Bahasa aplikasi yang paketnya terpasang: pilih antara bahasa itu dan
+    // Inggris. Bahasa aplikasi yang paketnya ada di katalog tapi belum terpasang: tawarkan unduhan. Bahasa lain: Inggris.
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val scope = rememberCoroutineScope()
+    var refresh by remember { mutableIntStateOf(0) }
+    val available by produceState<List<String>?>(null, refresh) { value = vm.mushaf.surahInfoLanguages() }
+    val offer by produceState<ContentPack?>(null, available) {
+        value = if (appLang != "en" && available?.contains(appLang) == false) {
+            runCatching { vm.mushaf.contentCatalog(ContentKind.SurahInfo) }.getOrNull()?.firstOrNull { it.lang == appLang }
+        } else null
+    }
+    var downloading by remember { mutableStateOf(false) }
+    var progress by remember { mutableFloatStateOf(0f) }
+    var failed by remember { mutableStateOf(false) }
+    val choices = if (appLang != "en" && available?.contains(appLang) == true) listOf(appLang, "en") else listOf("en")
+    var picked by rememberSaveable { mutableStateOf<String?>(null) }
+    val lang = picked?.takeIf { it in choices } ?: choices.first()
+    val details by produceState<SurahDetails?>(null, surahId, lang, available) { if (available != null) value = vm.mushaf.surahDetails(surahId, lang) }
     val font = remember { surahNameFontFamily(vm.getApplication()) }
 
     Scaffold(
@@ -96,21 +124,62 @@ fun SurahInfoScreen(vm: AppViewModel, surahId: Int, onBack: () -> Unit, onOpenAy
                         Text(stringResource(R.string.read_surah))
                     }
                 }
-                SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth().padding(vertical = 12.dp)) {
-                    listOf("id" to stringResource(R.string.lang_name_id), "en" to stringResource(R.string.lang_name_en)).forEachIndexed { i, (code, label) ->
-                        SegmentedButton(
-                            selected = lang == code,
-                            onClick = { lang = code },
-                            shape = SegmentedButtonDefaults.itemShape(i, 2),
-                        ) { Text(label) }
+                // Nama bahasa dari Locale (dalam bahasa UI), jadi bahasa info baru tidak butuh string tambahan.
+                val uiLocale = java.util.Locale.forLanguageTag(appLang)
+                if (choices.size > 1) {
+                    FlowRow(Modifier.fillMaxWidth().padding(vertical = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        choices.forEach { code ->
+                            FilterChip(
+                                selected = lang == code,
+                                onClick = { picked = code },
+                                label = { Text(java.util.Locale.forLanguageTag(code).getDisplayLanguage(uiLocale).replaceFirstChar { it.titlecase(uiLocale) }) },
+                            )
+                        }
                     }
+                } else if (offer != null) {
+                    val pack = offer!!
+                    Column(Modifier.fillMaxWidth().padding(vertical = 12.dp)) {
+                        OutlinedButton(
+                            enabled = !downloading,
+                            onClick = {
+                                downloading = true
+                                failed = false
+                                progress = 0f
+                                scope.launch {
+                                    try {
+                                        vm.mushaf.installContent(ContentKind.SurahInfo, pack) { done, total ->
+                                            if (total > 0) progress = done.toFloat() / total
+                                        }
+                                        picked = pack.lang
+                                        refresh++
+                                    } catch (e: kotlinx.coroutines.CancellationException) {
+                                        throw e
+                                    } catch (_: Exception) {
+                                        failed = true
+                                    } finally {
+                                        downloading = false
+                                    }
+                                }
+                            },
+                        ) {
+                            Text(stringResource(R.string.surah_info_download, java.util.Locale.forLanguageTag(pack.lang).getDisplayLanguage(uiLocale), Formatter.formatShortFileSize(context, pack.bytes)))
+                        }
+                        if (downloading) LinearProgressIndicator(progress = { progress }, modifier = Modifier.fillMaxWidth().padding(top = 8.dp))
+                        if (failed) Text(stringResource(R.string.surah_info_download_failed), color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(top = 8.dp))
+                    }
+                } else {
+                    Spacer(Modifier.size(12.dp))
                 }
                 details?.let { d ->
                     if (d.infoHtml.isBlank()) {
                         Text(stringResource(R.string.no_surah_info), color = MaterialTheme.colorScheme.onSurfaceVariant)
                     } else {
-                        HtmlContent(d.infoHtml) { href ->
-                            parseAyahLink(href)?.let { (s, a) -> onOpenAyah(s, a) }
+                        // Info Urdu (dan bahasa RTL lain) harus rata kanan dengan arah teks kanan-ke-kiri.
+                        val rtl = TextUtilsCompat.getLayoutDirectionFromLocale(java.util.Locale.forLanguageTag(lang)) == ViewCompat.LAYOUT_DIRECTION_RTL
+                        CompositionLocalProvider(LocalLayoutDirection provides if (rtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
+                            HtmlContent(d.infoHtml) { href ->
+                                parseAyahLink(href)?.let { (s, a) -> onOpenAyah(s, a) }
+                            }
                         }
                     }
                 }

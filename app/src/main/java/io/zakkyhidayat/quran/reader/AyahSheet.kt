@@ -70,6 +70,8 @@ fun AyahSheetContent(
     extras: AyahExtras? = null,
     onOpenAyah: (Int, Int) -> Unit = { _, _ -> },
     surahNames: Map<Int, Surah> = emptyMap(),
+    /** Kartu tafsir; diberikan pemanggil karena butuh akses ke paket terpasang. */
+    tafsir: (@Composable () -> Unit)? = null,
 ) {
     val context = LocalContext.current
     val clipboard = LocalClipboard.current
@@ -186,6 +188,7 @@ fun AyahSheetContent(
                 }
             }
         }
+        tafsir?.invoke()
         if (extras != null && !extras.isEmpty) ExtrasSections(extras, surahNames, onOpenAyah)
         Spacer(Modifier.height(24.dp))
     }

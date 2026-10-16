@@ -14,7 +14,7 @@ app/src/main/assets/fonts/          header, surah-name, common, and Hafs fonts; 
   ▼
 noBackupFilesDir/quran.db            installed with noBackupFilesDir/quran-fonts/p1.ttf..p604.ttf for offline reading
   ▼
-MushafRepository                    the only reader of quran.db (+ TranslationPacks for downloaded translations)
+MushafRepository                    the only reader of quran.db (+ TranslationPacks for downloaded translations, ContentPacks for downloaded surah-info and tafsir packs)
   ▼
 AppViewModel                        app-wide state: surahs, markers, selection, translations, updates, auto backup
   ▼
@@ -23,6 +23,8 @@ Compose screens                     reader, index, search, surah info, settings,
 
 Translations are not in `quran.db`. They are SQLite packs built by `tools/build_translation_packs.py`, published on
 GitHub Releases (`translations`), downloaded into `filesDir/translations/`, and verified (SHA-256, 6,236 rows) before use.
+Surah info in languages other than English, and all tafsir, are optional gzip packs from `tools/build_content_packs.py` in the same
+release and catalog (separate `surah_info` / `tafsir` arrays), installed into `filesDir/content/<kind>/` after a SHA-256 and content check.
 The required Qur'an database and page-font archive are downloaded from the stable `quran-data` release during onboarding
 or by a user-requested repair/update from Settings.
 Reading is blocked until both are installed and is offline afterward; the APK does not contain `quran.db` or the 604 page fonts.
@@ -31,7 +33,7 @@ Reading is blocked until both are installed and is offline afterward; the APK do
 
 | Package | Responsibility |
 |---------|----------------|
-| `data/` | `ContentDatabase`, `QuranDatabaseInstaller` (release catalog, verified database/font download), `DownloadHttp`, `MushafRepository`, `TranslationPacks`, `BookmarkStore` (user.db), `Backup` (JSON export/import), `Collections` (curated ayah collections), `ReadingHistory` (history.db), models |
+| `data/` | `ContentDatabase`, `QuranDatabaseInstaller` (release catalog, verified database/font download), `DownloadHttp`, `MushafRepository`, `TranslationPacks`, `ContentPacks` (optional gzip surah-info/tafsir packs in `filesDir/content/`), `BookmarkStore` (user.db), `Backup` (JSON export/import), `Collections` (curated ayah collections), `ReadingHistory` (history.db), models |
 | `reader/` | `ReaderScreen` (top bar, reader controls, pager), `MushafPage` (page rendering), `PalettedFonts` (font palettes), `AyahListReader` (ayah + translation modes), `AyahSheet` |
 | `home/` | Home tab (`HomeTab`: ayah of the day, sunnah readings, reading history, collections) and `PassageScreen` |
 | `explore/` | Thematic browsing: topic list and topic screen |

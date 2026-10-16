@@ -53,6 +53,8 @@ All versions and release notes:
 - Light, dark, and AMOLED themes; dynamic colour (Android 12+) or the original teal palette; three contrast levels.
 - Translation packs are downloaded on demand in many languages, including Indonesian and English; none are bundled in
   the APK.
+- Tafsir (105 sources in Arabic, Indonesian, English, and many other languages) and surah info in extra languages are
+  optional downloads from Settings. The ayah sheet shows the selected tafsir for the open ayah.
 
 ## Who it is for
 

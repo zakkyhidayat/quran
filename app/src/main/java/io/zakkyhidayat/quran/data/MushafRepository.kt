@@ -8,6 +8,7 @@ import kotlinx.coroutines.withContext
 class MushafRepository(context: Context) {
     private val db = ContentDatabase.get(context)
     private val packs = TranslationPacks(context)
+    private val content = ContentPacks(context)
 
     @Volatile private var surahCache: Map<Int, Surah>? = null
     private val markerCache = java.util.concurrent.ConcurrentHashMap<MarkerKind, List<Marker>>()
@@ -161,6 +162,42 @@ class MushafRepository(context: Context) {
         list
     }
 
+    // ---- Paket unduhan info surah dan tafsir ----
+
+    suspend fun contentCatalog(kind: ContentKind): List<ContentPack> = content.catalog(kind)
+
+    suspend fun installedContent(kind: ContentKind): List<InstalledContentPack> = content.installed(kind)
+
+    suspend fun installContent(kind: ContentKind, pack: ContentPack, onProgress: (Long, Long) -> Unit = { _, _ -> }) =
+        content.install(kind, pack, onProgress)
+
+    suspend fun deleteContent(kind: ContentKind, id: String) = withContext(Dispatchers.IO) { content.delete(kind, id) }
+
+    /**
+     * Tafsir [packId] untuk ayat [surah]:[ayah], atau null bila paket tidak terpasang atau tidak membahas ayat itu. Bila beberapa
+     * kelompok tumpang tindih (ada di beberapa sumber QUL), dipakai kelompok yang mulai paling dekat sebelum ayat.
+     */
+    suspend fun tafsirFor(packId: String, surah: Int, ayah: Int): TafsirEntry? = withContext(Dispatchers.IO) {
+        val pack = content.database(ContentKind.Tafsir, packId) ?: return@withContext null
+        val key = tafsirKey(surah, ayah).toString()
+        pack.rawQuery("SELECT start, \"end\", text FROM tafsir WHERE start <= ? AND \"end\" >= ? ORDER BY start DESC LIMIT 1", arrayOf(key, key)).use { c ->
+            if (!c.moveToFirst()) return@use null
+            val start = c.getInt(0)
+            val end = c.getInt(1)
+            TafsirEntry(packId, start / 1000, start % 1000, end / 1000, end % 1000, normalizeTafsirHtml(c.getString(2)))
+        }
+    }
+
+    /**
+     * Kode bahasa info surah yang bisa dibaca sekarang: Inggris (bawaan), bahasa yang masih dibundel di quran.db lama (id dan en
+     * sebelum info surah menjadi paket unduhan), dan paket yang sudah diunduh.
+     */
+    suspend fun surahInfoLanguages(): List<String> = withContext(Dispatchers.IO) {
+        val bundled = mutableListOf<String>()
+        db.rawQuery("SELECT DISTINCT lang FROM surah_info ORDER BY lang", null).use { c -> while (c.moveToNext()) bundled += c.getString(0) }
+        (listOf("en") + bundled + content.installed(ContentKind.SurahInfo).map { it.lang }).distinct()
+    }
+
     suspend fun surahDetails(id: Int, lang: String): SurahDetails = withContext(Dispatchers.IO) {
         val surah = surahs().getValue(id)
         var place: String? = null
@@ -173,8 +210,15 @@ class MushafRepository(context: Context) {
         }
         val lastPage = db.rawQuery("SELECT MAX(page) FROM words WHERE surah = ?", arrayOf(id.toString())).use { if (it.moveToFirst()) it.getInt(0) else surah.firstPage }
         val ruku = db.rawQuery("SELECT COUNT(*) FROM ruku WHERE surah = ?", arrayOf(id.toString())).use { if (it.moveToFirst()) it.getInt(0) else 0 }
-        val html = db.rawQuery("SELECT text FROM surah_info WHERE lang = ? AND surah = ?", arrayOf(lang, id.toString()))
-            .use { if (it.moveToFirst()) it.getString(0) else "" }
+        // Urutan: paket unduhan, teks yang masih dibundel di quran.db lama, lalu Inggris. Surah yang kosong di paket (mis.
+        // Italia: 112/114) jatuh ke bahasa Inggris.
+        fun bundled(code: String): String? = db.rawQuery("SELECT text FROM surah_info WHERE lang = ? AND surah = ? AND text <> ''", arrayOf(code, id.toString()))
+            .use { if (it.moveToFirst()) it.getString(0) else null }
+        suspend fun fromPack(): String? = content.installed(ContentKind.SurahInfo).firstOrNull { it.lang == lang }
+            ?.let { content.database(ContentKind.SurahInfo, it.id) }
+            ?.rawQuery("SELECT text FROM surah_info WHERE surah = ? AND text <> ''", arrayOf(id.toString()))
+            ?.use { if (it.moveToFirst()) it.getString(0) else null }
+        val html = (if (lang == "en") null else fromPack() ?: bundled(lang)) ?: bundled("en").orEmpty()
         SurahDetails(
             place = place,
             ayahCount = surah.ayahCount,
