@@ -319,9 +319,13 @@ private fun GlyphRow(
                     .fillMaxSize()
                     .graphicsLayer { alpha = overlayAlpha }
                     .drawBehind {
+                        // Lapisan tajwid memakai lebarnya sendiri. Memakai batas lapisan hitam membuat seluruh baris
+                        // bergeser dan menumpuk di kiri bila lebar kedua lapisan tidak persis sama.
+                        val overlayBounds = FloatArray(overlayLayouts.size * 2)
+                        layoutGlyphBounds(overlayLayouts, size.width, centered, minGapPx, overlayBounds)
                         overlayLayouts.forEachIndexed { i, layout ->
                             if (i < layouts.size) {
-                                drawText(layout, topLeft = Offset(bounds[2 * i], (size.height - layout.size.height) / 2f))
+                                drawText(layout, topLeft = Offset(overlayBounds[2 * i], (size.height - layout.size.height) / 2f))
                             }
                         }
                     },
