@@ -72,11 +72,9 @@ colours) and loads it as a typeface on a background thread. `MushafPage` measure
 background thread too, then draws each line on a canvas, justified right to left. The pager prepares neighbouring pages
 in advance, so swiping only draws ready-made layouts.
 
-Tajweed colours are a second layer measured with the plain layer's font size, so both layers have the same glyph size.
-When tajweed is switched on, the coloured layer fades in over the plain layer, which stops being drawn once the fade
-completes; when it is switched off, the plain layer is drawn again at once and the coloured layer fades out. The fade
-alpha is read only in the layer and draw phases, so the page is not recomposed during the animation. The ayah highlight
-is drawn on its own layer beneath all lines.
+Tajweed colours are a second set of layouts measured with the plain layer's font size, so both have the same glyph size.
+Switching tajweed on or off is instant, with no animation: the page draws either the coloured or the plain layouts, each
+positioned from its own widths. The ayah highlight is drawn on its own layer beneath all lines.
 
 ## Tests and checks
 
