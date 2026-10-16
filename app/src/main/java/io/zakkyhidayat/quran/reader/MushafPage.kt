@@ -1,9 +1,6 @@
 package io.zakkyhidayat.quran.reader
 
 import androidx.compose.runtime.setValue
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.ui.unit.DpSize
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.Dispatchers
@@ -12,7 +9,6 @@ import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.platform.LocalFontFamilyResolver
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -39,7 +35,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.layout
@@ -108,17 +103,6 @@ fun MushafPage(
         Box(modifier.fillMaxSize())
         return
     }
-    val tajweedAlphaState = animateFloatAsState(
-        targetValue = if (tajweed && tajweedFont != null && tajweedBasmalah != null) 1f else 0f,
-        animationSpec = spring(
-            dampingRatio = 0.9f,
-            stiffness = Spring.StiffnessLow,
-        ),
-        label = "tajweed fade",
-    )
-    // Alpha diteruskan sebagai lambda dan baru dibaca di fase layer/gambar: selama fade halaman tidak dikomposisi ulang
-    // dan teks tidak digambar ulang tiap frame.
-    val tajweedAlpha = remember(tajweedAlphaState) { { tajweedAlphaState.value } }
     val density = LocalDensity.current
     val resolver = LocalFontFamilyResolver.current
 
@@ -137,7 +121,7 @@ fun MushafPage(
             }
         }
         // Lapisan tajwid memakai ukuran huruf lapisan hitam, tidak menghitungnya ulang: satu pass pengukuran lebih sedikit,
-        // dan kedua lapisan dijamin seukuran sehingga huruf berwarna menumpuk tepat di atas huruf hitam.
+        // dan kedua lapisan dijamin seukuran.
         val plainFontSize = prepared?.fontSize
         val tajweedPrepared by produceState<PreparedPage?>(null, page, lines, widthPx, tajweedFont, tajweedBasmalah, header, density, surahs, glyphColor, plainFontSize) {
             val coloredFont = tajweedFont ?: return@produceState
@@ -148,7 +132,8 @@ fun MushafPage(
             }
         }
         val ready = prepared ?: return@Box
-        val colorReady = tajweedPrepared
+        // Tajwid berganti seketika: lapisan berwarna menggantikan lapisan hitam begitu siap, dan sebaliknya.
+        val colorReady = if (tajweed) tajweedPrepared else null
         // Baris bingkai surah lebih tinggi dari baris ayat (bingkai tidak diubah proporsinya); baris ayat di halaman itu
         // dirapatkan secukupnya agar total tetap seukuran halaman.
         val headerLineHeight = with(density) { (widthPx * HEADER_WIDTH_RATIO * HEADER_FRAME_HEIGHT_EM / HEADER_FRAME_EM * HEADER_LINE_RATIO).toDp() }
@@ -220,7 +205,6 @@ fun MushafPage(
                             line,
                             ready.words[line] ?: emptyList(),
                             colorReady?.words?.get(line).orEmpty(),
-                            tajweedAlpha,
                             ready.gapPx,
                             onAyahClick,
                         )
@@ -228,7 +212,6 @@ fun MushafPage(
                         LineType.Basmallah -> GlyphRow(
                             layouts = ready.basmalah,
                             overlayLayouts = colorReady?.basmalah,
-                            overlayAlpha = tajweedAlpha,
                             centered = true,
                             minGapPx = ready.gapPx,
                             bounds = remember { FloatArray(ready.basmalah.size * 2) },
@@ -309,7 +292,6 @@ private fun layoutGlyphBounds(layouts: List<TextLayoutResult>, width: Float, cen
 private fun GlyphRow(
     layouts: List<TextLayoutResult>,
     overlayLayouts: List<TextLayoutResult>? = null,
-    overlayAlpha: () -> Float = { 0f },
     centered: Boolean,
     minGapPx: Float,
     bounds: FloatArray,
@@ -318,31 +300,19 @@ private fun GlyphRow(
     val height = layouts.maxOfOrNull { it.size.height } ?: 0
     val rowHeight = with(LocalDensity.current) { height.toDp() }
     val overlay = overlayLayouts.orEmpty()
-    // Keduanya hanya berubah di awal atau akhir fade, jadi baris dikomposisi ulang atau digambar ulang sekali, bukan tiap frame.
-    val overlayVisible by remember(overlayAlpha) { derivedStateOf { overlayAlpha() > 0f } }
-    val overlayOpaque by remember(overlayAlpha) { derivedStateOf { overlayAlpha() >= 1f } }
     val overlayBounds = remember(overlay) { FloatArray(overlay.size * 2) }
     Box(modifier.fillMaxWidth().height(rowHeight)) {
         Spacer(
             Modifier
                 .fillMaxSize()
                 .drawBehind {
-                // Batas tetap dihitung walau lapisan hitam disembunyikan: ketukan dan sorotan memakainya.
-                layoutGlyphBounds(layouts, size.width, centered, minGapPx, bounds)
-                // Lapisan tajwid yang sudah penuh menutup lapisan hitam (bentuk glyph sama), jadi lapisan hitam tidak
-                // digambar. Selama fade lapisan hitam tetap digambar di bawahnya agar teks tidak hilang sesaat.
-                if (overlay.isNotEmpty() && overlayOpaque) return@drawBehind
-                layouts.forEachIndexed { i, layout ->
-                    drawText(layout, topLeft = Offset(bounds[2 * i], (size.height - layout.size.height) / 2f))
-                }
-            },
-        )
-        if (overlay.isNotEmpty() && overlayVisible) {
-            Spacer(
-                Modifier
-                    .fillMaxSize()
-                    .graphicsLayer { alpha = overlayAlpha() }
-                    .drawBehind {
+                    // Batas lapisan hitam selalu dihitung: ketukan memakainya, juga saat lapisan tajwid yang digambar.
+                    layoutGlyphBounds(layouts, size.width, centered, minGapPx, bounds)
+                    if (overlay.isEmpty()) {
+                        layouts.forEachIndexed { i, layout ->
+                            drawText(layout, topLeft = Offset(bounds[2 * i], (size.height - layout.size.height) / 2f))
+                        }
+                    } else {
                         // Lapisan tajwid memakai lebarnya sendiri. Memakai batas lapisan hitam membuat seluruh baris
                         // bergeser dan menumpuk di kiri bila lebar kedua lapisan tidak persis sama.
                         layoutGlyphBounds(overlay, size.width, centered, minGapPx, overlayBounds)
@@ -351,9 +321,9 @@ private fun GlyphRow(
                                 drawText(layout, topLeft = Offset(overlayBounds[2 * i], (size.height - layout.size.height) / 2f))
                             }
                         }
-                    },
-            )
-        }
+                    }
+                },
+        )
     }
 }
 
@@ -362,7 +332,6 @@ private fun AyahLine(
     line: PageLine,
     layouts: List<TextLayoutResult>,
     overlayLayouts: List<TextLayoutResult>,
-    overlayAlpha: () -> Float,
     gapPx: Float,
     onAyahClick: (AyahRef) -> Unit,
 ) {
@@ -372,7 +341,6 @@ private fun AyahLine(
     GlyphRow(
         layouts = layouts,
         overlayLayouts = overlayLayouts,
-        overlayAlpha = overlayAlpha,
         centered = line.centered,
         minGapPx = gapPx,
         bounds = bounds,

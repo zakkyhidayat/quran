@@ -7,9 +7,6 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
@@ -67,7 +64,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.graphics.luminance
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -213,11 +209,6 @@ private fun SurahTitle(surah: Surah?, tajweed: Boolean) {
     ) {
         value = if (hasPageFont(context, 1)) pageFontFamily(context, 1, tajweedPalette) else null
     }
-    val tajweedAlpha by animateFloatAsState(
-        targetValue = if (tajweed && tajweedBasmalahFont != null) 1f else 0f,
-        animationSpec = spring(dampingRatio = 0.9f, stiffness = Spring.StiffnessLow),
-        label = "basmalah tajweed fade",
-    )
     Column(
         Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -238,25 +229,14 @@ private fun SurahTitle(surah: Surah?, tajweed: Boolean) {
                     modifier = Modifier.clearAndSetSemantics { },
                 )
             } else {
+                // Tajwid berganti seketika: font berwarna dipakai begitu siap, tanpa lapisan dan animasi.
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                    Box(Modifier.fillMaxWidth()) {
-                        Text(
-                            BASMALAH_GLYPHS,
-                            style = TextStyle(fontFamily = plainBasmalahFont, fontSize = 36.sp),
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth().clearAndSetSemantics { },
-                        )
-                        tajweedBasmalahFont?.let { font ->
-                            Text(
-                                BASMALAH_GLYPHS,
-                                style = TextStyle(fontFamily = font, fontSize = 36.sp),
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.fillMaxWidth()
-                                    .graphicsLayer { alpha = tajweedAlpha }
-                                    .clearAndSetSemantics { },
-                            )
-                        }
-                    }
+                    Text(
+                        BASMALAH_GLYPHS,
+                        style = TextStyle(fontFamily = (if (tajweed) tajweedBasmalahFont else null) ?: plainBasmalahFont, fontSize = 36.sp),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth().clearAndSetSemantics { },
+                    )
                 }
             }
         }
@@ -304,11 +284,6 @@ private fun AyahRow(
     ) {
         value = if (hasPageFont(context, pos.page)) pageFontFamily(context, pos.page, tajweedPalette) else null
     }
-    val tajweedAlpha by animateFloatAsState(
-        targetValue = if (tajweed && tajweedGlyphFont != null) 1f else 0f,
-        animationSpec = spring(dampingRatio = 0.9f, stiffness = Spring.StiffnessLow),
-        label = "ayah tajweed fade",
-    )
     Column(
         Modifier
             .fillMaxWidth()
@@ -339,25 +314,13 @@ private fun AyahRow(
                         modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
                     )
                 } else {
-                    Box(Modifier.fillMaxWidth().padding(bottom = 8.dp)) {
-                        Text(
-                            glyphs,
-                            style = style.copy(fontFamily = plainGlyphFont),
-                            textAlign = TextAlign.Start,
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-                        if (tajweedGlyphFont != null) {
-                            Text(
-                                glyphs,
-                                style = style.copy(fontFamily = tajweedGlyphFont),
-                                textAlign = TextAlign.Start,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .graphicsLayer { alpha = tajweedAlpha }
-                                    .clearAndSetSemantics { },
-                            )
-                        }
-                    }
+                    // Tajwid berganti seketika: font berwarna dipakai begitu siap, tanpa lapisan dan animasi.
+                    Text(
+                        glyphs,
+                        style = style.copy(fontFamily = (if (tajweed) tajweedGlyphFont else null) ?: plainGlyphFont),
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                    )
                 }
             }
         }
