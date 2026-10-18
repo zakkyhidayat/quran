@@ -96,6 +96,12 @@ enum class SunnahReading(val refs: String, val time: SunnahTime) {
     ThreeQuls("112,113,114", SunnahTime.Night),
     KahfFirstTen("18:1-10", SunnahTime.Any);
 
+    /**
+     * Hanya rangkaian As-Sajdah lalu Al-Mulk yang melacak progres: pembaca menampilkan tombol mengambang "Lanjut ke Al-Mulk"
+     * dan beranda menawarkan melanjutkannya. Bacaan lain langsung dibuka tanpa progres dan tanpa petunjuk mengambang.
+     */
+    val tracksProgress: Boolean get() = this == MulkSajdah
+
     companion object {
         /** Yang waktunya sedang berlaku di depan, lalu sisanya dalam urutan semula. */
         fun ordered(now: LocalDateTime): List<SunnahReading> = entries.sortedBy { if (it.time.isNow(now)) 0 else 1 }

@@ -205,7 +205,8 @@ fun ReaderScreen(
         value = CounterValue(counterMode, a, divisions)
     }
     val pageBookmarked = bookmarks.any { it.kind == BookmarkKind.Page && it.page == currentPage }
-    val sunnahReading = SunnahReading.entries.firstOrNull { it.name == settings.sunnahReadingId }
+    // Progres lama dari bacaan yang tidak lagi melacak progres diabaikan: tidak ada petunjuk mengambang untuknya.
+    val sunnahReading = SunnahReading.entries.firstOrNull { it.name == settings.sunnahReadingId }?.takeIf { it.tracksProgress }
     val sunnahRanges = remember(sunnahReading, settings.sunnahReadingStep, surahs) {
         sunnahReading?.let { reading ->
             AyahRange.parseList(reading.refs).mapNotNull { range ->

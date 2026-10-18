@@ -116,6 +116,7 @@ fun IndexScreen(
         floatingActionButton = {
             val sunnahReading = io.zakkyhidayat.quran.data.SunnahReading.entries
                 .firstOrNull { it.name == settings.sunnahReadingId }
+                ?.takeIf { it.tracksProgress }
             Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 if (sunnahReading != null) {
                     val shape = MaterialTheme.shapes.large

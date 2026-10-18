@@ -71,9 +71,11 @@ Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pu
   juga hanya tersedia dalam bahasa Inggris. Teks ayat Qur'an tetap Arab.
 - Bacaan sunnah dengan dalil; yang waktunya berlaku (Jumat atau malam, pendekatan pukul 18.00) diberi label
   "Dianjurkan sekarang" dan ditaruh di atas.
-- Kartu bacaan Sunnah membuka langsung ayat/surah di pembaca. Untuk rangkaian beberapa surah, petunjuk beraksen
-  `tertiaryContainer` mengantar ke bagian berikutnya; progres tersimpan dan bisa dilanjutkan atau dibuang dari tombol
-  mengambang di daftar. Pengingat terpisah pukul 21.00 membuka rangkaian As-Sajdah lalu Al-Mulk.
+- Kartu bacaan Sunnah membuka langsung ayat/surah di pembaca. Hanya rangkaian As-Sajdah lalu Al-Mulk yang memakai
+  petunjuk mengambang beraksen `tertiaryContainer` ("Lanjut ke Al-Mulk", lalu "Selesaikan bacaan Sunnah"); progres
+  tersimpan dan bisa dilanjutkan atau dibuang dari tombol mengambang di daftar. Bacaan lain (Al-Kahfi, Ayat Kursi, akhir
+  Al-Baqarah, Tiga Qul, sepuluh ayat Al-Kahfi) dibuka tanpa petunjuk dan tanpa progres tersimpan. Pengingat terpisah
+  pukul 21.00 membuka rangkaian As-Sajdah lalu Al-Mulk.
 - Histori bacaan: satu baris per surah, 5 tampil, langsung setelah Ayat Hari Ini.
 - Kumpulan ayat: doa, solusi, adab, dosa besar; layar kumpulan dengan teks Arab, terjemahan, dan "Buka di pembaca".
   Teks Arab memakai glyph mushaf dan mengikuti sakelar tajwid yang sama dengan pembaca (pengaturan satu untuk seluruh
