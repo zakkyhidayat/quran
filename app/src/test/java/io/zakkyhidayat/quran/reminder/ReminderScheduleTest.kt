@@ -13,7 +13,7 @@ class ReminderScheduleTest {
 
     // 14 Oktober 2026 hari Rabu, 15 Oktober Kamis, 22 Oktober Kamis berikutnya.
     @Test
-    fun `harian: hari ini bila jamnya belum lewat, besok bila sudah`() {
+    fun `harian hari ini bila jamnya belum lewat dan besok bila sudah`() {
         val minutes = Reminder.BEDTIME_MINUTES
         assertEquals(at(2026, Calendar.OCTOBER, 14, 20, 30), Reminder.nextTriggerMillis(at(2026, Calendar.OCTOBER, 14, 12, 0), minutes))
         assertEquals(at(2026, Calendar.OCTOBER, 15, 20, 30), Reminder.nextTriggerMillis(at(2026, Calendar.OCTOBER, 14, 21, 0), minutes))
