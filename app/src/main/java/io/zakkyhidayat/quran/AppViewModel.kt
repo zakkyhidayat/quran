@@ -105,7 +105,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         // Pasang ulang jadwal pengingat setiap kali pengaturannya berubah (termasuk saat aplikasi dibuka).
         viewModelScope.launch {
             settingsRepository.settings
-                .map { listOf(it.reminderEnabled, it.reminderMinutes, it.reminderUnit, it.bedtimeSunnahReminderEnabled) }
+                .map { listOf(it.reminderEnabled, it.reminderMinutes, it.reminderUnit, it.bedtimeSunnahReminderEnabled, it.kahfThursdayReminderEnabled) }
                 .distinctUntilChanged()
                 .collect { io.zakkyhidayat.quran.reminder.Reminder.schedule(getApplication(), settingsRepository.settings.first()) }
         }

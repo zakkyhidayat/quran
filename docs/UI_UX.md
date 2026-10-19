@@ -74,8 +74,11 @@ Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pu
 - Kartu bacaan Sunnah membuka langsung ayat/surah di pembaca. Hanya rangkaian As-Sajdah lalu Al-Mulk yang memakai
   petunjuk mengambang beraksen `tertiaryContainer` ("Lanjut ke Al-Mulk", lalu "Selesaikan bacaan Sunnah"); progres
   tersimpan dan bisa dilanjutkan atau dibuang dari tombol mengambang di daftar. Bacaan lain (Al-Kahfi, Ayat Kursi, akhir
-  Al-Baqarah, Tiga Qul, sepuluh ayat Al-Kahfi) dibuka tanpa petunjuk dan tanpa progres tersimpan. Pengingat terpisah
-  pukul 21.00 membuka rangkaian As-Sajdah lalu Al-Mulk.
+  Al-Baqarah, Tiga Qul, sepuluh ayat Al-Kahfi) dibuka tanpa petunjuk dan tanpa progres tersimpan.
+- Pengingat bacaan Sunnah, masing-masing dengan sakelarnya sendiri di Pengaturan > Pengingat (bawaan mati, khusus perangkat
+  ini): malam hari pukul 20.30 membuka rangkaian As-Sajdah lalu Al-Mulk, dan Al-Kahfi setiap Kamis pukul 18.00 (pendekatan
+  awal malam Jumat) membuka Surah Al-Kahfi.
+- Bingkai nama surah memakai 97% lebar halaman (margin kiri dan kanan masing-masing 1,5%).
 - Histori bacaan: satu baris per surah, 5 tampil, langsung setelah Ayat Hari Ini.
 - Kumpulan ayat: doa, solusi, adab, dosa besar; layar kumpulan dengan teks Arab, terjemahan, dan "Buka di pembaca".
   Teks Arab memakai glyph mushaf dan mengikuti sakelar tajwid yang sama dengan pembaca (pengaturan satu untuk seluruh

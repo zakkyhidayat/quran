@@ -36,6 +36,8 @@ internal fun ReminderControls(vm: AppViewModel, settings: AppSettings) {
     val repo = vm.settingsRepository
     var showTime by rememberSaveable { mutableStateOf(false) }
     val timeText = remember(settings.reminderMinutes) { reminderTimeText(context, settings.reminderMinutes) }
+    val bedtimeTimeText = remember { reminderTimeText(context, io.zakkyhidayat.quran.reminder.Reminder.BEDTIME_MINUTES) }
+    val kahfTimeText = remember { reminderTimeText(context, io.zakkyhidayat.quran.reminder.Reminder.KAHF_MINUTES) }
     Group {
         item(
             title = stringResource(R.string.reminder_daily),
@@ -46,10 +48,17 @@ internal fun ReminderControls(vm: AppViewModel, settings: AppSettings) {
         )
         item(
             title = stringResource(R.string.reminder_bedtime_sunnah),
-            subtitle = stringResource(R.string.reminder_bedtime_sunnah_sub),
+            subtitle = stringResource(R.string.reminder_bedtime_sunnah_sub, bedtimeTimeText),
             onClick = { scope.launch { repo.setBedtimeSunnahReminderEnabled(!settings.bedtimeSunnahReminderEnabled) } },
             leading = { Icon(AppIcons.DarkMode, contentDescription = null) },
             trailing = { IconSwitch(settings.bedtimeSunnahReminderEnabled) },
+        )
+        item(
+            title = stringResource(R.string.reminder_kahf_friday),
+            subtitle = stringResource(R.string.reminder_kahf_friday_sub, kahfTimeText),
+            onClick = { scope.launch { repo.setKahfThursdayReminderEnabled(!settings.kahfThursdayReminderEnabled) } },
+            leading = { Icon(AppIcons.MenuBook, contentDescription = null) },
+            trailing = { IconSwitch(settings.kahfThursdayReminderEnabled) },
         )
         // Build debug saja: tampilkan pengingat sekarang untuk menguji isi dan ketukannya.
         if (settings.reminderEnabled && io.zakkyhidayat.quran.BuildConfig.DEBUG) {

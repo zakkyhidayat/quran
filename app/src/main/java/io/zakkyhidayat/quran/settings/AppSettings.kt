@@ -51,6 +51,8 @@ data class AppSettings(
     val reminderMinutes: Int = 20 * 60,
     val reminderUnit: ReminderUnit = ReminderUnit.Juz,
     val bedtimeSunnahReminderEnabled: Boolean = false,
+    /** Pengingat Al-Kahfi setiap Kamis pukul 18.00 (awal malam Jumat). */
+    val kahfThursdayReminderEnabled: Boolean = false,
     /** Nama SunnahReading dan indeks rentang yang sedang dibaca; disimpan lokal untuk tombol lanjut. */
     val sunnahReadingId: String? = null,
     val sunnahReadingStep: Int = 0,
@@ -81,6 +83,7 @@ class SettingsRepository(private val context: Context) {
     private val reminderMinutesKey = intPreferencesKey("reminder_minutes")
     private val reminderUnitKey = stringPreferencesKey("reminder_unit")
     private val bedtimeSunnahReminderKey = booleanPreferencesKey("bedtime_sunnah_reminder_enabled")
+    private val kahfThursdayReminderKey = booleanPreferencesKey("kahf_thursday_reminder_enabled")
     private val sunnahReadingIdKey = stringPreferencesKey("sunnah_reading_id")
     private val sunnahReadingStepKey = intPreferencesKey("sunnah_reading_step")
     private val counterModeKey = stringPreferencesKey("counter_mode")
@@ -90,6 +93,7 @@ class SettingsRepository(private val context: Context) {
         autoBackupUriKey.name,
         autoBackupAtKey.name,
         bedtimeSunnahReminderKey.name,
+        kahfThursdayReminderKey.name,
         sunnahReadingIdKey.name,
         sunnahReadingStepKey.name,
     )
@@ -115,6 +119,7 @@ class SettingsRepository(private val context: Context) {
             reminderMinutes = prefs[reminderMinutesKey] ?: (20 * 60),
             reminderUnit = prefs[reminderUnitKey].toEnum(ReminderUnit.Juz),
             bedtimeSunnahReminderEnabled = prefs[bedtimeSunnahReminderKey] ?: false,
+            kahfThursdayReminderEnabled = prefs[kahfThursdayReminderKey] ?: false,
             sunnahReadingId = prefs[sunnahReadingIdKey],
             sunnahReadingStep = prefs[sunnahReadingStepKey] ?: 0,
             // Pengguna lama (sudah pernah membaca) tidak perlu onboarding maupun petunjuk gerakan.
@@ -196,6 +201,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setBedtimeSunnahReminderEnabled(enabled: Boolean) =
         context.dataStore.edit { it[bedtimeSunnahReminderKey] = enabled }
+
+    suspend fun setKahfThursdayReminderEnabled(enabled: Boolean) =
+        context.dataStore.edit { it[kahfThursdayReminderKey] = enabled }
 
     suspend fun setSunnahReading(id: String, step: Int) = context.dataStore.edit {
         it[sunnahReadingIdKey] = id

@@ -210,9 +210,13 @@
     <string name="reminder">Reading reminder</string>
     <string name="reminder_daily">Daily reminder</string>
     <string name="reminder_bedtime_sunnah">Sunnah before sleep</string>
-    <string name="reminder_bedtime_sunnah_sub">As-Sajdah, then Al-Mulk at 9:00 PM</string>
+    <string name="reminder_bedtime_sunnah_sub">As-Sajdah, then Al-Mulk at %1$s</string>
     <string name="sunnah_reminder_notification_title">Nightly Sunnah reading</string>
     <string name="sunnah_reminder_notification_text">Read As-Sajdah, then Al-Mulk.</string>
+    <string name="reminder_kahf_friday">Al-Kahf on Friday eve</string>
+    <string name="reminder_kahf_friday_sub">Every Thursday at %1$s</string>
+    <string name="kahf_reminder_notification_title">Al-Kahf, Friday eve</string>
+    <string name="kahf_reminder_notification_text">Time to read Surah Al-Kahf.</string>
     <string name="reminder_off_sub">A notification each day with the portion you are reading</string>
     <string name="reminder_on_sub">Every day at %1$s</string>
     <string name="reminder_time">Reminder time</string>
