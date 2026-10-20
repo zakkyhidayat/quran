@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.zakkyhidayat.quran.AppViewModel
 import io.zakkyhidayat.quran.R
 import io.zakkyhidayat.quran.data.Backup
@@ -52,6 +53,7 @@ enum class SettingsPage(val route: String) {
     Main("settings"),
     Appearance("settings/appearance"),
     Translations("settings/translations"),
+    Tafsir("settings/tafsir"),
     Backup("settings/backup"),
     Reminder("settings/reminder"),
     QuranData("settings/quran-data"),
@@ -62,6 +64,7 @@ enum class SettingsPage(val route: String) {
 @Composable
 internal fun SettingsMainSheet(
     settings: AppSettings,
+    tafsirCount: Int,
     onDismiss: () -> Unit,
     onOpen: (SettingsPage) -> Unit,
 ) {
@@ -94,7 +97,7 @@ internal fun SettingsMainSheet(
                     .padding(horizontal = 16.dp)
                     .padding(bottom = 24.dp),
             ) {
-                SettingsMain(settings, onOpen)
+                SettingsMain(settings, tafsirCount, onOpen)
             }
         }
         }
@@ -123,6 +126,7 @@ fun SettingsScreen(
             SettingsPage.Main -> R.string.settings
             SettingsPage.Appearance -> R.string.appearance
             SettingsPage.Translations -> R.string.translations
+            SettingsPage.Tafsir -> R.string.tafsir
             SettingsPage.Backup -> R.string.backup
             SettingsPage.Reminder -> R.string.reminder
             SettingsPage.QuranData -> R.string.quran_data_title
@@ -145,24 +149,38 @@ fun SettingsScreen(
                         .padding(horizontal = 16.dp)
                         .padding(top = 8.dp, bottom = 24.dp),
                 ) {
-                    Group {
-                        item(
-                            title = stringResource(R.string.translit_title),
-                            subtitle = stringResource(R.string.translit_sub),
-                            onClick = { scope.launch { repo.setShowTransliteration(!settings.showTransliteration) } },
-                            leading = { Icon(AppIcons.Translate, contentDescription = null) },
-                            trailing = { IconSwitch(settings.showTransliteration) },
-                        )
-                    }
-                    Spacer(Modifier.height(16.dp))
-                    TranslationControls(vm, settings, Modifier.weight(1f), fillAvailableHeight = true)
+                    TranslationControls(
+                        vm, settings, Modifier.weight(1f), fillAvailableHeight = true,
+                        header = {
+                            Column {
+                                Group {
+                                    item(
+                                        title = stringResource(R.string.translit_title),
+                                        subtitle = stringResource(R.string.translit_sub),
+                                        onClick = { scope.launch { repo.setShowTransliteration(!settings.showTransliteration) } },
+                                        leading = { Icon(AppIcons.Translate, contentDescription = null) },
+                                        trailing = { IconSwitch(settings.showTransliteration) },
+                                    )
+                                }
+                                Spacer(Modifier.height(16.dp))
+                            }
+                        },
+                    )
+                }
+            } else if (page == SettingsPage.Tafsir) {
+                Column(
+                    Modifier.fillMaxSize()
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 8.dp, bottom = 24.dp),
+                ) {
+                    TafsirControls(vm, Modifier.weight(1f))
                 }
             } else {
                 LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp)) {
                     item(key = page.route) {
                         Column {
                             when (page) {
-                            SettingsPage.Main -> SettingsMain(settings, onOpen)
+                            SettingsPage.Main -> SettingsMain(settings, vm.tafsirInstalled.collectAsStateWithLifecycle().value.size, onOpen)
                             SettingsPage.Appearance -> {
 
                                 AppearanceControls(vm, settings)
@@ -187,7 +205,7 @@ fun SettingsScreen(
                                 }
 
                             }
-                            SettingsPage.Translations -> Unit
+                            SettingsPage.Translations, SettingsPage.Tafsir -> Unit
                             SettingsPage.Backup -> BackupControls(vm, settings, snackbar)
                             SettingsPage.Reminder -> ReminderControls(vm, settings)
                             SettingsPage.QuranData -> QuranDataMaintenance(quranDataInstaller)
@@ -229,7 +247,7 @@ fun SettingsScreen(
 
 /** Halaman utama: bahasa, lalu kategori dengan ringkasan isinya. */
 @Composable
-private fun SettingsMain(settings: AppSettings, onOpen: (SettingsPage) -> Unit) {
+private fun SettingsMain(settings: AppSettings, tafsirCount: Int, onOpen: (SettingsPage) -> Unit) {
     LanguageSection(showTitle = false)
     Spacer(Modifier.height(16.dp))
     val theme = stringResource(
@@ -242,6 +260,7 @@ private fun SettingsMain(settings: AppSettings, onOpen: (SettingsPage) -> Unit) 
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         SettingsCategory(stringResource(R.string.appearance), stringResource(R.string.settings_appearance_sub, theme), AppIcons.Palette) { onOpen(SettingsPage.Appearance) }
         SettingsCategory(stringResource(R.string.translations), stringResource(R.string.settings_translations_sub, settings.translationIds.size), AppIcons.Translate) { onOpen(SettingsPage.Translations) }
+        SettingsCategory(stringResource(R.string.tafsir), stringResource(R.string.settings_tafsir_sub, tafsirCount), AppIcons.MenuBook) { onOpen(SettingsPage.Tafsir) }
         SettingsCategory(
             stringResource(R.string.backup),
             stringResource(if (settings.autoBackupUri != null) R.string.settings_backup_on else R.string.settings_backup_sub),

@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
@@ -74,6 +75,7 @@ fun parseHtml(html: String, linkStyle: SpanStyle, onLink: (String) -> Unit): Lis
                 val marker = if (ordered) "$listCounter." else "•"
                 open { HtmlBlock.Item(marker, it) }
             }
+            "br" -> if (!closing) builder?.append("\n")
             "strong", "b" -> builder?.let { if (closing) it.pop() else it.pushStyle(SpanStyle(fontWeight = FontWeight.Bold)) }
             "em", "i" -> builder?.let { if (closing) it.pop() else it.pushStyle(SpanStyle(fontStyle = FontStyle.Italic)) }
             "a" -> builder?.let {
@@ -90,10 +92,60 @@ fun parseHtml(html: String, linkStyle: SpanStyle, onLink: (String) -> Unit): Lis
     return blocks
 }
 
+private fun HtmlBlock.length() = when (this) {
+    is HtmlBlock.Heading -> text.length
+    is HtmlBlock.Paragraph -> text.length
+    is HtmlBlock.Item -> text.length
+}
+
+/** Jumlah huruf semua blok (tanpa tag), untuk memutuskan apakah teks perlu dipotong. */
+fun htmlTextLength(html: String): Int = parseHtml(html, SpanStyle()) { }.sumOf { it.length() }
+
+/**
+ * Blok-blok pertama sampai jumlah hurufnya mencapai [maxChars]. Blok yang melewati batas dipotong di batas kata dan diberi
+ * "…" (satu paragraf sebesar ratusan ribu huruf tidak boleh lolos utuh dari pratinjau).
+ */
+fun limitBlocks(blocks: List<HtmlBlock>, maxChars: Int): List<HtmlBlock> {
+    if (maxChars == Int.MAX_VALUE) return blocks
+    var total = 0
+    val out = ArrayList<HtmlBlock>()
+    for (b in blocks) {
+        val remaining = maxChars - total
+        if (remaining <= 0) break
+        if (b.length() <= remaining) {
+            out += b
+            total += b.length()
+        } else {
+            out += b.truncated(remaining)
+            break
+        }
+    }
+    return out
+}
+
+private fun HtmlBlock.truncated(limit: Int): HtmlBlock {
+    fun cut(text: AnnotatedString): AnnotatedString {
+        val plain = text.text
+        // Mundur ke spasi terakhir dalam seperlima akhir batas supaya kata tidak terpotong.
+        val space = plain.lastIndexOf(' ', limit).takeIf { it >= limit - limit / 5 } ?: limit
+        return buildAnnotatedString {
+            append(text.subSequence(0, space.coerceIn(0, plain.length)))
+            append("…")
+        }
+    }
+    return when (this) {
+        is HtmlBlock.Heading -> copy(text = cut(text))
+        is HtmlBlock.Paragraph -> copy(text = cut(text))
+        is HtmlBlock.Item -> copy(text = cut(text))
+    }
+}
+
 @Composable
-fun HtmlContent(html: String, modifier: Modifier = Modifier, onLink: (String) -> Unit) {
+fun HtmlContent(html: String, modifier: Modifier = Modifier, maxChars: Int = Int.MAX_VALUE, onLink: (String) -> Unit) {
     val linkStyle = SpanStyle(color = MaterialTheme.colorScheme.primary, textDecoration = TextDecoration.Underline)
-    val blocks = remember(html, linkStyle) { parseHtml(html, linkStyle, onLink) }
+    val parsed = remember(html, linkStyle) { parseHtml(html, linkStyle, onLink) }
+    // Teks yang sangat panjang (tafsir) hanya ditampilkan sampai batas huruf; blok yang melewati batas dipotong.
+    val blocks = remember(parsed, maxChars) { limitBlocks(parsed, maxChars) }
     Column(modifier, verticalArrangement = Arrangement.spacedBy(12.dp)) {
         blocks.forEach { block ->
             when (block) {
