@@ -45,6 +45,7 @@ object Reminder {
             context,
             settings.reminderEnabled,
             settings.reminderMinutes,
+            null,
             REQUEST_DAILY,
             ReminderReceiver.ACTION_REMIND,
         )
@@ -53,8 +54,18 @@ object Reminder {
             context,
             settings.bedtimeSunnahReminderEnabled,
             BEDTIME_MINUTES,
+            null,
             REQUEST_BEDTIME,
             ReminderReceiver.ACTION_BEDTIME,
+        )
+        scheduleAlarm(
+            alarms,
+            context,
+            settings.kahfThursdayReminderEnabled,
+            KAHF_MINUTES,
+            Calendar.THURSDAY,
+            REQUEST_KAHF,
+            ReminderReceiver.ACTION_KAHF,
         )
     }
 
@@ -63,21 +74,32 @@ object Reminder {
         context: Context,
         enabled: Boolean,
         minutes: Int,
+        dayOfWeek: Int?,
         requestCode: Int,
         action: String,
     ) {
         val pending = alarmIntent(context, requestCode, action)
         alarms.cancel(pending)
         if (!enabled) return
+        // Jendela 10 menit: cukup tepat untuk pengingat, tanpa izin SCHEDULE_EXACT_ALARM.
+        alarms.setWindow(AlarmManager.RTC_WAKEUP, nextTriggerMillis(System.currentTimeMillis(), minutes, dayOfWeek), 10 * 60 * 1000L, pending)
+    }
+
+    /**
+     * Waktu pemicu berikutnya setelah [now]: pukul [minutes] (menit sejak tengah malam) setiap hari, atau setiap
+     * [dayOfWeek] ([Calendar.THURSDAY] dan seterusnya) bila diberikan. Tepat pada [now] dianggap sudah lewat.
+     */
+    internal fun nextTriggerMillis(now: Long, minutes: Int, dayOfWeek: Int? = null): Long {
         val next = Calendar.getInstance().apply {
+            timeInMillis = now
+            if (dayOfWeek != null) set(Calendar.DAY_OF_WEEK, dayOfWeek)
             set(Calendar.HOUR_OF_DAY, minutes / 60)
             set(Calendar.MINUTE, minutes % 60)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
-            if (timeInMillis <= System.currentTimeMillis()) add(Calendar.DAY_OF_YEAR, 1)
+            if (timeInMillis <= now) add(Calendar.DAY_OF_YEAR, if (dayOfWeek != null) 7 else 1)
         }
-        // Jendela 10 menit: cukup tepat untuk pengingat, tanpa izin SCHEDULE_EXACT_ALARM.
-        alarms.setWindow(AlarmManager.RTC_WAKEUP, next.timeInMillis, 10 * 60 * 1000L, pending)
+        return next.timeInMillis
     }
 
     private fun alarmIntent(context: Context, requestCode: Int, action: String): PendingIntent = PendingIntent.getBroadcast(
@@ -92,11 +114,15 @@ object Reminder {
             ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
 
     @SuppressLint("NotificationPermission")
-    internal suspend fun notify(context: Context, bedtimeSunnah: Boolean = false) {
+    internal suspend fun notify(context: Context, kind: ReminderKind = ReminderKind.Daily) {
         val app = context.app
         val settings = app.settings.settings.first()
-        if (bedtimeSunnah && !settings.bedtimeSunnahReminderEnabled) return
-        if (!bedtimeSunnah && !settings.reminderEnabled) return
+        val enabled = when (kind) {
+            ReminderKind.Daily -> settings.reminderEnabled
+            ReminderKind.Bedtime -> settings.bedtimeSunnahReminderEnabled
+            ReminderKind.KahfThursday -> settings.kahfThursdayReminderEnabled
+        }
+        if (!enabled) return
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
             ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
         ) return
@@ -104,28 +130,24 @@ object Reminder {
         manager.createNotificationChannel(
             NotificationChannel(CHANNEL, context.getString(R.string.reminder_channel), NotificationManager.IMPORTANCE_DEFAULT),
         )
-        if (bedtimeSunnah) {
-            val page = app.mushaf.ayahPage(32, 1)
-            val open = PendingIntent.getActivity(
-                context,
-                REQUEST_BEDTIME,
-                Intent(context, MainActivity::class.java)
-                    .putExtra(EXTRA_SUNNAH_READING, SunnahReading.MulkSajdah.name)
-                    .putExtra("page", page)
-                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
-            )
-            manager.notify(
-                BEDTIME_NOTIFICATION_ID,
-                NotificationCompat.Builder(context, CHANNEL)
-                    .setSmallIcon(R.drawable.ic_notification)
-                    .setContentTitle(context.getString(R.string.sunnah_reminder_notification_title))
-                    .setContentText(context.getString(R.string.sunnah_reminder_notification_text))
-                    .setContentIntent(open)
-                    .setAutoCancel(true)
-                    .build(),
-            )
-            return
+        when (kind) {
+            ReminderKind.Bedtime -> {
+                notifySunnah(
+                    context, manager, SunnahReading.MulkSajdah, app.mushaf.ayahPage(32, 1),
+                    REQUEST_BEDTIME, BEDTIME_NOTIFICATION_ID,
+                    R.string.sunnah_reminder_notification_title, R.string.sunnah_reminder_notification_text,
+                )
+                return
+            }
+            ReminderKind.KahfThursday -> {
+                notifySunnah(
+                    context, manager, SunnahReading.KahfFriday, app.mushaf.ayahPage(18, 1),
+                    REQUEST_KAHF, KAHF_NOTIFICATION_ID,
+                    R.string.kahf_reminder_notification_title, R.string.kahf_reminder_notification_text,
+                )
+                return
+            }
+            ReminderKind.Daily -> Unit
         }
         val kind = when (settings.reminderUnit) {
             ReminderUnit.Juz -> MarkerKind.Juz
@@ -172,13 +194,56 @@ object Reminder {
         manager.notify(DAILY_NOTIFICATION_ID, notification)
     }
 
+    /** Notifikasi bacaan Sunnah: ketukan membuka bacaannya dari awal di pembaca. */
+    @SuppressLint("NotificationPermission")
+    private fun notifySunnah(
+        context: Context,
+        manager: NotificationManager,
+        reading: SunnahReading,
+        page: Int,
+        requestCode: Int,
+        notificationId: Int,
+        title: Int,
+        text: Int,
+    ) {
+        val open = PendingIntent.getActivity(
+            context,
+            requestCode,
+            Intent(context, MainActivity::class.java)
+                .putExtra(EXTRA_SUNNAH_READING, reading.name)
+                .putExtra("page", page)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
+        manager.notify(
+            notificationId,
+            NotificationCompat.Builder(context, CHANNEL)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle(context.getString(title))
+                .setContentText(context.getString(text))
+                .setContentIntent(open)
+                .setAutoCancel(true)
+                .build(),
+        )
+    }
+
     private const val REQUEST_DAILY = 0
     private const val REQUEST_BEDTIME = 1
+    private const val REQUEST_KAHF = 2
     private const val DAILY_NOTIFICATION_ID = 1
     private const val BEDTIME_NOTIFICATION_ID = 2
-    private const val BEDTIME_MINUTES = 21 * 60
+    private const val KAHF_NOTIFICATION_ID = 3
+
+    /** Bacaan Sunnah malam hari: pukul 20.30. */
+    internal const val BEDTIME_MINUTES = 20 * 60 + 30
+
+    /** Al-Kahfi: setiap Kamis pukul 18.00 (pendekatan awal malam Jumat, sama dengan [SunnahTime.Friday]). */
+    internal const val KAHF_MINUTES = 18 * 60
     const val EXTRA_SUNNAH_READING = "sunnah_reading"
 }
+
+/** Jenis pengingat; tiap jenis punya sakelar, alarm, dan notifikasinya sendiri. */
+internal enum class ReminderKind { Daily, Bedtime, KahfThursday }
 
 class ReminderReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -187,7 +252,8 @@ class ReminderReceiver : BroadcastReceiver() {
             try {
                 when (intent.action) {
                     ACTION_REMIND -> Reminder.notify(context)
-                    ACTION_BEDTIME -> Reminder.notify(context, bedtimeSunnah = true)
+                    ACTION_BEDTIME -> Reminder.notify(context, ReminderKind.Bedtime)
+                    ACTION_KAHF -> Reminder.notify(context, ReminderKind.KahfThursday)
                 }
                 // Selain itu: boot, pembaruan aplikasi, atau jam/zona waktu berubah; cukup jadwalkan ulang.
                 // Jadwalkan kemunculan berikutnya (hanya bila pengingat menyala; schedule() membatalkan alarm bila mati).
@@ -201,5 +267,6 @@ class ReminderReceiver : BroadcastReceiver() {
     companion object {
         const val ACTION_REMIND = "io.zakkyhidayat.quran.REMIND"
         const val ACTION_BEDTIME = "io.zakkyhidayat.quran.REMIND_BEDTIME_SUNNAH"
+        const val ACTION_KAHF = "io.zakkyhidayat.quran.REMIND_KAHF_THURSDAY"
     }
 }

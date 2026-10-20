@@ -105,7 +105,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         // Pasang ulang jadwal pengingat setiap kali pengaturannya berubah (termasuk saat aplikasi dibuka).
         viewModelScope.launch {
             settingsRepository.settings
-                .map { listOf(it.reminderEnabled, it.reminderMinutes, it.reminderUnit, it.bedtimeSunnahReminderEnabled) }
+                .map { listOf(it.reminderEnabled, it.reminderMinutes, it.reminderUnit, it.bedtimeSunnahReminderEnabled, it.kahfThursdayReminderEnabled) }
                 .distinctUntilChanged()
                 .collect { io.zakkyhidayat.quran.reminder.Reminder.schedule(getApplication(), settingsRepository.settings.first()) }
         }
@@ -159,13 +159,17 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             val stored = settingsRepository.settings.first()
             val ranges = sunnahRanges(reading)
             if (ranges.isEmpty()) return@launch
-            val step = if (resume) stored.sunnahReadingStep.coerceIn(0, ranges.lastIndex) else 0
-            if (!resume || stored.sunnahReadingId != reading.name) {
+            // Progres hanya disimpan untuk rangkaian yang punya petunjuk lanjut; bacaan lain menghapus progres lama.
+            val track = reading.tracksProgress
+            val step = if (resume && track) stored.sunnahReadingStep.coerceIn(0, ranges.lastIndex) else 0
+            if (!track) {
+                settingsRepository.clearSunnahReading()
+            } else if (!resume || stored.sunnahReadingId != reading.name) {
                 settingsRepository.setSunnahReading(reading.name, step)
             }
             val range = ranges[step]
             val last = stored.lastSurah to stored.lastAyah
-            val resumePosition = resume && stored.sunnahReadingId == reading.name &&
+            val resumePosition = resume && track && stored.sunnahReadingId == reading.name &&
                 range.contains(last.first, last.second)
             val surah = if (resumePosition) last.first else range.surah
             val ayah = if (resumePosition) last.second else range.from

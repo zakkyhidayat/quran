@@ -209,9 +209,13 @@
     <string name="reminder">পড়ার অনুস্মারক</string>
     <string name="reminder_daily">দৈনিক অনুস্মারক</string>
     <string name="reminder_bedtime_sunnah">ঘুমানোর আগে সুন্নাহ</string>
-    <string name="reminder_bedtime_sunnah_sub">রাত ৯টায় আস-সাজদাহ, তারপর আল-মুলক</string>
+    <string name="reminder_bedtime_sunnah_sub">আস-সাজদাহ, তারপর আল-মুলক · %1$s</string>
     <string name="sunnah_reminder_notification_title">রাতের সুন্নাহ পাঠ</string>
     <string name="sunnah_reminder_notification_text">আস-সাজদাহ, তারপর আল-মুলক পড়ুন।</string>
+    <string name="reminder_kahf_friday">জুমার রাতে সূরা কাহফ</string>
+    <string name="reminder_kahf_friday_sub">প্রতি বৃহস্পতিবার · %1$s</string>
+    <string name="kahf_reminder_notification_title">জুমার রাতে সূরা কাহফ</string>
+    <string name="kahf_reminder_notification_text">সূরা কাহফ পড়ার সময় হয়েছে।</string>
     <string name="reminder_off_sub">প্রতিদিন আপনি যে অংশ পড়ছেন তার বিজ্ঞপ্তি</string>
     <string name="reminder_on_sub">প্রতিদিন %1$s-এ</string>
     <string name="reminder_time">অনুস্মারকের সময়</string>

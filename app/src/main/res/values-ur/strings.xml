@@ -209,9 +209,13 @@
     <string name="reminder">پڑھنے کی یاد دہانی</string>
     <string name="reminder_daily">روزانہ یاد دہانی</string>
     <string name="reminder_bedtime_sunnah">سونے سے پہلے سنت</string>
-    <string name="reminder_bedtime_sunnah_sub">رات 9 بجے سورۃ السجدہ، پھر سورۃ الملک</string>
+    <string name="reminder_bedtime_sunnah_sub">سورۃ السجدہ، پھر سورۃ الملک · %1$s</string>
     <string name="sunnah_reminder_notification_title">رات کی سنت کی تلاوت</string>
     <string name="sunnah_reminder_notification_text">سورۃ السجدہ، پھر سورۃ الملک پڑھیں۔</string>
+    <string name="reminder_kahf_friday">جمعہ کی رات سورۃ الکہف</string>
+    <string name="reminder_kahf_friday_sub">ہر جمعرات · %1$s</string>
+    <string name="kahf_reminder_notification_title">جمعہ کی رات سورۃ الکہف</string>
+    <string name="kahf_reminder_notification_text">سورۃ الکہف پڑھنے کا وقت ہے۔</string>
     <string name="reminder_off_sub">ہر روز اس حصے کی اطلاع جو آپ پڑھ رہے ہیں</string>
     <string name="reminder_on_sub">روزانہ %1$s بجے</string>
     <string name="reminder_time">یاد دہانی کا وقت</string>

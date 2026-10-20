@@ -48,6 +48,12 @@ class CollectionsTest {
     }
 
     @Test
+    fun `hanya As-Sajdah ke Al-Mulk yang melacak progres bacaan sunnah`() {
+        assertEquals(listOf(SunnahReading.MulkSajdah), SunnahReading.entries.filter { it.tracksProgress })
+        assertEquals(listOf(AyahRange(32, 1, 0), AyahRange(67, 1, 0)), AyahRange.parseList(SunnahReading.MulkSajdah.refs))
+    }
+
+    @Test
     fun `waktu bacaan sunnah`() {
         val thursdayEvening = LocalDateTime.of(2026, 10, 8, 19, 0)
         val fridayNoon = LocalDateTime.of(2026, 10, 9, 12, 0)

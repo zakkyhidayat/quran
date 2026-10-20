@@ -366,8 +366,9 @@ private const val HEADER_FRAME_LEFT_EM = 41f / HEADER_UPEM
 private const val HEADER_FRAME_HEIGHT_EM = 1026f / HEADER_UPEM
 
 // Bingkai diskalakan vertikal supaya ada jarak dengan baris ayat di atas dan basmalah di bawahnya.
-// Lebar bingkai 94% lebar halaman; baris bingkai 112% tinggi bingkai (jarak ~6% di atas dan bawah). Proporsi bingkai tetap asli.
-private const val HEADER_WIDTH_RATIO = 0.94f
+// Lebar bingkai 97% lebar halaman (margin kiri dan kanan masing-masing 1,5%); baris bingkai 112% tinggi bingkai (jarak ~6% di
+// atas dan bawah). Proporsi bingkai tetap asli.
+private const val HEADER_WIDTH_RATIO = 0.97f
 private const val HEADER_LINE_RATIO = 1.12f
 
 internal fun headerFontPx(widthPx: Int): Float = widthPx * HEADER_WIDTH_RATIO / HEADER_FRAME_EM
