@@ -296,8 +296,8 @@ object Reminder {
     /** Bacaan Sunnah malam hari: pukul 20.30. */
     internal const val BEDTIME_MINUTES = 20 * 60 + 30
 
-    /** "Ayat hari ini" (pagi, siang, malam): 07.00, 13.00, dan 20.00; kartunya di beranda sudah terbuka sejak 04.00, 12.00, dan 20.00. */
-    internal val VOTD_MINUTES = listOf(7 * 60, 13 * 60, 20 * 60)
+    /** "Ayat hari ini" (pagi, siang, malam): 06.00, 13.00, dan 20.00; kartunya di beranda sudah terbuka sejak 04.00, 12.00, dan 20.00. */
+    internal val VOTD_MINUTES = listOf(6 * 60, 13 * 60, 20 * 60)
 
     /** Al-Kahfi: setiap Kamis pukul 18.00 (pendekatan awal malam Jumat, sama dengan [SunnahTime.Friday]). */
     internal const val KAHF_MINUTES = 18 * 60

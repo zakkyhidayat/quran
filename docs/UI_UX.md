@@ -82,7 +82,7 @@ Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pu
   Kartu yang belum waktunya tidak tampil (penunjuk "n/3" juga disembunyikan sampai ada lebih dari satu kartu); yang sudah
   lewat tetap bisa digeser ke belakang. Hari potongan dimulai pukul 04.00, jadi dini hari masih memakai potongan malam
   sebelumnya. Notifikasinya satu sakelar di Pengaturan > Pengingat (bawaan mati, khusus perangkat ini): potongan yang sama
-  dengan kartu, pukul 07.00 (pagi), 13.00 (siang), dan 20.00 (malam); isinya terjemahan aktif (Arab bila belum ada) dan
+  dengan kartu, pukul 06.00 (pagi), 13.00 (siang), dan 20.00 (malam); isinya terjemahan aktif (Arab bila belum ada) dan
   ketukan membuka halaman ayatnya.
 - Bingkai nama surah memakai 97% lebar halaman (margin kiri dan kanan masing-masing 1,5%).
 - Histori bacaan: satu baris per surah, 5 tampil, langsung setelah Ayat Hari Ini.
