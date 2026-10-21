@@ -141,7 +141,6 @@
     <string name="translations_catalog_error">فهرست ترجمه‌های قابل بارگیری بارگذاری نشد. اتصال را بررسی کنید و دوباره تلاش کنید.</string>
     <string name="retry">تلاش دوباره</string>
     <string name="translation_download_failed">بارگیری %1$s انجام نشد. اتصال را بررسی کنید و دوباره تلاش کنید.</string>
-    <string name="translation_downloading_cd">در حال بارگیری %1$s</string>
     <string name="translation_size_mb">%1$s مگابایت</string>
     <string name="translation_download_cd">بارگیری %1$s</string>
     <string name="delete_downloaded_translation_cd">حذف فایل بارگیری‌شدهٔ %1$s</string>
@@ -289,7 +288,6 @@
     <string name="sunnah_kahf_ten">ده آیه نخست کهف</string>
     <string name="sunnah_kahf_ten_note">«هر کس ده آیه از آغاز سوره کهف را حفظ کند، از دجال محفوظ می‌ماند.» (مسلم)</string>
     <string name="translation_update_available">به‌روزرسانی موجود است</string>
-    <string name="translation_updating_cd">در حال به‌روزرسانی ترجمهٔ %1$s</string>
     <string name="update_translation_cd">به‌روزرسانی ترجمهٔ %1$s</string>
     <string name="translation_update_failed">به‌روزرسانی %1$s ناموفق بود. اتصال را بررسی و دوباره تلاش کنید.</string>
     <string name="translation_empty_ayah">(برای این آیه ترجمه‌ای نیست)</string>

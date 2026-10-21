@@ -94,8 +94,9 @@ Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pu
   "Halaman utama"; ketuk di luar dialog tetap di pembaca. Dari tempat lain, Back tetap satu langkah mundur seperti biasa.
 - Kartu Ayat Hari Ini memasangkan latar `primaryContainer` dengan `onPrimaryContainer` di tema terang/gelap; daftar
   Sunnah, histori, dan koleksi memakai wadah ikon tonal dengan pasangan warna yang sesuai.
-- Kategori Pengaturan memakai kartu terpisah dengan jarak antarkelompok agar tidak tampak berjejal. Paket terjemahan
-  yang dapat diunduh menampilkan ikon unduh dalam wadah tonal.
+- Kategori Pengaturan memakai kartu terpisah dengan jarak antarkelompok agar tidak tampak berjejal. Unduhan paket terjemahan
+  memakai `DownloadButton` satu-ikon ala Google Translate: ikon unduh, lalu lingkaran progres dengan kotak henti yang
+  bisa diketuk untuk membatalkan (berlaku juga untuk pembaruan paket).
 - Tautan Notifications ada di Pengaturan > Pengingat dan membuka setelan notifikasi Android; status izin tampil ringkas
   di sisi kanan baris. Sakelar pengingat tidak meminta izin melalui dialog aplikasi. Saat ada progres Sunnah, tombol
   lanjut Sunnah tampil di atas tombol lanjut baca harian; lebarnya mengikuti konten dan tombol tutup berada di dalam

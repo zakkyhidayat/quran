@@ -141,7 +141,6 @@
     <string name="translations_catalog_error">Senarai terjemahan yang boleh dimuat turun tidak dapat dimuatkan. Semak sambungan dan cuba lagi.</string>
     <string name="retry">Cuba lagi</string>
     <string name="translation_download_failed">%1$s tidak dapat dimuat turun. Semak sambungan dan cuba lagi.</string>
-    <string name="translation_downloading_cd">Memuat turun %1$s</string>
     <string name="translation_size_mb">%1$s MB</string>
     <string name="translation_download_cd">Muat turun %1$s</string>
     <string name="delete_downloaded_translation_cd">Padam fail muat turun %1$s</string>
@@ -289,7 +288,6 @@
     <string name="sunnah_kahf_ten">Sepuluh ayat pertama Al-Kahfi</string>
     <string name="sunnah_kahf_ten_note">“Sesiapa yang menghafal sepuluh ayat pertama surah Al-Kahfi, dia dilindungi daripada Dajjal.” (HR. Muslim)</string>
     <string name="translation_update_available">Kemas kini tersedia</string>
-    <string name="translation_updating_cd">Mengemas kini terjemahan %1$s</string>
     <string name="update_translation_cd">Kemas kini terjemahan %1$s</string>
     <string name="translation_update_failed">Gagal mengemas kini %1$s. Semak sambungan dan cuba lagi.</string>
     <string name="translation_empty_ayah">(tiada terjemahan untuk ayat ini)</string>

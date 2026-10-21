@@ -10,12 +10,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
@@ -23,7 +21,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,7 +42,6 @@ import io.zakkyhidayat.quran.AppViewModel
 import io.zakkyhidayat.quran.R
 import io.zakkyhidayat.quran.data.CatalogPack
 import io.zakkyhidayat.quran.data.TranslationInfo
-import io.zakkyhidayat.quran.ui.AppIcons
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
@@ -75,6 +71,7 @@ internal fun TranslationCatalogList(
     var attempt by remember { mutableIntStateOf(0) }
     var downloading by remember { mutableStateOf<String?>(null) }
     var progress by remember { mutableFloatStateOf(0f) }
+    var downloadJob by remember { mutableStateOf<kotlinx.coroutines.Job?>(null) }
     var failedLabel by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(attempt) {
@@ -184,62 +181,48 @@ internal fun TranslationCatalogList(
                             items(packs, key = { it.id }) { pack ->
                                 val label = translationLabel(pack.info)
                                 val busy = downloading == pack.id
+                                val start: () -> Unit = {
+                                    downloadJob = scope.launch {
+                                        downloading = pack.id
+                                        progress = 0f
+                                        failedLabel = null
+                                        try {
+                                            vm.installPack(pack) { done, total -> progress = if (total > 0) done.toFloat() / total else 0f }
+                                            onActivate(pack.id)
+                                        } catch (e: CancellationException) {
+                                            throw e
+                                        } catch (e: Exception) {
+                                            android.util.Log.w("TranslationPacks", "Gagal mengunduh ${pack.id}", e)
+                                            failedLabel = label
+                                        } finally {
+                                            downloading = null
+                                        }
+                                    }
+                                }
                                 ListItem(
                                     headlineContent = { Text(pack.name) },
                                     trailingContent = {
-                                        if (busy) {
-                                            val cd = stringResource(R.string.translation_downloading_cd, label)
-                                            CircularProgressIndicator(
-                                                progress = { progress },
-                                                modifier = Modifier.size(24.dp).semantics { contentDescription = cd },
-                                            )
-                                        } else {
-                                            val downloadCd = stringResource(R.string.translation_download_cd, label)
-                                            Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                                                if (pack.bytes > 0) {
-                                                    Text(
-                                                        stringResource(R.string.translation_size_mb, String.format(locale, "%.1f", pack.bytes / 1_000_000.0)),
-                                                        style = MaterialTheme.typography.labelMedium,
-                                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                                    )
-                                                }
-                                                Surface(
-                                                    shape = MaterialTheme.shapes.small,
-                                                    color = MaterialTheme.colorScheme.secondaryContainer,
-                                                    modifier = Modifier.size(40.dp).semantics {
-                                                        contentDescription = downloadCd
-                                                    },
-                                                ) {
-                                                    Box(contentAlignment = Alignment.Center) {
-                                                        Icon(
-                                                            AppIcons.Download,
-                                                            contentDescription = null,
-                                                            tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                                                        )
-                                                    }
-                                                }
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
+                                            if (pack.bytes > 0 && !busy) {
+                                                Text(
+                                                    stringResource(R.string.translation_size_mb, String.format(locale, "%.1f", pack.bytes / 1_000_000.0)),
+                                                    style = MaterialTheme.typography.labelMedium,
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                )
                                             }
+                                            DownloadButton(
+                                                downloading = busy,
+                                                progress = progress,
+                                                onStart = start,
+                                                onCancel = { downloadJob?.cancel() },
+                                                startDescription = stringResource(R.string.translation_download_cd, label),
+                                                cancelDescription = stringResource(R.string.cancel),
+                                                enabled = downloading == null,
+                                            )
                                         }
                                     },
                                     colors = dialogItemColors(),
-                                    modifier = Modifier.clickable(enabled = downloading == null) {
-                                        scope.launch {
-                                            downloading = pack.id
-                                            progress = 0f
-                                            failedLabel = null
-                                            try {
-                                                vm.installPack(pack) { done, total -> progress = if (total > 0) done.toFloat() / total else 0f }
-                                                onActivate(pack.id)
-                                            } catch (e: CancellationException) {
-                                                throw e
-                                            } catch (e: Exception) {
-                                                android.util.Log.w("TranslationPacks", "Gagal mengunduh ${pack.id}", e)
-                                                failedLabel = label
-                                            } finally {
-                                                downloading = null
-                                            }
-                                        }
-                                    },
+                                    modifier = Modifier.clickable(enabled = downloading == null, onClick = start),
                                 )
                             }
                         }

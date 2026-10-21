@@ -141,7 +141,6 @@
     <string name="translations_catalog_error">İndirilebilir meal listesi yüklenemedi. Bağlantınızı kontrol edip tekrar deneyin.</string>
     <string name="retry">Tekrar dene</string>
     <string name="translation_download_failed">%1$s indirilemedi. Bağlantınızı kontrol edip tekrar deneyin.</string>
-    <string name="translation_downloading_cd">%1$s indiriliyor</string>
     <string name="translation_size_mb">%1$s MB</string>
     <string name="translation_download_cd">%1$s indir</string>
     <string name="delete_downloaded_translation_cd">%1$s için indirilen dosyayı sil</string>
@@ -289,7 +288,6 @@
     <string name="sunnah_kahf_ten">Kehf suresinin ilk on ayeti</string>
     <string name="sunnah_kahf_ten_note">“Kim Kehf suresinin başından on ayet ezberlerse Deccal\'den korunur.” (Müslim)</string>
     <string name="translation_update_available">Güncelleme var</string>
-    <string name="translation_updating_cd">%1$s meali güncelleniyor</string>
     <string name="update_translation_cd">%1$s mealini güncelle</string>
     <string name="translation_update_failed">%1$s güncellenemedi. Bağlantınızı kontrol edip tekrar deneyin.</string>
     <string name="translation_empty_ayah">(bu ayet için meal yok)</string>

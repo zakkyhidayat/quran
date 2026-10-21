@@ -141,7 +141,6 @@
     <string name="translations_catalog_error">Не удалось загрузить список доступных переводов. Проверьте подключение и повторите попытку.</string>
     <string name="retry">Повторить</string>
     <string name="translation_download_failed">Не удалось скачать %1$s. Проверьте подключение и повторите попытку.</string>
-    <string name="translation_downloading_cd">Скачивается %1$s</string>
     <string name="translation_size_mb">%1$s МБ</string>
     <string name="translation_download_cd">Скачать %1$s</string>
     <string name="delete_downloaded_translation_cd">Удалить скачанный файл %1$s</string>
@@ -289,7 +288,6 @@
     <string name="sunnah_kahf_ten">Первые десять аятов «Аль-Кахф»</string>
     <string name="sunnah_kahf_ten_note">«Кто выучит наизусть десять аятов из начала суры „Аль-Кахф“, будет защищён от Даджаля». (Муслим)</string>
     <string name="translation_update_available">Доступно обновление</string>
-    <string name="translation_updating_cd">Обновление перевода %1$s</string>
     <string name="update_translation_cd">Обновить перевод %1$s</string>
     <string name="translation_update_failed">Не удалось обновить %1$s. Проверьте подключение и повторите.</string>
     <string name="translation_empty_ayah">(для этого аята нет перевода)</string>

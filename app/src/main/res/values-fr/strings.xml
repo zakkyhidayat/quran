@@ -141,7 +141,6 @@
     <string name="translations_catalog_error">Impossible de charger la liste des traductions téléchargeables. Vérifiez votre connexion et réessayez.</string>
     <string name="retry">Réessayer</string>
     <string name="translation_download_failed">Impossible de télécharger %1$s. Vérifiez votre connexion et réessayez.</string>
-    <string name="translation_downloading_cd">Téléchargement de %1$s</string>
     <string name="translation_size_mb">%1$s Mo</string>
     <string name="translation_download_cd">Télécharger %1$s</string>
     <string name="delete_downloaded_translation_cd">Supprimer le fichier téléchargé de %1$s</string>
@@ -289,7 +288,6 @@
     <string name="sunnah_kahf_ten">Les dix premiers versets d’Al-Kahf</string>
     <string name="sunnah_kahf_ten_note">« Celui qui mémorise dix versets du début de la sourate Al-Kahf sera protégé du Dajjal. » (Muslim)</string>
     <string name="translation_update_available">Mise à jour disponible</string>
-    <string name="translation_updating_cd">Mise à jour de la traduction %1$s</string>
     <string name="update_translation_cd">Mettre à jour la traduction %1$s</string>
     <string name="translation_update_failed">Impossible de mettre à jour %1$s. Vérifiez votre connexion et réessayez.</string>
     <string name="translation_empty_ayah">(pas de traduction pour ce verset)</string>

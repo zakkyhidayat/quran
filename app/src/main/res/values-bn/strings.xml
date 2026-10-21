@@ -141,7 +141,6 @@
     <string name="translations_catalog_error">ডাউনলোডযোগ্য অনুবাদের তালিকা লোড করা যায়নি। সংযোগ দেখে আবার চেষ্টা করুন।</string>
     <string name="retry">আবার চেষ্টা করুন</string>
     <string name="translation_download_failed">%1$s ডাউনলোড করা যায়নি। সংযোগ দেখে আবার চেষ্টা করুন।</string>
-    <string name="translation_downloading_cd">%1$s ডাউনলোড হচ্ছে</string>
     <string name="translation_size_mb">%1$s MB</string>
     <string name="translation_download_cd">%1$s ডাউনলোড করুন</string>
     <string name="delete_downloaded_translation_cd">%1$s-এর ডাউনলোড করা ফাইল মুছুন</string>
@@ -289,7 +288,6 @@
     <string name="sunnah_kahf_ten">সূরা কাহফের প্রথম দশ আয়াত</string>
     <string name="sunnah_kahf_ten_note">“যে সূরা কাহফের প্রথম দশ আয়াত মুখস্থ করে, সে দাজ্জাল থেকে রক্ষা পায়।” (মুসলিম)</string>
     <string name="translation_update_available">আপডেট পাওয়া যাচ্ছে</string>
-    <string name="translation_updating_cd">অনুবাদ %1$s আপডেট হচ্ছে</string>
     <string name="update_translation_cd">অনুবাদ %1$s আপডেট করুন</string>
     <string name="translation_update_failed">%1$s আপডেট করা যায়নি। সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।</string>
     <string name="translation_empty_ayah">(এই আয়াতের কোনো অনুবাদ নেই)</string>
