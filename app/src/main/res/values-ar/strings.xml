@@ -92,6 +92,8 @@
     <string name="translit_sub">عرض النطق اللاتيني في لوحة الآية</string>
     <string name="tajweed_title">ألوان التجويد</string>
     <string name="tajweed_sub">تلوين الحروف حسب أحكام التجويد</string>
+    <string name="keep_screen_on_title">إبقاء الشاشة مضاءة</string>
+    <string name="keep_screen_on_sub">منع انطفاء الشاشة أثناء القراءة</string>
     <string name="tajweed_guide_open">فتح دليل التجويد</string>
     <string name="tajweed_guide_title">دليل مختصر لقراءة التجويد</string>
     <string name="tajweed_guide_intro">تُبرز الألوان مواضع تستحق الانتباه. ويعتمد الحكم وطريقة تطبيقه على سياق التلاوة.</string>

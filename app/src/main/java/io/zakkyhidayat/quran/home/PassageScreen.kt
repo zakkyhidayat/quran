@@ -110,6 +110,7 @@ fun CollectionScreen(vm: AppViewModel, kind: CollectionKind, onBack: () -> Unit,
 fun PassageScreen(vm: AppViewModel, target: HomeTarget.Passage, onBack: () -> Unit, onOpenReader: () -> Unit) {
     val surahs by vm.surahs.collectAsStateWithLifecycle()
     val settings by vm.settingsRepository.settings.collectAsStateWithLifecycle(AppSettings())
+    io.zakkyhidayat.quran.ui.KeepScreenOn(settings.keepScreenOn)
     val scope = rememberCoroutineScope()
     // Rentang "seluruh surah" diisi jumlah ayatnya setelah daftar surah termuat.
     val ranges = remember(target.refs, surahs) {

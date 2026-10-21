@@ -92,6 +92,8 @@
     <string name="translit_sub">آیت شیٹ میں رومن تلفظ دکھائیں</string>
     <string name="tajweed_title">تجوید کے رنگ</string>
     <string name="tajweed_sub">حروف کو تجوید کے قواعد کے مطابق رنگین دکھائیں</string>
+    <string name="keep_screen_on_title">اسکرین روشن رکھیں</string>
+    <string name="keep_screen_on_sub">پڑھتے وقت اسکرین بند ہونے سے روکیں</string>
     <string name="tajweed_guide_open">تجوید کی رہنمائی کھولیں</string>
     <string name="tajweed_guide_title">تجوید کے ساتھ پڑھنے کی مختصر رہنمائی</string>
     <string name="tajweed_guide_intro">رنگ ان مقامات کو نمایاں کرتے ہیں جن پر توجہ دینی چاہیے۔ حکم اور اس کا اطلاق تلاوت کے سیاق پر منحصر ہے۔</string>

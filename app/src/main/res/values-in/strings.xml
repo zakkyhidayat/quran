@@ -92,6 +92,8 @@
     <string name="translit_sub">Tampilkan cara baca Latin di sheet ayat</string>
     <string name="tajweed_title">Warna tajwid</string>
     <string name="tajweed_sub">Tampilkan huruf berwarna sesuai hukum tajwid</string>
+    <string name="keep_screen_on_title">Layar tetap menyala</string>
+    <string name="keep_screen_on_sub">Cegah layar mati saat membaca</string>
     <string name="tajweed_guide_open">Buka panduan tajwid</string>
     <string name="tajweed_guide_title">Panduan ringkas membaca tajwid</string>
     <string name="tajweed_guide_intro">Warna menandai bagian bacaan yang perlu diperhatikan. Hukum dan penerapannya bergantung pada konteks bacaan.</string>

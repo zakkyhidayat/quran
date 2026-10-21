@@ -33,6 +33,7 @@ data class AppSettings(
     val amoled: Boolean = false,
     val contrast: ContrastLevel = ContrastLevel.Standard,
     val tajweed: Boolean = true,
+    val keepScreenOn: Boolean = true,
     val showTransliteration: Boolean = true,
     val translationIds: List<String> = listOf("id-kemenag"),
     val readingMode: ReadingMode = ReadingMode.Mushaf,
@@ -72,6 +73,7 @@ class SettingsRepository(private val context: Context) {
     private val amoledKey = booleanPreferencesKey("amoled")
     private val contrastKey = stringPreferencesKey("contrast")
     private val tajweedKey = booleanPreferencesKey("tajweed")
+    private val keepScreenOnKey = booleanPreferencesKey("keep_screen_on")
     private val transliterationKey = booleanPreferencesKey("transliteration")
     private val translationsKey = stringPreferencesKey("translations")
     private val readingModeKey = stringPreferencesKey("reading_mode")
@@ -112,6 +114,7 @@ class SettingsRepository(private val context: Context) {
             amoled = prefs[amoledKey] ?: false,
             contrast = prefs[contrastKey].toEnum(ContrastLevel.Standard),
             tajweed = prefs[tajweedKey] ?: true,
+            keepScreenOn = prefs[keepScreenOnKey] ?: true,
             showTransliteration = prefs[transliterationKey] ?: true,
             translationIds = prefs[translationsKey]?.split(',')?.filter { it.isNotBlank() } ?: defaultTranslations(),
             readingMode = prefs[readingModeKey].toEnum(ReadingMode.Mushaf),
@@ -155,6 +158,7 @@ class SettingsRepository(private val context: Context) {
     suspend fun setContrast(value: ContrastLevel) = context.dataStore.edit { it[contrastKey] = value.name }
 
     suspend fun setTajweed(value: Boolean) = context.dataStore.edit { it[tajweedKey] = value }
+    suspend fun setKeepScreenOn(value: Boolean) = context.dataStore.edit { it[keepScreenOnKey] = value }
 
     suspend fun setShowTransliteration(value: Boolean) = context.dataStore.edit { it[transliterationKey] = value }
 

@@ -92,6 +92,8 @@
     <string name="translit_sub">Tunjukkan sebutan Rumi dalam helaian ayat</string>
     <string name="tajweed_title">Warna tajwid</string>
     <string name="tajweed_sub">Warnakan huruf mengikut hukum tajwid</string>
+    <string name="keep_screen_on_title">Skrin sentiasa menyala</string>
+    <string name="keep_screen_on_sub">Elakkan skrin padam semasa membaca</string>
     <string name="tajweed_guide_open">Buka panduan tajwid</string>
     <string name="tajweed_guide_title">Panduan ringkas bacaan tajwid</string>
     <string name="tajweed_guide_intro">Warna menandakan bahagian bacaan yang perlu diberi perhatian. Hukum dan penerapannya bergantung pada konteks bacaan.</string>

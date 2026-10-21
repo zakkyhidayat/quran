@@ -92,6 +92,8 @@
     <string name="translit_sub">Показывать латинское произношение в карточке аята</string>
     <string name="tajweed_title">Цвета таджвида</string>
     <string name="tajweed_sub">Раскрашивать буквы по правилам таджвида</string>
+    <string name="keep_screen_on_title">Не выключать экран</string>
+    <string name="keep_screen_on_sub">Не давать экрану гаснуть во время чтения</string>
     <string name="tajweed_guide_open">Открыть руководство по таджвиду</string>
     <string name="tajweed_guide_title">Краткое руководство по чтению с таджвидом</string>
     <string name="tajweed_guide_intro">Цвета выделяют места, требующие внимания. Правило и его применение зависят от контекста чтения.</string>

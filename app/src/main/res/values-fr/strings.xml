@@ -92,6 +92,8 @@
     <string name="translit_sub">Afficher la prononciation latine dans la fiche du verset</string>
     <string name="tajweed_title">Couleurs du tajwid</string>
     <string name="tajweed_sub">Colorer les lettres selon les règles du tajwid</string>
+    <string name="keep_screen_on_title">Garder l’écran allumé</string>
+    <string name="keep_screen_on_sub">Empêcher la mise en veille de l’écran pendant la lecture</string>
     <string name="tajweed_guide_open">Ouvrir le guide du tajwid</string>
     <string name="tajweed_guide_title">Guide rapide de lecture du tajwid</string>
     <string name="tajweed_guide_intro">Les couleurs signalent les passages à observer. La règle et son application dépendent du contexte de récitation.</string>

@@ -93,6 +93,8 @@
     <string name="translit_sub">Show Latin pronunciation in the ayah sheet</string>
     <string name="tajweed_title">Tajweed colours</string>
     <string name="tajweed_sub">Show letters coloured by tajweed rules</string>
+    <string name="keep_screen_on_title">Keep screen on</string>
+    <string name="keep_screen_on_sub">Prevent the screen from turning off while reading</string>
     <string name="tajweed_guide_open">Open tajweed guide</string>
     <string name="tajweed_guide_title">Tajweed reading guide</string>
     <string name="tajweed_guide_intro">Colours highlight parts of the text to notice. The rule and its application depend on the recitation context.</string>

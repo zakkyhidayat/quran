@@ -92,6 +92,8 @@
     <string name="translit_sub">আয়াত শিটে লাতিন উচ্চারণ দেখান</string>
     <string name="tajweed_title">তাজবীদের রং</string>
     <string name="tajweed_sub">তাজবীদের নিয়ম অনুযায়ী অক্ষর রঙিন দেখান</string>
+    <string name="keep_screen_on_title">স্ক্রিন চালু রাখুন</string>
+    <string name="keep_screen_on_sub">পড়ার সময় স্ক্রিন বন্ধ হওয়া রোধ করুন</string>
     <string name="tajweed_guide_open">তাজবীদ নির্দেশিকা খুলুন</string>
     <string name="tajweed_guide_title">তাজবীদ পড়ার সংক্ষিপ্ত নির্দেশিকা</string>
     <string name="tajweed_guide_intro">রং মনোযোগ দেওয়ার অংশগুলো চিহ্নিত করে। নিয়ম ও প্রয়োগ তিলাওয়াতের প্রসঙ্গের ওপর নির্ভর করে।</string>

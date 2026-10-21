@@ -97,6 +97,8 @@ Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pu
 - Kategori Pengaturan memakai kartu terpisah dengan jarak antarkelompok agar tidak tampak berjejal. Unduhan paket terjemahan
   memakai `DownloadButton` satu-ikon ala Google Translate: ikon unduh, lalu lingkaran progres dengan kotak henti yang
   bisa diketuk untuk membatalkan (berlaku juga untuk pembaruan paket).
+- Layar tetap menyala selama membaca (pembaca mushaf, mode daftar ayat/terjemahan, dan halaman kumpulan doa); bisa
+  dimatikan di Pengaturan > Tampilan (`keepScreenOn`, bawaan aktif, ikut dalam cadangan).
 - Tautan Notifications ada di Pengaturan > Pengingat dan membuka setelan notifikasi Android; status izin tampil ringkas
   di sisi kanan baris. Sakelar pengingat tidak meminta izin melalui dialog aplikasi. Saat ada progres Sunnah, tombol
   lanjut Sunnah tampil di atas tombol lanjut baca harian; lebarnya mengikuti konten dan tombol tutup berada di dalam
