@@ -264,6 +264,7 @@
     <string name="home_votd_morning">Утро</string>
     <string name="home_votd_afternoon">День</string>
     <string name="home_votd_night">Ночь</string>
+    <string name="reminder_votd_sub">Утро %1$s · День %2$s · Ночь %3$s</string>
     <string name="home_sunnah">Чтения из Сунны</string>
     <string name="home_sunnah_now">Рекомендуется сейчас</string>
     <string name="home_history">История чтения</string>

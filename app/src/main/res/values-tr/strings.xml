@@ -264,6 +264,7 @@
     <string name="home_votd_morning">Sabah</string>
     <string name="home_votd_afternoon">Öğleden sonra</string>
     <string name="home_votd_night">Gece</string>
+    <string name="reminder_votd_sub">Sabah %1$s · Öğleden sonra %2$s · Gece %3$s</string>
     <string name="home_sunnah">Sünnet okumalar</string>
     <string name="home_sunnah_now">Şimdi tavsiye edilir</string>
     <string name="home_history">Okuma geçmişi</string>

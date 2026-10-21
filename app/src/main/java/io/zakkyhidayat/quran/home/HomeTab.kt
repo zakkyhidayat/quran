@@ -29,10 +29,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.background
@@ -67,9 +72,8 @@ import io.zakkyhidayat.quran.reader.arabicFontFamily
 import io.zakkyhidayat.quran.settings.AppSettings
 import io.zakkyhidayat.quran.ui.AppIcons
 import io.zakkyhidayat.quran.ui.segmentedItemColors
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.LocalTime
+import kotlinx.coroutines.delay
 
 /** Tujuan yang dibuka dari beranda: kumpulan ayat (judul + rujukan) atau daftar koleksi. */
 sealed interface HomeTarget {
@@ -216,24 +220,37 @@ private fun SectionHeader(text: String, modifier: Modifier = Modifier) {
     )
 }
 
-/** Tiga potongan harian kurasi yang dapat digeser; tiap kartu mewakili satu jendela waktu lokal delapan jam. */
+/**
+ * Tiga potongan harian kurasi yang dapat digeser, dibuka bertahap: pagi sejak 04.00, siang sejak 12.00, malam sejak 20.00.
+ * Kartu yang belum waktunya tidak tampil; yang sudah lewat tetap bisa digeser ke belakang.
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun VerseOfTheDay(vm: AppViewModel, onOpenReader: () -> Unit, onGestureChanged: (Boolean) -> Unit) {
     val settings by vm.settingsRepository.settings.collectAsStateWithLifecycle(AppSettings())
     val surahs by vm.surahs.collectAsStateWithLifecycle()
     val translations by vm.translations.collectAsStateWithLifecycle()
-    val day = remember { LocalDate.now() }
+    // Jam diperbarui tiap menit; yang dibaca hanya hasil turunannya, jadi beranda baru disusun ulang saat potongan berganti.
+    val clock = remember { mutableStateOf(LocalDateTime.now()) }
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(60_000)
+            clock.value = LocalDateTime.now()
+        }
+    }
+    val unlocked by remember { derivedStateOf { Collections.unlockedSlots(clock.value) } }
+    val day by remember { derivedStateOf { Collections.slotDay(clock.value) } }
     val pool by produceState<List<AyahRange>>(emptyList()) {
         value = vm.collections.dailyPool()
     }
     val ranges = remember(pool, day) { Collections.picksForDay(pool, day) }
-    val initialPage = when (LocalTime.now().hour) {
-        in 4..11 -> 0
-        in 12..19 -> 1
-        else -> 2
+    val pagerState = rememberPagerState(initialPage = unlocked - 1) { unlocked }
+    // Saat potongan baru terbuka dan aplikasi sedang dibuka, pager pindah ke potongan itu.
+    var seenUnlocked by remember { mutableIntStateOf(unlocked) }
+    LaunchedEffect(unlocked) {
+        if (unlocked > seenUnlocked) pagerState.animateScrollToPage(unlocked - 1)
+        seenUnlocked = unlocked
     }
-    val pagerState = rememberPagerState(initialPage = initialPage) { DAILY_SLOT_LABELS.size }
     HorizontalPager(
         state = pagerState,
         modifier = Modifier.fillMaxWidth().height(300.dp).padding(top = 8.dp),
@@ -247,6 +264,7 @@ private fun VerseOfTheDay(vm: AppViewModel, onOpenReader: () -> Unit, onGestureC
             translations = translations,
             slotLabel = stringResource(DAILY_SLOT_LABELS[page]),
             page = page,
+            total = unlocked,
             onOpenReader = onOpenReader,
             onGestureChanged = onGestureChanged,
         )
@@ -268,6 +286,7 @@ private fun VerseOfTheDayCard(
     translations: List<io.zakkyhidayat.quran.data.TranslationInfo>,
     slotLabel: String,
     page: Int,
+    total: Int,
     onOpenReader: () -> Unit,
     onGestureChanged: (Boolean) -> Unit,
 ) {
@@ -323,7 +342,10 @@ private fun VerseOfTheDayCard(
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
-                Text("${page + 1}/${DAILY_SLOT_LABELS.size}", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                // Nomor hanya tampil bila ada lebih dari satu potongan terbuka; kartu yang belum waktunya tidak dibocorkan.
+                if (total > 1) {
+                    Text("${page + 1}/$total", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                }
             }
             if (ayahs.isNotEmpty()) {
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {

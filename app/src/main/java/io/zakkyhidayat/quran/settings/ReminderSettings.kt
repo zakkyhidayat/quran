@@ -38,6 +38,7 @@ internal fun ReminderControls(vm: AppViewModel, settings: AppSettings) {
     val timeText = remember(settings.reminderMinutes) { reminderTimeText(context, settings.reminderMinutes) }
     val bedtimeTimeText = remember { reminderTimeText(context, io.zakkyhidayat.quran.reminder.Reminder.BEDTIME_MINUTES) }
     val kahfTimeText = remember { reminderTimeText(context, io.zakkyhidayat.quran.reminder.Reminder.KAHF_MINUTES) }
+    val votdTimeTexts = remember { io.zakkyhidayat.quran.reminder.Reminder.VOTD_MINUTES.map { reminderTimeText(context, it) } }
     Group {
         item(
             title = stringResource(R.string.reminder_daily),
@@ -59,6 +60,13 @@ internal fun ReminderControls(vm: AppViewModel, settings: AppSettings) {
             onClick = { scope.launch { repo.setKahfThursdayReminderEnabled(!settings.kahfThursdayReminderEnabled) } },
             leading = { Icon(AppIcons.MenuBook, contentDescription = null) },
             trailing = { IconSwitch(settings.kahfThursdayReminderEnabled) },
+        )
+        item(
+            title = stringResource(R.string.home_votd),
+            subtitle = stringResource(R.string.reminder_votd_sub, votdTimeTexts[0], votdTimeTexts[1], votdTimeTexts[2]),
+            onClick = { scope.launch { repo.setVotdReminderEnabled(!settings.votdReminderEnabled) } },
+            leading = { Icon(AppIcons.Favorite, contentDescription = null) },
+            trailing = { IconSwitch(settings.votdReminderEnabled) },
         )
         // Build debug saja: tampilkan pengingat sekarang untuk menguji isi dan ketukannya.
         if (settings.reminderEnabled && io.zakkyhidayat.quran.BuildConfig.DEBUG) {

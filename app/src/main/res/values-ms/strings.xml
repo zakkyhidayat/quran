@@ -264,6 +264,7 @@
     <string name="home_votd_morning">Pagi</string>
     <string name="home_votd_afternoon">Tengah hari</string>
     <string name="home_votd_night">Malam</string>
+    <string name="reminder_votd_sub">Pagi %1$s · Tengah hari %2$s · Malam %3$s</string>
     <string name="home_sunnah">Bacaan sunnah</string>
     <string name="home_sunnah_now">Dianjurkan sekarang</string>
     <string name="home_history">Sejarah bacaan</string>

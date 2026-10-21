@@ -264,6 +264,7 @@
     <string name="home_votd_morning">صبح</string>
     <string name="home_votd_afternoon">بعدازظهر</string>
     <string name="home_votd_night">شب</string>
+    <string name="reminder_votd_sub">صبح %1$s · بعدازظهر %2$s · شب %3$s</string>
     <string name="home_sunnah">قرائت‌های سنت</string>
     <string name="home_sunnah_now">اکنون توصیه می‌شود</string>
     <string name="home_history">تاریخچه مطالعه</string>

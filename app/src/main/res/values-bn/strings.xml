@@ -264,6 +264,7 @@
     <string name="home_votd_morning">সকাল</string>
     <string name="home_votd_afternoon">দুপুর</string>
     <string name="home_votd_night">রাত</string>
+    <string name="reminder_votd_sub">সকাল %1$s · দুপুর %2$s · রাত %3$s</string>
     <string name="home_sunnah">সুন্নাহ তিলাওয়াত</string>
     <string name="home_sunnah_now">এখন মুস্তাহাব</string>
     <string name="home_history">পাঠের ইতিহাস</string>

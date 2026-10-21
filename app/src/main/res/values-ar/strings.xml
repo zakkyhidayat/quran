@@ -264,6 +264,7 @@
     <string name="home_votd_morning">الصباح</string>
     <string name="home_votd_afternoon">بعد الظهر</string>
     <string name="home_votd_night">الليل</string>
+    <string name="reminder_votd_sub">الصباح %1$s · بعد الظهر %2$s · الليل %3$s</string>
     <string name="home_sunnah">قراءات من السنة</string>
     <string name="home_sunnah_now">يُستحب الآن</string>
     <string name="home_history">سجل القراءة</string>

@@ -264,6 +264,7 @@
     <string name="home_votd_morning">Matin</string>
     <string name="home_votd_afternoon">Après-midi</string>
     <string name="home_votd_night">Nuit</string>
+    <string name="reminder_votd_sub">Matin %1$s · Après-midi %2$s · Nuit %3$s</string>
     <string name="home_sunnah">Lectures de la Sunna</string>
     <string name="home_sunnah_now">Recommandé maintenant</string>
     <string name="home_history">Historique de lecture</string>
