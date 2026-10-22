@@ -92,6 +92,8 @@
     <string name="translit_sub">Ayet panelinde Latin harfli okunuşu göster</string>
     <string name="tajweed_title">Tecvid renkleri</string>
     <string name="tajweed_sub">Harfleri tecvid kurallarına göre renklendir</string>
+    <string name="keep_screen_on_title">Ekranı açık tut</string>
+    <string name="keep_screen_on_sub">Okurken ekranın kapanmasını önle</string>
     <string name="tajweed_guide_open">Tecvid rehberini aç</string>
     <string name="tajweed_guide_title">Tecvidli okuma için kısa rehber</string>
     <string name="tajweed_guide_intro">Renkler dikkat edilmesi gereken bölümleri vurgular. Kuralın uygulanışı okuyuşun bağlamına bağlıdır.</string>
@@ -141,7 +143,6 @@
     <string name="translations_catalog_error">İndirilebilir meal listesi yüklenemedi. Bağlantınızı kontrol edip tekrar deneyin.</string>
     <string name="retry">Tekrar dene</string>
     <string name="translation_download_failed">%1$s indirilemedi. Bağlantınızı kontrol edip tekrar deneyin.</string>
-    <string name="translation_downloading_cd">%1$s indiriliyor</string>
     <string name="translation_size_mb">%1$s MB</string>
     <string name="translation_download_cd">%1$s indir</string>
     <string name="delete_downloaded_translation_cd">%1$s için indirilen dosyayı sil</string>
@@ -264,6 +265,7 @@
     <string name="home_votd_morning">Sabah</string>
     <string name="home_votd_afternoon">Öğleden sonra</string>
     <string name="home_votd_night">Gece</string>
+    <string name="reminder_votd_sub">Sabah %1$s · Öğleden sonra %2$s · Gece %3$s</string>
     <string name="home_sunnah">Sünnet okumalar</string>
     <string name="home_sunnah_now">Şimdi tavsiye edilir</string>
     <string name="home_history">Okuma geçmişi</string>
@@ -288,7 +290,6 @@
     <string name="sunnah_kahf_ten">Kehf suresinin ilk on ayeti</string>
     <string name="sunnah_kahf_ten_note">“Kim Kehf suresinin başından on ayet ezberlerse Deccal\'den korunur.” (Müslim)</string>
     <string name="translation_update_available">Güncelleme var</string>
-    <string name="translation_updating_cd">%1$s meali güncelleniyor</string>
     <string name="update_translation_cd">%1$s mealini güncelle</string>
     <string name="translation_update_failed">%1$s güncellenemedi. Bağlantınızı kontrol edip tekrar deneyin.</string>
     <string name="translation_empty_ayah">(bu ayet için meal yok)</string>

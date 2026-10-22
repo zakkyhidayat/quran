@@ -26,6 +26,15 @@ class ReminderScheduleTest {
     }
 
     @Test
+    fun `ayat hari ini tiga kali sehari pukul 07-00, 13-00, dan 20-00`() {
+        assertEquals(listOf(6 * 60, 13 * 60, 20 * 60), Reminder.VOTD_MINUTES)
+        assertEquals(io.zakkyhidayat.quran.data.Collections.DAILY_SLOTS, Reminder.VOTD_MINUTES.size)
+        // Notifikasi muncul setelah kartunya terbuka di beranda (04.00, 12.00, 20.00).
+        val unlockHours = listOf(4, 12, 20)
+        Reminder.VOTD_MINUTES.forEachIndexed { slot, minutes -> assertEquals(true, minutes >= unlockHours[slot] * 60) }
+    }
+
+    @Test
     fun `pengingat malam pukul 20-30 dan Al-Kahfi pukul 18-00`() {
         assertEquals(20 * 60 + 30, Reminder.BEDTIME_MINUTES)
         assertEquals(18 * 60, Reminder.KAHF_MINUTES)

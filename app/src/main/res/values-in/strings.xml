@@ -92,6 +92,8 @@
     <string name="translit_sub">Tampilkan cara baca Latin di sheet ayat</string>
     <string name="tajweed_title">Warna tajwid</string>
     <string name="tajweed_sub">Tampilkan huruf berwarna sesuai hukum tajwid</string>
+    <string name="keep_screen_on_title">Layar tetap menyala</string>
+    <string name="keep_screen_on_sub">Cegah layar mati saat membaca</string>
     <string name="tajweed_guide_open">Buka panduan tajwid</string>
     <string name="tajweed_guide_title">Panduan ringkas membaca tajwid</string>
     <string name="tajweed_guide_intro">Warna menandai bagian bacaan yang perlu diperhatikan. Hukum dan penerapannya bergantung pada konteks bacaan.</string>
@@ -141,7 +143,6 @@
     <string name="translations_catalog_error">Daftar terjemahan yang bisa diunduh tidak dapat dimuat. Periksa koneksi lalu coba lagi.</string>
     <string name="retry">Coba lagi</string>
     <string name="translation_download_failed">%1$s gagal diunduh. Periksa koneksi lalu coba lagi.</string>
-    <string name="translation_downloading_cd">Mengunduh %1$s</string>
     <string name="translation_size_mb">%1$s MB</string>
     <string name="translation_download_cd">Unduh %1$s</string>
     <string name="delete_downloaded_translation_cd">Hapus berkas unduhan %1$s</string>
@@ -264,6 +265,7 @@
     <string name="home_votd_morning">Pagi</string>
     <string name="home_votd_afternoon">Siang</string>
     <string name="home_votd_night">Malam</string>
+    <string name="reminder_votd_sub">Pagi %1$s · Siang %2$s · Malam %3$s</string>
     <string name="home_sunnah">Bacaan sunnah</string>
     <string name="home_sunnah_now">Dianjurkan sekarang</string>
     <string name="home_history">Histori bacaan</string>
@@ -288,7 +290,6 @@
     <string name="sunnah_kahf_ten">Sepuluh ayat pertama Al-Kahfi</string>
     <string name="sunnah_kahf_ten_note">“Siapa yang menghafal sepuluh ayat pertama surah Al-Kahfi, ia dilindungi dari Dajjal.” (HR. Muslim)</string>
     <string name="translation_update_available">Pembaruan tersedia</string>
-    <string name="translation_updating_cd">Memperbarui terjemahan %1$s</string>
     <string name="update_translation_cd">Perbarui terjemahan %1$s</string>
     <string name="translation_update_failed">Gagal memperbarui %1$s. Periksa koneksi lalu coba lagi.</string>
     <string name="translation_empty_ayah">(tidak ada terjemahan untuk ayat ini)</string>

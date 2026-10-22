@@ -92,6 +92,8 @@
     <string name="translit_sub">Tunjukkan sebutan Rumi dalam helaian ayat</string>
     <string name="tajweed_title">Warna tajwid</string>
     <string name="tajweed_sub">Warnakan huruf mengikut hukum tajwid</string>
+    <string name="keep_screen_on_title">Skrin sentiasa menyala</string>
+    <string name="keep_screen_on_sub">Elakkan skrin padam semasa membaca</string>
     <string name="tajweed_guide_open">Buka panduan tajwid</string>
     <string name="tajweed_guide_title">Panduan ringkas bacaan tajwid</string>
     <string name="tajweed_guide_intro">Warna menandakan bahagian bacaan yang perlu diberi perhatian. Hukum dan penerapannya bergantung pada konteks bacaan.</string>
@@ -141,7 +143,6 @@
     <string name="translations_catalog_error">Senarai terjemahan yang boleh dimuat turun tidak dapat dimuatkan. Semak sambungan dan cuba lagi.</string>
     <string name="retry">Cuba lagi</string>
     <string name="translation_download_failed">%1$s tidak dapat dimuat turun. Semak sambungan dan cuba lagi.</string>
-    <string name="translation_downloading_cd">Memuat turun %1$s</string>
     <string name="translation_size_mb">%1$s MB</string>
     <string name="translation_download_cd">Muat turun %1$s</string>
     <string name="delete_downloaded_translation_cd">Padam fail muat turun %1$s</string>
@@ -264,6 +265,7 @@
     <string name="home_votd_morning">Pagi</string>
     <string name="home_votd_afternoon">Tengah hari</string>
     <string name="home_votd_night">Malam</string>
+    <string name="reminder_votd_sub">Pagi %1$s · Tengah hari %2$s · Malam %3$s</string>
     <string name="home_sunnah">Bacaan sunnah</string>
     <string name="home_sunnah_now">Dianjurkan sekarang</string>
     <string name="home_history">Sejarah bacaan</string>
@@ -288,7 +290,6 @@
     <string name="sunnah_kahf_ten">Sepuluh ayat pertama Al-Kahfi</string>
     <string name="sunnah_kahf_ten_note">“Sesiapa yang menghafal sepuluh ayat pertama surah Al-Kahfi, dia dilindungi daripada Dajjal.” (HR. Muslim)</string>
     <string name="translation_update_available">Kemas kini tersedia</string>
-    <string name="translation_updating_cd">Mengemas kini terjemahan %1$s</string>
     <string name="update_translation_cd">Kemas kini terjemahan %1$s</string>
     <string name="translation_update_failed">Gagal mengemas kini %1$s. Semak sambungan dan cuba lagi.</string>
     <string name="translation_empty_ayah">(tiada terjemahan untuk ayat ini)</string>

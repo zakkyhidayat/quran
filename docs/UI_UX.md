@@ -78,6 +78,12 @@ Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pu
 - Pengingat bacaan Sunnah, masing-masing dengan sakelarnya sendiri di Pengaturan > Pengingat (bawaan mati, khusus perangkat
   ini): malam hari pukul 20.30 membuka rangkaian As-Sajdah lalu Al-Mulk, dan Al-Kahfi setiap Kamis pukul 18.00 (pendekatan
   awal malam Jumat) membuka Surah Al-Kahfi.
+- Kartu "Ayat hari ini" di beranda dibuka bertahap menurut waktu: pagi sejak 04.00, siang sejak 12.00, malam sejak 20.00.
+  Kartu yang belum waktunya tidak tampil (penunjuk "n/3" juga disembunyikan sampai ada lebih dari satu kartu); yang sudah
+  lewat tetap bisa digeser ke belakang. Hari potongan dimulai pukul 04.00, jadi dini hari masih memakai potongan malam
+  sebelumnya. Notifikasinya satu sakelar di Pengaturan > Pengingat (bawaan mati, khusus perangkat ini): potongan yang sama
+  dengan kartu, pukul 06.00 (pagi), 13.00 (siang), dan 20.00 (malam); isinya terjemahan aktif (Arab bila belum ada) dan
+  ketukan membuka halaman ayatnya.
 - Bingkai nama surah memakai 97% lebar halaman (margin kiri dan kanan masing-masing 1,5%).
 - Histori bacaan: satu baris per surah, 5 tampil, langsung setelah Ayat Hari Ini.
 - Kumpulan ayat: doa, solusi, adab, dosa besar; layar kumpulan dengan teks Arab, terjemahan, dan "Buka di pembaca".
@@ -88,8 +94,11 @@ Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pu
   "Halaman utama"; ketuk di luar dialog tetap di pembaca. Dari tempat lain, Back tetap satu langkah mundur seperti biasa.
 - Kartu Ayat Hari Ini memasangkan latar `primaryContainer` dengan `onPrimaryContainer` di tema terang/gelap; daftar
   Sunnah, histori, dan koleksi memakai wadah ikon tonal dengan pasangan warna yang sesuai.
-- Kategori Pengaturan memakai kartu terpisah dengan jarak antarkelompok agar tidak tampak berjejal. Paket terjemahan
-  yang dapat diunduh menampilkan ikon unduh dalam wadah tonal.
+- Kategori Pengaturan memakai kartu terpisah dengan jarak antarkelompok agar tidak tampak berjejal. Unduhan paket terjemahan
+  memakai `DownloadButton` satu-ikon ala Google Translate: ikon unduh, lalu lingkaran progres dengan kotak henti yang
+  bisa diketuk untuk membatalkan (berlaku juga untuk pembaruan paket).
+- Layar tetap menyala selama membaca (pembaca mushaf, mode daftar ayat/terjemahan, dan halaman kumpulan doa); bisa
+  dimatikan di Pengaturan > Tampilan (`keepScreenOn`, bawaan aktif, ikut dalam cadangan).
 - Tautan Notifications ada di Pengaturan > Pengingat dan membuka setelan notifikasi Android; status izin tampil ringkas
   di sisi kanan baris. Sakelar pengingat tidak meminta izin melalui dialog aplikasi. Saat ada progres Sunnah, tombol
   lanjut Sunnah tampil di atas tombol lanjut baca harian; lebarnya mengikuti konten dan tombol tutup berada di dalam

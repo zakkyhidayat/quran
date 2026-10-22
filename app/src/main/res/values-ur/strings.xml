@@ -92,6 +92,8 @@
     <string name="translit_sub">آیت شیٹ میں رومن تلفظ دکھائیں</string>
     <string name="tajweed_title">تجوید کے رنگ</string>
     <string name="tajweed_sub">حروف کو تجوید کے قواعد کے مطابق رنگین دکھائیں</string>
+    <string name="keep_screen_on_title">اسکرین روشن رکھیں</string>
+    <string name="keep_screen_on_sub">پڑھتے وقت اسکرین بند ہونے سے روکیں</string>
     <string name="tajweed_guide_open">تجوید کی رہنمائی کھولیں</string>
     <string name="tajweed_guide_title">تجوید کے ساتھ پڑھنے کی مختصر رہنمائی</string>
     <string name="tajweed_guide_intro">رنگ ان مقامات کو نمایاں کرتے ہیں جن پر توجہ دینی چاہیے۔ حکم اور اس کا اطلاق تلاوت کے سیاق پر منحصر ہے۔</string>
@@ -141,7 +143,6 @@
     <string name="translations_catalog_error">ڈاؤن لوڈ کے قابل ترجموں کی فہرست لوڈ نہیں ہو سکی۔ کنکشن چیک کر کے دوبارہ کوشش کریں۔</string>
     <string name="retry">دوبارہ کوشش کریں</string>
     <string name="translation_download_failed">%1$s ڈاؤن لوڈ نہیں ہو سکا۔ کنکشن چیک کر کے دوبارہ کوشش کریں۔</string>
-    <string name="translation_downloading_cd">%1$s ڈاؤن لوڈ ہو رہا ہے</string>
     <string name="translation_size_mb">%1$s MB</string>
     <string name="translation_download_cd">%1$s ڈاؤن لوڈ کریں</string>
     <string name="delete_downloaded_translation_cd">%1$s کی ڈاؤن لوڈ فائل حذف کریں</string>
@@ -264,6 +265,7 @@
     <string name="home_votd_morning">صبح</string>
     <string name="home_votd_afternoon">دوپہر</string>
     <string name="home_votd_night">رات</string>
+    <string name="reminder_votd_sub">صبح %1$s · دوپہر %2$s · رات %3$s</string>
     <string name="home_sunnah">سنت قراءتیں</string>
     <string name="home_sunnah_now">ابھی مستحب ہے</string>
     <string name="home_history">تلاوت کی تاریخ</string>
@@ -288,7 +290,6 @@
     <string name="sunnah_kahf_ten">سورۃ الکہف کی پہلی دس آیات</string>
     <string name="sunnah_kahf_ten_note">”جو سورۃ الکہف کی ابتدائی دس آیات حفظ کرے، وہ دجال سے محفوظ رہے گا۔“ (مسلم)</string>
     <string name="translation_update_available">اپ ڈیٹ دستیاب ہے</string>
-    <string name="translation_updating_cd">ترجمہ %1$s اپ ڈیٹ ہو رہا ہے</string>
     <string name="update_translation_cd">ترجمہ %1$s اپ ڈیٹ کریں</string>
     <string name="translation_update_failed">%1$s اپ ڈیٹ نہیں ہو سکا۔ کنکشن چیک کر کے دوبارہ کوشش کریں۔</string>
     <string name="translation_empty_ayah">(اس آیت کا ترجمہ موجود نہیں)</string>

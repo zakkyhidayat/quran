@@ -33,6 +33,7 @@ data class AppSettings(
     val amoled: Boolean = false,
     val contrast: ContrastLevel = ContrastLevel.Standard,
     val tajweed: Boolean = true,
+    val keepScreenOn: Boolean = true,
     val showTransliteration: Boolean = true,
     val translationIds: List<String> = listOf("id-kemenag"),
     val readingMode: ReadingMode = ReadingMode.Mushaf,
@@ -53,6 +54,8 @@ data class AppSettings(
     val bedtimeSunnahReminderEnabled: Boolean = false,
     /** Pengingat Al-Kahfi setiap Kamis pukul 18.00 (awal malam Jumat). */
     val kahfThursdayReminderEnabled: Boolean = false,
+    /** Notifikasi "Ayat hari ini" tiga kali sehari (pagi, siang, malam). */
+    val votdReminderEnabled: Boolean = false,
     /** Nama SunnahReading dan indeks rentang yang sedang dibaca; disimpan lokal untuk tombol lanjut. */
     val sunnahReadingId: String? = null,
     val sunnahReadingStep: Int = 0,
@@ -70,6 +73,7 @@ class SettingsRepository(private val context: Context) {
     private val amoledKey = booleanPreferencesKey("amoled")
     private val contrastKey = stringPreferencesKey("contrast")
     private val tajweedKey = booleanPreferencesKey("tajweed")
+    private val keepScreenOnKey = booleanPreferencesKey("keep_screen_on")
     private val transliterationKey = booleanPreferencesKey("transliteration")
     private val translationsKey = stringPreferencesKey("translations")
     private val readingModeKey = stringPreferencesKey("reading_mode")
@@ -84,6 +88,7 @@ class SettingsRepository(private val context: Context) {
     private val reminderUnitKey = stringPreferencesKey("reminder_unit")
     private val bedtimeSunnahReminderKey = booleanPreferencesKey("bedtime_sunnah_reminder_enabled")
     private val kahfThursdayReminderKey = booleanPreferencesKey("kahf_thursday_reminder_enabled")
+    private val votdReminderKey = booleanPreferencesKey("votd_reminder_enabled")
     private val sunnahReadingIdKey = stringPreferencesKey("sunnah_reading_id")
     private val sunnahReadingStepKey = intPreferencesKey("sunnah_reading_step")
     private val counterModeKey = stringPreferencesKey("counter_mode")
@@ -94,6 +99,7 @@ class SettingsRepository(private val context: Context) {
         autoBackupAtKey.name,
         bedtimeSunnahReminderKey.name,
         kahfThursdayReminderKey.name,
+        votdReminderKey.name,
         sunnahReadingIdKey.name,
         sunnahReadingStepKey.name,
     )
@@ -108,6 +114,7 @@ class SettingsRepository(private val context: Context) {
             amoled = prefs[amoledKey] ?: false,
             contrast = prefs[contrastKey].toEnum(ContrastLevel.Standard),
             tajweed = prefs[tajweedKey] ?: true,
+            keepScreenOn = prefs[keepScreenOnKey] ?: true,
             showTransliteration = prefs[transliterationKey] ?: true,
             translationIds = prefs[translationsKey]?.split(',')?.filter { it.isNotBlank() } ?: defaultTranslations(),
             readingMode = prefs[readingModeKey].toEnum(ReadingMode.Mushaf),
@@ -120,6 +127,7 @@ class SettingsRepository(private val context: Context) {
             reminderUnit = prefs[reminderUnitKey].toEnum(ReminderUnit.Juz),
             bedtimeSunnahReminderEnabled = prefs[bedtimeSunnahReminderKey] ?: false,
             kahfThursdayReminderEnabled = prefs[kahfThursdayReminderKey] ?: false,
+            votdReminderEnabled = prefs[votdReminderKey] ?: false,
             sunnahReadingId = prefs[sunnahReadingIdKey],
             sunnahReadingStep = prefs[sunnahReadingStepKey] ?: 0,
             // Pengguna lama (sudah pernah membaca) tidak perlu onboarding maupun petunjuk gerakan.
@@ -150,6 +158,7 @@ class SettingsRepository(private val context: Context) {
     suspend fun setContrast(value: ContrastLevel) = context.dataStore.edit { it[contrastKey] = value.name }
 
     suspend fun setTajweed(value: Boolean) = context.dataStore.edit { it[tajweedKey] = value }
+    suspend fun setKeepScreenOn(value: Boolean) = context.dataStore.edit { it[keepScreenOnKey] = value }
 
     suspend fun setShowTransliteration(value: Boolean) = context.dataStore.edit { it[transliterationKey] = value }
 
@@ -204,6 +213,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setKahfThursdayReminderEnabled(enabled: Boolean) =
         context.dataStore.edit { it[kahfThursdayReminderKey] = enabled }
+
+    suspend fun setVotdReminderEnabled(enabled: Boolean) =
+        context.dataStore.edit { it[votdReminderKey] = enabled }
 
     suspend fun setSunnahReading(id: String, step: Int) = context.dataStore.edit {
         it[sunnahReadingIdKey] = id

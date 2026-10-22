@@ -92,6 +92,8 @@
     <string name="translit_sub">Показывать латинское произношение в карточке аята</string>
     <string name="tajweed_title">Цвета таджвида</string>
     <string name="tajweed_sub">Раскрашивать буквы по правилам таджвида</string>
+    <string name="keep_screen_on_title">Не выключать экран</string>
+    <string name="keep_screen_on_sub">Не давать экрану гаснуть во время чтения</string>
     <string name="tajweed_guide_open">Открыть руководство по таджвиду</string>
     <string name="tajweed_guide_title">Краткое руководство по чтению с таджвидом</string>
     <string name="tajweed_guide_intro">Цвета выделяют места, требующие внимания. Правило и его применение зависят от контекста чтения.</string>
@@ -141,7 +143,6 @@
     <string name="translations_catalog_error">Не удалось загрузить список доступных переводов. Проверьте подключение и повторите попытку.</string>
     <string name="retry">Повторить</string>
     <string name="translation_download_failed">Не удалось скачать %1$s. Проверьте подключение и повторите попытку.</string>
-    <string name="translation_downloading_cd">Скачивается %1$s</string>
     <string name="translation_size_mb">%1$s МБ</string>
     <string name="translation_download_cd">Скачать %1$s</string>
     <string name="delete_downloaded_translation_cd">Удалить скачанный файл %1$s</string>
@@ -264,6 +265,7 @@
     <string name="home_votd_morning">Утро</string>
     <string name="home_votd_afternoon">День</string>
     <string name="home_votd_night">Ночь</string>
+    <string name="reminder_votd_sub">Утро %1$s · День %2$s · Ночь %3$s</string>
     <string name="home_sunnah">Чтения из Сунны</string>
     <string name="home_sunnah_now">Рекомендуется сейчас</string>
     <string name="home_history">История чтения</string>
@@ -288,7 +290,6 @@
     <string name="sunnah_kahf_ten">Первые десять аятов «Аль-Кахф»</string>
     <string name="sunnah_kahf_ten_note">«Кто выучит наизусть десять аятов из начала суры „Аль-Кахф“, будет защищён от Даджаля». (Муслим)</string>
     <string name="translation_update_available">Доступно обновление</string>
-    <string name="translation_updating_cd">Обновление перевода %1$s</string>
     <string name="update_translation_cd">Обновить перевод %1$s</string>
     <string name="translation_update_failed">Не удалось обновить %1$s. Проверьте подключение и повторите.</string>
     <string name="translation_empty_ayah">(для этого аята нет перевода)</string>

@@ -92,6 +92,8 @@
     <string name="translit_sub">نمایش تلفظ لاتین در برگهٔ آیه</string>
     <string name="tajweed_title">رنگ‌های تجوید</string>
     <string name="tajweed_sub">رنگ‌آمیزی حروف بر اساس احکام تجوید</string>
+    <string name="keep_screen_on_title">روشن ماندن صفحه</string>
+    <string name="keep_screen_on_sub">جلوگیری از خاموش شدن صفحه هنگام خواندن</string>
     <string name="tajweed_guide_open">باز کردن راهنمای تجوید</string>
     <string name="tajweed_guide_title">راهنمای کوتاه خواندن تجوید</string>
     <string name="tajweed_guide_intro">رنگ‌ها بخش‌هایی را که باید به آن‌ها توجه شود مشخص می‌کنند. حکم و اجرای آن به بافت تلاوت بستگی دارد.</string>
@@ -141,7 +143,6 @@
     <string name="translations_catalog_error">فهرست ترجمه‌های قابل بارگیری بارگذاری نشد. اتصال را بررسی کنید و دوباره تلاش کنید.</string>
     <string name="retry">تلاش دوباره</string>
     <string name="translation_download_failed">بارگیری %1$s انجام نشد. اتصال را بررسی کنید و دوباره تلاش کنید.</string>
-    <string name="translation_downloading_cd">در حال بارگیری %1$s</string>
     <string name="translation_size_mb">%1$s مگابایت</string>
     <string name="translation_download_cd">بارگیری %1$s</string>
     <string name="delete_downloaded_translation_cd">حذف فایل بارگیری‌شدهٔ %1$s</string>
@@ -264,6 +265,7 @@
     <string name="home_votd_morning">صبح</string>
     <string name="home_votd_afternoon">بعدازظهر</string>
     <string name="home_votd_night">شب</string>
+    <string name="reminder_votd_sub">صبح %1$s · بعدازظهر %2$s · شب %3$s</string>
     <string name="home_sunnah">قرائت‌های سنت</string>
     <string name="home_sunnah_now">اکنون توصیه می‌شود</string>
     <string name="home_history">تاریخچه مطالعه</string>
@@ -288,7 +290,6 @@
     <string name="sunnah_kahf_ten">ده آیه نخست کهف</string>
     <string name="sunnah_kahf_ten_note">«هر کس ده آیه از آغاز سوره کهف را حفظ کند، از دجال محفوظ می‌ماند.» (مسلم)</string>
     <string name="translation_update_available">به‌روزرسانی موجود است</string>
-    <string name="translation_updating_cd">در حال به‌روزرسانی ترجمهٔ %1$s</string>
     <string name="update_translation_cd">به‌روزرسانی ترجمهٔ %1$s</string>
     <string name="translation_update_failed">به‌روزرسانی %1$s ناموفق بود. اتصال را بررسی و دوباره تلاش کنید.</string>
     <string name="translation_empty_ayah">(برای این آیه ترجمه‌ای نیست)</string>

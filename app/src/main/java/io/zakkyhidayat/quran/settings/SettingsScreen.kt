@@ -184,6 +184,13 @@ fun SettingsScreen(
                                         leading = { Icon(AppIcons.FormatColorText, contentDescription = null) },
                                         trailing = { IconSwitch(settings.tajweed) },
                                     )
+                                    item(
+                                        title = stringResource(R.string.keep_screen_on_title),
+                                        subtitle = stringResource(R.string.keep_screen_on_sub),
+                                        onClick = { scope.launch { repo.setKeepScreenOn(!settings.keepScreenOn) } },
+                                        leading = { Icon(AppIcons.LightMode, contentDescription = null) },
+                                        trailing = { IconSwitch(settings.keepScreenOn) },
+                                    )
                                 }
 
                             }

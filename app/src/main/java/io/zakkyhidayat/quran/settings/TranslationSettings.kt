@@ -6,17 +6,16 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -24,8 +23,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.zakkyhidayat.quran.AppViewModel
@@ -74,6 +71,8 @@ internal fun TranslationControls(
     val translations by vm.translations.collectAsStateWithLifecycle()
     val updates by vm.packUpdates.collectAsStateWithLifecycle()
     var updating by remember { mutableStateOf<String?>(null) }
+    var updateProgress by remember { mutableFloatStateOf(0f) }
+    var updateJob by remember { mutableStateOf<kotlinx.coroutines.Job?>(null) }
     var updateFailed by remember { mutableStateOf<String?>(null) }
     // Cek versi katalog sekali saat daftar tampil (dan lagi bila daftar terpasang berubah); luring dilewati diam-diam.
     LaunchedEffect(translations.map { it.id to it.version }) { vm.checkPackUpdates() }
@@ -90,30 +89,33 @@ internal fun TranslationControls(
                     trailing = {
                         Row {
                             updates[tr.id]?.let { pack ->
-                                if (updating == tr.id) {
-                                    val cd = stringResource(R.string.translation_updating_cd, label)
-                                    CircularProgressIndicator(Modifier.size(24.dp).semantics { contentDescription = cd })
-                                } else {
-                                    IconButton(
-                                        enabled = updating == null,
-                                        onClick = {
-                                            scope.launch {
-                                                updating = tr.id
-                                                updateFailed = null
-                                                try {
-                                                    vm.updatePack(pack)
-                                                } catch (e: kotlinx.coroutines.CancellationException) {
-                                                    throw e
-                                                } catch (e: Exception) {
-                                                    android.util.Log.w("TranslationPacks", "Gagal memperbarui ${pack.id}", e)
-                                                    updateFailed = label
-                                                } finally {
-                                                    updating = null
-                                                }
+                                val busy = updating == tr.id
+                                DownloadButton(
+                                    downloading = busy,
+                                    progress = updateProgress,
+                                    onStart = {
+                                        updateJob = scope.launch {
+                                            updating = tr.id
+                                            updateProgress = 0f
+                                            updateFailed = null
+                                            try {
+                                                vm.updatePack(pack) { done, total -> updateProgress = if (total > 0) done.toFloat() / total else 0f }
+                                            } catch (e: kotlinx.coroutines.CancellationException) {
+                                                throw e
+                                            } catch (e: Exception) {
+                                                android.util.Log.w("TranslationPacks", "Gagal memperbarui ${pack.id}", e)
+                                                updateFailed = label
+                                            } finally {
+                                                updating = null
                                             }
-                                        },
-                                    ) { Icon(Icons.Default.Refresh, contentDescription = stringResource(R.string.update_translation_cd, label)) }
-                                }
+                                        }
+                                    },
+                                    onCancel = { updateJob?.cancel() },
+                                    startDescription = stringResource(R.string.update_translation_cd, label),
+                                    cancelDescription = stringResource(R.string.cancel),
+                                    enabled = updating == null,
+                                    icon = Icons.Default.Refresh,
+                                )
                             }
                             IconButton(
                                 onClick = { scope.launch { repo.setTranslations(ordered.filter { it in settings.translationIds && it != tr.id }) } },

@@ -92,6 +92,8 @@
     <string name="translit_sub">Afficher la prononciation latine dans la fiche du verset</string>
     <string name="tajweed_title">Couleurs du tajwid</string>
     <string name="tajweed_sub">Colorer les lettres selon les règles du tajwid</string>
+    <string name="keep_screen_on_title">Garder l’écran allumé</string>
+    <string name="keep_screen_on_sub">Empêcher la mise en veille de l’écran pendant la lecture</string>
     <string name="tajweed_guide_open">Ouvrir le guide du tajwid</string>
     <string name="tajweed_guide_title">Guide rapide de lecture du tajwid</string>
     <string name="tajweed_guide_intro">Les couleurs signalent les passages à observer. La règle et son application dépendent du contexte de récitation.</string>
@@ -141,7 +143,6 @@
     <string name="translations_catalog_error">Impossible de charger la liste des traductions téléchargeables. Vérifiez votre connexion et réessayez.</string>
     <string name="retry">Réessayer</string>
     <string name="translation_download_failed">Impossible de télécharger %1$s. Vérifiez votre connexion et réessayez.</string>
-    <string name="translation_downloading_cd">Téléchargement de %1$s</string>
     <string name="translation_size_mb">%1$s Mo</string>
     <string name="translation_download_cd">Télécharger %1$s</string>
     <string name="delete_downloaded_translation_cd">Supprimer le fichier téléchargé de %1$s</string>
@@ -264,6 +265,7 @@
     <string name="home_votd_morning">Matin</string>
     <string name="home_votd_afternoon">Après-midi</string>
     <string name="home_votd_night">Nuit</string>
+    <string name="reminder_votd_sub">Matin %1$s · Après-midi %2$s · Nuit %3$s</string>
     <string name="home_sunnah">Lectures de la Sunna</string>
     <string name="home_sunnah_now">Recommandé maintenant</string>
     <string name="home_history">Historique de lecture</string>
@@ -288,7 +290,6 @@
     <string name="sunnah_kahf_ten">Les dix premiers versets d’Al-Kahf</string>
     <string name="sunnah_kahf_ten_note">« Celui qui mémorise dix versets du début de la sourate Al-Kahf sera protégé du Dajjal. » (Muslim)</string>
     <string name="translation_update_available">Mise à jour disponible</string>
-    <string name="translation_updating_cd">Mise à jour de la traduction %1$s</string>
     <string name="update_translation_cd">Mettre à jour la traduction %1$s</string>
     <string name="translation_update_failed">Impossible de mettre à jour %1$s. Vérifiez votre connexion et réessayez.</string>
     <string name="translation_empty_ayah">(pas de traduction pour ce verset)</string>

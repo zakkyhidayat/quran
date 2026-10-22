@@ -125,6 +125,7 @@ fun ReaderScreen(
     onOpenSettings: () -> Unit,
     onOpenSurahInfo: (Int) -> Unit,
 ) {
+    io.zakkyhidayat.quran.ui.KeepScreenOn(settings.keepScreenOn)
     val surahs by vm.surahs.collectAsStateWithLifecycle()
     val pageMeta by vm.pageMeta.collectAsStateWithLifecycle()
     val selected by vm.selected.collectAsStateWithLifecycle()

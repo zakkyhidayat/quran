@@ -93,6 +93,8 @@
     <string name="translit_sub">Show Latin pronunciation in the ayah sheet</string>
     <string name="tajweed_title">Tajweed colours</string>
     <string name="tajweed_sub">Show letters coloured by tajweed rules</string>
+    <string name="keep_screen_on_title">Keep screen on</string>
+    <string name="keep_screen_on_sub">Prevent the screen from turning off while reading</string>
     <string name="tajweed_guide_open">Open tajweed guide</string>
     <string name="tajweed_guide_title">Tajweed reading guide</string>
     <string name="tajweed_guide_intro">Colours highlight parts of the text to notice. The rule and its application depend on the recitation context.</string>
@@ -142,7 +144,6 @@
     <string name="translations_catalog_error">Could not load the list of downloadable translations. Check your connection and try again.</string>
     <string name="retry">Try again</string>
     <string name="translation_download_failed">Could not download %1$s. Check your connection and try again.</string>
-    <string name="translation_downloading_cd">Downloading %1$s</string>
     <string name="translation_size_mb">%1$s MB</string>
     <string name="translation_download_cd">Download %1$s</string>
     <string name="delete_downloaded_translation_cd">Delete downloaded file for %1$s</string>
@@ -265,6 +266,7 @@
     <string name="home_votd_morning">Morning</string>
     <string name="home_votd_afternoon">Afternoon</string>
     <string name="home_votd_night">Night</string>
+    <string name="reminder_votd_sub">Morning %1$s · Afternoon %2$s · Night %3$s</string>
     <string name="home_sunnah">Sunnah readings</string>
     <string name="home_sunnah_now">Recommended now</string>
     <string name="home_history">Reading history</string>
@@ -289,7 +291,6 @@
     <string name="sunnah_kahf_ten">First ten ayahs of Al-Kahf</string>
     <string name="sunnah_kahf_ten_note">“Whoever memorises ten ayahs from the beginning of Surah Al-Kahf will be protected from the Dajjal.” (Muslim)</string>
     <string name="translation_update_available">Update available</string>
-    <string name="translation_updating_cd">Updating translation %1$s</string>
     <string name="update_translation_cd">Update translation %1$s</string>
     <string name="translation_update_failed">Could not update %1$s. Check your connection and try again.</string>
     <string name="translation_empty_ayah">(no translation for this verse)</string>

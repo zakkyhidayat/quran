@@ -77,6 +77,22 @@ class Collections(private val context: Context) {
         fun pickForDay(pool: List<AyahRange>, day: LocalDate): AyahRange? =
             if (pool.isEmpty()) null else pool[Math.floorMod(day.toEpochDay(), pool.size.toLong()).toInt()]
 
+        /** Jumlah potongan harian (pagi, siang, malam). */
+        const val DAILY_SLOTS = 3
+
+        /** Hari potongan harian dimulai pukul 04.00: dini hari masih milik malam sebelumnya, bukan hari baru. */
+        fun slotDay(now: java.time.LocalDateTime): LocalDate = now.minusHours(4).toLocalDate()
+
+        /**
+         * Potongan yang sudah dibuka: pagi sejak 04.00, siang sejak 12.00, malam sejak 20.00 (sampai 04.00). Potongan
+         * berikutnya muncul bertahap seiring hari berjalan; yang sudah lewat tetap bisa dibuka.
+         */
+        fun unlockedSlots(now: java.time.LocalDateTime): Int = when (now.hour) {
+            in 4..11 -> 1
+            in 12..19 -> 2
+            else -> DAILY_SLOTS
+        }
+
         /** Tiga potongan harian berurutan dan stabil, dipakai untuk pagi, siang, dan malam. */
         fun picksForDay(pool: List<AyahRange>, day: LocalDate, count: Int = 3): List<AyahRange?> {
             if (count <= 0) return emptyList()

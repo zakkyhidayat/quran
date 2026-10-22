@@ -54,6 +54,30 @@ class CollectionsTest {
     }
 
     @Test
+    fun `potongan harian dibuka bertahap menurut jam`() {
+        fun unlocked(hour: Int, minute: Int = 0) = Collections.unlockedSlots(LocalDateTime.of(2026, 10, 14, hour, minute))
+        // Dini hari sampai 03.59 masih malam sebelumnya: ketiga potongan terbuka.
+        assertEquals(3, unlocked(0))
+        assertEquals(3, unlocked(3, 59))
+        assertEquals(1, unlocked(4))
+        assertEquals(1, unlocked(11, 59))
+        assertEquals(2, unlocked(12))
+        assertEquals(2, unlocked(19, 59))
+        assertEquals(3, unlocked(20))
+        assertEquals(3, unlocked(23, 59))
+    }
+
+    @Test
+    fun `hari potongan dimulai pukul 04-00`() {
+        assertEquals(LocalDate.of(2026, 10, 14), Collections.slotDay(LocalDateTime.of(2026, 10, 14, 4, 0)))
+        assertEquals(LocalDate.of(2026, 10, 14), Collections.slotDay(LocalDateTime.of(2026, 10, 14, 23, 59)))
+        // 02.00 pada tanggal 15 masih memakai potongan hari 14 (malam yang sama), bukan yang baru.
+        assertEquals(LocalDate.of(2026, 10, 14), Collections.slotDay(LocalDateTime.of(2026, 10, 15, 2, 0)))
+        assertEquals(LocalDate.of(2026, 10, 15), Collections.slotDay(LocalDateTime.of(2026, 10, 15, 4, 0)))
+        assertEquals(3, Collections.DAILY_SLOTS)
+    }
+
+    @Test
     fun `waktu bacaan sunnah`() {
         val thursdayEvening = LocalDateTime.of(2026, 10, 8, 19, 0)
         val fridayNoon = LocalDateTime.of(2026, 10, 9, 12, 0)
