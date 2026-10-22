@@ -218,6 +218,7 @@
     <string name="kahf_reminder_notification_title">سورة الكهف ليلة الجمعة</string>
     <string name="kahf_reminder_notification_text">حان وقت قراءة سورة الكهف.</string>
     <string name="reminder_off_sub">إشعار يومي بالجزء الذي تقرؤه</string>
+    <string name="settings_reminder_sub">قراءات السنة وآية اليوم</string>
     <string name="reminder_on_sub">كل يوم الساعة %1$s</string>
     <string name="reminder_time">وقت التذكير</string>
     <string name="reminder_unit">الورد اليومي</string>

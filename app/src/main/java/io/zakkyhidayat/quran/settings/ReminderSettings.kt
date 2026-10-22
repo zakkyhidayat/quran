@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import io.zakkyhidayat.quran.AppViewModel
 import io.zakkyhidayat.quran.R
+import io.zakkyhidayat.quran.reminder.Reminder
 import io.zakkyhidayat.quran.ui.AppIcons
 import kotlinx.coroutines.launch
 
@@ -36,17 +37,19 @@ internal fun ReminderControls(vm: AppViewModel, settings: AppSettings) {
     val repo = vm.settingsRepository
     var showTime by rememberSaveable { mutableStateOf(false) }
     val timeText = remember(settings.reminderMinutes) { reminderTimeText(context, settings.reminderMinutes) }
-    val bedtimeTimeText = remember { reminderTimeText(context, io.zakkyhidayat.quran.reminder.Reminder.BEDTIME_MINUTES) }
-    val kahfTimeText = remember { reminderTimeText(context, io.zakkyhidayat.quran.reminder.Reminder.KAHF_MINUTES) }
-    val votdTimeTexts = remember { io.zakkyhidayat.quran.reminder.Reminder.VOTD_MINUTES.map { reminderTimeText(context, it) } }
+    val bedtimeTimeText = remember { reminderTimeText(context, Reminder.BEDTIME_MINUTES) }
+    val kahfTimeText = remember { reminderTimeText(context, Reminder.KAHF_MINUTES) }
+    val votdTimeTexts = remember { Reminder.VOTD_MINUTES.map { reminderTimeText(context, it) } }
     Group {
-        item(
-            title = stringResource(R.string.reminder_daily),
-            subtitle = if (settings.reminderEnabled) stringResource(R.string.reminder_on_sub, timeText) else stringResource(R.string.reminder_off_sub),
-            onClick = { scope.launch { repo.setReminder(!settings.reminderEnabled) } },
-            leading = { Icon(AppIcons.Alarm, contentDescription = null) },
-            trailing = { IconSwitch(settings.reminderEnabled) },
-        )
+        if (Reminder.DAILY_AVAILABLE) {
+            item(
+                title = stringResource(R.string.reminder_daily),
+                subtitle = if (settings.reminderEnabled) stringResource(R.string.reminder_on_sub, timeText) else stringResource(R.string.reminder_off_sub),
+                onClick = { scope.launch { repo.setReminder(!settings.reminderEnabled) } },
+                leading = { Icon(AppIcons.Alarm, contentDescription = null) },
+                trailing = { IconSwitch(settings.reminderEnabled) },
+            )
+        }
         item(
             title = stringResource(R.string.reminder_bedtime_sunnah),
             subtitle = stringResource(R.string.reminder_bedtime_sunnah_sub, bedtimeTimeText),
@@ -69,13 +72,13 @@ internal fun ReminderControls(vm: AppViewModel, settings: AppSettings) {
             trailing = { IconSwitch(settings.votdReminderEnabled) },
         )
         // Build debug saja: tampilkan pengingat sekarang untuk menguji isi dan ketukannya.
-        if (settings.reminderEnabled && io.zakkyhidayat.quran.BuildConfig.DEBUG) {
+        if (Reminder.DAILY_AVAILABLE && settings.reminderEnabled && io.zakkyhidayat.quran.BuildConfig.DEBUG) {
             item(
                 title = stringResource(R.string.reminder_send_test),
-                onClick = { scope.launch { io.zakkyhidayat.quran.reminder.Reminder.notify(context) } },
+                onClick = { scope.launch { Reminder.notify(context) } },
             )
         }
-        if (settings.reminderEnabled) {
+        if (Reminder.DAILY_AVAILABLE && settings.reminderEnabled) {
             item(
                 title = stringResource(R.string.reminder_time),
                 subtitle = timeText,
@@ -86,7 +89,7 @@ internal fun ReminderControls(vm: AppViewModel, settings: AppSettings) {
     }
     Spacer(Modifier.height(16.dp))
     NotificationSettingsRow()
-    if (settings.reminderEnabled) {
+    if (Reminder.DAILY_AVAILABLE && settings.reminderEnabled) {
         Labeled(stringResource(R.string.reminder_unit)) {
             val options = listOf(
                 ReminderUnit.Juz to stringResource(R.string.tab_juz),

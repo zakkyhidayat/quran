@@ -46,7 +46,7 @@ object Reminder {
         scheduleAlarm(
             alarms,
             context,
-            settings.reminderEnabled,
+            DAILY_AVAILABLE && settings.reminderEnabled,
             settings.reminderMinutes,
             null,
             REQUEST_DAILY,
@@ -132,7 +132,7 @@ object Reminder {
         val app = context.app
         val settings = app.settings.settings.first()
         val enabled = when (kind) {
-            ReminderKind.Daily -> settings.reminderEnabled
+            ReminderKind.Daily -> DAILY_AVAILABLE && settings.reminderEnabled
             ReminderKind.Bedtime -> settings.bedtimeSunnahReminderEnabled
             ReminderKind.KahfThursday -> settings.kahfThursdayReminderEnabled
             ReminderKind.VotdMorning, ReminderKind.VotdAfternoon, ReminderKind.VotdNight -> settings.votdReminderEnabled
@@ -282,6 +282,12 @@ object Reminder {
                 .build(),
         )
     }
+
+    /**
+     * Pengingat bacaan harian (juz/hizb/manzil) disembunyikan sementara: tanpa sakelar di Pengaturan, tanpa alarm, dan
+     * notifikasi yang sudah terjadwal tidak lagi tampil. Pilihan pengguna tetap tersimpan bila fitur ini dinyalakan lagi.
+     */
+    internal const val DAILY_AVAILABLE = false
 
     private const val REQUEST_DAILY = 0
     private const val REQUEST_BEDTIME = 1

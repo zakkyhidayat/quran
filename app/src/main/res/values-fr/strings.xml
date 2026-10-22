@@ -218,6 +218,7 @@
     <string name="kahf_reminder_notification_title">Al-Kahf, veille du vendredi</string>
     <string name="kahf_reminder_notification_text">C’est l’heure de lire la sourate Al-Kahf.</string>
     <string name="reminder_off_sub">Une notification chaque jour avec la partie que vous lisez</string>
+    <string name="settings_reminder_sub">Lectures de la Sunna et verset du jour</string>
     <string name="reminder_on_sub">Chaque jour à %1$s</string>
     <string name="reminder_time">Heure du rappel</string>
     <string name="reminder_unit">Portion quotidienne</string>

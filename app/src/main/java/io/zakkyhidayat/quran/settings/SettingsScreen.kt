@@ -256,8 +256,7 @@ private fun SettingsMain(settings: AppSettings, onOpen: (SettingsPage) -> Unit) 
         ) { onOpen(SettingsPage.Backup) }
         SettingsCategory(
             stringResource(R.string.reminder),
-            if (settings.reminderEnabled) stringResource(R.string.reminder_on_sub, reminderTimeText(LocalContext.current, settings.reminderMinutes))
-            else stringResource(R.string.reminder_off_sub),
+            stringResource(R.string.settings_reminder_sub),
             AppIcons.Alarm,
         ) { onOpen(SettingsPage.Reminder) }
         SettingsCategory(stringResource(R.string.quran_data_title), stringResource(R.string.quran_data_sub), AppIcons.Download) {

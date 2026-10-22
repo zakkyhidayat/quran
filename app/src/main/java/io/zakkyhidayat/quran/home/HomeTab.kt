@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.layout.layout
@@ -181,30 +182,35 @@ fun HomeTab(
         }
 
         item(key = "collections_h") { SectionHeader(stringResource(R.string.home_collections)) }
-        items(CollectionKind.entries.chunked(2), key = { row -> "c_${row.first().name}" }) { row ->
-            Row(Modifier.fillMaxWidth().height(IntrinsicSize.Max), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                row.forEach { kind ->
-                    Card(
-                        onClick = { onOpen(HomeTarget.Collection(kind)) },
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer, contentColor = MaterialTheme.colorScheme.onSecondaryContainer),
-                        shape = MaterialTheme.shapes.extraLarge,
-                        modifier = Modifier.weight(1f).fillMaxHeight(),
-                    ) {
-                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                            Surface(
-                                shape = CircleShape,
-                                color = MaterialTheme.colorScheme.primaryContainer,
-                                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        // Satu item agar jarak antarbaris sama dengan jarak antarkolom (8 dp); di LazyColumn jarak antaritem hanya 2 dp.
+        item(key = "collections") {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                CollectionKind.entries.chunked(2).forEach { row ->
+                    Row(Modifier.fillMaxWidth().height(IntrinsicSize.Max), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        row.forEach { kind ->
+                            Card(
+                                onClick = { onOpen(HomeTarget.Collection(kind)) },
+                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+                                shape = MaterialTheme.shapes.large,
+                                modifier = Modifier.weight(1f).fillMaxHeight().heightIn(min = 112.dp),
                             ) {
-                                androidx.compose.foundation.layout.Box(Modifier.size(44.dp), contentAlignment = Alignment.Center) {
-                                    Icon(collectionIcon(kind), contentDescription = null, modifier = Modifier.size(24.dp))
+                                Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.SpaceBetween) {
+                                    Surface(
+                                        shape = CircleShape,
+                                        color = MaterialTheme.colorScheme.secondaryContainer,
+                                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    ) {
+                                        androidx.compose.foundation.layout.Box(Modifier.size(40.dp), contentAlignment = Alignment.Center) {
+                                            Icon(collectionIcon(kind), contentDescription = null)
+                                        }
+                                    }
+                                    Text(collectionTitle(kind), style = MaterialTheme.typography.titleSmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
                                 }
                             }
-                            Text(collectionTitle(kind), style = MaterialTheme.typography.titleSmall)
                         }
+                        if (row.size == 1) Spacer(Modifier.weight(1f))
                     }
                 }
-                if (row.size == 1) Spacer(Modifier.weight(1f))
             }
         }
     }
