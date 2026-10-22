@@ -218,6 +218,7 @@
     <string name="kahf_reminder_notification_title">জুমার রাতে সূরা কাহফ</string>
     <string name="kahf_reminder_notification_text">সূরা কাহফ পড়ার সময় হয়েছে।</string>
     <string name="reminder_off_sub">প্রতিদিন আপনি যে অংশ পড়ছেন তার বিজ্ঞপ্তি</string>
+    <string name="settings_reminder_sub">সুন্নাহ তিলাওয়াত ও আজকের আয়াত</string>
     <string name="reminder_on_sub">প্রতিদিন %1$s-এ</string>
     <string name="reminder_time">অনুস্মারকের সময়</string>
     <string name="reminder_unit">দৈনিক অংশ</string>

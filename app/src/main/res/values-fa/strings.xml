@@ -218,6 +218,7 @@
     <string name="kahf_reminder_notification_title">سوره کهف شب جمعه</string>
     <string name="kahf_reminder_notification_text">وقت خواندن سوره کهف است.</string>
     <string name="reminder_off_sub">هر روز اعلانی دربارهٔ بخشی که می‌خوانید</string>
+    <string name="settings_reminder_sub">تلاوت‌های سنت و آیه روز</string>
     <string name="reminder_on_sub">هر روز ساعت %1$s</string>
     <string name="reminder_time">زمان یادآوری</string>
     <string name="reminder_unit">بخش روزانه</string>

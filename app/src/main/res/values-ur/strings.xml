@@ -218,6 +218,7 @@
     <string name="kahf_reminder_notification_title">جمعہ کی رات سورۃ الکہف</string>
     <string name="kahf_reminder_notification_text">سورۃ الکہف پڑھنے کا وقت ہے۔</string>
     <string name="reminder_off_sub">ہر روز اس حصے کی اطلاع جو آپ پڑھ رہے ہیں</string>
+    <string name="settings_reminder_sub">سنت کی تلاوتیں اور آج کی آیت</string>
     <string name="reminder_on_sub">روزانہ %1$s بجے</string>
     <string name="reminder_time">یاد دہانی کا وقت</string>
     <string name="reminder_unit">روزانہ حصہ</string>

@@ -218,6 +218,7 @@
     <string name="kahf_reminder_notification_title">Cuma gecesi Kehf suresi</string>
     <string name="kahf_reminder_notification_text">Kehf suresini okuma zamanı.</string>
     <string name="reminder_off_sub">Her gün okuduğunuz bölümle ilgili bir bildirim</string>
+    <string name="settings_reminder_sub">Sünnet okumaları ve günün ayeti</string>
     <string name="reminder_on_sub">Her gün %1$s</string>
     <string name="reminder_time">Hatırlatma saati</string>
     <string name="reminder_unit">Günlük bölüm</string>

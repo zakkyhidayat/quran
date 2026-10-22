@@ -218,6 +218,7 @@
     <string name="kahf_reminder_notification_title">Al-Kahfi malam Jumaat</string>
     <string name="kahf_reminder_notification_text">Masa untuk membaca Surah Al-Kahfi.</string>
     <string name="reminder_off_sub">Pemberitahuan setiap hari tentang bahagian yang sedang anda baca</string>
+    <string name="settings_reminder_sub">Bacaan Sunnah dan ayat hari ini</string>
     <string name="reminder_on_sub">Setiap hari pada %1$s</string>
     <string name="reminder_time">Masa peringatan</string>
     <string name="reminder_unit">Bahagian harian</string>
