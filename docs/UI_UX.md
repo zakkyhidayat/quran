@@ -105,6 +105,8 @@ Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pu
 - Empat kotak koleksi di beranda berada dalam satu item daftar dengan jarak 8 dp ke segala arah (dulu jarak antarbaris hanya
   2 dp), berwarna `surfaceContainer` seperti daftar lain, bentuk `large`, tinggi minimal 112 dp, ikon di atas dan judul di
   bawah.
+- Popup mengambang di pembaca dibuat ringkas: baris pilihan counter setinggi 40 dp dengan jarak 3 dp, dan panel panduan tajwid
+  berjarak 4 dp antarbaris dengan padding vertikal 8 dp.
 - Tautan Notifications ada di Pengaturan > Pengingat dan membuka setelan notifikasi Android; status izin tampil ringkas
   di sisi kanan baris. Sakelar pengingat tidak meminta izin melalui dialog aplikasi. Saat ada progres Sunnah, tombol
   lanjut Sunnah tampil di atas tombol lanjut baca harian; lebarnya mengikuti konten dan tombol tutup berada di dalam
