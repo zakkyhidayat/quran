@@ -209,10 +209,9 @@
     <string name="auto_backup_error">تعذّر الحفظ في المجلد المختار. أوقف النسخ التلقائي ثم شغّله لاختيار المجلد من جديد.</string>
     <string name="reminder">تذكير القراءة</string>
     <string name="reminder_daily">تذكير يومي</string>
-    <string name="reminder_bedtime_sunnah">السنة قبل النوم</string>
     <string name="reminder_bedtime_sunnah_sub">السجدة ثم الملك عند الساعة %1$s</string>
+    <string name="reminder_bedtime_each_sub">كل ليلة عند %1$s</string>
     <string name="sunnah_reminder_notification_title">ورد السنة الليلي</string>
-    <string name="sunnah_reminder_notification_text">اقرأ السجدة ثم الملك.</string>
     <string name="reminder_kahf_friday">سورة الكهف ليلة الجمعة</string>
     <string name="reminder_kahf_friday_sub">كل خميس عند الساعة %1$s</string>
     <string name="kahf_reminder_notification_title">سورة الكهف ليلة الجمعة</string>

@@ -209,10 +209,9 @@
     <string name="auto_backup_error">বেছে নেওয়া ফোল্ডারে সংরক্ষণ করা যায়নি। আবার ফোল্ডার বাছতে স্বয়ংক্রিয় ব্যাকআপ বন্ধ করে চালু করুন।</string>
     <string name="reminder">পড়ার অনুস্মারক</string>
     <string name="reminder_daily">দৈনিক অনুস্মারক</string>
-    <string name="reminder_bedtime_sunnah">ঘুমানোর আগে সুন্নাহ</string>
     <string name="reminder_bedtime_sunnah_sub">আস-সাজদাহ, তারপর আল-মুলক · %1$s</string>
+    <string name="reminder_bedtime_each_sub">প্রতি রাতে %1$s-এ</string>
     <string name="sunnah_reminder_notification_title">রাতের সুন্নাহ পাঠ</string>
-    <string name="sunnah_reminder_notification_text">আস-সাজদাহ, তারপর আল-মুলক পড়ুন।</string>
     <string name="reminder_kahf_friday">জুমার রাতে সূরা কাহফ</string>
     <string name="reminder_kahf_friday_sub">প্রতি বৃহস্পতিবার · %1$s</string>
     <string name="kahf_reminder_notification_title">জুমার রাতে সূরা কাহফ</string>

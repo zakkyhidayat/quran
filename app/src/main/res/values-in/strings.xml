@@ -209,10 +209,9 @@
     <string name="auto_backup_error">Tidak bisa menyimpan ke folder yang dipilih. Matikan lalu nyalakan lagi untuk memilih foldernya.</string>
     <string name="reminder">Pengingat membaca</string>
     <string name="reminder_daily">Pengingat harian</string>
-    <string name="reminder_bedtime_sunnah">Sunnah sebelum tidur</string>
     <string name="reminder_bedtime_sunnah_sub">As-Sajdah, lalu Al-Mulk pukul %1$s</string>
+    <string name="reminder_bedtime_each_sub">Setiap malam pukul %1$s</string>
     <string name="sunnah_reminder_notification_title">Bacaan Sunnah malam</string>
-    <string name="sunnah_reminder_notification_text">Baca As-Sajdah, lalu Al-Mulk.</string>
     <string name="reminder_kahf_friday">Al-Kahfi malam Jumat</string>
     <string name="reminder_kahf_friday_sub">Setiap Kamis pukul %1$s</string>
     <string name="kahf_reminder_notification_title">Al-Kahfi malam Jumat</string>

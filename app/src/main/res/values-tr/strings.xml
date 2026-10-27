@@ -209,10 +209,9 @@
     <string name="auto_backup_error">Seçilen klasöre kaydedilemedi. Klasörü yeniden seçmek için otomatik yedeklemeyi kapatıp açın.</string>
     <string name="reminder">Okuma hatırlatıcısı</string>
     <string name="reminder_daily">Günlük hatırlatıcı</string>
-    <string name="reminder_bedtime_sunnah">Uyumadan önce sünnet</string>
     <string name="reminder_bedtime_sunnah_sub">Secde, ardından Mülk · %1$s</string>
+    <string name="reminder_bedtime_each_sub">Her gece %1$s</string>
     <string name="sunnah_reminder_notification_title">Gece sünnet tilaveti</string>
-    <string name="sunnah_reminder_notification_text">Secde’yi, ardından Mülk’ü okuyun.</string>
     <string name="reminder_kahf_friday">Cuma gecesi Kehf suresi</string>
     <string name="reminder_kahf_friday_sub">Her Perşembe · %1$s</string>
     <string name="kahf_reminder_notification_title">Cuma gecesi Kehf suresi</string>

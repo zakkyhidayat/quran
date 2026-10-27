@@ -209,10 +209,9 @@
     <string name="auto_backup_error">ذخیره در پوشه انتخاب‌شده ممکن نشد. برای انتخاب دوباره، پشتیبان‌گیری خودکار را خاموش و روشن کنید.</string>
     <string name="reminder">یادآور خواندن</string>
     <string name="reminder_daily">یادآور روزانه</string>
-    <string name="reminder_bedtime_sunnah">سنت پیش از خواب</string>
     <string name="reminder_bedtime_sunnah_sub">سجده، سپس ملک، ساعت %1$s</string>
+    <string name="reminder_bedtime_each_sub">هر شب ساعت %1$s</string>
     <string name="sunnah_reminder_notification_title">تلاوت سنت شبانه</string>
-    <string name="sunnah_reminder_notification_text">سورهٔ سجده، سپس ملک را بخوانید.</string>
     <string name="reminder_kahf_friday">سوره کهف شب جمعه</string>
     <string name="reminder_kahf_friday_sub">هر پنجشنبه ساعت %1$s</string>
     <string name="kahf_reminder_notification_title">سوره کهف شب جمعه</string>

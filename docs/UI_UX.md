@@ -76,14 +76,15 @@ Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pu
   tersimpan dan bisa dilanjutkan atau dibuang dari tombol mengambang di daftar. Bacaan lain (Al-Kahfi, Ayat Kursi, akhir
   Al-Baqarah, Tiga Qul, sepuluh ayat Al-Kahfi) dibuka tanpa petunjuk dan tanpa progres tersimpan.
 - Pengingat bacaan Sunnah, masing-masing dengan sakelarnya sendiri di Pengaturan > Pengingat (bawaan mati, khusus perangkat
-  ini): malam hari pukul 20.30 membuka rangkaian As-Sajdah lalu Al-Mulk, dan Al-Kahfi setiap Kamis pukul 18.00 (pendekatan
-  awal malam Jumat) membuka Surah Al-Kahfi.
+  ini): malam hari pukul 20.30 dengan sakelar terpisah untuk As-Sajdah dan Al-Mulk, Ayat Kursi, dua ayat terakhir
+  Al-Baqarah, dan Tiga Qul (satu notifikasi memuat semua yang menyala; ketukan membuka yang pertama menurut urutan itu),
+  dan Al-Kahfi setiap Kamis pukul 18.00 (pendekatan awal malam Jumat) membuka Surah Al-Kahfi.
 - Kartu "Ayat hari ini" di beranda dibuka bertahap menurut waktu: pagi sejak 04.00, siang sejak 12.00, malam sejak 20.00.
   Kartu yang belum waktunya tidak tampil (penunjuk "n/3" juga disembunyikan sampai ada lebih dari satu kartu); yang sudah
   lewat tetap bisa digeser ke belakang. Hari potongan dimulai pukul 04.00, jadi dini hari masih memakai potongan malam
   sebelumnya. Notifikasinya satu sakelar di Pengaturan > Pengingat (bawaan mati, khusus perangkat ini): potongan yang sama
   dengan kartu, pukul 06.00 (pagi), 13.00 (siang), dan 20.00 (malam); isinya terjemahan aktif (Arab bila belum ada) dan
-  ketukan membuka halaman ayatnya.
+  ketukan membuka ayatnya dalam mode ayat dan terjemahan (mode baca ikut berpindah ke sana dan tetap tersimpan).
 - Bingkai nama surah memakai 97% lebar halaman (margin kiri dan kanan masing-masing 1,5%).
 - Histori bacaan: satu baris per surah, 5 tampil, langsung setelah Ayat Hari Ini.
 - Kumpulan ayat: doa, solusi, adab, dosa besar; layar kumpulan dengan teks Arab, terjemahan, dan "Buka di pembaca".
