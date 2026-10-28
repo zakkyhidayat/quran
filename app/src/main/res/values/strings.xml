@@ -210,10 +210,9 @@
     <string name="auto_backup_error">Could not save to the chosen folder. Turn auto backup off and on to choose it again.</string>
     <string name="reminder">Reading reminder</string>
     <string name="reminder_daily">Daily reminder</string>
-    <string name="reminder_bedtime_sunnah">Sunnah before sleep</string>
     <string name="reminder_bedtime_sunnah_sub">As-Sajdah, then Al-Mulk at %1$s</string>
+    <string name="reminder_bedtime_each_sub">Every night at %1$s</string>
     <string name="sunnah_reminder_notification_title">Nightly Sunnah reading</string>
-    <string name="sunnah_reminder_notification_text">Read As-Sajdah, then Al-Mulk.</string>
     <string name="reminder_kahf_friday">Al-Kahf on Friday eve</string>
     <string name="reminder_kahf_friday_sub">Every Thursday at %1$s</string>
     <string name="kahf_reminder_notification_title">Al-Kahf, Friday eve</string>

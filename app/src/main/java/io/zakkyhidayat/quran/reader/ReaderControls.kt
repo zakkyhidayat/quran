@@ -136,8 +136,8 @@ internal fun TajweedReaderControls(
                                 Modifier
                                     .heightIn(max = 300.dp)
                                     .verticalScroll(rememberScrollState())
-                                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                                verticalArrangement = Arrangement.spacedBy(8.dp),
+                                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                                verticalArrangement = Arrangement.spacedBy(4.dp),
                             ) {
                                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                     TajweedLegendItem(Color(0xFF999999), R.string.tajweed_legend_idgham, Modifier.weight(1f))
@@ -393,7 +393,7 @@ internal fun ReaderCounter(
                             .width(counterButtonWidth)
                             .heightIn(max = LocalConfiguration.current.screenHeightDp.dp - 160.dp)
                             .verticalScroll(rememberScrollState()),
-                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        verticalArrangement = Arrangement.spacedBy(3.dp),
                     ) {
                         CounterMode.entries.forEach { mode ->
                             val selected = value.mode == mode
@@ -425,7 +425,7 @@ internal fun ReaderCounter(
                                 contentColor = if (selected) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSurface,
                                 tonalElevation = if (selected) 2.dp else 1.dp,
                                 shadowElevation = 1.dp,
-                                modifier = Modifier.fillMaxWidth().height(48.dp),
+                                modifier = Modifier.fillMaxWidth().height(40.dp),
                             ) {
                                 Row(
                                     Modifier.fillMaxWidth().padding(horizontal = 8.dp),

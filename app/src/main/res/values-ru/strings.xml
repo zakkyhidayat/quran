@@ -209,10 +209,9 @@
     <string name="auto_backup_error">Не удалось сохранить в выбранную папку. Выключите и снова включите автокопирование, чтобы выбрать её заново.</string>
     <string name="reminder">Напоминание о чтении</string>
     <string name="reminder_daily">Ежедневное напоминание</string>
-    <string name="reminder_bedtime_sunnah">Сунна перед сном</string>
     <string name="reminder_bedtime_sunnah_sub">Ас-Саджда, затем Аль-Мульк в %1$s</string>
+    <string name="reminder_bedtime_each_sub">Каждый вечер в %1$s</string>
     <string name="sunnah_reminder_notification_title">Вечернее чтение сунны</string>
-    <string name="sunnah_reminder_notification_text">Прочитайте Ас-Саджда, затем Аль-Мульк.</string>
     <string name="reminder_kahf_friday">Аль-Кахф в пятницу</string>
     <string name="reminder_kahf_friday_sub">Каждый четверг в %1$s</string>
     <string name="kahf_reminder_notification_title">Аль-Кахф, ночь пятницы</string>

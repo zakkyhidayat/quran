@@ -33,16 +33,24 @@ class MainActivity : ComponentActivity() {
     private var databaseReady = false
     private var pendingPage: Int? = null
     private var pendingSunnah: SunnahReading? = null
+    private var pendingAyah: Pair<Int, Int>? = null
 
     override fun attachBaseContext(newBase: android.content.Context) {
         super.attachBaseContext(AppLanguage.wrap(newBase))
     }
 
+    private fun ayahExtra(intent: Intent): Pair<Int, Int>? =
+        if (intent.hasExtra(Reminder.EXTRA_AYAH_SURAH)) intent.getIntExtra(Reminder.EXTRA_AYAH_SURAH, 1) to intent.getIntExtra(Reminder.EXTRA_AYAH_NUMBER, 1) else null
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         pendingSunnah = intent.getStringExtra(Reminder.EXTRA_SUNNAH_READING)
             ?.let { name -> SunnahReading.entries.firstOrNull { it.name == name } }
-        if (databaseReady && pendingSunnah != null) {
+        pendingAyah = ayahExtra(intent)
+        if (databaseReady && pendingAyah != null) {
+            pendingAyah?.let { (surah, ayah) -> vm.openAyahWithTranslation(surah, ayah) }
+            pendingAyah = null
+        } else if (databaseReady && pendingSunnah != null) {
             pendingSunnah?.let { vm.startSunnahReading(it) }
             pendingSunnah = null
         } else if (intent.hasExtra("page")) {
@@ -56,7 +64,8 @@ class MainActivity : ComponentActivity() {
         if (savedInstanceState == null) {
             pendingSunnah = intent.getStringExtra(Reminder.EXTRA_SUNNAH_READING)
                 ?.let { name -> SunnahReading.entries.firstOrNull { it.name == name } }
-            if (pendingSunnah == null && intent.hasExtra("page")) pendingPage = intent.getIntExtra("page", 1)
+            pendingAyah = ayahExtra(intent)
+            if (pendingSunnah == null && pendingAyah == null && intent.hasExtra("page")) pendingPage = intent.getIntExtra("page", 1)
         }
         setContent {
             // Posisi baca berubah setiap ganti halaman; UI tidak memakainya setelah layar dibuka, jadi perubahan yang hanya
@@ -99,7 +108,10 @@ class MainActivity : ComponentActivity() {
                 androidx.compose.runtime.LaunchedEffect(installed) {
                     if (installed == true) {
                         databaseReady = true
-                        pendingSunnah?.let { reading ->
+                        pendingAyah?.let { (surah, ayah) ->
+                            vm.openAyahWithTranslation(surah, ayah)
+                            pendingAyah = null
+                        } ?: pendingSunnah?.let { reading ->
                             vm.startSunnahReading(reading)
                             pendingSunnah = null
                         } ?: pendingPage?.let { page ->

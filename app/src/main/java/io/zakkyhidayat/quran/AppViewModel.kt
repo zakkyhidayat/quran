@@ -105,7 +105,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         // Pasang ulang jadwal pengingat setiap kali pengaturannya berubah (termasuk saat aplikasi dibuka).
         viewModelScope.launch {
             settingsRepository.settings
-                .map { listOf(it.reminderEnabled, it.reminderMinutes, it.reminderUnit, it.bedtimeSunnahReminderEnabled, it.kahfThursdayReminderEnabled, it.votdReminderEnabled) }
+                .map { listOf(it.reminderEnabled, it.reminderMinutes, it.reminderUnit, it.bedtimeReminderReadings, it.kahfThursdayReminderEnabled, it.votdReminderEnabled) }
                 .distinctUntilChanged()
                 .collect { io.zakkyhidayat.quran.reminder.Reminder.schedule(getApplication(), settingsRepository.settings.first()) }
         }
@@ -273,6 +273,12 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             settingsRepository.setLastAyah(surah, ayah)
             goToPage(mushaf.ayahPage(surah, ayah))
         }
+    }
+
+    /** Buka [surah]:[ayah] dalam mode ayat dan terjemahan (dari notifikasi "Ayat hari ini"). */
+    fun openAyahWithTranslation(surah: Int, ayah: Int) {
+        viewModelScope.launch { settingsRepository.setReadingMode(io.zakkyhidayat.quran.settings.ReadingMode.AyahTranslation) }
+        goToAyah(surah, ayah)
     }
 
     fun randomAyah() {

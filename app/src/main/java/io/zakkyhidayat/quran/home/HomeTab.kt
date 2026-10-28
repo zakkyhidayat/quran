@@ -384,16 +384,16 @@ internal fun plainTranslation(raw: String): String =
     raw.replace(Regex("<sup[^>]*>.*?</sup>"), "").replace(Regex("<[^>]+>"), "").replace(Regex("\\s+"), " ").trim()
 
 @Composable
-internal fun sunnahTitle(s: SunnahReading): String = stringResource(
-    when (s) {
-        SunnahReading.KahfFriday -> R.string.sunnah_kahf_friday
-        SunnahReading.MulkSajdah -> R.string.sunnah_mulk_sajdah
-        SunnahReading.Kursi -> R.string.sunnah_kursi
-        SunnahReading.BaqarahEnd -> R.string.sunnah_baqarah_end
-        SunnahReading.ThreeQuls -> R.string.sunnah_three_quls
-        SunnahReading.KahfFirstTen -> R.string.sunnah_kahf_ten
-    },
-)
+internal fun sunnahTitle(s: SunnahReading): String = stringResource(sunnahTitleRes(s))
+
+internal fun sunnahTitleRes(s: SunnahReading): Int = when (s) {
+    SunnahReading.KahfFriday -> R.string.sunnah_kahf_friday
+    SunnahReading.MulkSajdah -> R.string.sunnah_mulk_sajdah
+    SunnahReading.Kursi -> R.string.sunnah_kursi
+    SunnahReading.BaqarahEnd -> R.string.sunnah_baqarah_end
+    SunnahReading.ThreeQuls -> R.string.sunnah_three_quls
+    SunnahReading.KahfFirstTen -> R.string.sunnah_kahf_ten
+}
 
 @Composable
 internal fun sunnahNote(s: SunnahReading): String = stringResource(

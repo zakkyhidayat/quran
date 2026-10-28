@@ -209,10 +209,9 @@
     <string name="auto_backup_error">Impossible d’enregistrer dans le dossier choisi. Désactivez puis réactivez la sauvegarde automatique pour le choisir à nouveau.</string>
     <string name="reminder">Rappel de lecture</string>
     <string name="reminder_daily">Rappel quotidien</string>
-    <string name="reminder_bedtime_sunnah">Sunnah avant de dormir</string>
     <string name="reminder_bedtime_sunnah_sub">As-Sajda, puis Al-Mulk à %1$s</string>
+    <string name="reminder_bedtime_each_sub">Chaque soir à %1$s</string>
     <string name="sunnah_reminder_notification_title">Lecture de la Sunnah du soir</string>
-    <string name="sunnah_reminder_notification_text">Lisez As-Sajda, puis Al-Mulk.</string>
     <string name="reminder_kahf_friday">Al-Kahf du vendredi</string>
     <string name="reminder_kahf_friday_sub">Chaque jeudi à %1$s</string>
     <string name="kahf_reminder_notification_title">Al-Kahf, veille du vendredi</string>

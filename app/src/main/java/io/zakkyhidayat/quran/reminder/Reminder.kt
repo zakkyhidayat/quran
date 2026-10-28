@@ -16,9 +16,11 @@ import androidx.core.content.ContextCompat
 import io.zakkyhidayat.quran.MainActivity
 import io.zakkyhidayat.quran.R
 import io.zakkyhidayat.quran.app
+import io.zakkyhidayat.quran.data.AyahRange
 import io.zakkyhidayat.quran.data.Collections
 import io.zakkyhidayat.quran.data.DivisionMath
 import io.zakkyhidayat.quran.home.plainTranslation
+import io.zakkyhidayat.quran.home.sunnahTitleRes
 import io.zakkyhidayat.quran.data.MarkerKind
 import io.zakkyhidayat.quran.settings.AppSettings
 import io.zakkyhidayat.quran.settings.ReminderUnit
@@ -55,7 +57,7 @@ object Reminder {
         scheduleAlarm(
             alarms,
             context,
-            settings.bedtimeSunnahReminderEnabled,
+            settings.bedtimeReminderReadings.isNotEmpty(),
             BEDTIME_MINUTES,
             null,
             REQUEST_BEDTIME,
@@ -133,7 +135,7 @@ object Reminder {
         val settings = app.settings.settings.first()
         val enabled = when (kind) {
             ReminderKind.Daily -> DAILY_AVAILABLE && settings.reminderEnabled
-            ReminderKind.Bedtime -> settings.bedtimeSunnahReminderEnabled
+            ReminderKind.Bedtime -> settings.bedtimeReminderReadings.isNotEmpty()
             ReminderKind.KahfThursday -> settings.kahfThursdayReminderEnabled
             ReminderKind.VotdMorning, ReminderKind.VotdAfternoon, ReminderKind.VotdNight -> settings.votdReminderEnabled
         }
@@ -147,10 +149,15 @@ object Reminder {
         )
         when (kind) {
             ReminderKind.Bedtime -> {
+                // Satu notifikasi untuk semua bacaan malam yang menyala; ketukan membuka yang pertama.
+                val readings = settings.bedtimeReminderReadings
+                val first = readings.first()
+                val firstRange = AyahRange.parseList(first.refs).first()
                 notifySunnah(
-                    context, manager, SunnahReading.MulkSajdah, app.mushaf.ayahPage(32, 1),
+                    context, manager, first, app.mushaf.ayahPage(firstRange.surah, firstRange.from),
                     REQUEST_BEDTIME, BEDTIME_NOTIFICATION_ID,
-                    R.string.sunnah_reminder_notification_title, R.string.sunnah_reminder_notification_text,
+                    context.getString(R.string.sunnah_reminder_notification_title),
+                    readings.joinToString("\n") { context.getString(sunnahTitleRes(it)) },
                 )
                 return
             }
@@ -158,7 +165,7 @@ object Reminder {
                 notifySunnah(
                     context, manager, SunnahReading.KahfFriday, app.mushaf.ayahPage(18, 1),
                     REQUEST_KAHF, KAHF_NOTIFICATION_ID,
-                    R.string.kahf_reminder_notification_title, R.string.kahf_reminder_notification_text,
+                    context.getString(R.string.kahf_reminder_notification_title), context.getString(R.string.kahf_reminder_notification_text),
                 )
                 return
             }
@@ -233,7 +240,8 @@ object Reminder {
             context,
             REQUEST_VOTD + slot,
             Intent(context, MainActivity::class.java)
-                .putExtra("page", app.mushaf.ayahPage(range.surah, range.from))
+                .putExtra(EXTRA_AYAH_SURAH, range.surah)
+                .putExtra(EXTRA_AYAH_NUMBER, range.from)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
@@ -259,8 +267,8 @@ object Reminder {
         page: Int,
         requestCode: Int,
         notificationId: Int,
-        title: Int,
-        text: Int,
+        title: String,
+        text: String,
     ) {
         val open = PendingIntent.getActivity(
             context,
@@ -275,8 +283,9 @@ object Reminder {
             notificationId,
             NotificationCompat.Builder(context, CHANNEL)
                 .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle(context.getString(title))
-                .setContentText(context.getString(text))
+                .setContentTitle(title)
+                .setContentText(text.lineSequence().first())
+                .setStyle(NotificationCompat.BigTextStyle().bigText(text))
                 .setContentIntent(open)
                 .setAutoCancel(true)
                 .build(),
@@ -308,6 +317,10 @@ object Reminder {
     /** Al-Kahfi: setiap Kamis pukul 18.00 (pendekatan awal malam Jumat, sama dengan [SunnahTime.Friday]). */
     internal const val KAHF_MINUTES = 18 * 60
     const val EXTRA_SUNNAH_READING = "sunnah_reading"
+
+    /** Ayat yang dibuka dalam mode ayat dan terjemahan (notifikasi "Ayat hari ini"). */
+    const val EXTRA_AYAH_SURAH = "ayah_surah"
+    const val EXTRA_AYAH_NUMBER = "ayah_number"
 }
 
 /** Jenis pengingat; tiap jenis punya sakelar, alarm, dan notifikasinya sendiri. */
