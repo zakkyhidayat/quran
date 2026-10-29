@@ -51,6 +51,7 @@ import io.zakkyhidayat.quran.data.AyahRange
 import io.zakkyhidayat.quran.data.CollectionItem
 import io.zakkyhidayat.quran.data.CollectionKind
 import io.zakkyhidayat.quran.reader.AyahArabicText
+import io.zakkyhidayat.quran.reader.FootnoteList
 import io.zakkyhidayat.quran.reader.TajweedReaderControls
 import io.zakkyhidayat.quran.reader.translationText
 import io.zakkyhidayat.quran.settings.AppSettings
@@ -182,6 +183,7 @@ private fun PassageAyah(vm: AppViewModel, surah: Int, ayah: Int, translationIds:
                     },
                     style = MaterialTheme.typography.bodyLarge.scaled(LocalReadingTextScale.current.translation, 1.5f),
                 )
+                if (tr.footnotes.isNotEmpty()) FootnoteList(tr.footnotes)
             }
         }
     }

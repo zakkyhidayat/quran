@@ -107,6 +107,8 @@ Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pu
   bawah.
 - Popup mengambang di pembaca dibuat ringkas: baris pilihan counter setinggi 40 dp dengan jarak 3 dp, dan panel panduan tajwid
   berjarak 4 dp antarbaris dengan padding vertikal 8 dp.
+- Catatan kaki terjemahan tampil di bawah teksnya di lembar ayat, mode ayat dan terjemahan (juga terjemahan saja), dan
+  layar kumpulan doa lewat `FootnoteList`; sebelumnya hanya lembar ayat yang menampilkannya.
 - Tautan Notifications ada di Pengaturan > Pengingat dan membuka setelan notifikasi Android; status izin tampil ringkas
   di sisi kanan baris. Sakelar pengingat tidak meminta izin melalui dialog aplikasi. Saat ada progres Sunnah, tombol
   lanjut Sunnah tampil di atas tombol lanjut baca harian; lebarnya mengikuti konten dan tombol tutup berada di dalam
