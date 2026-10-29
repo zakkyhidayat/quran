@@ -298,6 +298,7 @@ private fun AyahRow(
                     },
                     style = body,
                 )
+                if (tr.footnotes.isNotEmpty()) FootnoteList(tr.footnotes)
             }
         }
         AnimatedVisibility(

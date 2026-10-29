@@ -168,26 +168,32 @@ fun AyahSheetContent(
                     )
                     if (tr.footnotes.isNotEmpty()) {
                         Spacer(Modifier.height(12.dp))
-                        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                            tr.footnotes.forEach { note ->
-                                Text(
-                                    text = buildAnnotatedString {
-                                        withStyle(SpanStyle(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)) {
-                                            append(if (note.label != null) "${note.label}. " else "• ")
-                                        }
-                                        append(note.text)
-                                    },
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                )
-                            }
-                        }
+                        FootnoteList(tr.footnotes)
                     }
                 }
             }
         }
         if (extras != null && !extras.isEmpty) ExtrasSections(extras, surahNames, onOpenAyah)
         Spacer(Modifier.height(24.dp))
+    }
+}
+
+/** Catatan kaki terjemahan satu ayat: nomor tebal berwarna utama, lalu isinya. Dipakai lembar ayat, daftar ayat, dan kumpulan doa. */
+@Composable
+internal fun FootnoteList(notes: List<io.zakkyhidayat.quran.data.Footnote>, modifier: Modifier = Modifier) {
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        notes.forEach { note ->
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(SpanStyle(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)) {
+                        append(if (note.label != null) "${note.label}. " else "• ")
+                    }
+                    append(note.text)
+                },
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
     }
 }
 
