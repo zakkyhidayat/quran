@@ -14,6 +14,9 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.FilledTonalIconToggleButton
 import androidx.compose.material3.Icon
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.background
+import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -94,6 +97,8 @@ internal fun AyahListReader(
     animateArabic: Boolean = true,
     state: PagerState,
     targetAyah: AyahRef?,
+    /** Berubah tiap ada permintaan lompat, supaya ayat yang sama bisa digulir lagi setelah pengguna menggulir pergi. */
+    targetToken: Int = 0,
     modifier: Modifier = Modifier,
     onFirstVisible: (page: Int, ayah: AyahRef) -> Unit = { _, _ -> },
 ) {
@@ -119,6 +124,7 @@ internal fun AyahListReader(
     }
 
     val contentDirection = LocalLayoutDirection.current
+    val selected by vm.selected.collectAsStateWithLifecycle()
     var openAyah by remember { mutableStateOf<AyahRef?>(null) }
     val bookmarks by vm.bookmarkStore.bookmarks.collectAsStateWithLifecycle()
     val bookmarkedAyahs = remember(bookmarks) {
@@ -130,10 +136,15 @@ internal fun AyahListReader(
         HorizontalPager(state = state, reverseLayout = true, beyondViewportPageCount = 1, modifier = modifier.fillMaxSize()) { index ->
             CompositionLocalProvider(LocalLayoutDirection provides contentDirection) {
                 PageAyahs(
-                    vm, index + 1, pages[index + 1].orEmpty(), surahs, translationIds, showArabic, tajweed, animateArabic, targetAyah,
+                    vm, index + 1, pages[index + 1].orEmpty(), surahs, translationIds, showArabic, tajweed, animateArabic, targetAyah, targetToken,
                     isCurrent = state.currentPage == index,
                     openAyah = openAyah,
-                    onToggleAyah = { ref -> openAyah = if (openAyah == ref) null else ref },
+                    highlighted = selected,
+                    onToggleAyah = { ref ->
+                        openAyah = if (openAyah == ref) null else ref
+                        // Sorotan lompatan hilang begitu pengguna mulai berinteraksi dengan ayat.
+                        if (selected != null) vm.clearSelection()
+                    },
                     bookmarkedAyahs = bookmarkedAyahs,
                     onFirstVisible = onFirstVisible,
                 )
@@ -153,8 +164,10 @@ private fun PageAyahs(
     tajweed: Boolean,
     animateArabic: Boolean,
     targetAyah: AyahRef?,
+    targetToken: Int,
     isCurrent: Boolean,
     openAyah: AyahRef?,
+    highlighted: AyahRef?,
     onToggleAyah: (AyahRef) -> Unit,
     bookmarkedAyahs: Set<AyahRef>,
     onFirstVisible: (page: Int, ayah: AyahRef) -> Unit,
@@ -168,7 +181,7 @@ private fun PageAyahs(
         }
     }
     // Lompat ke ayat tertentu (dari daftar, pencarian, atau baca terakhir) bila ayat itu ada di halaman ini.
-    LaunchedEffect(targetAyah, ayahs) {
+    LaunchedEffect(targetAyah, targetToken, ayahs) {
         val i = ayahs.indexOfFirst { targetAyah != null && it.surah == targetAyah.surah && it.ayah == targetAyah.ayah }
         if (i > 0) listState.scrollToItem(i)
     }
@@ -180,6 +193,7 @@ private fun PageAyahs(
                 AyahRow(
                     vm, pos, surahs[pos.surah], translationIds, showArabic, tajweed, animateArabic,
                     actionsOpen = openAyah == ref,
+                    highlighted = highlighted == ref,
                     bookmarked = ref in bookmarkedAyahs,
                     onToggle = { onToggleAyah(ref) },
                 )
@@ -254,6 +268,7 @@ private fun AyahRow(
     tajweed: Boolean,
     animateArabic: Boolean,
     actionsOpen: Boolean,
+    highlighted: Boolean,
     bookmarked: Boolean,
     onToggle: () -> Unit,
 ) {
@@ -263,9 +278,15 @@ private fun AyahRow(
     val detail by produceState<AyahDetail?>(null, pos, translationIds) {
         value = vm.mushaf.ayahDetail(pos.surah, pos.ayah, translationIds)
     }
+    val highlightColor by animateColorAsState(
+        if (highlighted) MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f) else Color.Transparent,
+        animationSpec = MaterialTheme.motionScheme.defaultEffectsSpec(),
+        label = "ayahHighlight",
+    )
     Column(
         Modifier
             .fillMaxWidth()
+            .background(highlightColor)
             .clickable(onClickLabel = stringResource(if (actionsOpen) R.string.ayah_actions_hide else R.string.ayah_actions_show), onClick = onToggle)
             .padding(horizontal = 16.dp, vertical = 12.dp),
     ) {
