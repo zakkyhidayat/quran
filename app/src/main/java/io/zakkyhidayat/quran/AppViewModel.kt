@@ -270,8 +270,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         selected.value = AyahRef(surah, ayah)
         sheetVisible.value = openSheet
         viewModelScope.launch {
-            settingsRepository.setLastAyah(surah, ayah)
+            // Halaman dulu: pembaca tidak menunggu tulis DataStore, jadi lompatnya langsung terlihat.
             goToPage(mushaf.ayahPage(surah, ayah))
+            settingsRepository.setLastAyah(surah, ayah)
         }
     }
 

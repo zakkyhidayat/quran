@@ -148,11 +148,15 @@ fun ReaderScreen(
     val currentPage by remember(listMode) { derivedStateOf { activePager.currentPage + 1 } }
     // Ayat tujuan di mode daftar (lompat ke ayat, baca terakhir): halaman itu digulir sampai ayatnya terlihat.
     var listTargetAyah by remember { mutableStateOf(vm.selected.value) }
+    var listTargetToken by remember { mutableIntStateOf(0) }
 
     LaunchedEffect(listMode) {
         vm.pendingPage.collect { page ->
             if (page != null) {
-                if (listMode) listTargetAyah = vm.selected.value
+                if (listMode) {
+                    listTargetAyah = vm.selected.value
+                    listTargetToken++
+                }
                 activePager.scrollToPage(page - 1)
                 vm.pendingPage.value = null
             }
@@ -370,6 +374,7 @@ fun ReaderScreen(
                     animateArabic = listMode && listAlpha > 0f,
                     state = listPagerState,
                     targetAyah = listTargetAyah,
+                    targetToken = listTargetToken,
                     onFirstVisible = { page, ayah -> listFirst = page to ayah },
                     modifier = Modifier.fillMaxSize(),
                 )
