@@ -92,6 +92,7 @@
     <string name="translit_sub">Ayet panelinde Latin harfli okunuşu göster</string>
     <string name="tajweed_title">Tecvid renkleri</string>
     <string name="tajweed_sub">Harfleri tecvid kurallarına göre renklendir</string>
+    <string name="extras_language">Tema ve konu dili</string>
     <string name="keep_screen_on_title">Ekranı açık tut</string>
     <string name="keep_screen_on_sub">Okurken ekranın kapanmasını önle</string>
     <string name="tajweed_guide_open">Tecvid rehberini aç</string>

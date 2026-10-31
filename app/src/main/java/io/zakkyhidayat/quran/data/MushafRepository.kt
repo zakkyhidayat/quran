@@ -336,8 +336,9 @@ class MushafRepository(context: Context) {
     val hasTopics get() = "topics" in optionalTables
 
     // Terjemahan nama/deskripsi topik dan tema (tabel *_i18n dari tools/explore_i18n/). Bila tabel atau barisnya tidak ada,
-    // COALESCE jatuh ke teks Inggris QUL. Bahasa diambil dari locale aplikasi; Android memakai kode lama "in" untuk Indonesia.
-    private fun contentLanguage(): String = java.util.Locale.getDefault().language.let { if (it == "in") "id" else it }
+    // COALESCE jatuh ke teks Inggris QUL. Bahasanya pilihan pengguna (extrasLanguage), bukan locale aplikasi; diset AppViewModel.
+    @Volatile var extrasLang: String = "en"
+    private fun contentLanguage(): String = extrasLang
     private val hasTopicI18n get() = "topics_i18n" in optionalTables
     private val hasThemeI18n get() = "ayah_themes_i18n" in optionalTables
     private val TOPIC_NAME get() = if (hasTopicI18n) "COALESCE(i.name, t.name)" else "t.name"

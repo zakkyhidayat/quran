@@ -1,6 +1,7 @@
 package io.zakkyhidayat.quran.settings
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,10 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -54,6 +59,25 @@ internal fun translationLabel(tr: io.zakkyhidayat.quran.data.TranslationInfo): S
         else -> languageDisplayName(tr.lang, tr.langName, LocalConfiguration.current.locales[0])
     }
     return stringResource(R.string.translation_label, language, tr.name)
+}
+
+/** Bahasa tema dan topik ayat, dipisah dari bahasa aplikasi; bahasa tanpa terjemahan jatuh ke Inggris. */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun ExtrasLanguageRow(vm: AppViewModel, settings: AppSettings) {
+    val scope = rememberCoroutineScope()
+    val options = listOf("en" to stringResource(R.string.lang_name_en), "id" to stringResource(R.string.lang_name_id))
+    Labeled(stringResource(R.string.extras_language)) {
+        SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+            options.forEachIndexed { i, (code, label) ->
+                SegmentedButton(
+                    selected = settings.extrasLanguage == code,
+                    onClick = { scope.launch { vm.settingsRepository.setExtrasLanguage(code) } },
+                    shape = SegmentedButtonDefaults.itemShape(i, options.size),
+                ) { Text(label) }
+            }
+        }
+    }
 }
 
 /**

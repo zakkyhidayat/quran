@@ -22,6 +22,9 @@ enum class ContrastLevel { Standard, Medium, High }
 /** Satuan bagian harian untuk pengingat membaca. */
 enum class ReminderUnit { Juz, Hizb, Manzil }
 
+/** Bahasa tema dan topik yang bisa dipilih; hanya kode yang punya terjemahan di quran.db yang ditawarkan. */
+val EXTRAS_LANGUAGES = listOf("en", "id")
+
 /** Cara baca, berlaku untuk semua surah: halaman mushaf, ayat dengan terjemahan, atau terjemahan saja. */
 enum class ReadingMode { Mushaf, AyahTranslation, Translation }
 
@@ -41,6 +44,8 @@ data class AppSettings(
     val showTransliteration: Boolean = true,
     val translationIds: List<String> = listOf("id-kemenag"),
     val readingMode: ReadingMode = ReadingMode.Mushaf,
+    /** Kode bahasa untuk tema dan topik ayat (en atau id); terpisah dari bahasa aplikasi, bawaan Inggris (sumber QUL). */
+    val extrasLanguage: String = "en",
     /** Ukuran teks Arab (daftar ayat, lembar ayat) dalam persen dari ukuran bawaan. Halaman mushaf tidak terpengaruh. */
     val arabicTextPercent: Int = 100,
     /** Ukuran teks terjemahan dalam persen dari ukuran bawaan. */
@@ -97,6 +102,7 @@ class SettingsRepository(private val context: Context) {
     private val transliterationKey = booleanPreferencesKey("transliteration")
     private val translationsKey = stringPreferencesKey("translations")
     private val readingModeKey = stringPreferencesKey("reading_mode")
+    private val extrasLanguageKey = stringPreferencesKey("extras_language")
     private val arabicTextKey = intPreferencesKey("arabic_text_percent")
     private val translationTextKey = intPreferencesKey("translation_text_percent")
     private val onboardingKey = booleanPreferencesKey("onboarding_done")
@@ -144,6 +150,7 @@ class SettingsRepository(private val context: Context) {
             showTransliteration = prefs[transliterationKey] ?: true,
             translationIds = prefs[translationsKey]?.split(',')?.filter { it.isNotBlank() } ?: defaultTranslations(),
             readingMode = prefs[readingModeKey].toEnum(ReadingMode.Mushaf),
+            extrasLanguage = prefs[extrasLanguageKey]?.takeIf { it in EXTRAS_LANGUAGES } ?: "en",
             arabicTextPercent = prefs[arabicTextKey] ?: 100,
             translationTextPercent = prefs[translationTextKey] ?: 100,
             autoBackupUri = prefs[autoBackupUriKey],
@@ -275,6 +282,8 @@ class SettingsRepository(private val context: Context) {
     suspend fun setTranslationTextPercent(value: Int) = context.dataStore.edit { it[translationTextKey] = value }
 
     suspend fun setReadingMode(value: ReadingMode) = context.dataStore.edit { it[readingModeKey] = value.name }
+
+    suspend fun setExtrasLanguage(code: String) = context.dataStore.edit { it[extrasLanguageKey] = code }
 
     suspend fun setCounterMode(value: CounterMode) = context.dataStore.edit { it[counterModeKey] = value.name }
 

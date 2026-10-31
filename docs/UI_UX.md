@@ -112,6 +112,9 @@ Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pu
 - Lompat ke ayat (kartu Ayat hari ini, histori, bookmark, Sunnah) di mode ayat dan terjemahan menggulir ke ayat itu dan
   menyorotnya dengan warna `secondaryContainer`; sorotan hilang saat pengguna mengetuk ayat. Halaman dibuka lebih dulu,
   baru posisi baca disimpan (`AppViewModel.goToAyah`), jadi lompatnya tidak menunggu DataStore.
+- Tema dan topik ayat memakai bahasa pilihan sendiri (Pengaturan > Terjemahan, `extrasLanguage`: Inggris bawaan atau
+  Indonesia), terpisah dari bahasa aplikasi. Bahasa yang belum punya terjemahan di `quran.db` jatuh ke teks Inggris QUL.
+  Dipakai lembar ayat, kartu tema/topik, dan layar Jelajahi lewat `MushafRepository.extrasLang`.
 - Tautan Notifications ada di Pengaturan > Pengingat dan membuka setelan notifikasi Android; status izin tampil ringkas
   di sisi kanan baris. Sakelar pengingat tidak meminta izin melalui dialog aplikasi. Saat ada progres Sunnah, tombol
   lanjut Sunnah tampil di atas tombol lanjut baca harian; lebarnya mengikuti konten dan tombol tutup berada di dalam
