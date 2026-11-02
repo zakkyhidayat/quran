@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.layout.layout
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -30,6 +31,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -257,9 +264,18 @@ private fun VerseOfTheDay(vm: AppViewModel, onOpenReader: () -> Unit, onGestureC
         if (unlocked > seenUnlocked) pagerState.animateScrollToPage(unlocked - 1)
         seenUnlocked = unlocked
     }
+    // Kartu terbuka menampilkan teks penuh: tinggi pager ikut tinggi isi yang diukur (tidak kurang dari kartu biasa).
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    var measuredPx by remember { mutableIntStateOf(0) }
+    LaunchedEffect(pagerState.currentPage) { expanded = false }
+    val density = LocalDensity.current
+    val pagerHeight by animateDpAsState(
+        if (expanded && measuredPx > 0) maxOf(VOTD_CARD_HEIGHT, with(density) { measuredPx.toDp() }) else VOTD_CARD_HEIGHT,
+        label = "votdHeight",
+    )
     HorizontalPager(
         state = pagerState,
-        modifier = Modifier.fillMaxWidth().height(300.dp).padding(top = 8.dp),
+        modifier = Modifier.fillMaxWidth().height(pagerHeight).padding(top = 8.dp),
         key = { it },
     ) { page ->
         VerseOfTheDayCard(
@@ -271,11 +287,16 @@ private fun VerseOfTheDay(vm: AppViewModel, onOpenReader: () -> Unit, onGestureC
             slotLabel = stringResource(DAILY_SLOT_LABELS[page]),
             page = page,
             total = unlocked,
+            expanded = expanded && page == pagerState.currentPage,
+            onToggle = { expanded = !expanded },
+            onMeasured = { measuredPx = it },
             onOpenReader = onOpenReader,
             onGestureChanged = onGestureChanged,
         )
     }
 }
+
+private val VOTD_CARD_HEIGHT = 300.dp
 
 private val DAILY_SLOT_LABELS = listOf(
     R.string.home_votd_morning,
@@ -293,6 +314,9 @@ private fun VerseOfTheDayCard(
     slotLabel: String,
     page: Int,
     total: Int,
+    expanded: Boolean,
+    onToggle: () -> Unit,
+    onMeasured: (Int) -> Unit,
     onOpenReader: () -> Unit,
     onGestureChanged: (Boolean) -> Unit,
 ) {
@@ -313,9 +337,7 @@ private fun VerseOfTheDayCard(
         listOf(container, lerp(container, MaterialTheme.colorScheme.surfaceContainerHigh, 0.28f)),
     )
     Card(
-        onClick = {
-            if (r != null) { vm.goToAyah(r.surah, r.from); onOpenReader() }
-        },
+        onClick = { if (r != null) onToggle() },
         enabled = r != null,
         colors = CardDefaults.cardColors(containerColor = Color.Transparent, contentColor = MaterialTheme.colorScheme.onPrimaryContainer),
         shape = shape,
@@ -333,47 +355,62 @@ private fun VerseOfTheDayCard(
                 }
             },
     ) {
-        Column(
-            Modifier.fillMaxSize().background(gradient, shape).padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(AppIcons.Favorite, contentDescription = null)
-                Text(stringResource(R.string.home_votd), style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(start = 8.dp).weight(1f))
-                Text(slotLabel, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimaryContainer)
-            }
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text(
-                    r?.let { "${surahs[it.surah]?.nameLatin.orEmpty()} $it" }.orEmpty(),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                )
-                // Nomor hanya tampil bila ada lebih dari satu potongan terbuka; kartu yang belum waktunya tidak dibocorkan.
-                if (total > 1) {
-                    Text("${page + 1}/$total", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
+        // Terbuka: isi tidak dipotong dan diukur tingginya (wrapContentHeight unbounded) supaya pager bisa mengikutinya.
+        val contentModifier = if (expanded) {
+            Modifier.fillMaxWidth().heightIn(min = VOTD_CARD_HEIGHT).wrapContentHeight(unbounded = true).onSizeChanged { onMeasured(it.height) }
+        } else {
+            Modifier.fillMaxSize()
+        }
+        Box(Modifier.fillMaxSize()) {
+            Column(
+                contentModifier.background(gradient, shape).padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(AppIcons.Favorite, contentDescription = null)
+                    Text(stringResource(R.string.home_votd), style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(start = 8.dp).weight(1f))
+                    Text(slotLabel, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimaryContainer)
                 }
-            }
-            if (ayahs.isNotEmpty()) {
-                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                     Text(
-                        ayahs.joinToString(" ") { it.arabic },
-                        style = MaterialTheme.typography.bodyLarge.copy(fontFamily = arabicFont, lineHeight = MaterialTheme.typography.bodyLarge.fontSize * 1.8f),
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier.fillMaxWidth(),
-                        maxLines = 4,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                }
-                val translation = ayahs.mapNotNull { a -> a.translations.firstOrNull()?.text?.let(::plainTranslation)?.takeIf { it.isNotBlank() } }
-                if (translation.isNotEmpty()) {
-                    Text(
-                        translation.joinToString(" "),
-                        style = MaterialTheme.typography.bodyLarge,
+                        r?.let { "${surahs[it.surah]?.nameLatin.orEmpty()} $it" }.orEmpty(),
+                        style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        maxLines = 4,
-                        overflow = TextOverflow.Ellipsis,
                     )
+                    // Nomor hanya tampil bila ada lebih dari satu potongan terbuka; kartu yang belum waktunya tidak dibocorkan.
+                    if (total > 1) {
+                        Text("${page + 1}/$total", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                    }
                 }
+                if (ayahs.isNotEmpty()) {
+                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                        Text(
+                            ayahs.joinToString(" ") { it.arabic },
+                            style = MaterialTheme.typography.bodyLarge.copy(fontFamily = arabicFont, lineHeight = MaterialTheme.typography.bodyLarge.fontSize * 1.8f),
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier.fillMaxWidth(),
+                            maxLines = if (expanded) Int.MAX_VALUE else 4,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                    val translation = ayahs.mapNotNull { a -> a.translations.firstOrNull()?.text?.let(::plainTranslation)?.takeIf { it.isNotBlank() } }
+                    if (translation.isNotEmpty()) {
+                        Text(
+                            translation.joinToString(" "),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            maxLines = if (expanded) Int.MAX_VALUE else 4,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                }
+                if (expanded) Spacer(Modifier.height(48.dp))
+            }
+            if (expanded && r != null) {
+                FilledTonalButton(
+                    onClick = { vm.goToAyah(r.surah, r.from); onOpenReader() },
+                    modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp),
+                ) { Text(stringResource(R.string.open_in_reader)) }
             }
         }
     }

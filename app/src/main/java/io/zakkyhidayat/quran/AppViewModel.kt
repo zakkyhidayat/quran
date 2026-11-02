@@ -71,8 +71,12 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     // Tambahan tematik ayat terpilih (tema, topik, ayat serupa, mutasyabihat); kosong bila datanya tidak dibundel.
-    val ayahExtras: StateFlow<AyahExtras?> = selected
-        .mapLatest { sel -> sel?.let { mushaf.ayahExtras(it.surah, it.ayah) }?.takeUnless { it.isEmpty } }
+    private val extrasLanguage = settingsRepository.settings.map { it.extrasLanguage }.distinctUntilChanged()
+    val ayahExtras: StateFlow<AyahExtras?> = combine(selected, extrasLanguage) { sel, lang -> sel to lang }
+        .mapLatest { (sel, lang) ->
+            mushaf.extrasLang = lang
+            sel?.let { mushaf.ayahExtras(it.surah, it.ayah) }?.takeUnless { it.isEmpty }
+        }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     // Pintu masuk Jelajahi hanya tampil bila quran.db memuat data topik.
@@ -102,6 +106,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         // Cadangan otomatis menyimpan bookmark dan posisi baca ke folder yang dipilih.
         autoBackup()
         recordHistory()
+        // Bahasa tema dan topik ikut dipakai layar Jelajahi, jadi diset begitu berubah (tidak hanya saat lembar ayat dibuka).
+        viewModelScope.launch { extrasLanguage.collect { mushaf.extrasLang = it } }
         // Pasang ulang jadwal pengingat setiap kali pengaturannya berubah (termasuk saat aplikasi dibuka).
         viewModelScope.launch {
             settingsRepository.settings
@@ -296,6 +302,11 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         selected.value = ref
         sheetVisible.value = true
         viewModelScope.launch { settingsRepository.setLastAyah(ref.surah, ref.ayah) }
+    }
+
+    /** Ketuk ayat yang sudah terpilih untuk membatalkan pilihannya (sorotan dan lembar ayat ikut tertutup); ayat lain dipilih. */
+    fun toggleAyahSelection(ref: AyahRef) {
+        if (selected.value == ref) clearSelection() else selectAyah(ref)
     }
 
     fun moveSelection(step: Int) {

@@ -155,6 +155,8 @@ fun SettingsScreen(
                         )
                     }
                     Spacer(Modifier.height(16.dp))
+                    ExtrasLanguageRow(vm, settings)
+                    Spacer(Modifier.height(16.dp))
                     TranslationControls(vm, settings, Modifier.weight(1f), fillAvailableHeight = true)
                 }
             } else {
