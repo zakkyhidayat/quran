@@ -84,7 +84,8 @@ Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pu
   lewat tetap bisa digeser ke belakang. Hari potongan dimulai pukul 04.00, jadi dini hari masih memakai potongan malam
   sebelumnya. Notifikasinya satu sakelar di Pengaturan > Pengingat (bawaan mati, khusus perangkat ini): potongan yang sama
   dengan kartu, pukul 06.00 (pagi), 13.00 (siang), dan 20.00 (malam); isinya terjemahan aktif (Arab bila belum ada) dan
-  ketukan membuka ayatnya dalam mode ayat dan terjemahan (mode baca ikut berpindah ke sana dan tetap tersimpan).
+  ketukan membuka ayatnya dalam mode ayat dan terjemahan. Saat diperluas, notifikasi menampilkan nama surah dan ayat sebagai judul,
+  lalu teks Arab dan terjemahan seperti kartu di beranda (mode baca ikut berpindah ke sana dan tetap tersimpan).
 - Bingkai nama surah memakai 97% lebar halaman (margin kiri dan kanan masing-masing 1,5%).
 - Histori bacaan: satu baris per surah, 5 tampil, langsung setelah Ayat Hari Ini.
 - Kumpulan ayat: doa, solusi, adab, dosa besar; layar kumpulan dengan teks Arab, terjemahan, dan "Buka di pembaca".
