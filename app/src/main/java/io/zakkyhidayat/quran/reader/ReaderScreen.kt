@@ -343,7 +343,7 @@ fun ReaderScreen(
                                             ayahTexts = ayahTexts,
                                             surahs = surahs,
                                             selected = selected,
-                                            onAyahClick = { vm.selectAyah(it) },
+                                            onAyahClick = { vm.toggleAyahSelection(it) },
                                             tajweed = settings.tajweed,
                                             onSurahClick = onOpenSurahInfo,
                                         )

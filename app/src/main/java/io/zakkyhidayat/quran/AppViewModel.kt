@@ -304,6 +304,11 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch { settingsRepository.setLastAyah(ref.surah, ref.ayah) }
     }
 
+    /** Ketuk ayat yang sudah terpilih untuk membatalkan pilihannya (sorotan dan lembar ayat ikut tertutup); ayat lain dipilih. */
+    fun toggleAyahSelection(ref: AyahRef) {
+        if (selected.value == ref) clearSelection() else selectAyah(ref)
+    }
+
     fun moveSelection(step: Int) {
         val current = selected.value ?: return
         viewModelScope.launch {
