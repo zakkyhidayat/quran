@@ -112,9 +112,9 @@ Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pu
 - Lompat ke ayat (kartu Ayat hari ini, histori, bookmark, Sunnah) di mode ayat dan terjemahan menggulir ke ayat itu dan
   menyorotnya dengan warna `secondaryContainer`; sorotan hilang saat pengguna mengetuk ayat. Halaman dibuka lebih dulu,
   baru posisi baca disimpan (`AppViewModel.goToAyah`), jadi lompatnya tidak menunggu DataStore.
-- Tema dan topik ayat memakai bahasa pilihan sendiri (Pengaturan > Terjemahan, `extrasLanguage`: Inggris bawaan atau
-  Indonesia), terpisah dari bahasa aplikasi. Bahasa yang belum punya terjemahan di `quran.db` jatuh ke teks Inggris QUL.
-  Dipakai lembar ayat, kartu tema/topik, dan layar Jelajahi lewat `MushafRepository.extrasLang`.
+- Tema dan topik ayat memakai pilihan di Pengaturan > Terjemahan: bahasa aplikasi (bawaan), bahasa sistem, atau English /
+  Indonesia. Pilihan "app" dan "system" menampilkan bahasa yang dipakai di bawah judulnya. Bahasa tanpa terjemahan di
+  `quran.db` jatuh ke teks Inggris QUL. Dibaca lewat `AppLanguage.extrasLanguage` oleh `MushafRepository`.
 - Ketuk kartu "Ayat hari ini" di beranda membuka teks penuhnya: tinggi kartu bertambah bila teks tidak muat (pager
   mengikuti tinggi yang diukur), dan tombol "Buka di pembaca" muncul di tengah bawah kartu. Ketuk lagi untuk menciutkan;
   geser ke kartu lain juga menciutkannya. Tombol itu yang membuka halaman, bukan ketukan kartu.

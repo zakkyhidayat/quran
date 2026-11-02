@@ -94,6 +94,8 @@
     <string name="tajweed_title">Tajweed colours</string>
     <string name="tajweed_sub">Show letters coloured by tajweed rules</string>
     <string name="extras_language">Language for themes and topics</string>
+    <string name="extras_lang_app">App language</string>
+    <string name="extras_lang_system">System language</string>
     <string name="keep_screen_on_title">Keep screen on</string>
     <string name="keep_screen_on_sub">Prevent the screen from turning off while reading</string>
     <string name="tajweed_guide_open">Open tajweed guide</string>

@@ -93,6 +93,8 @@
     <string name="tajweed_title">رنگ‌های تجوید</string>
     <string name="tajweed_sub">رنگ‌آمیزی حروف بر اساس احکام تجوید</string>
     <string name="extras_language">زبان موضوع‌ها و تم‌ها</string>
+    <string name="extras_lang_app">زبان برنامه</string>
+    <string name="extras_lang_system">زبان سیستم</string>
     <string name="keep_screen_on_title">روشن ماندن صفحه</string>
     <string name="keep_screen_on_sub">جلوگیری از خاموش شدن صفحه هنگام خواندن</string>
     <string name="tajweed_guide_open">باز کردن راهنمای تجوید</string>

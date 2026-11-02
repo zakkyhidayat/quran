@@ -1,7 +1,6 @@
 package io.zakkyhidayat.quran.settings
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.Row
@@ -12,10 +11,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -61,20 +58,28 @@ internal fun translationLabel(tr: io.zakkyhidayat.quran.data.TranslationInfo): S
     return stringResource(R.string.translation_label, language, tr.name)
 }
 
-/** Bahasa tema dan topik ayat, dipisah dari bahasa aplikasi; bahasa tanpa terjemahan jatuh ke Inggris. */
-@OptIn(ExperimentalMaterial3Api::class)
+/** Bahasa tema dan topik ayat: bahasa aplikasi, bahasa sistem, atau salah satu bahasa yang punya terjemahan. */
 @Composable
 internal fun ExtrasLanguageRow(vm: AppViewModel, settings: AppSettings) {
     val scope = rememberCoroutineScope()
-    val options = listOf("en" to stringResource(R.string.lang_name_en), "id" to stringResource(R.string.lang_name_id))
+    val context = LocalContext.current
+    val options = listOf(
+        "app" to stringResource(R.string.extras_lang_app),
+        "system" to stringResource(R.string.extras_lang_system),
+        "en" to stringResource(R.string.lang_name_en),
+        "id" to stringResource(R.string.lang_name_id),
+    )
     Labeled(stringResource(R.string.extras_language)) {
-        SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-            options.forEachIndexed { i, (code, label) ->
-                SegmentedButton(
-                    selected = settings.extrasLanguage == code,
+        Group {
+            options.forEach { (code, label) ->
+                // Bahasa yang sebenarnya dipakai ditampilkan di bawah pilihan "app" dan "system".
+                val resolved = io.zakkyhidayat.quran.AppLanguage.extrasLanguage(code, context)
+                item(
+                    title = label,
+                    subtitle = if (code == "app" || code == "system") io.zakkyhidayat.quran.AppLanguage.endonyms[resolved] else null,
                     onClick = { scope.launch { vm.settingsRepository.setExtrasLanguage(code) } },
-                    shape = SegmentedButtonDefaults.itemShape(i, options.size),
-                ) { Text(label) }
+                    trailing = { RadioButton(selected = settings.extrasLanguage == code, onClick = null) },
+                )
             }
         }
     }

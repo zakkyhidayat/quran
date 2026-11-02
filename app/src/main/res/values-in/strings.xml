@@ -93,6 +93,8 @@
     <string name="tajweed_title">Warna tajwid</string>
     <string name="tajweed_sub">Tampilkan huruf berwarna sesuai hukum tajwid</string>
     <string name="extras_language">Bahasa tema dan topik</string>
+    <string name="extras_lang_app">Bahasa aplikasi</string>
+    <string name="extras_lang_system">Bahasa sistem</string>
     <string name="keep_screen_on_title">Layar tetap menyala</string>
     <string name="keep_screen_on_sub">Cegah layar mati saat membaca</string>
     <string name="tajweed_guide_open">Buka panduan tajwid</string>

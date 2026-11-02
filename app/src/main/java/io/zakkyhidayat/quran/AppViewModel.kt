@@ -72,9 +72,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     // Tambahan tematik ayat terpilih (tema, topik, ayat serupa, mutasyabihat); kosong bila datanya tidak dibundel.
     private val extrasLanguage = settingsRepository.settings.map { it.extrasLanguage }.distinctUntilChanged()
-    val ayahExtras: StateFlow<AyahExtras?> = combine(selected, extrasLanguage) { sel, lang -> sel to lang }
-        .mapLatest { (sel, lang) ->
-            mushaf.extrasLang = lang
+    val ayahExtras: StateFlow<AyahExtras?> = combine(selected, extrasLanguage) { sel, setting -> sel to setting }
+        .mapLatest { (sel, setting) ->
+            mushaf.extrasSetting = setting
             sel?.let { mushaf.ayahExtras(it.surah, it.ayah) }?.takeUnless { it.isEmpty }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
@@ -107,7 +107,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         autoBackup()
         recordHistory()
         // Bahasa tema dan topik ikut dipakai layar Jelajahi, jadi diset begitu berubah (tidak hanya saat lembar ayat dibuka).
-        viewModelScope.launch { extrasLanguage.collect { mushaf.extrasLang = it } }
+        viewModelScope.launch { extrasLanguage.collect { mushaf.extrasSetting = it } }
         // Pasang ulang jadwal pengingat setiap kali pengaturannya berubah (termasuk saat aplikasi dibuka).
         viewModelScope.launch {
             settingsRepository.settings

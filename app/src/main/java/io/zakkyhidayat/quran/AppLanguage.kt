@@ -41,6 +41,19 @@ object AppLanguage {
         return if (code == "in") "id" else if (code in supported) code else "en"
     }
 
+    /**
+     * Bahasa tema dan topik dari pilihan [setting]: "app" mengikuti bahasa aplikasi, "system" bahasa perangkat (bukan
+     * bahasa per-aplikasi), selain itu kode yang dipilih. Hanya en dan id yang punya terjemahan; lainnya jatuh ke en.
+     */
+    fun extrasLanguage(setting: String, context: Context): String {
+        val code = when (setting) {
+            "app" -> effective(context)
+            "system" -> android.content.res.Resources.getSystem().configuration.locales[0].language
+            else -> setting
+        }
+        return if (code == "id" || code == "in") "id" else "en"
+    }
+
     /** Simpan pilihan lalu terapkan: Android 13+ lewat LocaleManager (ikut tercatat di pengaturan sistem), versi lama dengan membuat ulang Activity. */
     fun apply(context: Context, code: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
