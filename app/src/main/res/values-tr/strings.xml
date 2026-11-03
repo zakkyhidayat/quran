@@ -94,8 +94,6 @@
     <string name="tajweed_title">Tecvid renkleri</string>
     <string name="tajweed_sub">Harfleri tecvid kurallarına göre renklendir</string>
     <string name="extras_language">Tema ve konu dili</string>
-    <string name="extras_lang_app">Uygulama dili</string>
-    <string name="extras_lang_system">Sistem dili</string>
     <string name="keep_screen_on_title">Ekranı açık tut</string>
     <string name="keep_screen_on_sub">Okurken ekranın kapanmasını önle</string>
     <string name="tajweed_guide_open">Tecvid rehberini aç</string>
@@ -338,4 +336,9 @@
     <string name="doa_back_text">Okuyucu “%1$s” bölümünden açıldı.</string>
     <string name="doa_back_collection">Koleksiyona dön</string>
     <string name="doa_back_main">Ana sayfa</string>
+    <string name="tafsir_title">Tefsir</string>
+    <string name="tafsir_none">Tefsir yok</string>
+    <string name="tafsir_download_cd">Tefsir %1$s indir</string>
+    <string name="tafsir_catalog_error">Tefsir kataloğu yüklenemedi. Bağlantıyı kontrol edip yeniden deneyin.</string>
+    <string name="extras_language_note">Şimdilik İngilizce ve Endonezyaca olarak sunulmaktadır.</string>
 </resources>

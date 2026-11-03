@@ -181,6 +181,9 @@ anti-pola. Yang ditambahkan untuk repo ini ada di bawah dan diperiksa `tools/che
 - **Gerak:** `ReduceMotion` membaca `ANIMATOR_DURATION_SCALE` (0 bila sistem mematikan animasi). Bila aktif, `motionTween`
   dan `reducedMotion` (di `ui/Motion.kt`) mengganti animasi dengan lompatan instan. Opsi "Reduce motion" di Android 14+
   yang tidak mengubah skala animator belum tercakup; perlu dicek di perangkat.
+- **Tafsir (0.7.0):** lembar ayat menampilkan bagian tafsir yang memuat ayat itu, di bawah terjemahan, dengan rentang
+  ayatnya. Pilihan tafsir ada di Pengaturan > Terjemahan > Tafsir (tanpa tafsir, atau salah satu paket terpasang).
+- **Bahasa tema dan topik:** hanya Inggris dan Indonesia untuk sekarang; catatan di bawah pilihan menyebutkannya.
 - **Carousel jelajah:** tinggi 120dp dikali skala font (minimal 1x), supaya judul dua baris dan jumlah tidak terpotong.
 
 Belum diuji di perangkat dan belum dikompilasi lokal (Gradle tidak jalan di sandbox). Pemeriksaan belum dipasang di CI

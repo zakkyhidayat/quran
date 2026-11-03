@@ -94,8 +94,6 @@
     <string name="tajweed_title">Warna tajwid</string>
     <string name="tajweed_sub">Tampilkan huruf berwarna sesuai hukum tajwid</string>
     <string name="extras_language">Bahasa tema dan topik</string>
-    <string name="extras_lang_app">Bahasa aplikasi</string>
-    <string name="extras_lang_system">Bahasa sistem</string>
     <string name="keep_screen_on_title">Layar tetap menyala</string>
     <string name="keep_screen_on_sub">Cegah layar mati saat membaca</string>
     <string name="tajweed_guide_open">Buka panduan tajwid</string>
@@ -338,4 +336,9 @@
     <string name="doa_back_text">Pembaca dibuka dari “%1$s”.</string>
     <string name="doa_back_collection">Kembali ke kumpulan</string>
     <string name="doa_back_main">Halaman utama</string>
+    <string name="tafsir_title">Tafsir</string>
+    <string name="tafsir_none">Tanpa tafsir</string>
+    <string name="tafsir_download_cd">Unduh tafsir %1$s</string>
+    <string name="tafsir_catalog_error">Katalog tafsir belum bisa dimuat. Periksa koneksi lalu coba lagi.</string>
+    <string name="extras_language_note">Tersedia dalam bahasa Inggris dan Indonesia untuk sementara.</string>
 </resources>

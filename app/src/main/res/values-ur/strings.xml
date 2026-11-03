@@ -94,8 +94,6 @@
     <string name="tajweed_title">تجوید کے رنگ</string>
     <string name="tajweed_sub">حروف کو تجوید کے قواعد کے مطابق رنگین دکھائیں</string>
     <string name="extras_language">موضوعات اور تھیمز کی زبان</string>
-    <string name="extras_lang_app">ایپ کی زبان</string>
-    <string name="extras_lang_system">سسٹم کی زبان</string>
     <string name="keep_screen_on_title">اسکرین روشن رکھیں</string>
     <string name="keep_screen_on_sub">پڑھتے وقت اسکرین بند ہونے سے روکیں</string>
     <string name="tajweed_guide_open">تجوید کی رہنمائی کھولیں</string>
@@ -338,4 +336,9 @@
     <string name="doa_back_text">پڑھنے کا صفحہ «%1$s» سے کھولا گیا۔</string>
     <string name="doa_back_collection">مجموعے پر واپس</string>
     <string name="doa_back_main">مرکزی صفحہ</string>
+    <string name="tafsir_title">تفسیر</string>
+    <string name="tafsir_none">کوئی تفسیر نہیں</string>
+    <string name="tafsir_download_cd">تفسیر %1$s ڈاؤن لوڈ کریں</string>
+    <string name="tafsir_catalog_error">تفاسیر کی فہرست لوڈ نہیں ہو سکی۔ کنکشن چیک کریں اور دوبارہ کوشش کریں۔</string>
+    <string name="extras_language_note">فی الحال یہ انگریزی اور انڈونیشیائی زبان میں دستیاب ہے۔</string>
 </resources>

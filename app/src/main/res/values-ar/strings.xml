@@ -94,8 +94,6 @@
     <string name="tajweed_title">ألوان التجويد</string>
     <string name="tajweed_sub">تلوين الحروف حسب أحكام التجويد</string>
     <string name="extras_language">لغة المواضيع والمحاور</string>
-    <string name="extras_lang_app">لغة التطبيق</string>
-    <string name="extras_lang_system">لغة النظام</string>
     <string name="keep_screen_on_title">إبقاء الشاشة مضاءة</string>
     <string name="keep_screen_on_sub">منع انطفاء الشاشة أثناء القراءة</string>
     <string name="tajweed_guide_open">فتح دليل التجويد</string>
@@ -338,4 +336,9 @@
     <string name="doa_back_text">تم فتح القارئ من «%1$s».</string>
     <string name="doa_back_collection">العودة إلى المجموعة</string>
     <string name="doa_back_main">الصفحة الرئيسية</string>
+    <string name="tafsir_title">التفسير</string>
+    <string name="tafsir_none">بدون تفسير</string>
+    <string name="tafsir_download_cd">تنزيل التفسير %1$s</string>
+    <string name="tafsir_catalog_error">تعذر تحميل كتالوج التفاسير. تحقق من الاتصال ثم حاول مرة أخرى.</string>
+    <string name="extras_language_note">متاح بالإنجليزية والإندونيسية حاليًا.</string>
 </resources>

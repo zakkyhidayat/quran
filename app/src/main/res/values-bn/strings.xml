@@ -94,8 +94,6 @@
     <string name="tajweed_title">তাজবীদের রং</string>
     <string name="tajweed_sub">তাজবীদের নিয়ম অনুযায়ী অক্ষর রঙিন দেখান</string>
     <string name="extras_language">থিম ও বিষয়ের ভাষা</string>
-    <string name="extras_lang_app">অ্যাপের ভাষা</string>
-    <string name="extras_lang_system">সিস্টেমের ভাষা</string>
     <string name="keep_screen_on_title">স্ক্রিন চালু রাখুন</string>
     <string name="keep_screen_on_sub">পড়ার সময় স্ক্রিন বন্ধ হওয়া রোধ করুন</string>
     <string name="tajweed_guide_open">তাজবীদ নির্দেশিকা খুলুন</string>
@@ -338,4 +336,9 @@
     <string name="doa_back_text">পাঠ পৃষ্ঠা “%1$s” থেকে খোলা হয়েছে।</string>
     <string name="doa_back_collection">সংকলনে ফিরুন</string>
     <string name="doa_back_main">মূল পৃষ্ঠা</string>
+    <string name="tafsir_title">তাফসির</string>
+    <string name="tafsir_none">কোনো তাফসির নেই</string>
+    <string name="tafsir_download_cd">তাফসির %1$s ডাউনলোড করুন</string>
+    <string name="tafsir_catalog_error">তাফসির তালিকা লোড করা যায়নি। সংযোগ দেখে আবার চেষ্টা করুন।</string>
+    <string name="extras_language_note">আপাতত ইংরেজি ও ইন্দোনেশীয় ভাষায় পাওয়া যায়।</string>
 </resources>

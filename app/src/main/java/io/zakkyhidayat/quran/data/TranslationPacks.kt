@@ -27,8 +27,10 @@ data class CatalogPack(
     val version: Int,
     /** Nama bahasa Inggris untuk kode ISO 639-3 yang tidak dikenal Locale (mis. "mos" -> Moore); kosong untuk kode 639-1. */
     val langName: String? = null,
+    /** "translation" (bawaan) atau "tafsir". Tafsir tidak muncul di daftar terjemahan. */
+    val kind: String = "translation",
 ) {
-    val info get() = TranslationInfo(id, lang, name, downloaded = true, langName = langName)
+    val info get() = TranslationInfo(id, lang, name, downloaded = true, langName = langName, kind = kind)
 }
 
 /**
@@ -48,7 +50,7 @@ class TranslationPacks(context: Context) {
                 val info = db.rawQuery("SELECT key, value FROM info", null).use { c ->
                     buildMap { while (c.moveToNext()) put(c.getString(0), c.getString(1)) }
                 }
-                TranslationInfo(file.nameWithoutExtension, info.getValue("lang"), info.getValue("name"), downloaded = true, langName = info["lang_name"], version = info["version"]?.toIntOrNull() ?: 1)
+                TranslationInfo(file.nameWithoutExtension, info.getValue("lang"), info.getValue("name"), downloaded = true, langName = info["lang_name"], version = info["version"]?.toIntOrNull() ?: 1, kind = info["kind"] ?: "translation")
             }.getOrNull()
         }
     }
@@ -85,6 +87,7 @@ class TranslationPacks(context: Context) {
                     source = p.optString("source"), file = p.getString("file"), bytes = p.optLong("bytes"),
                     sha256 = p.getString("sha256"), version = p.optInt("version", 1),
                     langName = p.optString("lang_name").takeIf { it.isNotBlank() },
+                    kind = p.optString("kind").ifBlank { "translation" },
                 )
             }
         } catch (e: Exception) {
@@ -125,7 +128,7 @@ class TranslationPacks(context: Context) {
             }
             val hash = digest.digest().joinToString("") { "%02x".format(it) }
             if (!hash.equals(pack.sha256, ignoreCase = true)) throw IOException("Berkas rusak (sha256 tidak cocok)")
-            verify(tmp, pack.id)
+            verify(tmp, pack.id, pack.kind)
             // Tutup handle lama (bila memperbarui paket yang sudah ada) sebelum menimpa berkasnya.
             synchronized(this@TranslationPacks) { handles.remove(pack.id)?.close() }
             val target = File(dir, "${pack.id}.db")
@@ -139,15 +142,20 @@ class TranslationPacks(context: Context) {
         }
     }
 
-    private fun verify(file: File, id: String) {
+    private fun verify(file: File, id: String, kind: String) {
         val db = try {
             SQLiteDatabase.openDatabase(file.path, null, SQLiteDatabase.OPEN_READONLY)
         } catch (e: Exception) {
             throw IOException("Paket bukan SQLite yang valid", e)
         }
         db.use {
-            val rows = it.rawQuery("SELECT COUNT(*) FROM translation_texts", null).use { c -> if (c.moveToFirst()) c.getInt(0) else 0 }
-            if (rows != 6236) throw IOException("Paket tidak lengkap ($rows ayat)")
+            if (kind == "tafsir") {
+                val rows = it.rawQuery("SELECT COUNT(*) FROM tafsir", null).use { c -> if (c.moveToFirst()) c.getInt(0) else 0 }
+                if (rows < 1) throw IOException("Paket tafsir kosong")
+            } else {
+                val rows = it.rawQuery("SELECT COUNT(*) FROM translation_texts", null).use { c -> if (c.moveToFirst()) c.getInt(0) else 0 }
+                if (rows != 6236) throw IOException("Paket tidak lengkap ($rows ayat)")
+            }
             val packId = it.rawQuery("SELECT value FROM info WHERE key = 'id'", null).use { c -> if (c.moveToFirst()) c.getString(0) else null }
             if (packId != id) throw IOException("Id paket tidak cocok")
         }

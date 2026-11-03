@@ -94,8 +94,6 @@
     <string name="tajweed_title">Цвета таджвида</string>
     <string name="tajweed_sub">Раскрашивать буквы по правилам таджвида</string>
     <string name="extras_language">Язык тем и топиков</string>
-    <string name="extras_lang_app">Язык приложения</string>
-    <string name="extras_lang_system">Язык системы</string>
     <string name="keep_screen_on_title">Не выключать экран</string>
     <string name="keep_screen_on_sub">Не давать экрану гаснуть во время чтения</string>
     <string name="tajweed_guide_open">Открыть руководство по таджвиду</string>
@@ -338,4 +336,9 @@
     <string name="doa_back_text">Чтение открыто из «%1$s».</string>
     <string name="doa_back_collection">К подборке</string>
     <string name="doa_back_main">На главную</string>
+    <string name="tafsir_title">Тафсир</string>
+    <string name="tafsir_none">Без тафсира</string>
+    <string name="tafsir_download_cd">Скачать тафсир %1$s</string>
+    <string name="tafsir_catalog_error">Не удалось загрузить каталог тафсиров. Проверьте подключение и попробуйте снова.</string>
+    <string name="extras_language_note">Пока доступно на английском и индонезийском языках.</string>
 </resources>

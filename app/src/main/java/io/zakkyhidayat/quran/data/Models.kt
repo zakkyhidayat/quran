@@ -30,7 +30,29 @@ data class AyahInfo(val juz: Int, val hizb: Int, val rubInHizb: Int, val manzil:
 
 data class PageMeta(val surah: Int, val juz: Int)
 
-data class TranslationInfo(val id: String, val lang: String, val name: String, val downloaded: Boolean = false, val langName: String? = null, val version: Int = 1)
+data class TranslationInfo(val id: String, val lang: String, val name: String, val downloaded: Boolean = false, val langName: String? = null, val version: Int = 1, val kind: String = "translation")
+
+/** Kunci rentang tafsir: surah*1000+ayah (1:1 = 1001), sama dengan kolom start/end di paket tafsir. */
+object TafsirKey {
+    fun of(surah: Int, ayah: Int): Int = surah * 1000 + ayah
+    fun surah(key: Int): Int = key / 1000
+    fun ayah(key: Int): Int = key % 1000
+}
+
+/** Bagian tafsir yang memuat satu ayat: rentang (fromSurah, fromAyah) sampai (toSurah, toAyah), inklusif, dalam satu surah. */
+data class TafsirPassage(
+    val info: TranslationInfo,
+    val fromSurah: Int,
+    val fromAyah: Int,
+    val toSurah: Int,
+    val toAyah: Int,
+    val text: String,
+) {
+    fun contains(surah: Int, ayah: Int): Boolean {
+        val key = TafsirKey.of(surah, ayah)
+        return key in TafsirKey.of(fromSurah, fromAyah)..TafsirKey.of(toSurah, toAyah)
+    }
+}
 
 data class Footnote(val label: Int?, val text: String)
 

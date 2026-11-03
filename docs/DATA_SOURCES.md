@@ -39,7 +39,7 @@ tombol unduhnya butuh login. Ambil format **SQLite** kecuali dicatat lain.
 | 12 | Transliterasi Latin (tajwid, simple) | [transliteration/469](https://qul.tarteel.ai/resources/transliteration/469), `english-transliteration-tajweed-simple` | `translit-tajweed-simple/` | Kartu transliterasi di sheet ayat |
 | 13 | Terjemahan Indonesia, Kemenag RI (berkas `quran-id-with-footnote-tags`) | [translation/224](https://qul.tarteel.ai/resources/translation/224) ("Indonesian Islamic affairs ministry"; berkas unduhannya bernama `quran-id-...`) | `quran-id-with-footnote-tags/` | Terjemahan |
 | 14 | Info surah bahasa lain (Italia `it`, Malayalam `ml`, Tamil `ta`, Urdu `ur`; Indonesia dan Inggris ada di baris 10-11) | [surah-info](https://qul.tarteel.ai/resources/surah-info), `surah-info-<kode>.db` | `surah-info/` (`python tools/qul_catch.py surah-info --existing`) | Belum dipakai build; kandidat tambahan bahasa layar info surah |
-| 15 | Tafsir (sekitar 108 sumber; unduh massal lewat `tools/qul_bulk_download.js` di Console halaman login) | [tafsir](https://qul.tarteel.ai/resources/tafsir) | `tafsir/` (`python tools/qul_catch.py tafsir --existing`) | Belum dipakai build; aplikasi belum punya fitur tafsir. Status lokal 2026-10-14: 107 dari 108 (lihat catatan di bawah) |
+| 15 | Tafsir (sekitar 108 sumber; unduh massal lewat `tools/qul_bulk_download.js` di Console halaman login) | [tafsir](https://qul.tarteel.ai/resources/tafsir) | `tafsir/` (`python tools/qul_catch.py tafsir --existing`) | Paket `ar-tahrir` dibangun dari sumber ini (`python tools/build_tafsir_pack.py`, lihat bagian Paket tafsir). Dipakai di lembar ayat sejak 0.7.0. Status lokal 2026-10-14: 107 dari 108 (lihat catatan di bawah) |
 | 14 | Terjemahan Indonesia, The Sabiq Company | [translation/194](https://qul.tarteel.ai/resources/translation/194) | `the-sabiq-company-with-footnote-tags/` | Terjemahan |
 | 15 | Terjemahan Indonesia, King Fahad Quran Complex | [translation/173](https://qul.tarteel.ai/resources/translation/173) | `king-fahad-quran-complex-with-footnote-tags/` | Terjemahan |
 | 16 | Terjemahan Inggris, Saheeh International | [translation/193](https://qul.tarteel.ai/resources/translation/193) | `en-sahih-international-with-footnote-tags/` | Terjemahan |
@@ -251,3 +251,16 @@ QUL tidak memberi pemberitahuan. Periksa sendiri:
   keduanya disimpan.
 - **Kategori tertukar**: file `surah-info-*.db` atau `phrases*.json` bisa tertangkap ke `tafsir/` bila diunduh saat skrip
   kategori tafsir masih berjalan. Pindahkan ke `surah-info/` atau `phrases/`.
+
+## Paket tafsir
+
+Tafsir memakai format paket sendiri, bukan paket terjemahan: tabel `info` (dengan `kind` = `tafsir`) dan `tafsir(start, end, text)`.
+`start` dan `end` adalah kunci `surah*1000+ayah` (1:1 = 1001), inklusif, dalam satu surah. Teks berupa paragraf polos.
+
+1. Letakkan unduhan QUL di `data-src/tafsir/ar-tafseer-tahrir-al-tanwir.db`.
+2. `python tools/build_tafsir_pack.py` membuat `build/translation-packs/ar-tahrir.db` dan `ar-tahrir.entry.json`. Skrip
+   gagal bila ada ayat yang tidak tercakup tepat satu rentang atau markup yang tersisa.
+3. Tambahkan entri `ar-tahrir.entry.json` ke `catalog.json` di rilis `translations` (ganti entri yang lama bila ada), lalu
+   unggah `ar-tahrir.db` dan `catalog.json`. Entri katalog membawa `"kind": "tafsir"`; aplikasi menampilkannya di
+   Pengaturan > Terjemahan > Tafsir, bukan di daftar terjemahan.
+

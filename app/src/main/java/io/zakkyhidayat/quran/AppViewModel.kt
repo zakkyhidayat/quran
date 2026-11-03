@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import io.zakkyhidayat.quran.data.AyahDetail
+import io.zakkyhidayat.quran.data.TafsirPassage
 import io.zakkyhidayat.quran.data.AyahExtras
 import io.zakkyhidayat.quran.data.AyahRef
 import io.zakkyhidayat.quran.data.CatalogPack
@@ -54,6 +55,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     val pageMeta = MutableStateFlow<List<PageMeta>>(emptyList())
     val translations = MutableStateFlow<List<TranslationInfo>>(emptyList())
 
+    /** Paket tafsir terpasang; daftar terpisah dari terjemahan. */
+    val tafsirs = MutableStateFlow<List<TranslationInfo>>(emptyList())
+
     val currentPage = MutableStateFlow(1)
     val pendingPage = MutableStateFlow<Int?>(null)
 
@@ -72,6 +76,11 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     // Tambahan tematik ayat terpilih (tema, topik, ayat serupa, mutasyabihat); kosong bila datanya tidak dibundel.
     private val extrasLanguage = settingsRepository.settings.map { it.extrasLanguage }.distinctUntilChanged()
+    /** Tafsir terpilih untuk ayat yang dibuka; null bila tidak ada tafsir terpilih atau ayat tidak tercakup. */
+    val tafsir: StateFlow<TafsirPassage?> = combine(detail, settingsRepository.settings.map { it.selectedTafsir }.distinctUntilChanged()) { d, id -> d to id }
+        .mapLatest { (d, id) -> if (d == null || id.isEmpty()) null else mushaf.tafsirPassage(id, d.surah, d.ayah) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
     val ayahExtras: StateFlow<AyahExtras?> = combine(selected, extrasLanguage) { sel, setting -> sel to setting }
         .mapLatest { (sel, setting) ->
             mushaf.extrasSetting = setting
@@ -100,7 +109,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             ruku.value = mushaf.markers(MarkerKind.Ruku)
             sajda.value = mushaf.markers(MarkerKind.Sajda)
             pageMeta.value = mushaf.pageMeta()
-            translations.value = mushaf.translations()
+            translations.value = mushaf.translations(); tafsirs.value = mushaf.tafsirs()
             restoreActiveTranslations()
         }
         // Cadangan otomatis menyimpan bookmark dan posisi baca ke folder yang dipilih.
@@ -242,7 +251,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         val packs = runCatching { mushaf.catalog() }
             .onFailure { if (it is kotlinx.coroutines.CancellationException) throw it }
             .getOrNull() ?: return
-        val installed = translations.value.filter { it.downloaded }.associateBy { it.id }
+        val installed = (translations.value + tafsirs.value).filter { it.downloaded }.associateBy { it.id }
         packUpdates.value = packs.filter { p -> installed[p.id]?.let { isPackUpdateAvailable(it.version, p.version) } == true }.associateBy { it.id }
     }
 
@@ -257,14 +266,14 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         try {
             mushaf.installPack(pack, onProgress)
         } finally {
-            withContext(NonCancellable) { translations.value = mushaf.translations() }
+            withContext(NonCancellable) { translations.value = mushaf.translations(); tafsirs.value = mushaf.tafsirs() }
         }
     }
 
     fun deletePack(id: String) {
         viewModelScope.launch {
             mushaf.deletePack(id)
-            translations.value = mushaf.translations()
+            translations.value = mushaf.translations(); tafsirs.value = mushaf.tafsirs()
         }
     }
 

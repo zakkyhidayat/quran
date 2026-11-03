@@ -54,6 +54,7 @@ import io.zakkyhidayat.quran.data.AyahDetail
 import io.zakkyhidayat.quran.data.AyahExtras
 import androidx.compose.material3.TextButton
 import io.zakkyhidayat.quran.data.Surah
+import io.zakkyhidayat.quran.data.TafsirPassage
 import io.zakkyhidayat.quran.ui.AppIcons
 import kotlinx.coroutines.launch
 
@@ -68,6 +69,7 @@ fun AyahSheetContent(
     showTransliteration: Boolean = true,
     showArabicText: Boolean = true,
     extras: AyahExtras? = null,
+    tafsir: TafsirPassage? = null,
     onOpenAyah: (Int, Int) -> Unit = { _, _ -> },
     surahNames: Map<Int, Surah> = emptyMap(),
 ) {
@@ -170,6 +172,20 @@ fun AyahSheetContent(
                         Spacer(Modifier.height(12.dp))
                         FootnoteList(tr.footnotes)
                     }
+                }
+            }
+        }
+        tafsir?.takeIf { it.contains(detail.surah, detail.ayah) }?.let { passage ->
+            Spacer(Modifier.height(16.dp))
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
+            ) {
+                Column(Modifier.padding(16.dp)) {
+                    Text(stringResource(R.string.tafsir_title) + " · " + passage.info.name, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                    Text(tafsirRange(passage), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Spacer(Modifier.height(4.dp))
+                    Text(passage.text, style = MaterialTheme.typography.bodyLarge.scaled(LocalReadingTextScale.current.translation, 1.6f))
                 }
             }
         }
@@ -284,3 +300,8 @@ internal fun translationTextOrPlaceholder(raw: String, markerColor: Color, marke
     } else {
         translationText(raw, markerColor, markerSize)
     }
+
+/** Rentang ayat tafsir, mis. "2:282" atau "2:282–2:283". */
+private fun tafsirRange(p: TafsirPassage): String =
+    if (p.fromSurah == p.toSurah && p.fromAyah == p.toAyah) "${p.fromSurah}:${p.fromAyah}"
+    else "${p.fromSurah}:${p.fromAyah}–${p.toSurah}:${p.toAyah}"
