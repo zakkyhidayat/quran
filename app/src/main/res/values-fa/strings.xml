@@ -94,8 +94,6 @@
     <string name="tajweed_title">رنگ‌های تجوید</string>
     <string name="tajweed_sub">رنگ‌آمیزی حروف بر اساس احکام تجوید</string>
     <string name="extras_language">زبان موضوع‌ها و تم‌ها</string>
-    <string name="extras_lang_app">زبان برنامه</string>
-    <string name="extras_lang_system">زبان سیستم</string>
     <string name="keep_screen_on_title">روشن ماندن صفحه</string>
     <string name="keep_screen_on_sub">جلوگیری از خاموش شدن صفحه هنگام خواندن</string>
     <string name="tajweed_guide_open">باز کردن راهنمای تجوید</string>
@@ -338,4 +336,9 @@
     <string name="doa_back_text">صفحه قرائت از «%1$s» باز شد.</string>
     <string name="doa_back_collection">بازگشت به مجموعه</string>
     <string name="doa_back_main">صفحه اصلی</string>
+    <string name="tafsir_title">تفسیر</string>
+    <string name="tafsir_none">بدون تفسیر</string>
+    <string name="tafsir_download_cd">دانلود تفسیر %1$s</string>
+    <string name="tafsir_catalog_error">فهرست تفسیرها بارگذاری نشد. اتصال را بررسی و دوباره تلاش کنید.</string>
+    <string name="extras_language_note">فعلاً به انگلیسی و اندونزیایی موجود است.</string>
 </resources>

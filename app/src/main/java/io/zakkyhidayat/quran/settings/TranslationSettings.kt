@@ -1,5 +1,10 @@
 package io.zakkyhidayat.quran.settings
 
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.Alignment
+import io.zakkyhidayat.quran.data.CatalogPack
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
@@ -63,25 +68,24 @@ internal fun translationLabel(tr: io.zakkyhidayat.quran.data.TranslationInfo): S
 internal fun ExtrasLanguageRow(vm: AppViewModel, settings: AppSettings) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val options = listOf(
-        "app" to stringResource(R.string.extras_lang_app),
-        "system" to stringResource(R.string.extras_lang_system),
-        "en" to stringResource(R.string.lang_name_en),
-        "id" to stringResource(R.string.lang_name_id),
-    )
+    // Hanya Inggris dan Indonesia untuk sekarang. Nilai tersimpan "app" atau "system" tetap diterima dan dipetakan ke salah satunya.
+    val resolved = io.zakkyhidayat.quran.AppLanguage.extrasLanguage(settings.extrasLanguage, context)
     Labeled(stringResource(R.string.extras_language)) {
         Group {
-            options.forEach { (code, label) ->
-                // Bahasa yang sebenarnya dipakai ditampilkan di bawah pilihan "app" dan "system".
-                val resolved = io.zakkyhidayat.quran.AppLanguage.extrasLanguage(code, context)
+            listOf("en" to stringResource(R.string.lang_name_en), "id" to stringResource(R.string.lang_name_id)).forEach { (code, label) ->
                 item(
                     title = label,
-                    subtitle = if (code == "app" || code == "system") io.zakkyhidayat.quran.AppLanguage.endonyms[resolved] else null,
                     onClick = { scope.launch { vm.settingsRepository.setExtrasLanguage(code) } },
-                    trailing = { RadioButton(selected = settings.extrasLanguage == code, onClick = null) },
+                    trailing = { RadioButton(selected = resolved == code, onClick = null) },
                 )
             }
         }
+        Text(
+            stringResource(R.string.extras_language_note),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(start = 4.dp, top = 6.dp),
+        )
     }
 }
 
@@ -179,5 +183,96 @@ internal fun TranslationControls(
             Modifier.heightIn(max = 400.dp).imePadding()
         }
         TranslationCatalogList(vm, inactive, onActivate, catalogModifier)
+    }
+}
+
+/** Tafsir: satu sumber dipakai di lembar ayat, atau tanpa tafsir. Paket yang belum ada bisa diunduh dari katalog tafsir. */
+@Composable
+internal fun TafsirSection(vm: AppViewModel, settings: AppSettings) {
+    val scope = rememberCoroutineScope()
+    val installed by vm.tafsirs.collectAsStateWithLifecycle()
+    var catalog by remember { mutableStateOf<List<CatalogPack>>(emptyList()) }
+    var catalogFailed by remember { mutableStateOf(false) }
+    var downloading by remember { mutableStateOf<String?>(null) }
+    var progress by remember { mutableFloatStateOf(0f) }
+    var downloadJob by remember { mutableStateOf<Job?>(null) }
+
+    LaunchedEffect(Unit) {
+        try {
+            catalog = vm.catalog().filter { it.kind == "tafsir" }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            android.util.Log.w("TafsirPacks", "Katalog tafsir gagal dimuat: $e")
+            catalogFailed = true
+        }
+    }
+
+    val installedIds = installed.map { it.id }.toSet()
+    Labeled(stringResource(R.string.tafsir_title)) {
+        Group {
+            item(
+                title = stringResource(R.string.tafsir_none),
+                onClick = { scope.launch { vm.settingsRepository.setSelectedTafsir("") } },
+                trailing = { RadioButton(selected = settings.selectedTafsir.isEmpty(), onClick = null) },
+            )
+            installed.forEach { tr ->
+                item(
+                    title = tr.name,
+                    onClick = { scope.launch { vm.settingsRepository.setSelectedTafsir(tr.id) } },
+                    trailing = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            RadioButton(selected = settings.selectedTafsir == tr.id, onClick = null)
+                            IconButton(onClick = {
+                                if (settings.selectedTafsir == tr.id) scope.launch { vm.settingsRepository.setSelectedTafsir("") }
+                                vm.deletePack(tr.id)
+                            }) {
+                                Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete_downloaded_translation_cd, tr.name))
+                            }
+                        }
+                    },
+                )
+            }
+            catalog.filter { it.id !in installedIds }.forEach { pack ->
+                val busy = downloading == pack.id
+                item(
+                    title = pack.name,
+                    subtitle = pack.source.takeIf { it.isNotBlank() },
+                    trailing = {
+                        DownloadButton(
+                            downloading = busy,
+                            progress = progress,
+                            onStart = {
+                                downloadJob = scope.launch {
+                                    downloading = pack.id
+                                    progress = 0f
+                                    try {
+                                        vm.installPack(pack) { done, total -> progress = if (total > 0) done.toFloat() / total else 0f }
+                                    } catch (e: CancellationException) {
+                                        throw e
+                                    } catch (e: Exception) {
+                                        android.util.Log.w("TafsirPacks", "Gagal mengunduh ${pack.id}", e)
+                                    } finally {
+                                        downloading = null
+                                    }
+                                }
+                            },
+                            onCancel = { downloadJob?.cancel() },
+                            startDescription = stringResource(R.string.tafsir_download_cd, pack.name),
+                            cancelDescription = stringResource(R.string.cancel),
+                            enabled = downloading == null,
+                        )
+                    },
+                )
+            }
+        }
+    }
+    if (catalogFailed) {
+        Text(
+            stringResource(R.string.tafsir_catalog_error),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.error,
+            modifier = Modifier.padding(top = 6.dp),
+        )
     }
 }

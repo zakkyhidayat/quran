@@ -89,7 +89,7 @@ internal fun TranslationCatalogList(
     val loadingCd = stringResource(R.string.translations_loading_cd)
     val locale = LocalConfiguration.current.locales[0]
     var query by remember { mutableStateOf("") }
-    val downloadable = (state as? CatalogState.Loaded)?.packs.orEmpty().filter { it.id !in installedIds }
+    val downloadable = (state as? CatalogState.Loaded)?.packs.orEmpty().filter { it.id !in installedIds && it.kind == "translation" }
     // Kelompok per bahasa (nama bahasa mengikuti bahasa aplikasi), urut abjad; pencarian cocok ke bahasa, kode, nama, atau penerjemah.
     val groups = remember(downloadable, query, locale) {
         val q = query.trim().lowercase(locale)

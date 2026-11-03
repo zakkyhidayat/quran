@@ -46,6 +46,8 @@ data class AppSettings(
     val readingMode: ReadingMode = ReadingMode.Mushaf,
     /** Pilihan bahasa tema dan topik ayat: app, system, en, atau id (lihat EXTRAS_LANGUAGES). */
     val extrasLanguage: String = "app",
+    /** Id paket tafsir yang dipakai di lembar ayat; kosong berarti tanpa tafsir. */
+    val selectedTafsir: String = "",
     /** Ukuran teks Arab (daftar ayat, lembar ayat) dalam persen dari ukuran bawaan. Halaman mushaf tidak terpengaruh. */
     val arabicTextPercent: Int = 100,
     /** Ukuran teks terjemahan dalam persen dari ukuran bawaan. */
@@ -103,6 +105,7 @@ class SettingsRepository(private val context: Context) {
     private val translationsKey = stringPreferencesKey("translations")
     private val readingModeKey = stringPreferencesKey("reading_mode")
     private val extrasLanguageKey = stringPreferencesKey("extras_language")
+    private val selectedTafsirKey = stringPreferencesKey("selected_tafsir")
     private val arabicTextKey = intPreferencesKey("arabic_text_percent")
     private val translationTextKey = intPreferencesKey("translation_text_percent")
     private val onboardingKey = booleanPreferencesKey("onboarding_done")
@@ -151,6 +154,7 @@ class SettingsRepository(private val context: Context) {
             translationIds = prefs[translationsKey]?.split(',')?.filter { it.isNotBlank() } ?: defaultTranslations(),
             readingMode = prefs[readingModeKey].toEnum(ReadingMode.Mushaf),
             extrasLanguage = prefs[extrasLanguageKey]?.takeIf { it in EXTRAS_LANGUAGES } ?: "app",
+            selectedTafsir = prefs[selectedTafsirKey] ?: "",
             arabicTextPercent = prefs[arabicTextKey] ?: 100,
             translationTextPercent = prefs[translationTextKey] ?: 100,
             autoBackupUri = prefs[autoBackupUriKey],
@@ -284,6 +288,8 @@ class SettingsRepository(private val context: Context) {
     suspend fun setReadingMode(value: ReadingMode) = context.dataStore.edit { it[readingModeKey] = value.name }
 
     suspend fun setExtrasLanguage(code: String) = context.dataStore.edit { it[extrasLanguageKey] = code }
+
+    suspend fun setSelectedTafsir(id: String) = context.dataStore.edit { it[selectedTafsirKey] = id }
 
     suspend fun setCounterMode(value: CounterMode) = context.dataStore.edit { it[counterModeKey] = value.name }
 

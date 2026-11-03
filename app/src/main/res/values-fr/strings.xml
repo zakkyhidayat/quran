@@ -94,8 +94,6 @@
     <string name="tajweed_title">Couleurs du tajwid</string>
     <string name="tajweed_sub">Colorer les lettres selon les règles du tajwid</string>
     <string name="extras_language">Langue des thèmes et sujets</string>
-    <string name="extras_lang_app">Langue de l’application</string>
-    <string name="extras_lang_system">Langue du système</string>
     <string name="keep_screen_on_title">Garder l’écran allumé</string>
     <string name="keep_screen_on_sub">Empêcher la mise en veille de l’écran pendant la lecture</string>
     <string name="tajweed_guide_open">Ouvrir le guide du tajwid</string>
@@ -338,4 +336,9 @@
     <string name="doa_back_text">Le lecteur a été ouvert depuis « %1$s ».</string>
     <string name="doa_back_collection">Retour à la collection</string>
     <string name="doa_back_main">Page principale</string>
+    <string name="tafsir_title">Tafsir</string>
+    <string name="tafsir_none">Aucun tafsir</string>
+    <string name="tafsir_download_cd">Télécharger le tafsir %1$s</string>
+    <string name="tafsir_catalog_error">Le catalogue des tafsirs n\'a pas pu être chargé. Vérifiez la connexion et réessayez.</string>
+    <string name="extras_language_note">Disponible en anglais et en indonésien pour le moment.</string>
 </resources>

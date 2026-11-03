@@ -130,11 +130,32 @@ class MushafRepository(private val context: Context) {
             while (c.moveToNext()) list += TranslationInfo(c.getString(0), c.getString(1), c.getString(2))
         }
         val bundled = list.map { it.id }.toSet()
-        list += packs.installed().filter { it.id !in bundled }
+        list += packs.installed().filter { it.id !in bundled && it.kind == "translation" }
         list.also { translationCache = it }
     }
 
     /** Katalog paket yang bisa diunduh; melempar IOException bila gagal (offline, server, isi tidak valid). */
+    suspend fun tafsirs(): List<TranslationInfo> = withContext(Dispatchers.IO) { packs.installed().filter { it.kind == "tafsir" } }
+
+    /** Bagian tafsir paket [id] yang memuat ayat ini; null bila paket tidak terpasang atau ayat tidak tercakup. */
+    suspend fun tafsirPassage(id: String, surah: Int, ayah: Int): TafsirPassage? = withContext(Dispatchers.IO) {
+        val db = packs.database(id) ?: return@withContext null
+        val key = TafsirKey.of(surah, ayah)
+        val row = db.rawQuery("SELECT start, \"end\", text FROM tafsir WHERE start <= ? ORDER BY start DESC LIMIT 1", arrayOf(key.toString())).use { c ->
+            if (c.moveToFirst()) Triple(c.getInt(0), c.getInt(1), c.getString(2)) else null
+        } ?: return@withContext null
+        if (row.second < key) return@withContext null
+        val info = db.rawQuery("SELECT key, value FROM info", null).use { c -> buildMap { while (c.moveToNext()) put(c.getString(0), c.getString(1)) } }
+        TafsirPassage(
+            info = TranslationInfo(id, info["lang"].orEmpty(), info["name"] ?: id, downloaded = true, kind = "tafsir"),
+            fromSurah = TafsirKey.surah(row.first),
+            fromAyah = TafsirKey.ayah(row.first),
+            toSurah = TafsirKey.surah(row.second),
+            toAyah = TafsirKey.ayah(row.second),
+            text = row.third,
+        )
+    }
+
     suspend fun catalog(): List<CatalogPack> = packs.catalog()
 
     suspend fun installPack(pack: CatalogPack, onProgress: (Long, Long) -> Unit = { _, _ -> }) {

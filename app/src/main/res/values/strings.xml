@@ -95,8 +95,6 @@
     <string name="tajweed_title">Tajweed colours</string>
     <string name="tajweed_sub">Show letters coloured by tajweed rules</string>
     <string name="extras_language">Language for themes and topics</string>
-    <string name="extras_lang_app">App language</string>
-    <string name="extras_lang_system">System language</string>
     <string name="keep_screen_on_title">Keep screen on</string>
     <string name="keep_screen_on_sub">Prevent the screen from turning off while reading</string>
     <string name="tajweed_guide_open">Open tajweed guide</string>
@@ -340,4 +338,9 @@
     <string name="doa_back_text">The reader was opened from “%1$s”.</string>
     <string name="doa_back_collection">Back to collection</string>
     <string name="doa_back_main">Main page</string>
+    <string name="tafsir_title">Tafsir</string>
+    <string name="tafsir_none">No tafsir</string>
+    <string name="tafsir_download_cd">Download tafsir %1$s</string>
+    <string name="tafsir_catalog_error">The tafsir catalog could not be loaded. Check your connection and try again.</string>
+    <string name="extras_language_note">Available in English and Indonesian for now.</string>
 </resources>

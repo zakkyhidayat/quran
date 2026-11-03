@@ -132,6 +132,7 @@ fun ReaderScreen(
     val selected by vm.selected.collectAsStateWithLifecycle()
     val sheetVisible by vm.sheetVisible.collectAsStateWithLifecycle()
     val detail by vm.detail.collectAsStateWithLifecycle()
+    val tafsir by vm.tafsir.collectAsStateWithLifecycle()
     val extras by vm.ayahExtras.collectAsStateWithLifecycle()
     val bookmarks by vm.bookmarkStore.bookmarks.collectAsStateWithLifecycle()
 
@@ -442,6 +443,7 @@ fun ReaderScreen(
                 showTransliteration = settings.showTransliteration,
                 showArabicText = false,
                 extras = extras,
+                tafsir = tafsir,
                 onOpenAyah = { s, a -> vm.goToAyah(s, a, openSheet = true) },
                 surahNames = surahs,
             )

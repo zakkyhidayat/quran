@@ -155,6 +155,7 @@ fun SettingsScreen(
                         )
                     }
                     Spacer(Modifier.height(16.dp))
+                    TafsirSection(vm, settings)
                     ExtrasLanguageRow(vm, settings)
                     Spacer(Modifier.height(16.dp))
                     TranslationControls(vm, settings, Modifier.weight(1f), fillAvailableHeight = true)
