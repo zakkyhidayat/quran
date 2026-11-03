@@ -40,6 +40,10 @@ import java.util.Calendar
  * bagian itu. Jadwal dipasang ulang setiap kali notifikasi tampil, setelah perangkat menyala ulang, dan saat
  * jam/zona waktu berubah.
  */
+/** Isi notifikasi ayat hari ini yang diperluas: teks Arab, lalu terjemahan bila ada. */
+internal fun votdBody(arabic: String, translation: String): String =
+    if (translation.isBlank()) arabic else "$arabic\n\n$translation"
+
 object Reminder {
     private const val CHANNEL = "reading_reminder"
 
@@ -236,7 +240,7 @@ object Reminder {
             .joinToString(" ")
         // Seperti kartu di beranda: teks Arab lebih dulu, lalu terjemahan (bila ada) di bawahnya.
         val arabic = ayahs.joinToString(" ") { it.arabic }
-        val body = if (translation.isBlank()) arabic else "$arabic\n\n$translation"
+        val body = votdBody(arabic, translation)
         val reference = "${app.mushaf.surahs()[range.surah]?.nameLatin.orEmpty()} $range"
         val open = PendingIntent.getActivity(
             context,

@@ -8,10 +8,12 @@ import androidx.compose.material3.MotionScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.platform.LocalContext
 import io.zakkyhidayat.quran.settings.AppSettings
 import io.zakkyhidayat.quran.settings.ColorMode
 import io.zakkyhidayat.quran.settings.ThemeMode
+import io.zakkyhidayat.quran.ui.ReduceMotion
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -33,6 +35,9 @@ fun QuranTheme(
         else -> originalColorScheme(dark, settings.contrast)
     }
     if (dark) scheme = if (settings.amoled) scheme.toAmoled() else scheme.liftedDark()
+
+    val reduce = ReduceMotion.systemAnimationsOff(context)
+    SideEffect { ReduceMotion.enabled = reduce }
 
     MaterialExpressiveTheme(
         colorScheme = scheme,

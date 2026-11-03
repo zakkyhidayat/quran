@@ -77,6 +77,7 @@ import io.zakkyhidayat.quran.ui.AppIcons
 import io.zakkyhidayat.quran.ui.CenteredContent
 import io.zakkyhidayat.quran.ui.segmentedItemColors
 import io.zakkyhidayat.quran.ui.NumberBadge
+import io.zakkyhidayat.quran.ui.reducedMotion
 
 private val TABS = listOf(
     R.string.tab_bookmark to AppIcons.Bookmark,
@@ -166,7 +167,7 @@ fun IndexScreen(
                                 val motion = MaterialTheme.motionScheme
                                 AnimatedContent(
                                     targetState = "${lastSurah.nameLatin} ${lastSurah.id}:${settings.lastAyah}",
-                                    transitionSpec = { fadeIn(motion.defaultEffectsSpec()) togetherWith fadeOut(motion.fastEffectsSpec()) },
+                                    transitionSpec = { fadeIn(reducedMotion(motion.defaultEffectsSpec())) togetherWith fadeOut(reducedMotion(motion.fastEffectsSpec())) },
                                     label = "continueLabel",
                                 ) { label -> Text(label, style = MaterialTheme.typography.labelMedium) }
                             }

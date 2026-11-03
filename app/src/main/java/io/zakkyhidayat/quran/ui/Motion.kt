@@ -3,8 +3,10 @@ package io.zakkyhidayat.quran.ui
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.CubicBezierEasing
+import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.Easing
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleOut
@@ -33,13 +35,13 @@ val StepSlide = 30.dp
  * layar yang keluar). [forward] = 1 untuk maju, -1 untuk mundur (sudah dikalikan arah RTL oleh pemanggil).
  */
 fun sharedAxisXEnter(forward: Int, slidePx: Int, delayedFade: Boolean = true): EnterTransition =
-    slideInHorizontally(tween(STEP_MS, easing = StepEasing)) { forward * slidePx } +
-        fadeIn(tween(if (delayedFade) FADE_IN_MS else STEP_MS, delayMillis = if (delayedFade) FADE_OUT_MS else 0, easing = LinearEasing))
+    slideInHorizontally(motionTween(STEP_MS, easing = StepEasing)) { forward * slidePx } +
+        fadeIn(motionTween(if (delayedFade) FADE_IN_MS else STEP_MS, delayMillis = if (delayedFade) FADE_OUT_MS else 0, easing = LinearEasing))
 
 /** Keluar: geser berlawanan arah + pudar cepat pada 90 ms pertama. */
 fun sharedAxisXExit(forward: Int, slidePx: Int): ExitTransition =
-    slideOutHorizontally(tween(STEP_MS, easing = StepEasing)) { -forward * slidePx } +
-        fadeOut(tween(FADE_OUT_MS, easing = LinearEasing))
+    slideOutHorizontally(motionTween(STEP_MS, easing = StepEasing)) { -forward * slidePx } +
+        fadeOut(motionTween(FADE_OUT_MS, easing = LinearEasing))
 
 /** Pergeseran kecil layar yang keluar ke tepi gestur dan radius sudut (extra large) selama kembali prediktif. */
 val PredictiveShift = 16.dp
@@ -53,14 +55,14 @@ val PredictiveCorner = 28.dp
  * animasinya berbalik.
  */
 fun predictivePopExit(forward: Int, distancePx: Int): ExitTransition =
-    slideOutHorizontally(tween(STEP_MS, easing = StepEasing)) { forward * distancePx } +
-        scaleOut(tween(STEP_MS, easing = StepEasing), targetScale = 0.9f) +
-        fadeOut(tween(STEP_MS, easing = LinearEasing))
+    slideOutHorizontally(motionTween(STEP_MS, easing = StepEasing)) { forward * distancePx } +
+        scaleOut(motionTween(STEP_MS, easing = StepEasing), targetScale = 0.9f) +
+        fadeOut(motionTween(STEP_MS, easing = LinearEasing))
 
 /** Layar di bawah: parallax halus dari -[slidePx] searah + pudar masuk sepanjang durasi, tanpa delay. */
 fun predictivePopEnter(forward: Int, slidePx: Int): EnterTransition =
-    slideInHorizontally(tween(STEP_MS, easing = StepEasing)) { -forward * slidePx } +
-        fadeIn(tween(STEP_MS, easing = LinearEasing))
+    slideInHorizontally(motionTween(STEP_MS, easing = StepEasing)) { -forward * slidePx } +
+        fadeIn(motionTween(STEP_MS, easing = LinearEasing))
 
 /**
  * Membulatkan sudut layar yang sedang keluar (PostExit) dan memotongnya, sehingga kartu mengecil saat back prediktif
@@ -68,7 +70,7 @@ fun predictivePopEnter(forward: Int, slidePx: Int): EnterTransition =
  */
 @Composable
 fun AnimatedContentScope.PredictiveBackFrame(content: @Composable () -> Unit) {
-    val radius by transition.animateDp(transitionSpec = { tween(STEP_MS, easing = LinearEasing) }, label = "backCorner") {
+    val radius by transition.animateDp(transitionSpec = { motionTween(STEP_MS, easing = LinearEasing) }, label = "backCorner") {
         if (it == EnterExitState.PostExit) PredictiveCorner else 0.dp
     }
     Box(
@@ -80,3 +82,22 @@ fun AnimatedContentScope.PredictiveBackFrame(content: @Composable () -> Unit) {
         },
     ) { content() }
 }
+
+/**
+ * Pengurangan gerak: aktif bila sistem mematikan animasi (skala animator 0, opsi "Remove animations" atau setara).
+ * Dibaca dari [QuranTheme] setiap komposisi; spesifikasi di bawah ini memakai [ReduceMotion.enabled] saat animasi dimulai.
+ */
+object ReduceMotion {
+    @Volatile
+    var enabled: Boolean = false
+
+    fun systemAnimationsOff(context: android.content.Context): Boolean =
+        android.provider.Settings.Global.getFloat(context.contentResolver, android.provider.Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f
+}
+
+/** Sama seperti [androidx.compose.animation.core.tween], tetapi langsung lompat bila pengurangan gerak aktif. */
+fun <T> motionTween(durationMillis: Int, delayMillis: Int = 0, easing: Easing = androidx.compose.animation.core.FastOutSlowInEasing): FiniteAnimationSpec<T> =
+    if (ReduceMotion.enabled) snap(delayMillis) else androidx.compose.animation.core.tween(durationMillis, delayMillis, easing)
+
+/** Spesifikasi dari MotionScheme M3 ikut pengurangan gerak. */
+fun <T> reducedMotion(spec: FiniteAnimationSpec<T>): FiniteAnimationSpec<T> = if (ReduceMotion.enabled) snap() else spec

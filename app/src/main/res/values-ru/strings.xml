@@ -52,6 +52,7 @@
     <string name="surah_cd">Сура %1$s</string>
     <string name="open_surah_info">Открыть сведения о суре</string>
     <string name="ayah_cd">%1$s, аят %2$d. %3$s</string>
+    <string name="bismillah_cd">Bismillahirrahmanirrahim</string>
     <string name="show_translation">Показать перевод</string>
     <string name="juz_page">Джуз %1$s • с. %2$d</string>
     <string name="index_cd">Список сур и джузов</string>

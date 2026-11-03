@@ -52,6 +52,7 @@
     <string name="surah_cd">সূরা %1$s</string>
     <string name="open_surah_info">সূরার তথ্য খুলুন</string>
     <string name="ayah_cd">%1$s আয়াত %2$d। %3$s</string>
+    <string name="bismillah_cd">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</string>
     <string name="show_translation">অনুবাদ দেখান</string>
     <string name="juz_page">পারা %1$s • পৃ. %2$d</string>
     <string name="index_cd">সূরা ও পারার তালিকা</string>

@@ -53,6 +53,7 @@
     <string name="surah_cd">Surah %1$s</string>
     <string name="open_surah_info">Open surah info</string>
     <string name="ayah_cd">%1$s ayah %2$d. %3$s</string>
+    <string name="bismillah_cd">Bismillahirrahmanirrahim</string>
     <string name="show_translation">Show translation</string>
     <string name="juz_page">Juz %1$s • p. %2$d</string>
     <string name="index_cd">Surah and juz list</string>

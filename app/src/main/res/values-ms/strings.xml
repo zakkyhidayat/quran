@@ -52,6 +52,7 @@
     <string name="surah_cd">Surah %1$s</string>
     <string name="open_surah_info">Buka maklumat surah</string>
     <string name="ayah_cd">%1$s ayat %2$d. %3$s</string>
+    <string name="bismillah_cd">Bismillahirrahmanirrahim</string>
     <string name="show_translation">Tunjukkan terjemahan</string>
     <string name="juz_page">Juzuk %1$s • hlm. %2$d</string>
     <string name="index_cd">Senarai surah dan juzuk</string>

@@ -172,12 +172,19 @@ anti-pola. Yang ditambahkan untuk repo ini ada di bawah dan diperiksa `tools/che
 - **Ikon:** target Material Symbols. Impor `androidx.compose.material.icons` yang sudah ada tercatat sebagai baseline
   (20 berkas, dihitung saat aturan dibuat); impor baru ditandai. Belum dipaksa.
 - **Nama aksesibel:** ikon yang menjadi satu-satunya isi tombol wajib `contentDescription` berbahasa lokal. Ikon
-  dekoratif di samping teks boleh `null`. Pencarian `contentDescription = null` masih per baris, jadi tinjau manual.
+  dekoratif di samping teks boleh `null`. Ditinjau: tidak ada ikon tanpa nama di dalam tombol atau area yang bisa diketuk
+  (pemeriksaan 3 baris ke atas; sampel, bukan bukti lengkap).
 - **Target sentuh:** minimal 48dp untuk area sentuh; ikon kecil boleh asal area sentuhnya tetap 48dp.
 - **Teks Arab:** tidak memotong teks, tidak mengunci tinggi tetap, dan memakai RTL bawaan Compose untuk teks Arab.
 - **Kartu:** tidak membungkus setiap baris atau bagian; kartu hanya untuk unit yang memang terkandung.
 
-Belum diuji di perangkat. Pemeriksaan belum dipasang di CI karena baseline masih berisi pelanggaran lama.
+- **Gerak:** `ReduceMotion` membaca `ANIMATOR_DURATION_SCALE` (0 bila sistem mematikan animasi). Bila aktif, `motionTween`
+  dan `reducedMotion` (di `ui/Motion.kt`) mengganti animasi dengan lompatan instan. Opsi "Reduce motion" di Android 14+
+  yang tidak mengubah skala animator belum tercakup; perlu dicek di perangkat.
+- **Carousel jelajah:** tinggi 120dp dikali skala font (minimal 1x), supaya judul dua baris dan jumlah tidak terpotong.
+
+Belum diuji di perangkat dan belum dikompilasi lokal (Gradle tidak jalan di sandbox). Pemeriksaan belum dipasang di CI
+karena baseline ikon lama (20 berkas) masih ada.
 
 ## Yang dibutuhkan dari pemilik
 

@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -62,7 +63,7 @@ fun ExploreCarousel(counts: ExploreCounts, onOpen: (ExploreEntry) -> Unit, modif
             itemWidth = 152.dp,
             itemSpacing = 8.dp,
             contentPadding = PaddingValues(horizontal = 16.dp),
-            modifier = Modifier.fillMaxWidth().height(120.dp),
+            modifier = Modifier.fillMaxWidth().height((120 * LocalConfiguration.current.fontScale.coerceAtLeast(1f)).dp),
         ) { index ->
             val item = items[index]
             val title = stringResource(item.title)

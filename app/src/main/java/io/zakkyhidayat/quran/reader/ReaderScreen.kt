@@ -103,6 +103,7 @@ import io.zakkyhidayat.quran.settings.CounterMode
 import io.zakkyhidayat.quran.ui.AppIcons
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import io.zakkyhidayat.quran.ui.reducedMotion
 
 private const val PAGE_COUNT = 604
 private val PageMaxWidth = 640.dp
@@ -277,7 +278,7 @@ fun ReaderScreen(
             // memakan ~300 ms dan membuat transisi tersendat.
             // Pudar berurutan: lapisan yang keluar memudar di paruh pertama, yang masuk muncul di paruh kedua, sehingga
             // glif mushaf dan teks daftar tidak pernah tampak bertumpuk. Durasi total sama dengan sebelumnya.
-            val modeProgress by animateFloatAsState(if (listMode) 1f else 0f, motion.defaultEffectsSpec(), label = "modeProgress")
+            val modeProgress by animateFloatAsState(if (listMode) 1f else 0f, reducedMotion(motion.defaultEffectsSpec()), label = "modeProgress")
             val listAlpha = (2f * modeProgress - 1f).coerceIn(0f, 1f)
             val mushafAlpha = (1f - 2f * modeProgress).coerceIn(0f, 1f)
             var listShown by remember { mutableStateOf(listMode) }
@@ -383,16 +384,16 @@ fun ReaderScreen(
                 // Petunjuk sekali untuk pengguna baru: mengambang di atas halaman, tidak mengubah ukurannya.
                 androidx.compose.animation.AnimatedVisibility(
                     visible = !listMode && !settings.gestureHintDone,
-                    enter = fadeIn(motion.defaultEffectsSpec()),
-                    exit = fadeOut(motion.fastEffectsSpec()),
+                    enter = fadeIn(reducedMotion(motion.defaultEffectsSpec())),
+                    exit = fadeOut(reducedMotion(motion.fastEffectsSpec())),
                     modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 76.dp).zIndex(2f),
                 ) {
                     GestureHint { scope.launch { vm.settingsRepository.setGestureHintDone() } }
                 }
                 androidx.compose.animation.AnimatedVisibility(
                     visible = activeSunnahRange != null && sunnahStepReached,
-                    enter = fadeIn(motion.defaultEffectsSpec()),
-                    exit = fadeOut(motion.fastEffectsSpec()),
+                    enter = fadeIn(reducedMotion(motion.defaultEffectsSpec())),
+                    exit = fadeOut(reducedMotion(motion.fastEffectsSpec())),
                     modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 12.dp).zIndex(3f),
                 ) {
                     val label = nextSunnahRange?.let { range ->

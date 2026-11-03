@@ -52,6 +52,7 @@
     <string name="surah_cd">سورهٔ %1$s</string>
     <string name="open_surah_info">باز کردن اطلاعات سوره</string>
     <string name="ayah_cd">%1$s آیهٔ %2$d. %3$s</string>
+    <string name="bismillah_cd">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</string>
     <string name="show_translation">نمایش ترجمه</string>
     <string name="juz_page">جزء %1$s • ص %2$d</string>
     <string name="index_cd">فهرست سوره‌ها و اجزاء</string>

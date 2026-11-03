@@ -28,9 +28,7 @@ LEGACY_ICON = re.compile(r"^import androidx\.compose\.material\.icons\b", re.M)
 NULL_CD = re.compile(r"Icon\(.*contentDescription\s*=\s*null")
 
 # Keadaan saat aturan ditambahkan (dihitung ulang dengan skrip ini). Berkas di sini tidak dihitung sebagai baru.
-BASELINE_HEX = {
-    "io/zakkyhidayat/quran/reader/ReaderControls.kt",
-}
+BASELINE_HEX: set[str] = set()  # kosong: warna tajwid dipindah ke ui/theme/TajweedColors.kt
 BASELINE_LEGACY_ICON = {
     "io/zakkyhidayat/quran/explore/ExploreCommon.kt",
     "io/zakkyhidayat/quran/explore/ExploreScreen.kt",

@@ -52,6 +52,7 @@
     <string name="surah_cd">%1$s Suresi</string>
     <string name="open_surah_info">Sure bilgisini aç</string>
     <string name="ayah_cd">%1$s %2$d. ayet. %3$s</string>
+    <string name="bismillah_cd">Bismillahirrahmanirrahim</string>
     <string name="show_translation">Meali göster</string>
     <string name="juz_page">Cüz %1$s • s. %2$d</string>
     <string name="index_cd">Sure ve cüz listesi</string>
