@@ -84,7 +84,8 @@ Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pu
   lewat tetap bisa digeser ke belakang. Hari potongan dimulai pukul 04.00, jadi dini hari masih memakai potongan malam
   sebelumnya. Notifikasinya satu sakelar di Pengaturan > Pengingat (bawaan mati, khusus perangkat ini): potongan yang sama
   dengan kartu, pukul 06.00 (pagi), 13.00 (siang), dan 20.00 (malam); isinya terjemahan aktif (Arab bila belum ada) dan
-  ketukan membuka ayatnya dalam mode ayat dan terjemahan (mode baca ikut berpindah ke sana dan tetap tersimpan).
+  ketukan membuka ayatnya dalam mode ayat dan terjemahan. Saat diperluas, notifikasi menampilkan nama surah dan ayat sebagai judul,
+  lalu teks Arab dan terjemahan seperti kartu di beranda (mode baca ikut berpindah ke sana dan tetap tersimpan).
 - Bingkai nama surah memakai 97% lebar halaman (margin kiri dan kanan masing-masing 1,5%).
 - Histori bacaan: satu baris per surah, 5 tampil, langsung setelah Ayat Hari Ini.
 - Kumpulan ayat: doa, solusi, adab, dosa besar; layar kumpulan dengan teks Arab, terjemahan, dan "Buka di pembaca".
@@ -112,9 +113,9 @@ Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pu
 - Lompat ke ayat (kartu Ayat hari ini, histori, bookmark, Sunnah) di mode ayat dan terjemahan menggulir ke ayat itu dan
   menyorotnya dengan warna `secondaryContainer`; sorotan hilang saat pengguna mengetuk ayat. Halaman dibuka lebih dulu,
   baru posisi baca disimpan (`AppViewModel.goToAyah`), jadi lompatnya tidak menunggu DataStore.
-- Tema dan topik ayat memakai bahasa pilihan sendiri (Pengaturan > Terjemahan, `extrasLanguage`: Inggris bawaan atau
-  Indonesia), terpisah dari bahasa aplikasi. Bahasa yang belum punya terjemahan di `quran.db` jatuh ke teks Inggris QUL.
-  Dipakai lembar ayat, kartu tema/topik, dan layar Jelajahi lewat `MushafRepository.extrasLang`.
+- Tema dan topik ayat memakai pilihan di Pengaturan > Terjemahan: bahasa aplikasi (bawaan), bahasa sistem, atau English /
+  Indonesia. Pilihan "app" dan "system" menampilkan bahasa yang dipakai di bawah judulnya. Bahasa tanpa terjemahan di
+  `quran.db` jatuh ke teks Inggris QUL. Dibaca lewat `AppLanguage.extrasLanguage` oleh `MushafRepository`.
 - Ketuk kartu "Ayat hari ini" di beranda membuka teks penuhnya: tinggi kartu bertambah bila teks tidak muat (pager
   mengikuti tinggi yang diukur), dan tombol "Buka di pembaca" muncul di tengah bawah kartu. Ketuk lagi untuk menciutkan;
   geser ke kartu lain juga menciutkannya. Tombol itu yang membuka halaman, bukan ketukan kartu.
@@ -159,6 +160,31 @@ Perlu dicek pemilik sebelum rilis: redaksi hadits di bacaan sunnah, dan tampilan
 - Uji dengan TalkBack sungguhan.
 - Uji dengan ukuran font sistem besar.
 - Tes UI dasar otomatis: buka, pilih surah, geser, cari, bookmark.
+
+## Aturan UI yang bisa diperiksa
+
+Acuan prinsip: skill `skydashnet/material-design-3-ui-skill` v1.1.1 (MIT), dipakai sebagai referensi review, bukan
+gerbang tunggal. Yang diambil: aksesibilitas sebagai syarat rilis, token semantik, varian kartu eksplisit, dan
+anti-pola. Yang ditambahkan untuk repo ini ada di bawah dan diperiksa `tools/check_ui_rules.py`.
+
+- **Warna:** `Color(0x…)` hanya di `ui/theme/`. Komponen memakai peran M3 (`colorScheme.*`). Pelanggaran baru di
+  luar tema menggagalkan `--strict`.
+- **Ikon:** target Material Symbols. Impor `androidx.compose.material.icons` yang sudah ada tercatat sebagai baseline
+  (20 berkas, dihitung saat aturan dibuat); impor baru ditandai. Belum dipaksa.
+- **Nama aksesibel:** ikon yang menjadi satu-satunya isi tombol wajib `contentDescription` berbahasa lokal. Ikon
+  dekoratif di samping teks boleh `null`. Ditinjau: tidak ada ikon tanpa nama di dalam tombol atau area yang bisa diketuk
+  (pemeriksaan 3 baris ke atas; sampel, bukan bukti lengkap).
+- **Target sentuh:** minimal 48dp untuk area sentuh; ikon kecil boleh asal area sentuhnya tetap 48dp.
+- **Teks Arab:** tidak memotong teks, tidak mengunci tinggi tetap, dan memakai RTL bawaan Compose untuk teks Arab.
+- **Kartu:** tidak membungkus setiap baris atau bagian; kartu hanya untuk unit yang memang terkandung.
+
+- **Gerak:** `ReduceMotion` membaca `ANIMATOR_DURATION_SCALE` (0 bila sistem mematikan animasi). Bila aktif, `motionTween`
+  dan `reducedMotion` (di `ui/Motion.kt`) mengganti animasi dengan lompatan instan. Opsi "Reduce motion" di Android 14+
+  yang tidak mengubah skala animator belum tercakup; perlu dicek di perangkat.
+- **Carousel jelajah:** tinggi 120dp dikali skala font (minimal 1x), supaya judul dua baris dan jumlah tidak terpotong.
+
+Belum diuji di perangkat dan belum dikompilasi lokal (Gradle tidak jalan di sandbox). Pemeriksaan belum dipasang di CI
+karena baseline ikon lama (20 berkas) masih ada.
 
 ## Yang dibutuhkan dari pemilik
 

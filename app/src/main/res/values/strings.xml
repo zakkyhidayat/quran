@@ -53,6 +53,7 @@
     <string name="surah_cd">Surah %1$s</string>
     <string name="open_surah_info">Open surah info</string>
     <string name="ayah_cd">%1$s ayah %2$d. %3$s</string>
+    <string name="bismillah_cd">Bismillahirrahmanirrahim</string>
     <string name="show_translation">Show translation</string>
     <string name="juz_page">Juz %1$s • p. %2$d</string>
     <string name="index_cd">Surah and juz list</string>
@@ -94,6 +95,8 @@
     <string name="tajweed_title">Tajweed colours</string>
     <string name="tajweed_sub">Show letters coloured by tajweed rules</string>
     <string name="extras_language">Language for themes and topics</string>
+    <string name="extras_lang_app">App language</string>
+    <string name="extras_lang_system">System language</string>
     <string name="keep_screen_on_title">Keep screen on</string>
     <string name="keep_screen_on_sub">Prevent the screen from turning off while reading</string>
     <string name="tajweed_guide_open">Open tajweed guide</string>

@@ -74,6 +74,8 @@ import io.zakkyhidayat.quran.data.Surah
 import io.zakkyhidayat.quran.settings.CounterMode
 import io.zakkyhidayat.quran.settings.ReadingMode
 import io.zakkyhidayat.quran.ui.AppIcons
+import io.zakkyhidayat.quran.ui.reducedMotion
+import io.zakkyhidayat.quran.ui.theme.TajweedColors
 
 @Composable
 internal fun TajweedReaderControls(
@@ -120,10 +122,10 @@ internal fun TajweedReaderControls(
                 ) {
                     AnimatedVisibility(
                         visibleState = guideTransition,
-                        enter = scaleIn(initialScale = 0.92f, animationSpec = motion.fastSpatialSpec()) +
-                            fadeIn(animationSpec = motion.fastEffectsSpec()),
-                        exit = scaleOut(targetScale = 0.92f, animationSpec = motion.fastSpatialSpec()) +
-                            fadeOut(animationSpec = motion.fastEffectsSpec()),
+                        enter = scaleIn(initialScale = 0.92f, animationSpec = reducedMotion(motion.fastSpatialSpec())) +
+                            fadeIn(animationSpec = reducedMotion(motion.fastEffectsSpec())),
+                        exit = scaleOut(targetScale = 0.92f, animationSpec = reducedMotion(motion.fastSpatialSpec())) +
+                            fadeOut(animationSpec = reducedMotion(motion.fastEffectsSpec())),
                     ) {
                         Surface(
                             shape = MaterialTheme.shapes.extraLarge,
@@ -140,20 +142,20 @@ internal fun TajweedReaderControls(
                                 verticalArrangement = Arrangement.spacedBy(4.dp),
                             ) {
                                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    TajweedLegendItem(Color(0xFF999999), R.string.tajweed_legend_idgham, Modifier.weight(1f))
-                                    TajweedLegendItem(Color(0xFFFF9FCB), R.string.tajweed_legend_madd_two, Modifier.weight(1f))
+                                    TajweedLegendItem(TajweedColors.Idgham, R.string.tajweed_legend_idgham, Modifier.weight(1f))
+                                    TajweedLegendItem(TajweedColors.MaddTwo, R.string.tajweed_legend_madd_two, Modifier.weight(1f))
                                 }
                                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    TajweedLegendItem(Color(0xFFFF842E), R.string.tajweed_legend_madd_optional, Modifier.weight(1f))
-                                    TajweedLegendItem(Color(0xFFFF4F8B), R.string.tajweed_legend_madd_four_five, Modifier.weight(1f))
+                                    TajweedLegendItem(TajweedColors.MaddOptional, R.string.tajweed_legend_madd_optional, Modifier.weight(1f))
+                                    TajweedLegendItem(TajweedColors.MaddFourFive, R.string.tajweed_legend_madd_four_five, Modifier.weight(1f))
                                 }
                                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    TajweedLegendItem(Color(0xFFE00000), R.string.tajweed_legend_madd_six, Modifier.weight(1f))
-                                    TajweedLegendItem(Color(0xFF20B95A), R.string.tajweed_legend_ikhfa, Modifier.weight(1f))
+                                    TajweedLegendItem(TajweedColors.MaddSix, R.string.tajweed_legend_madd_six, Modifier.weight(1f))
+                                    TajweedLegendItem(TajweedColors.Ikhfa, R.string.tajweed_legend_ikhfa, Modifier.weight(1f))
                                 }
                                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    TajweedLegendItem(Color(0xFF00CDEB), R.string.tajweed_legend_qalqalah, Modifier.weight(1f))
-                                    TajweedLegendItem(Color(0xFF3986D8), R.string.tajweed_legend_tafkhim, Modifier.weight(1f))
+                                    TajweedLegendItem(TajweedColors.Qalqalah, R.string.tajweed_legend_qalqalah, Modifier.weight(1f))
+                                    TajweedLegendItem(TajweedColors.Tafkhim, R.string.tajweed_legend_tafkhim, Modifier.weight(1f))
                                 }
                                 Row(
                                     Modifier.fillMaxWidth(),
@@ -233,8 +235,8 @@ internal fun ReadingModeBar(
                 if (!compact) {
                     AnimatedVisibility(
                         visible = checked,
-                        enter = expandHorizontally(MaterialTheme.motionScheme.fastSpatialSpec()) + fadeIn(MaterialTheme.motionScheme.fastEffectsSpec()),
-                        exit = shrinkHorizontally(MaterialTheme.motionScheme.fastSpatialSpec()) + fadeOut(MaterialTheme.motionScheme.fastEffectsSpec()),
+                        enter = expandHorizontally(reducedMotion(MaterialTheme.motionScheme.fastSpatialSpec())) + fadeIn(reducedMotion(MaterialTheme.motionScheme.fastEffectsSpec())),
+                        exit = shrinkHorizontally(reducedMotion(MaterialTheme.motionScheme.fastSpatialSpec())) + fadeOut(reducedMotion(MaterialTheme.motionScheme.fastEffectsSpec())),
                     ) {
                         Row {
                             Spacer(Modifier.size(ToggleButtonDefaults.IconSpacing))
@@ -320,7 +322,7 @@ internal fun ReaderCounter(
     }
     val progress by androidx.compose.animation.core.animateFloatAsState(
         targetValue = (n.toFloat() / total.coerceAtLeast(1)).coerceIn(0f, 1f),
-        animationSpec = MaterialTheme.motionScheme.defaultSpatialSpec(),
+        animationSpec = reducedMotion(MaterialTheme.motionScheme.defaultSpatialSpec()),
         label = "readerCounterProgress",
     )
     val progressTrackColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.22f)
@@ -383,10 +385,10 @@ internal fun ReaderCounter(
             ) {
                 AnimatedVisibility(
                     visibleState = counterTransition,
-                    enter = scaleIn(initialScale = 0.92f, animationSpec = MaterialTheme.motionScheme.fastSpatialSpec()) +
-                        fadeIn(animationSpec = MaterialTheme.motionScheme.fastEffectsSpec()),
-                    exit = scaleOut(targetScale = 0.92f, animationSpec = MaterialTheme.motionScheme.fastSpatialSpec()) +
-                        fadeOut(animationSpec = MaterialTheme.motionScheme.fastEffectsSpec()),
+                    enter = scaleIn(initialScale = 0.92f, animationSpec = reducedMotion(MaterialTheme.motionScheme.fastSpatialSpec())) +
+                        fadeIn(animationSpec = reducedMotion(MaterialTheme.motionScheme.fastEffectsSpec())),
+                    exit = scaleOut(targetScale = 0.92f, animationSpec = reducedMotion(MaterialTheme.motionScheme.fastSpatialSpec())) +
+                        fadeOut(animationSpec = reducedMotion(MaterialTheme.motionScheme.fastEffectsSpec())),
                 ) {
                     Column(
                         Modifier
@@ -412,7 +414,7 @@ internal fun ReaderCounter(
                                 } else {
                                     MaterialTheme.colorScheme.surfaceContainerHigh
                                 },
-                                animationSpec = MaterialTheme.motionScheme.fastEffectsSpec(),
+                                animationSpec = reducedMotion(MaterialTheme.motionScheme.fastEffectsSpec()),
                                 label = "counterItemColor",
                             )
                             Surface(

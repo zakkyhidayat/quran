@@ -52,6 +52,7 @@
     <string name="surah_cd">Sourate %1$s</string>
     <string name="open_surah_info">Ouvrir les infos de la sourate</string>
     <string name="ayah_cd">%1$s verset %2$d. %3$s</string>
+    <string name="bismillah_cd">Bismillahirrahmanirrahim</string>
     <string name="show_translation">Afficher la traduction</string>
     <string name="juz_page">Juz %1$s • p. %2$d</string>
     <string name="index_cd">Liste des sourates et des juz</string>
@@ -93,6 +94,8 @@
     <string name="tajweed_title">Couleurs du tajwid</string>
     <string name="tajweed_sub">Colorer les lettres selon les règles du tajwid</string>
     <string name="extras_language">Langue des thèmes et sujets</string>
+    <string name="extras_lang_app">Langue de l’application</string>
+    <string name="extras_lang_system">Langue du système</string>
     <string name="keep_screen_on_title">Garder l’écran allumé</string>
     <string name="keep_screen_on_sub">Empêcher la mise en veille de l’écran pendant la lecture</string>
     <string name="tajweed_guide_open">Ouvrir le guide du tajwid</string>

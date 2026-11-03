@@ -4,6 +4,7 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.CubicBezierEasing
+import io.zakkyhidayat.quran.ui.motionTween
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -99,8 +100,8 @@ fun OnboardingScreen(vm: AppViewModel, settings: AppSettings) {
                     AnimatedContent(
                         targetState = step,
                         transitionSpec = {
-                            fadeIn(tween(FADE_IN_MS, delayMillis = FADE_OUT_MS, easing = LinearEasing)) togetherWith
-                                fadeOut(tween(FADE_OUT_MS, easing = LinearEasing)) using SizeTransform(clip = false) { _, _ -> tween(STEP_MS, easing = StepEasing) }
+                            fadeIn(motionTween(FADE_IN_MS, delayMillis = FADE_OUT_MS, easing = LinearEasing)) togetherWith
+                                fadeOut(motionTween(FADE_OUT_MS, easing = LinearEasing)) using SizeTransform(clip = false) { _, _ -> motionTween(STEP_MS, easing = StepEasing) }
                         },
                         modifier = Modifier.padding(start = 16.dp).weight(1f),
                         label = "onboardingStepLabel",
@@ -140,8 +141,8 @@ fun OnboardingScreen(vm: AppViewModel, settings: AppSettings) {
                         AnimatedContent(
                             targetState = step < STEPS - 1,
                             transitionSpec = {
-                                fadeIn(tween(FADE_IN_MS, delayMillis = FADE_OUT_MS, easing = LinearEasing)) togetherWith
-                                    fadeOut(tween(FADE_OUT_MS, easing = LinearEasing)) using SizeTransform(clip = false) { _, _ -> tween(STEP_MS, easing = StepEasing) }
+                                fadeIn(motionTween(FADE_IN_MS, delayMillis = FADE_OUT_MS, easing = LinearEasing)) togetherWith
+                                    fadeOut(motionTween(FADE_OUT_MS, easing = LinearEasing)) using SizeTransform(clip = false) { _, _ -> motionTween(STEP_MS, easing = StepEasing) }
                             },
                             label = "onboardingNext",
                         ) { notLast -> Text(stringResource(if (notLast) R.string.onb_next else R.string.onb_start)) }
@@ -204,7 +205,7 @@ private fun AppearanceStep(vm: AppViewModel, settings: AppSettings) {
 /** Tombol teks yang memudar masuk/keluar dengan slot tetap; saat tidak terlihat tidak bisa difokus, diklik, atau dibaca TalkBack. */
 @Composable
 private fun FadingButton(visible: Boolean, onClick: () -> Unit, content: @Composable () -> Unit) {
-    val alpha by animateFloatAsState(if (visible) 1f else 0f, tween(STEP_MS, easing = StepEasing), label = "fadingButton")
+    val alpha by animateFloatAsState(if (visible) 1f else 0f, motionTween(STEP_MS, easing = StepEasing), label = "fadingButton")
     TextButton(
         onClick = { if (visible) onClick() },
         modifier = Modifier
@@ -219,10 +220,10 @@ private fun StepDots(step: Int) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)) {
         repeat(STEPS) { i ->
             val active = i == step
-            val width by animateDpAsState(if (active) 24.dp else 8.dp, tween(STEP_MS, easing = StepEasing), label = "dotWidth")
+            val width by animateDpAsState(if (active) 24.dp else 8.dp, motionTween(STEP_MS, easing = StepEasing), label = "dotWidth")
             val color by animateColorAsState(
                 if (active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant,
-                tween(STEP_MS, easing = StepEasing), label = "dotColor",
+                motionTween(STEP_MS, easing = StepEasing), label = "dotColor",
             )
             Box(Modifier.size(width = width, height = 8.dp).clip(CircleShape).background(color))
         }

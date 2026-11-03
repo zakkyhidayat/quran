@@ -52,6 +52,7 @@
     <string name="surah_cd">সূরা %1$s</string>
     <string name="open_surah_info">সূরার তথ্য খুলুন</string>
     <string name="ayah_cd">%1$s আয়াত %2$d। %3$s</string>
+    <string name="bismillah_cd">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</string>
     <string name="show_translation">অনুবাদ দেখান</string>
     <string name="juz_page">পারা %1$s • পৃ. %2$d</string>
     <string name="index_cd">সূরা ও পারার তালিকা</string>
@@ -93,6 +94,8 @@
     <string name="tajweed_title">তাজবীদের রং</string>
     <string name="tajweed_sub">তাজবীদের নিয়ম অনুযায়ী অক্ষর রঙিন দেখান</string>
     <string name="extras_language">থিম ও বিষয়ের ভাষা</string>
+    <string name="extras_lang_app">অ্যাপের ভাষা</string>
+    <string name="extras_lang_system">সিস্টেমের ভাষা</string>
     <string name="keep_screen_on_title">স্ক্রিন চালু রাখুন</string>
     <string name="keep_screen_on_sub">পড়ার সময় স্ক্রিন বন্ধ হওয়া রোধ করুন</string>
     <string name="tajweed_guide_open">তাজবীদ নির্দেশিকা খুলুন</string>

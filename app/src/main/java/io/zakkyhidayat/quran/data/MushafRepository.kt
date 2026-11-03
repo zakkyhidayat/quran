@@ -5,7 +5,7 @@ import android.database.Cursor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class MushafRepository(context: Context) {
+class MushafRepository(private val context: Context) {
     private val db = ContentDatabase.get(context)
     private val packs = TranslationPacks(context)
 
@@ -336,9 +336,10 @@ class MushafRepository(context: Context) {
     val hasTopics get() = "topics" in optionalTables
 
     // Terjemahan nama/deskripsi topik dan tema (tabel *_i18n dari tools/explore_i18n/). Bila tabel atau barisnya tidak ada,
-    // COALESCE jatuh ke teks Inggris QUL. Bahasanya pilihan pengguna (extrasLanguage), bukan locale aplikasi; diset AppViewModel.
-    @Volatile var extrasLang: String = "en"
-    private fun contentLanguage(): String = extrasLang
+    // COALESCE jatuh ke teks Inggris QUL. Pilihan pengguna (app, system, en, id) diset AppViewModel dan dibaca tiap kali dipakai,
+    // jadi bahasa aplikasi yang berubah ikut berlaku.
+    @Volatile var extrasSetting: String = "app"
+    private fun contentLanguage(): String = io.zakkyhidayat.quran.AppLanguage.extrasLanguage(extrasSetting, context)
     private val hasTopicI18n get() = "topics_i18n" in optionalTables
     private val hasThemeI18n get() = "ayah_themes_i18n" in optionalTables
     private val TOPIC_NAME get() = if (hasTopicI18n) "COALESCE(i.name, t.name)" else "t.name"

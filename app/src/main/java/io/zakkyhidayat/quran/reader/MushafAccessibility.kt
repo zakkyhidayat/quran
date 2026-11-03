@@ -64,7 +64,7 @@ internal fun ScreenReaderLayer(
                         )
                     }
                 }
-                LineType.Basmallah -> Box(Modifier.size(1.dp).semantics { contentDescription = "Bismillahirrahmanirrahim" })
+                LineType.Basmallah -> Box(Modifier.size(1.dp).semantics { contentDescription = resources.getString(R.string.bismillah_cd) })
             }
         }
     }

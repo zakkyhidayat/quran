@@ -52,6 +52,7 @@
     <string name="surah_cd">سورة %1$s</string>
     <string name="open_surah_info">فتح معلومات السورة</string>
     <string name="ayah_cd">%1$s الآية %2$d. %3$s</string>
+    <string name="bismillah_cd">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</string>
     <string name="show_translation">عرض الترجمة</string>
     <string name="juz_page">الجزء %1$s • ص %2$d</string>
     <string name="index_cd">قائمة السور والأجزاء</string>
@@ -93,6 +94,8 @@
     <string name="tajweed_title">ألوان التجويد</string>
     <string name="tajweed_sub">تلوين الحروف حسب أحكام التجويد</string>
     <string name="extras_language">لغة المواضيع والمحاور</string>
+    <string name="extras_lang_app">لغة التطبيق</string>
+    <string name="extras_lang_system">لغة النظام</string>
     <string name="keep_screen_on_title">إبقاء الشاشة مضاءة</string>
     <string name="keep_screen_on_sub">منع انطفاء الشاشة أثناء القراءة</string>
     <string name="tajweed_guide_open">فتح دليل التجويد</string>

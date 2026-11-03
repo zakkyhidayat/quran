@@ -52,6 +52,7 @@
     <string name="surah_cd">Сура %1$s</string>
     <string name="open_surah_info">Открыть сведения о суре</string>
     <string name="ayah_cd">%1$s, аят %2$d. %3$s</string>
+    <string name="bismillah_cd">Bismillahirrahmanirrahim</string>
     <string name="show_translation">Показать перевод</string>
     <string name="juz_page">Джуз %1$s • с. %2$d</string>
     <string name="index_cd">Список сур и джузов</string>
@@ -93,6 +94,8 @@
     <string name="tajweed_title">Цвета таджвида</string>
     <string name="tajweed_sub">Раскрашивать буквы по правилам таджвида</string>
     <string name="extras_language">Язык тем и топиков</string>
+    <string name="extras_lang_app">Язык приложения</string>
+    <string name="extras_lang_system">Язык системы</string>
     <string name="keep_screen_on_title">Не выключать экран</string>
     <string name="keep_screen_on_sub">Не давать экрану гаснуть во время чтения</string>
     <string name="tajweed_guide_open">Открыть руководство по таджвиду</string>

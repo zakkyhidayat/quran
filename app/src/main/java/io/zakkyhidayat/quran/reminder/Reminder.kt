@@ -40,6 +40,10 @@ import java.util.Calendar
  * bagian itu. Jadwal dipasang ulang setiap kali notifikasi tampil, setelah perangkat menyala ulang, dan saat
  * jam/zona waktu berubah.
  */
+/** Isi notifikasi ayat hari ini yang diperluas: teks Arab, lalu terjemahan bila ada. */
+internal fun votdBody(arabic: String, translation: String): String =
+    if (translation.isBlank()) arabic else "$arabic\n\n$translation"
+
 object Reminder {
     private const val CHANNEL = "reading_reminder"
 
@@ -234,7 +238,9 @@ object Reminder {
         val translation = ayahs
             .mapNotNull { a -> a.translations.firstOrNull()?.text?.let(::plainTranslation)?.takeIf { it.isNotBlank() } }
             .joinToString(" ")
-        val body = translation.ifBlank { ayahs.joinToString(" ") { it.arabic } }
+        // Seperti kartu di beranda: teks Arab lebih dulu, lalu terjemahan (bila ada) di bawahnya.
+        val arabic = ayahs.joinToString(" ") { it.arabic }
+        val body = votdBody(arabic, translation)
         val reference = "${app.mushaf.surahs()[range.surah]?.nameLatin.orEmpty()} $range"
         val open = PendingIntent.getActivity(
             context,
@@ -251,7 +257,7 @@ object Reminder {
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle("${context.getString(R.string.home_votd)} · ${context.getString(VOTD_SLOT_LABELS[slot])}")
                 .setContentText(reference)
-                .setStyle(NotificationCompat.BigTextStyle().bigText("$reference\n$body"))
+                .setStyle(NotificationCompat.BigTextStyle().setBigContentTitle(reference).bigText(body))
                 .setContentIntent(open)
                 .setAutoCancel(true)
                 .build(),

@@ -52,6 +52,7 @@
     <string name="surah_cd">Surah %1$s</string>
     <string name="open_surah_info">Buka maklumat surah</string>
     <string name="ayah_cd">%1$s ayat %2$d. %3$s</string>
+    <string name="bismillah_cd">Bismillahirrahmanirrahim</string>
     <string name="show_translation">Tunjukkan terjemahan</string>
     <string name="juz_page">Juzuk %1$s • hlm. %2$d</string>
     <string name="index_cd">Senarai surah dan juzuk</string>
@@ -93,6 +94,8 @@
     <string name="tajweed_title">Warna tajwid</string>
     <string name="tajweed_sub">Warnakan huruf mengikut hukum tajwid</string>
     <string name="extras_language">Bahasa tema dan topik</string>
+    <string name="extras_lang_app">Bahasa aplikasi</string>
+    <string name="extras_lang_system">Bahasa sistem</string>
     <string name="keep_screen_on_title">Skrin sentiasa menyala</string>
     <string name="keep_screen_on_sub">Elakkan skrin padam semasa membaca</string>
     <string name="tajweed_guide_open">Buka panduan tajwid</string>

@@ -22,8 +22,8 @@ enum class ContrastLevel { Standard, Medium, High }
 /** Satuan bagian harian untuk pengingat membaca. */
 enum class ReminderUnit { Juz, Hizb, Manzil }
 
-/** Bahasa tema dan topik yang bisa dipilih; hanya kode yang punya terjemahan di quran.db yang ditawarkan. */
-val EXTRAS_LANGUAGES = listOf("en", "id")
+/** Pilihan bahasa tema dan topik: bahasa aplikasi, bahasa sistem, atau salah satu bahasa yang punya terjemahan di quran.db. */
+val EXTRAS_LANGUAGES = listOf("app", "system", "en", "id")
 
 /** Cara baca, berlaku untuk semua surah: halaman mushaf, ayat dengan terjemahan, atau terjemahan saja. */
 enum class ReadingMode { Mushaf, AyahTranslation, Translation }
@@ -44,8 +44,8 @@ data class AppSettings(
     val showTransliteration: Boolean = true,
     val translationIds: List<String> = listOf("id-kemenag"),
     val readingMode: ReadingMode = ReadingMode.Mushaf,
-    /** Kode bahasa untuk tema dan topik ayat (en atau id); terpisah dari bahasa aplikasi, bawaan Inggris (sumber QUL). */
-    val extrasLanguage: String = "en",
+    /** Pilihan bahasa tema dan topik ayat: app, system, en, atau id (lihat EXTRAS_LANGUAGES). */
+    val extrasLanguage: String = "app",
     /** Ukuran teks Arab (daftar ayat, lembar ayat) dalam persen dari ukuran bawaan. Halaman mushaf tidak terpengaruh. */
     val arabicTextPercent: Int = 100,
     /** Ukuran teks terjemahan dalam persen dari ukuran bawaan. */
@@ -150,7 +150,7 @@ class SettingsRepository(private val context: Context) {
             showTransliteration = prefs[transliterationKey] ?: true,
             translationIds = prefs[translationsKey]?.split(',')?.filter { it.isNotBlank() } ?: defaultTranslations(),
             readingMode = prefs[readingModeKey].toEnum(ReadingMode.Mushaf),
-            extrasLanguage = prefs[extrasLanguageKey]?.takeIf { it in EXTRAS_LANGUAGES } ?: "en",
+            extrasLanguage = prefs[extrasLanguageKey]?.takeIf { it in EXTRAS_LANGUAGES } ?: "app",
             arabicTextPercent = prefs[arabicTextKey] ?: 100,
             translationTextPercent = prefs[translationTextKey] ?: 100,
             autoBackupUri = prefs[autoBackupUriKey],

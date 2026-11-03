@@ -79,6 +79,7 @@ import io.zakkyhidayat.quran.data.AyahPos
 import io.zakkyhidayat.quran.data.AyahRef
 import io.zakkyhidayat.quran.data.Surah
 import io.zakkyhidayat.quran.ui.CenteredContent
+import io.zakkyhidayat.quran.ui.reducedMotion
 
 /**
  * Mode baca daftar: satu layar = ayat-ayat dari satu halaman mushaf, berpindah halaman dengan geser seperti mode mushaf
@@ -280,7 +281,7 @@ private fun AyahRow(
     }
     val highlightColor by animateColorAsState(
         if (highlighted) MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f) else Color.Transparent,
-        animationSpec = MaterialTheme.motionScheme.defaultEffectsSpec(),
+        animationSpec = reducedMotion(MaterialTheme.motionScheme.defaultEffectsSpec()),
         label = "ayahHighlight",
     )
     Column(
@@ -300,8 +301,8 @@ private fun AyahRow(
         AnimatedVisibility(
             visible = showArabic,
             // Tanpa animasi (snap) bila daftar belum terlihat, agar tidak ada lompatan tata letak saat memudar masuk.
-            enter = if (animateArabic) expandVertically(motion.defaultSpatialSpec()) + fadeIn(motion.defaultEffectsSpec()) else EnterTransition.None,
-            exit = if (animateArabic) shrinkVertically(motion.defaultSpatialSpec()) + fadeOut(motion.defaultEffectsSpec()) else ExitTransition.None,
+            enter = if (animateArabic) expandVertically(reducedMotion(motion.defaultSpatialSpec())) + fadeIn(reducedMotion(motion.defaultEffectsSpec())) else EnterTransition.None,
+            exit = if (animateArabic) shrinkVertically(reducedMotion(motion.defaultSpatialSpec())) + fadeOut(reducedMotion(motion.defaultEffectsSpec())) else ExitTransition.None,
         ) {
             AyahArabicText(vm, pos.surah, pos.ayah, pos.page, d.arabic, tajweed, Modifier.fillMaxWidth().padding(bottom = 8.dp))
         }
@@ -324,8 +325,8 @@ private fun AyahRow(
         }
         AnimatedVisibility(
             visible = actionsOpen,
-            enter = expandVertically(motion.defaultSpatialSpec()) + fadeIn(motion.defaultEffectsSpec()),
-            exit = shrinkVertically(motion.defaultSpatialSpec()) + fadeOut(motion.defaultEffectsSpec()),
+            enter = expandVertically(reducedMotion(motion.defaultSpatialSpec())) + fadeIn(reducedMotion(motion.defaultEffectsSpec())),
+            exit = shrinkVertically(reducedMotion(motion.defaultSpatialSpec())) + fadeOut(reducedMotion(motion.defaultEffectsSpec())),
         ) {
             val plainText = remember(d) { ayahShareText(d, "${surah?.nameLatin ?: ""} ${pos.surah}:${pos.ayah}") }
             Row(Modifier.padding(top = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
