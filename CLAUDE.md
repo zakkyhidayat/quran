@@ -35,6 +35,9 @@ python tools/check_strings.py
 ./gradlew --no-daemon :app:testGithubDebugUnitTest :app:lintGithubDebug :app:assembleGithubDebug
 ```
 
+Untuk perubahan UI, jalankan juga `python tools/check_ui_rules.py` dan baca aturannya di `docs/UI_UX.md`. Belum wajib
+di CI; `--strict` menggagalkan warna literal baru di luar `ui/theme`.
+
 ## Bahasa
 
 Pesan commit, komentar kode, dan dokumen internal (`docs/`) dalam bahasa Indonesia. `README.md`, `ARCHITECTURE.md`,

@@ -161,6 +161,24 @@ Perlu dicek pemilik sebelum rilis: redaksi hadits di bacaan sunnah, dan tampilan
 - Uji dengan ukuran font sistem besar.
 - Tes UI dasar otomatis: buka, pilih surah, geser, cari, bookmark.
 
+## Aturan UI yang bisa diperiksa
+
+Acuan prinsip: skill `skydashnet/material-design-3-ui-skill` v1.1.1 (MIT), dipakai sebagai referensi review, bukan
+gerbang tunggal. Yang diambil: aksesibilitas sebagai syarat rilis, token semantik, varian kartu eksplisit, dan
+anti-pola. Yang ditambahkan untuk repo ini ada di bawah dan diperiksa `tools/check_ui_rules.py`.
+
+- **Warna:** `Color(0x…)` hanya di `ui/theme/`. Komponen memakai peran M3 (`colorScheme.*`). Pelanggaran baru di
+  luar tema menggagalkan `--strict`.
+- **Ikon:** target Material Symbols. Impor `androidx.compose.material.icons` yang sudah ada tercatat sebagai baseline
+  (20 berkas, dihitung saat aturan dibuat); impor baru ditandai. Belum dipaksa.
+- **Nama aksesibel:** ikon yang menjadi satu-satunya isi tombol wajib `contentDescription` berbahasa lokal. Ikon
+  dekoratif di samping teks boleh `null`. Pencarian `contentDescription = null` masih per baris, jadi tinjau manual.
+- **Target sentuh:** minimal 48dp untuk area sentuh; ikon kecil boleh asal area sentuhnya tetap 48dp.
+- **Teks Arab:** tidak memotong teks, tidak mengunci tinggi tetap, dan memakai RTL bawaan Compose untuk teks Arab.
+- **Kartu:** tidak membungkus setiap baris atau bagian; kartu hanya untuk unit yang memang terkandung.
+
+Belum diuji di perangkat. Pemeriksaan belum dipasang di CI karena baseline masih berisi pelanggaran lama.
+
 ## Yang dibutuhkan dari pemilik
 
 - Screenshot aplikasi saat ini: daftar, pembaca, lembar ayat, pengaturan.
