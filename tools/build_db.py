@@ -18,7 +18,7 @@ sys.argv = [a for a in sys.argv if a != "--explore-only"]
 SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "data-src"
 OUT = Path(sys.argv[2]) if len(sys.argv) > 2 else ROOT / "app/src/main/assets/quran.db"
 
-DATA_VERSION = 10
+DATA_VERSION = 11
 
 # Terjemahan tidak lagi dibundel di quran.db; semuanya paket unduhan (tools/build_translation_packs.py). Tabel
 # translations/translation_texts/footnotes tetap dibuat kosong agar skema aplikasi tidak berubah. TEXT_OVERRIDES dan
