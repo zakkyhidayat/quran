@@ -52,6 +52,7 @@ enum class SettingsPage(val route: String) {
     Main("settings"),
     Appearance("settings/appearance"),
     Translations("settings/translations"),
+    Tafsir("settings/tafsir"),
     Backup("settings/backup"),
     Reminder("settings/reminder"),
     QuranData("settings/quran-data"),
@@ -123,6 +124,7 @@ fun SettingsScreen(
             SettingsPage.Main -> R.string.settings
             SettingsPage.Appearance -> R.string.appearance
             SettingsPage.Translations -> R.string.translations
+            SettingsPage.Tafsir -> R.string.tafsir_title
             SettingsPage.Backup -> R.string.backup
             SettingsPage.Reminder -> R.string.reminder
             SettingsPage.QuranData -> R.string.quran_data_title
@@ -155,7 +157,6 @@ fun SettingsScreen(
                         )
                     }
                     Spacer(Modifier.height(16.dp))
-                    TafsirSection(vm, settings)
                     ExtrasLanguageRow(vm, settings)
                     Spacer(Modifier.height(16.dp))
                     TranslationControls(vm, settings, Modifier.weight(1f), fillAvailableHeight = true)
@@ -198,6 +199,7 @@ fun SettingsScreen(
 
                             }
                             SettingsPage.Translations -> Unit
+                            SettingsPage.Tafsir -> TafsirSection(vm, settings)
                             SettingsPage.Backup -> BackupControls(vm, settings, snackbar)
                             SettingsPage.Reminder -> ReminderControls(vm, settings)
                             SettingsPage.QuranData -> QuranDataMaintenance(quranDataInstaller)
@@ -252,6 +254,11 @@ private fun SettingsMain(settings: AppSettings, onOpen: (SettingsPage) -> Unit) 
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         SettingsCategory(stringResource(R.string.appearance), stringResource(R.string.settings_appearance_sub, theme), AppIcons.Palette) { onOpen(SettingsPage.Appearance) }
         SettingsCategory(stringResource(R.string.translations), stringResource(R.string.settings_translations_sub, settings.translationIds.size), AppIcons.Translate) { onOpen(SettingsPage.Translations) }
+        SettingsCategory(
+            stringResource(R.string.tafsir_title),
+            if (settings.selectedTafsir.isEmpty()) stringResource(R.string.tafsir_none) else stringResource(R.string.settings_translations_sub, 1),
+            AppIcons.MenuBook,
+        ) { onOpen(SettingsPage.Tafsir) }
         SettingsCategory(
             stringResource(R.string.backup),
             stringResource(if (settings.autoBackupUri != null) R.string.settings_backup_on else R.string.settings_backup_sub),

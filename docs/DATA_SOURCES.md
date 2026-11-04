@@ -262,5 +262,5 @@ Tafsir memakai format paket sendiri, bukan paket terjemahan: tabel `info` (denga
    gagal bila ada ayat yang tidak tercakup tepat satu rentang atau markup yang tersisa.
 3. Tambahkan entri `ar-tahrir.entry.json` ke `catalog.json` di rilis `translations` (ganti entri yang lama bila ada), lalu
    unggah `ar-tahrir.db` dan `catalog.json`. Entri katalog membawa `"kind": "tafsir"`; aplikasi menampilkannya di
-   Pengaturan > Terjemahan > Tafsir, bukan di daftar terjemahan.
+   Pengaturan > Tafsir, bukan di daftar terjemahan.
 
