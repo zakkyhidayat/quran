@@ -341,4 +341,7 @@
     <string name="tafsir_download_cd">Muat turun tafsir %1$s</string>
     <string name="tafsir_catalog_error">Katalog tafsir tidak dapat dimuat. Semak sambungan dan cuba lagi.</string>
     <string name="extras_language_note">Tersedia dalam bahasa Inggeris dan Indonesia buat masa ini.</string>
+    <string name="download_part_database">Pangkalan data Al-Quran</string>
+    <string name="download_part_fonts">Fon mushaf</string>
+    <string name="download_part_progress">%1$s, fail %2$d daripada %3$d</string>
 </resources>

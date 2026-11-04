@@ -341,4 +341,7 @@
     <string name="tafsir_download_cd">دانلود تفسیر %1$s</string>
     <string name="tafsir_catalog_error">فهرست تفسیرها بارگذاری نشد. اتصال را بررسی و دوباره تلاش کنید.</string>
     <string name="extras_language_note">فعلاً به انگلیسی و اندونزیایی موجود است.</string>
+    <string name="download_part_database">پایگاه داده قرآن</string>
+    <string name="download_part_fonts">قلم‌های مصحف</string>
+    <string name="download_part_progress">%1$s، فایل %2$d از %3$d</string>
 </resources>

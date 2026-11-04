@@ -341,4 +341,7 @@
     <string name="tafsir_download_cd">تفسیر %1$s ڈاؤن لوڈ کریں</string>
     <string name="tafsir_catalog_error">تفاسیر کی فہرست لوڈ نہیں ہو سکی۔ کنکشن چیک کریں اور دوبارہ کوشش کریں۔</string>
     <string name="extras_language_note">فی الحال یہ انگریزی اور انڈونیشیائی زبان میں دستیاب ہے۔</string>
+    <string name="download_part_database">قرآن ڈیٹابیس</string>
+    <string name="download_part_fonts">مصحف کے فونٹ</string>
+    <string name="download_part_progress">%1$s، فائل %2$d از %3$d</string>
 </resources>

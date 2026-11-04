@@ -341,4 +341,7 @@
     <string name="tafsir_download_cd">Télécharger le tafsir %1$s</string>
     <string name="tafsir_catalog_error">Le catalogue des tafsirs n\'a pas pu être chargé. Vérifiez la connexion et réessayez.</string>
     <string name="extras_language_note">Disponible en anglais et en indonésien pour le moment.</string>
+    <string name="download_part_database">Base de données du Coran</string>
+    <string name="download_part_fonts">Polices du mushaf</string>
+    <string name="download_part_progress">%1$s, fichier %2$d sur %3$d</string>
 </resources>

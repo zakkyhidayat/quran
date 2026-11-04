@@ -223,7 +223,7 @@ QUL tidak memberi pemberitahuan. Periksa sendiri:
    Skrip berhenti dengan galat bila ada yang janggal (jumlah ayat, tempat turun, terjemahan tidak lengkap).
 4. **Salin font** bila nomor 4 sampai 8 berubah: `data-src/ttf/p*.ttf`, `data-src/surah-names/surah_names.ttf`, dan
    tiga berkas `data-src/fonts-extra/*.ttf` ke `app/src/main/assets/fonts/`.
-5. **Naikkan `DATA_VERSION`** di `tools/build_db.py` (nilai `PRAGMA user_version`), lalu bangun dan uji di perangkat:
+5. **Atur `DATA_VERSION`** di `tools/build_db.py` ke tanggal build dalam format yyyymmdd (mis. `20261104`; nilai ini `PRAGMA user_version`), lalu bangun dan uji di perangkat:
    halaman pertama, halaman dengan banyak surah (604), sheet ayat, pencarian, info surah, dan mode terang dan gelap.
 6. **Catat** perubahan sebagai baseline baru, lalu commit `docs/data-manifest.json` bersama `quran.db`:
    ```bash

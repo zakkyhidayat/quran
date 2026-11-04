@@ -341,4 +341,7 @@
     <string name="tafsir_download_cd">تنزيل التفسير %1$s</string>
     <string name="tafsir_catalog_error">تعذر تحميل كتالوج التفاسير. تحقق من الاتصال ثم حاول مرة أخرى.</string>
     <string name="extras_language_note">متاح بالإنجليزية والإندونيسية حاليًا.</string>
+    <string name="download_part_database">قاعدة بيانات القرآن</string>
+    <string name="download_part_fonts">خطوط المصحف</string>
+    <string name="download_part_progress">%1$s، الملف %2$d من %3$d</string>
 </resources>

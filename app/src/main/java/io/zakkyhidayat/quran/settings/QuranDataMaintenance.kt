@@ -24,6 +24,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.zakkyhidayat.quran.R
 import io.zakkyhidayat.quran.data.QuranDataCheck
+import io.zakkyhidayat.quran.data.QuranDataPart
+import io.zakkyhidayat.quran.data.QuranDatabaseDownloadProgress
 import io.zakkyhidayat.quran.data.QuranDatabaseInstaller
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
@@ -89,6 +91,7 @@ internal fun QuranDataMaintenance(installer: QuranDatabaseInstaller) {
                     ),
                     style = MaterialTheme.typography.bodySmall,
                 )
+                Text(quranPartLabel(current), style = MaterialTheme.typography.bodySmall)
             }
         }
         if (failed || checkFailed) {
@@ -179,4 +182,11 @@ internal fun QuranDataMaintenance(installer: QuranDatabaseInstaller) {
             },
         )
     }
+}
+
+/** "Database Qur’an, berkas 1 dari 2" untuk progres unduhan yang sedang berjalan. */
+@Composable
+internal fun quranPartLabel(p: QuranDatabaseDownloadProgress): String {
+    val name = stringResource(if (p.part == QuranDataPart.Database) R.string.download_part_database else R.string.download_part_fonts)
+    return stringResource(R.string.download_part_progress, name, p.index, p.count)
 }

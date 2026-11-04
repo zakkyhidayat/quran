@@ -343,4 +343,7 @@
     <string name="tafsir_download_cd">Download tafsir %1$s</string>
     <string name="tafsir_catalog_error">The tafsir catalog could not be loaded. Check your connection and try again.</string>
     <string name="extras_language_note">Available in English and Indonesian for now.</string>
+    <string name="download_part_database">Qur’an database</string>
+    <string name="download_part_fonts">Mushaf fonts</string>
+    <string name="download_part_progress">%1$s, file %2$d of %3$d</string>
 </resources>

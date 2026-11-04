@@ -341,4 +341,7 @@
     <string name="tafsir_download_cd">তাফসির %1$s ডাউনলোড করুন</string>
     <string name="tafsir_catalog_error">তাফসির তালিকা লোড করা যায়নি। সংযোগ দেখে আবার চেষ্টা করুন।</string>
     <string name="extras_language_note">আপাতত ইংরেজি ও ইন্দোনেশীয় ভাষায় পাওয়া যায়।</string>
+    <string name="download_part_database">কুরআন ডেটাবেস</string>
+    <string name="download_part_fonts">মুসহাফের ফন্ট</string>
+    <string name="download_part_progress">%1$s, ফাইল %2$d/%3$d</string>
 </resources>

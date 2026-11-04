@@ -16,7 +16,17 @@ import java.security.MessageDigest
 import java.util.zip.GZIPInputStream
 import java.util.zip.ZipInputStream
 
-data class QuranDatabaseDownloadProgress(val downloaded: Long, val total: Long)
+/** Berkas yang sedang diunduh: database Qur'an atau paket font mushaf. */
+enum class QuranDataPart { Database, Fonts }
+
+/** Progres satu berkas: [downloaded] dari [total] byte, berkas ke-[index] dari [count] yang diunduh kali ini. */
+data class QuranDatabaseDownloadProgress(
+    val downloaded: Long,
+    val total: Long,
+    val part: QuranDataPart,
+    val index: Int,
+    val count: Int,
+)
 data class QuranDataCheck(
     val current: Boolean,
     val latestVersion: Int,
@@ -85,11 +95,11 @@ class QuranDatabaseInstaller(context: Context) {
         val fontsArchive = File(target.parentFile, "quran-fonts.zip.tmp")
         val fontsStage = File(target.parentFile, "quran-fonts.stage")
         val fontsBackup = File(target.parentFile, "quran-fonts.old")
-        val downloadTotal = asset.bytes + if (fontsNeeded) metadata.fonts.bytes else 0L
+        val parts = if (fontsNeeded) 2 else 1
         try {
-            download(asset.file, asset.bytes, asset.sha256, archive, 0L, downloadTotal)
+            download(asset.file, asset.bytes, asset.sha256, archive, QuranDataPart.Database, 1, parts)
             if (fontsNeeded) {
-                download(metadata.fonts.file, metadata.fonts.bytes, metadata.fonts.sha256, fontsArchive, asset.bytes, downloadTotal)
+                download(metadata.fonts.file, metadata.fonts.bytes, metadata.fonts.sha256, fontsArchive, QuranDataPart.Fonts, 2, parts)
             }
 
             GZIPInputStream(archive.inputStream().buffered()).use { input ->
@@ -256,7 +266,7 @@ class QuranDatabaseInstaller(context: Context) {
         return digest.digest().joinToString("") { "%02x".format(it) }
     }
 
-    private suspend fun download(file: String, bytes: Long, sha256: String, destination: File, offset: Long, total: Long) {
+    private suspend fun download(file: String, bytes: Long, sha256: String, destination: File, part: QuranDataPart, index: Int, count: Int) {
         val digest = MessageDigest.getInstance("SHA-256")
         val conn = openHttpsDownload("${BuildConfig.QURAN_DATA_CATALOG_URL.substringBeforeLast('/')}/$file")
         try {
@@ -271,7 +281,7 @@ class QuranDatabaseInstaller(context: Context) {
                         output.write(buffer, 0, count)
                         digest.update(buffer, 0, count)
                         downloaded += count
-                        progress.value = QuranDatabaseDownloadProgress(offset + downloaded, total)
+                        progress.value = QuranDatabaseDownloadProgress(downloaded, bytes, part, index, count)
                     }
                 }
             }
