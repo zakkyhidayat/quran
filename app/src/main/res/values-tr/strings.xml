@@ -341,4 +341,7 @@
     <string name="tafsir_download_cd">Tefsir %1$s indir</string>
     <string name="tafsir_catalog_error">Tefsir kataloğu yüklenemedi. Bağlantıyı kontrol edip yeniden deneyin.</string>
     <string name="extras_language_note">Şimdilik İngilizce ve Endonezyaca olarak sunulmaktadır.</string>
+    <string name="download_part_database">Kur’an veritabanı</string>
+    <string name="download_part_fonts">Mushaf yazı tipleri</string>
+    <string name="download_part_progress">%1$s, dosya %2$d / %3$d</string>
 </resources>

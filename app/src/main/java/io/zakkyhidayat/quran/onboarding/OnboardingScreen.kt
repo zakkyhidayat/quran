@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -167,10 +166,12 @@ private fun MushafStep(vm: AppViewModel, settings: AppSettings) {
     val lines by produceState<List<PageLine>?>(null) { value = vm.mushaf.page(1) }
     val surahs by vm.surahs.collectAsStateWithLifecycle()
     // Pratinjau Al-Fatihah; ikut berubah saat sakelar tajwid di bawahnya diubah.
-    // Proporsi halaman B5 seperti di layar baca, agar baris tidak berdesakan.
-    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-        androidx.compose.foundation.layout.BoxWithConstraints(Modifier.fillMaxWidth(0.8f).aspectRatio(176f / 250f)) {
-            val previewSize = androidx.compose.ui.unit.DpSize(maxWidth, maxHeight)
+    // Proporsi halaman B5 seperti di layar baca, tetapi tingginya dibatasi agar sakelar tajwid tetap terlihat
+    // tanpa menggulir di ponsel biasa (kolom langkah bisa digulir, jadi batas ini tidak memotong apa pun).
+    androidx.compose.foundation.layout.BoxWithConstraints(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+        val pageHeight = minOf(maxWidth * 0.8f * 250f / 176f, 260.dp)
+        val previewSize = androidx.compose.ui.unit.DpSize(pageHeight * 176f / 250f, pageHeight)
+        Box(Modifier.size(previewSize), contentAlignment = Alignment.Center) {
             lines?.let {
                 MushafPage(
                     pageSize = previewSize,

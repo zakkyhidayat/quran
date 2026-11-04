@@ -37,6 +37,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.zakkyhidayat.quran.R
 import io.zakkyhidayat.quran.data.QuranDataCheck
 import io.zakkyhidayat.quran.data.QuranDatabaseInstaller
+import io.zakkyhidayat.quran.settings.quranPartLabel
 import io.zakkyhidayat.quran.settings.LanguageSection
 import io.zakkyhidayat.quran.ui.CenteredContent
 import io.zakkyhidayat.quran.ui.AppIcons
@@ -155,6 +156,7 @@ fun DatabaseSetupScreen(installer: QuranDatabaseInstaller, onInstalled: () -> Un
                             ),
                             style = MaterialTheme.typography.bodySmall,
                         )
+                        Text(quranPartLabel(current), style = MaterialTheme.typography.bodySmall)
                     }
                 } else if (failed) {
                     Spacer(Modifier.height(12.dp))

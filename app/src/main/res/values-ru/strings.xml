@@ -341,4 +341,7 @@
     <string name="tafsir_download_cd">Скачать тафсир %1$s</string>
     <string name="tafsir_catalog_error">Не удалось загрузить каталог тафсиров. Проверьте подключение и попробуйте снова.</string>
     <string name="extras_language_note">Пока доступно на английском и индонезийском языках.</string>
+    <string name="download_part_database">База данных Корана</string>
+    <string name="download_part_fonts">Шрифты мусхафа</string>
+    <string name="download_part_progress">%1$s, файл %2$d из %3$d</string>
 </resources>
