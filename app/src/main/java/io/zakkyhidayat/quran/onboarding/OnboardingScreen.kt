@@ -63,7 +63,7 @@ import io.zakkyhidayat.quran.data.PageLine
 import io.zakkyhidayat.quran.reader.MushafPage
 import io.zakkyhidayat.quran.settings.AppSettings
 import io.zakkyhidayat.quran.settings.AppearanceControls
-import io.zakkyhidayat.quran.settings.TajweedToggle
+import io.zakkyhidayat.quran.reader.TajweedReaderControls
 import io.zakkyhidayat.quran.settings.TranslationControls
 import io.zakkyhidayat.quran.ui.CenteredContent
 import io.zakkyhidayat.quran.ui.FADE_IN_MS
@@ -188,7 +188,14 @@ private fun MushafStep(vm: AppViewModel, settings: AppSettings) {
         }
     }
     Spacer(Modifier.height(16.dp))
-    TajweedToggle(vm, settings)
+    // Sama dengan pembaca surah: tombol "Tajwid" yang membuka panduan warna dan sakelarnya.
+    val scope = rememberCoroutineScope()
+    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterStart) {
+        TajweedReaderControls(
+            enabled = settings.tajweed,
+            onEnabledChange = { enabled -> scope.launch { vm.settingsRepository.setTajweed(enabled) } },
+        )
+    }
 }
 
 @Composable
