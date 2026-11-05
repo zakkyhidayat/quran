@@ -211,7 +211,6 @@
     <string name="auto_backup_error">Impossible d’enregistrer dans le dossier choisi. Désactivez puis réactivez la sauvegarde automatique pour le choisir à nouveau.</string>
     <string name="reminder">Rappel de lecture</string>
     <string name="reminder_daily">Rappel quotidien</string>
-    <string name="reminder_bedtime_sunnah_sub">As-Sajda, puis Al-Mulk à %1$s</string>
     <string name="reminder_bedtime_each_sub">Chaque soir à %1$s</string>
     <string name="sunnah_reminder_notification_title">Lecture de la Sunnah du soir</string>
     <string name="reminder_kahf_friday">Al-Kahf du vendredi</string>
@@ -344,4 +343,6 @@
     <string name="download_part_database">Base de données du Coran</string>
     <string name="download_part_fonts">Polices du mushaf</string>
     <string name="download_part_progress">%1$s, fichier %2$d sur %3$d</string>
+    <string name="sunnah_bedtime_title">Sunnah avant le sommeil</string>
+    <string name="sunnah_bedtime_note">Ayat al-Kursi, les deux derniers versets d’Al-Baqara, puis les trois Qul.</string>
 </resources>

@@ -107,9 +107,8 @@ class Collections(private val context: Context) {
 enum class SunnahReading(val refs: String, val time: SunnahTime) {
     KahfFriday("18", SunnahTime.Friday),
     MulkSajdah("32,67", SunnahTime.Night),
-    Kursi("2:255", SunnahTime.Night),
-    BaqarahEnd("2:285-286", SunnahTime.Night),
-    ThreeQuls("112,113,114", SunnahTime.Night),
+    /** Sunnah sebelum tidur: Ayat al-Kursi, dua ayat terakhir Al-Baqarah, lalu tiga Qul (satu halaman, satu pengingat). */
+    Bedtime("2:255,2:285-286,112,113,114", SunnahTime.Night),
     KahfFirstTen("18:1-10", SunnahTime.Any);
 
     /**

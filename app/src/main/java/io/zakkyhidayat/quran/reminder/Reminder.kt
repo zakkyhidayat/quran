@@ -20,7 +20,6 @@ import io.zakkyhidayat.quran.data.AyahRange
 import io.zakkyhidayat.quran.data.Collections
 import io.zakkyhidayat.quran.data.DivisionMath
 import io.zakkyhidayat.quran.home.plainTranslation
-import io.zakkyhidayat.quran.home.sunnahTitleRes
 import io.zakkyhidayat.quran.data.MarkerKind
 import io.zakkyhidayat.quran.settings.AppSettings
 import io.zakkyhidayat.quran.settings.ReminderUnit
@@ -61,7 +60,7 @@ object Reminder {
         scheduleAlarm(
             alarms,
             context,
-            settings.bedtimeReminderReadings.isNotEmpty(),
+            settings.bedtimeSunnahReminderEnabled,
             BEDTIME_MINUTES,
             null,
             REQUEST_BEDTIME,
@@ -139,7 +138,7 @@ object Reminder {
         val settings = app.settings.settings.first()
         val enabled = when (kind) {
             ReminderKind.Daily -> DAILY_AVAILABLE && settings.reminderEnabled
-            ReminderKind.Bedtime -> settings.bedtimeReminderReadings.isNotEmpty()
+            ReminderKind.Bedtime -> settings.bedtimeSunnahReminderEnabled
             ReminderKind.KahfThursday -> settings.kahfThursdayReminderEnabled
             ReminderKind.VotdMorning, ReminderKind.VotdAfternoon, ReminderKind.VotdNight -> settings.votdReminderEnabled
         }
@@ -153,15 +152,13 @@ object Reminder {
         )
         when (kind) {
             ReminderKind.Bedtime -> {
-                // Satu notifikasi untuk semua bacaan malam yang menyala; ketukan membuka yang pertama.
-                val readings = settings.bedtimeReminderReadings
-                val first = readings.first()
-                val firstRange = AyahRange.parseList(first.refs).first()
+                // Satu notifikasi; ketukan membuka halaman sunnah sebelum tidur (ayat 2:255 lebih dulu).
+                val first = AyahRange.parseList(SunnahReading.Bedtime.refs).first()
                 notifySunnah(
-                    context, manager, first, app.mushaf.ayahPage(firstRange.surah, firstRange.from),
+                    context, manager, SunnahReading.Bedtime, app.mushaf.ayahPage(first.surah, first.from),
                     REQUEST_BEDTIME, BEDTIME_NOTIFICATION_ID,
                     context.getString(R.string.sunnah_reminder_notification_title),
-                    readings.joinToString("\n") { context.getString(sunnahTitleRes(it)) },
+                    context.getString(R.string.sunnah_bedtime_note),
                 )
                 return
             }

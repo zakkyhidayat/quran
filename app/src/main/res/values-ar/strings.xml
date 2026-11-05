@@ -211,7 +211,6 @@
     <string name="auto_backup_error">تعذّر الحفظ في المجلد المختار. أوقف النسخ التلقائي ثم شغّله لاختيار المجلد من جديد.</string>
     <string name="reminder">تذكير القراءة</string>
     <string name="reminder_daily">تذكير يومي</string>
-    <string name="reminder_bedtime_sunnah_sub">السجدة ثم الملك عند الساعة %1$s</string>
     <string name="reminder_bedtime_each_sub">كل ليلة عند %1$s</string>
     <string name="sunnah_reminder_notification_title">ورد السنة الليلي</string>
     <string name="reminder_kahf_friday">سورة الكهف ليلة الجمعة</string>
@@ -344,4 +343,6 @@
     <string name="download_part_database">قاعدة بيانات القرآن</string>
     <string name="download_part_fonts">خطوط المصحف</string>
     <string name="download_part_progress">%1$s، الملف %2$d من %3$d</string>
+    <string name="sunnah_bedtime_title">سنة قبل النوم</string>
+    <string name="sunnah_bedtime_note">آية الكرسي، وخاتمة البقرة (٢٨٥-٢٨٦)، ثم المعوذتين والإخلاص.</string>
 </resources>

@@ -211,7 +211,6 @@
     <string name="auto_backup_error">Seçilen klasöre kaydedilemedi. Klasörü yeniden seçmek için otomatik yedeklemeyi kapatıp açın.</string>
     <string name="reminder">Okuma hatırlatıcısı</string>
     <string name="reminder_daily">Günlük hatırlatıcı</string>
-    <string name="reminder_bedtime_sunnah_sub">Secde, ardından Mülk · %1$s</string>
     <string name="reminder_bedtime_each_sub">Her gece %1$s</string>
     <string name="sunnah_reminder_notification_title">Gece sünnet tilaveti</string>
     <string name="reminder_kahf_friday">Cuma gecesi Kehf suresi</string>
@@ -344,4 +343,6 @@
     <string name="download_part_database">Kur’an veritabanı</string>
     <string name="download_part_fonts">Mushaf yazı tipleri</string>
     <string name="download_part_progress">%1$s, dosya %2$d / %3$d</string>
+    <string name="sunnah_bedtime_title">Uyku öncesi sünnet</string>
+    <string name="sunnah_bedtime_note">Ayetü’l-Kürsî, Bakara’nın son iki ayeti, ardından üç Kul.</string>
 </resources>

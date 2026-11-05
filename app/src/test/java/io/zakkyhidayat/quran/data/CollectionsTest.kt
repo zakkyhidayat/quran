@@ -51,6 +51,12 @@ class CollectionsTest {
     fun `hanya As-Sajdah ke Al-Mulk yang melacak progres bacaan sunnah`() {
         assertEquals(listOf(SunnahReading.MulkSajdah), SunnahReading.entries.filter { it.tracksProgress })
         assertEquals(listOf(AyahRange(32, 1, 0), AyahRange(67, 1, 0)), AyahRange.parseList(SunnahReading.MulkSajdah.refs))
+        // Sunnah sebelum tidur: satu halaman, berurutan: Ayat al-Kursi, dua ayat terakhir Al-Baqarah, lalu tiga Qul.
+        assertEquals(
+            listOf(AyahRange(2, 255, 255), AyahRange(2, 285, 286), AyahRange(112, 1, 0), AyahRange(113, 1, 0), AyahRange(114, 1, 0)),
+            AyahRange.parseList(SunnahReading.Bedtime.refs),
+        )
+        assertTrue(SunnahReading.entries.none { it.tracksProgress && it != SunnahReading.MulkSajdah })
     }
 
     @Test

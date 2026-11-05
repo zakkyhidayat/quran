@@ -165,10 +165,12 @@ fun HomeTab(
         item(key = "sunnah_h") { SectionHeader(stringResource(R.string.home_sunnah)) }
         itemsIndexed(sunnah, key = { _, s -> "s_${s.name}" }) { index, s ->
             val nowLabel = stringResource(R.string.home_sunnah_now)
+            val bedtimeTitle = stringResource(R.string.sunnah_bedtime_title)
+            val bedtimeNote = stringResource(R.string.sunnah_bedtime_note)
             val overline: (@Composable () -> Unit)? =
                 if (s.time.isNow(now)) { { Text(nowLabel, color = MaterialTheme.colorScheme.primary) } } else null
             SegmentedListItem(
-                onClick = { onOpen(HomeTarget.Sunnah(s)) },
+                onClick = { onOpen(if (s == SunnahReading.Bedtime) HomeTarget.Passage(bedtimeTitle, bedtimeNote, s.refs) else HomeTarget.Sunnah(s)) },
                 shapes = ListItemDefaults.segmentedShapes(index, sunnah.size),
                 colors = segmentedItemColors(),
                 leadingContent = {
@@ -426,9 +428,7 @@ internal fun sunnahTitle(s: SunnahReading): String = stringResource(sunnahTitleR
 internal fun sunnahTitleRes(s: SunnahReading): Int = when (s) {
     SunnahReading.KahfFriday -> R.string.sunnah_kahf_friday
     SunnahReading.MulkSajdah -> R.string.sunnah_mulk_sajdah
-    SunnahReading.Kursi -> R.string.sunnah_kursi
-    SunnahReading.BaqarahEnd -> R.string.sunnah_baqarah_end
-    SunnahReading.ThreeQuls -> R.string.sunnah_three_quls
+    SunnahReading.Bedtime -> R.string.sunnah_bedtime_title
     SunnahReading.KahfFirstTen -> R.string.sunnah_kahf_ten
 }
 
@@ -437,9 +437,7 @@ internal fun sunnahNote(s: SunnahReading): String = stringResource(
     when (s) {
         SunnahReading.KahfFriday -> R.string.sunnah_kahf_friday_note
         SunnahReading.MulkSajdah -> R.string.sunnah_mulk_sajdah_note
-        SunnahReading.Kursi -> R.string.sunnah_kursi_note
-        SunnahReading.BaqarahEnd -> R.string.sunnah_baqarah_end_note
-        SunnahReading.ThreeQuls -> R.string.sunnah_three_quls_note
+        SunnahReading.Bedtime -> R.string.sunnah_bedtime_note
         SunnahReading.KahfFirstTen -> R.string.sunnah_kahf_ten_note
     },
 )

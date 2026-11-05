@@ -211,7 +211,6 @@
     <string name="auto_backup_error">Не удалось сохранить в выбранную папку. Выключите и снова включите автокопирование, чтобы выбрать её заново.</string>
     <string name="reminder">Напоминание о чтении</string>
     <string name="reminder_daily">Ежедневное напоминание</string>
-    <string name="reminder_bedtime_sunnah_sub">Ас-Саджда, затем Аль-Мульк в %1$s</string>
     <string name="reminder_bedtime_each_sub">Каждый вечер в %1$s</string>
     <string name="sunnah_reminder_notification_title">Вечернее чтение сунны</string>
     <string name="reminder_kahf_friday">Аль-Кахф в пятницу</string>
@@ -344,4 +343,6 @@
     <string name="download_part_database">База данных Корана</string>
     <string name="download_part_fonts">Шрифты мусхафа</string>
     <string name="download_part_progress">%1$s, файл %2$d из %3$d</string>
+    <string name="sunnah_bedtime_title">Сунна перед сном</string>
+    <string name="sunnah_bedtime_note">Аят аль-Курси, два последних аята аль-Бакара и три суры «Кул».</string>
 </resources>

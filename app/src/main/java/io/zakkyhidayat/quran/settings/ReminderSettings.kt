@@ -25,7 +25,6 @@ import androidx.compose.ui.res.stringResource
 import io.zakkyhidayat.quran.AppViewModel
 import io.zakkyhidayat.quran.R
 import io.zakkyhidayat.quran.data.SunnahReading
-import io.zakkyhidayat.quran.home.sunnahTitleRes
 import io.zakkyhidayat.quran.reminder.Reminder
 import io.zakkyhidayat.quran.ui.AppIcons
 import kotlinx.coroutines.launch
@@ -52,19 +51,14 @@ internal fun ReminderControls(vm: AppViewModel, settings: AppSettings) {
                 trailing = { IconSwitch(settings.reminderEnabled) },
             )
         }
-        // Bacaan sebelum tidur: tiap bacaan punya sakelar sendiri; satu notifikasi pukul 20.30 memuat yang menyala.
-        BEDTIME_REMINDER_READINGS.forEach { reading ->
-            item(
-                title = stringResource(sunnahTitleRes(reading)),
-                subtitle = stringResource(
-                    if (reading == SunnahReading.MulkSajdah) R.string.reminder_bedtime_sunnah_sub else R.string.reminder_bedtime_each_sub,
-                    bedtimeTimeText,
-                ),
-                onClick = { scope.launch { repo.setBedtimeReadingReminderEnabled(reading, !settings.bedtimeReminderEnabled(reading)) } },
-                leading = { Icon(AppIcons.DarkMode, contentDescription = null) },
-                trailing = { IconSwitch(settings.bedtimeReminderEnabled(reading)) },
-            )
-        }
+        // Sunnah sebelum tidur: satu sakelar; pengingat pukul 20.30 membuka halaman bacaannya.
+        item(
+            title = stringResource(R.string.sunnah_bedtime_title),
+            subtitle = stringResource(R.string.reminder_bedtime_each_sub, bedtimeTimeText),
+            onClick = { scope.launch { repo.setBedtimeSunnahReminderEnabled(!settings.bedtimeSunnahReminderEnabled) } },
+            leading = { Icon(AppIcons.DarkMode, contentDescription = null) },
+            trailing = { IconSwitch(settings.bedtimeSunnahReminderEnabled) },
+        )
         item(
             title = stringResource(R.string.reminder_kahf_friday),
             subtitle = stringResource(R.string.reminder_kahf_friday_sub, kahfTimeText),

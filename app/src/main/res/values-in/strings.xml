@@ -211,7 +211,6 @@
     <string name="auto_backup_error">Tidak bisa menyimpan ke folder yang dipilih. Matikan lalu nyalakan lagi untuk memilih foldernya.</string>
     <string name="reminder">Pengingat membaca</string>
     <string name="reminder_daily">Pengingat harian</string>
-    <string name="reminder_bedtime_sunnah_sub">As-Sajdah, lalu Al-Mulk pukul %1$s</string>
     <string name="reminder_bedtime_each_sub">Setiap malam pukul %1$s</string>
     <string name="sunnah_reminder_notification_title">Bacaan Sunnah malam</string>
     <string name="reminder_kahf_friday">Al-Kahfi malam Jumat</string>
@@ -344,4 +343,6 @@
     <string name="download_part_database">Database Qur’an</string>
     <string name="download_part_fonts">Font mushaf</string>
     <string name="download_part_progress">%1$s, berkas %2$d dari %3$d</string>
+    <string name="sunnah_bedtime_title">Sunnah sebelum tidur</string>
+    <string name="sunnah_bedtime_note">Ayat Kursi, dua ayat terakhir Al-Baqarah, lalu tiga Qul.</string>
 </resources>

@@ -212,7 +212,6 @@
     <string name="auto_backup_error">Could not save to the chosen folder. Turn auto backup off and on to choose it again.</string>
     <string name="reminder">Reading reminder</string>
     <string name="reminder_daily">Daily reminder</string>
-    <string name="reminder_bedtime_sunnah_sub">As-Sajdah, then Al-Mulk at %1$s</string>
     <string name="reminder_bedtime_each_sub">Every night at %1$s</string>
     <string name="sunnah_reminder_notification_title">Nightly Sunnah reading</string>
     <string name="reminder_kahf_friday">Al-Kahf on Friday eve</string>
@@ -346,4 +345,6 @@
     <string name="download_part_database">Qur’an database</string>
     <string name="download_part_fonts">Mushaf fonts</string>
     <string name="download_part_progress">%1$s, file %2$d of %3$d</string>
+    <string name="sunnah_bedtime_title">Sunnah before sleep</string>
+    <string name="sunnah_bedtime_note">Ayat al-Kursi, the last two ayahs of Al-Baqarah, then the three Quls.</string>
 </resources>

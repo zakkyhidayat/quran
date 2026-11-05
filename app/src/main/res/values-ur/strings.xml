@@ -211,7 +211,6 @@
     <string name="auto_backup_error">منتخب فولڈر میں محفوظ نہیں ہو سکا۔ فولڈر دوبارہ چننے کے لیے خودکار بیک اپ بند کر کے دوبارہ چلائیں۔</string>
     <string name="reminder">پڑھنے کی یاد دہانی</string>
     <string name="reminder_daily">روزانہ یاد دہانی</string>
-    <string name="reminder_bedtime_sunnah_sub">سورۃ السجدہ، پھر سورۃ الملک · %1$s</string>
     <string name="reminder_bedtime_each_sub">ہر رات %1$s بجے</string>
     <string name="sunnah_reminder_notification_title">رات کی سنت کی تلاوت</string>
     <string name="reminder_kahf_friday">جمعہ کی رات سورۃ الکہف</string>
@@ -344,4 +343,6 @@
     <string name="download_part_database">قرآن ڈیٹابیس</string>
     <string name="download_part_fonts">مصحف کے فونٹ</string>
     <string name="download_part_progress">%1$s، فائل %2$d از %3$d</string>
+    <string name="sunnah_bedtime_title">سونے سے پہلے کی سنت</string>
+    <string name="sunnah_bedtime_note">آیت الکرسی، سورۃ البقرۃ کی آخری دو آیات، پھر تین قل۔</string>
 </resources>

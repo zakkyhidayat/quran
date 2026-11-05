@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
             pendingAyah?.let { (surah, ayah) -> vm.openAyahWithTranslation(surah, ayah) }
             pendingAyah = null
         } else if (databaseReady && pendingSunnah != null) {
-            pendingSunnah?.let { vm.startSunnahReading(it) }
+            pendingSunnah?.let { vm.openSunnah(it) }
             pendingSunnah = null
         } else if (intent.hasExtra("page")) {
             val page = intent.getIntExtra("page", 1)
@@ -112,7 +112,7 @@ class MainActivity : ComponentActivity() {
                             vm.openAyahWithTranslation(surah, ayah)
                             pendingAyah = null
                         } ?: pendingSunnah?.let { reading ->
-                            vm.startSunnahReading(reading)
+                            vm.openSunnah(reading)
                             pendingSunnah = null
                         } ?: pendingPage?.let { page ->
                             vm.goToPage(page)

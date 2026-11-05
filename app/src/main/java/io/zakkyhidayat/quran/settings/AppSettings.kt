@@ -32,7 +32,6 @@ enum class ReadingMode { Mushaf, AyahTranslation, Translation }
 enum class CounterMode { Surah, Juz, Hizb, Rub, Manzil, Ruku }
 
 /** Bacaan malam yang punya pengingat, dalam urutan notifikasi. */
-val BEDTIME_REMINDER_READINGS = listOf(SunnahReading.MulkSajdah, SunnahReading.Kursi, SunnahReading.BaqarahEnd, SunnahReading.ThreeQuls)
 
 data class AppSettings(
     val themeMode: ThemeMode = ThemeMode.System,
@@ -63,10 +62,7 @@ data class AppSettings(
     val reminderMinutes: Int = 20 * 60,
     val reminderUnit: ReminderUnit = ReminderUnit.Juz,
     val bedtimeSunnahReminderEnabled: Boolean = false,
-    /** Bacaan malam lain yang bisa diingatkan pukul 20.30, masing-masing dengan sakelarnya. */
-    val bedtimeKursiReminderEnabled: Boolean = false,
-    val bedtimeBaqarahEndReminderEnabled: Boolean = false,
-    val bedtimeThreeQulsReminderEnabled: Boolean = false,
+    /** Pengingat sunnah sebelum tidur pukul 20.30 (satu sakelar; halamannya memuat semua bacaan malam). */
     /** Pengingat Al-Kahfi setiap Kamis pukul 18.00 (awal malam Jumat). */
     val kahfThursdayReminderEnabled: Boolean = false,
     /** Notifikasi "Ayat hari ini" tiga kali sehari (pagi, siang, malam). */
@@ -79,17 +75,6 @@ data class AppSettings(
     val lastSurah: Int = 0,
     val lastAyah: Int = 0,
 ) {
-    /** Bacaan malam yang pengingatnya menyala, dalam urutan [BEDTIME_REMINDER_READINGS]. */
-    val bedtimeReminderReadings: List<SunnahReading>
-        get() = BEDTIME_REMINDER_READINGS.filter { bedtimeReminderEnabled(it) }
-
-    fun bedtimeReminderEnabled(reading: SunnahReading): Boolean = when (reading) {
-        SunnahReading.MulkSajdah -> bedtimeSunnahReminderEnabled
-        SunnahReading.Kursi -> bedtimeKursiReminderEnabled
-        SunnahReading.BaqarahEnd -> bedtimeBaqarahEndReminderEnabled
-        SunnahReading.ThreeQuls -> bedtimeThreeQulsReminderEnabled
-        else -> false
-    }
 }
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
@@ -162,10 +147,9 @@ class SettingsRepository(private val context: Context) {
             reminderEnabled = prefs[reminderKey] ?: false,
             reminderMinutes = prefs[reminderMinutesKey] ?: (20 * 60),
             reminderUnit = prefs[reminderUnitKey].toEnum(ReminderUnit.Juz),
-            bedtimeSunnahReminderEnabled = prefs[bedtimeSunnahReminderKey] ?: false,
-            bedtimeKursiReminderEnabled = prefs[bedtimeKursiReminderKey] ?: false,
-            bedtimeBaqarahEndReminderEnabled = prefs[bedtimeBaqarahEndReminderKey] ?: false,
-            bedtimeThreeQulsReminderEnabled = prefs[bedtimeThreeQulsReminderKey] ?: false,
+            // Pengguna yang dulu menyalakan salah satu dari tiga sakelar lama tetap mendapat pengingat satu sakelar.
+            bedtimeSunnahReminderEnabled = prefs[bedtimeSunnahReminderKey]
+                ?: (prefs[bedtimeKursiReminderKey] == true || prefs[bedtimeBaqarahEndReminderKey] == true || prefs[bedtimeThreeQulsReminderKey] == true),
             kahfThursdayReminderEnabled = prefs[kahfThursdayReminderKey] ?: false,
             votdReminderEnabled = prefs[votdReminderKey] ?: false,
             sunnahReadingId = prefs[sunnahReadingIdKey],
@@ -250,16 +234,6 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setBedtimeSunnahReminderEnabled(enabled: Boolean) =
         context.dataStore.edit { it[bedtimeSunnahReminderKey] = enabled }
-
-    suspend fun setBedtimeReadingReminderEnabled(reading: SunnahReading, enabled: Boolean) = context.dataStore.edit {
-        when (reading) {
-            SunnahReading.MulkSajdah -> it[bedtimeSunnahReminderKey] = enabled
-            SunnahReading.Kursi -> it[bedtimeKursiReminderKey] = enabled
-            SunnahReading.BaqarahEnd -> it[bedtimeBaqarahEndReminderKey] = enabled
-            SunnahReading.ThreeQuls -> it[bedtimeThreeQulsReminderKey] = enabled
-            else -> Unit
-        }
-    }
 
     suspend fun setKahfThursdayReminderEnabled(enabled: Boolean) =
         context.dataStore.edit { it[kahfThursdayReminderKey] = enabled }

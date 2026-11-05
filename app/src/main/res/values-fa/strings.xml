@@ -211,7 +211,6 @@
     <string name="auto_backup_error">ذخیره در پوشه انتخاب‌شده ممکن نشد. برای انتخاب دوباره، پشتیبان‌گیری خودکار را خاموش و روشن کنید.</string>
     <string name="reminder">یادآور خواندن</string>
     <string name="reminder_daily">یادآور روزانه</string>
-    <string name="reminder_bedtime_sunnah_sub">سجده، سپس ملک، ساعت %1$s</string>
     <string name="reminder_bedtime_each_sub">هر شب ساعت %1$s</string>
     <string name="sunnah_reminder_notification_title">تلاوت سنت شبانه</string>
     <string name="reminder_kahf_friday">سوره کهف شب جمعه</string>
@@ -344,4 +343,6 @@
     <string name="download_part_database">پایگاه داده قرآن</string>
     <string name="download_part_fonts">قلم‌های مصحف</string>
     <string name="download_part_progress">%1$s، فایل %2$d از %3$d</string>
+    <string name="sunnah_bedtime_title">سنت پیش از خواب</string>
+    <string name="sunnah_bedtime_note">آیةالکرسی، دو آیه پایانی بقره، سپس سه قل.</string>
 </resources>

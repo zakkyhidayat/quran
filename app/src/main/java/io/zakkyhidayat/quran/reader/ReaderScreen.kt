@@ -16,6 +16,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.Crossfade
 import kotlinx.coroutines.launch
 import io.zakkyhidayat.quran.settings.ReadingMode
 import androidx.compose.ui.graphics.Color
@@ -294,7 +295,13 @@ fun ReaderScreen(
                     Modifier
                         .fillMaxSize()
                         .zIndex(if (listMode) 0f else 1f)
-                        .graphicsLayer { alpha = mushafAlpha }
+                        .graphicsLayer {
+                            alpha = mushafAlpha
+                            // Halaman mushaf membesar dari 94% saat masuk dari daftar; sama halusnya saat kembali.
+                            val zoom = 0.94f + 0.06f * mushafAlpha
+                            scaleX = zoom
+                            scaleY = zoom
+                        }
                         // Lapisan tersembunyi (alpha 0) tetap tersusun tapi tidak digambar sama sekali.
                         .drawWithContent { if (mushafAlpha > 0f) drawContent() }
                         .then(if (listMode) Modifier.clearAndSetSemantics { } else Modifier),
@@ -334,9 +341,13 @@ fun ReaderScreen(
                         ) {
                             Column(Modifier.align(Alignment.CenterStart).offset(x = startOffset), horizontalAlignment = Alignment.CenterHorizontally) {
                                 Box(Modifier.size(blockWidth, blockHeight), contentAlignment = Alignment.Center) {
-                                    val loaded = lines
+                                    Crossfade(
+                                        targetState = lines,
+                                        animationSpec = reducedMotion(motion.defaultEffectsSpec()),
+                                        label = "mushafPageLoad",
+                                    ) { loaded ->
                                     if (loaded == null) {
-                                        LoadingIndicator()
+                                        LoadingIndicator(Modifier.size(56.dp))
                                     } else {
                                         MushafPage(
                                             pageSize = DpSize(blockWidth, blockHeight),
@@ -349,6 +360,7 @@ fun ReaderScreen(
                                             tajweed = settings.tajweed,
                                             onSurahClick = onOpenSurahInfo,
                                         )
+                                    }
                                     }
                                 }
                             }

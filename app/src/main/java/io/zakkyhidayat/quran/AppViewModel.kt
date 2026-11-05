@@ -43,6 +43,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     val history = app.history
     // Kumpulan ayat yang sedang dibuka di layar "passage" (dari beranda atau koleksi).
     val passage = MutableStateFlow<io.zakkyhidayat.quran.home.HomeTarget.Passage?>(null)
+
+    /** Permintaan membuka halaman kumpulan ayat dari luar layar (notifikasi); AppNav yang membukanya lalu mengosongkannya. */
+    val requestedPassage = MutableStateFlow<io.zakkyhidayat.quran.home.HomeTarget.Passage?>(null)
     val collections = app.collections
 
     val surahs = MutableStateFlow<Map<Int, Surah>>(emptyMap())
@@ -120,7 +123,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         // Pasang ulang jadwal pengingat setiap kali pengaturannya berubah (termasuk saat aplikasi dibuka).
         viewModelScope.launch {
             settingsRepository.settings
-                .map { listOf(it.reminderEnabled, it.reminderMinutes, it.reminderUnit, it.bedtimeReminderReadings, it.kahfThursdayReminderEnabled, it.votdReminderEnabled) }
+                .map { listOf(it.reminderEnabled, it.reminderMinutes, it.reminderUnit, it.bedtimeSunnahReminderEnabled, it.kahfThursdayReminderEnabled, it.votdReminderEnabled) }
                 .distinctUntilChanged()
                 .collect { io.zakkyhidayat.quran.reminder.Reminder.schedule(getApplication(), settingsRepository.settings.first()) }
         }
@@ -168,6 +171,19 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun clearHistory() = viewModelScope.launch { history.clear() }
+
+    /** Sunnah sebelum tidur membuka halaman tersendiri (ayat yang dibaca berurutan); bacaan lain langsung ke pembaca. */
+    fun openSunnah(reading: SunnahReading) {
+        if (reading == SunnahReading.Bedtime) {
+            requestedPassage.value = io.zakkyhidayat.quran.home.HomeTarget.Passage(
+                getApplication<Application>().getString(R.string.sunnah_bedtime_title),
+                getApplication<Application>().getString(R.string.sunnah_bedtime_note),
+                reading.refs,
+            )
+        } else {
+            startSunnahReading(reading)
+        }
+    }
 
     fun startSunnahReading(reading: SunnahReading, resume: Boolean = false) {
         viewModelScope.launch {
