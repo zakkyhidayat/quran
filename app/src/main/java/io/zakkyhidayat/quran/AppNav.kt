@@ -3,6 +3,7 @@ package io.zakkyhidayat.quran
 import io.zakkyhidayat.quran.settings.SettingsPage
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.LaunchedEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -98,6 +99,15 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
             is HomeTarget.Passage -> { vm.passage.value = target; nav.navigate("passage") }
             is HomeTarget.Collection -> nav.navigate("collection/${target.kind.name}")
             is HomeTarget.Sunnah -> { vm.startSunnahReading(target.reading); openReader() }
+        }
+    }
+    // Notifikasi sunnah sebelum tidur membuka halaman kumpulan ayat tersendiri, bukan pembaca.
+    val requestedPassage by vm.requestedPassage.collectAsStateWithLifecycle()
+    LaunchedEffect(requestedPassage) {
+        requestedPassage?.let { target ->
+            vm.passage.value = target
+            nav.navigate("passage")
+            vm.requestedPassage.value = null
         }
     }
     val onOpenExplore: (ExploreEntry) -> Unit = {

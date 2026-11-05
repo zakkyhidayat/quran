@@ -183,6 +183,8 @@ anti-pola. Yang ditambahkan untuk repo ini ada di bawah dan diperiksa `tools/che
   yang tidak mengubah skala animator belum tercakup; perlu dicek di perangkat.
 - **Tafsir (0.7.0):** lembar ayat menampilkan bagian tafsir yang memuat ayat itu, di bawah terjemahan, dengan rentang
   ayatnya. Pilihan tafsir ada di Pengaturan > Terjemahan > Tafsir (tanpa tafsir, atau salah satu paket terpasang).
+- **Sunnah sebelum tidur:** satu bacaan, satu sakelar, satu pengingat pukul 20.30. Ketuk membuka halaman kumpulan ayat
+  berurutan: Ayat al-Kursi (2:255), 2:285–286, lalu tiga Qul. As-Sajdah dan Al-Mulk tidak termasuk.
 - **Bahasa tema dan topik:** hanya Inggris dan Indonesia untuk sekarang; catatan di bawah pilihan menyebutkannya.
 - **Carousel jelajah:** tinggi 120dp dikali skala font (minimal 1x), supaya judul dua baris dan jumlah tidak terpotong.
 
