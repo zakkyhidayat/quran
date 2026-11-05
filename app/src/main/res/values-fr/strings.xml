@@ -89,7 +89,7 @@
     <string name="contrast_high">Élevé</string>
     <string name="contrast_note">Le contraste s\'applique à la palette Originale.</string>
     <string name="amoled_sub">Fond noir pur en mode sombre</string>
-    <string name="translit_title">Translittération latine</string>
+    <string name="translit_title">Translittération</string>
     <string name="translit_sub">Afficher la prononciation latine dans la fiche du verset</string>
     <string name="tajweed_title">Couleurs du tajwid</string>
     <string name="tajweed_sub">Colorer les lettres selon les règles du tajwid</string>
@@ -345,4 +345,5 @@
     <string name="download_part_progress">%1$s, fichier %2$d sur %3$d</string>
     <string name="sunnah_bedtime_title">Sunnah avant le sommeil</string>
     <string name="sunnah_bedtime_note">Ayat al-Kursi, les deux derniers versets d’Al-Baqara, puis les trois Qul.</string>
+    <string name="settings_tafsir_sub">Explication des versets affichée sur la feuille du verset</string>
 </resources>

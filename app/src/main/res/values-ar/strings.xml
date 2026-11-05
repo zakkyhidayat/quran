@@ -89,7 +89,7 @@
     <string name="contrast_high">عالٍ</string>
     <string name="contrast_note">ينطبق التباين على اللوحة الأصلية.</string>
     <string name="amoled_sub">خلفية سوداء تمامًا في الوضع الداكن</string>
-    <string name="translit_title">النطق بالحروف اللاتينية</string>
+    <string name="translit_title">التحويل الصوتي</string>
     <string name="translit_sub">عرض النطق اللاتيني في لوحة الآية</string>
     <string name="tajweed_title">ألوان التجويد</string>
     <string name="tajweed_sub">تلوين الحروف حسب أحكام التجويد</string>
@@ -345,4 +345,5 @@
     <string name="download_part_progress">%1$s، الملف %2$d من %3$d</string>
     <string name="sunnah_bedtime_title">سنة قبل النوم</string>
     <string name="sunnah_bedtime_note">آية الكرسي، وخاتمة البقرة (٢٨٥-٢٨٦)، ثم المعوذتين والإخلاص.</string>
+    <string name="settings_tafsir_sub">شرح الآيات المعروضة في ورقة الآية</string>
 </resources>

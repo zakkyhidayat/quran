@@ -89,7 +89,7 @@
     <string name="contrast_high">زیادہ</string>
     <string name="contrast_note">تضاد صرف اصل پیلیٹ پر لاگو ہوتا ہے۔</string>
     <string name="amoled_sub">تاریک موڈ میں مکمل سیاہ پس منظر</string>
-    <string name="translit_title">رومن تلفظ</string>
+    <string name="translit_title">ٹرانسلٹریشن</string>
     <string name="translit_sub">آیت شیٹ میں رومن تلفظ دکھائیں</string>
     <string name="tajweed_title">تجوید کے رنگ</string>
     <string name="tajweed_sub">حروف کو تجوید کے قواعد کے مطابق رنگین دکھائیں</string>
@@ -345,4 +345,5 @@
     <string name="download_part_progress">%1$s، فائل %2$d از %3$d</string>
     <string name="sunnah_bedtime_title">سونے سے پہلے کی سنت</string>
     <string name="sunnah_bedtime_note">آیت الکرسی، سورۃ البقرۃ کی آخری دو آیات، پھر تین قل۔</string>
+    <string name="settings_tafsir_sub">آیت شیٹ پر دکھائی جانے والی آیات کی تشریح</string>
 </resources>

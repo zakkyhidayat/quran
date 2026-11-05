@@ -89,7 +89,7 @@
     <string name="contrast_high">Tinggi</string>
     <string name="contrast_note">Kontras berlaku untuk palet Asli.</string>
     <string name="amoled_sub">Latar hitam pekat di mode gelap</string>
-    <string name="translit_title">Transliterasi Latin</string>
+    <string name="translit_title">Transliterasi</string>
     <string name="translit_sub">Tampilkan cara baca Latin di sheet ayat</string>
     <string name="tajweed_title">Warna tajwid</string>
     <string name="tajweed_sub">Tampilkan huruf berwarna sesuai hukum tajwid</string>
@@ -345,4 +345,5 @@
     <string name="download_part_progress">%1$s, berkas %2$d dari %3$d</string>
     <string name="sunnah_bedtime_title">Sunnah sebelum tidur</string>
     <string name="sunnah_bedtime_note">Ayat Kursi, dua ayat terakhir Al-Baqarah, lalu tiga Qul.</string>
+    <string name="settings_tafsir_sub">Penjelasan ayat yang tampil di lembar ayat</string>
 </resources>

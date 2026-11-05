@@ -89,7 +89,7 @@
     <string name="contrast_high">بالا</string>
     <string name="contrast_note">کنتراست فقط برای پالت اصلی اعمال می‌شود.</string>
     <string name="amoled_sub">پس‌زمینهٔ کاملاً سیاه در حالت تیره</string>
-    <string name="translit_title">آوانگاری لاتین</string>
+    <string name="translit_title">آوانگاری</string>
     <string name="translit_sub">نمایش تلفظ لاتین در برگهٔ آیه</string>
     <string name="tajweed_title">رنگ‌های تجوید</string>
     <string name="tajweed_sub">رنگ‌آمیزی حروف بر اساس احکام تجوید</string>
@@ -345,4 +345,5 @@
     <string name="download_part_progress">%1$s، فایل %2$d از %3$d</string>
     <string name="sunnah_bedtime_title">سنت پیش از خواب</string>
     <string name="sunnah_bedtime_note">آیةالکرسی، دو آیه پایانی بقره، سپس سه قل.</string>
+    <string name="settings_tafsir_sub">شرح آیات نمایش‌داده‌شده در برگ آیه</string>
 </resources>

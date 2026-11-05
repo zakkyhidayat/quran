@@ -89,7 +89,7 @@
     <string name="contrast_high">উচ্চ</string>
     <string name="contrast_note">কনট্রাস্ট শুধু আসল প্যালেটে প্রযোজ্য।</string>
     <string name="amoled_sub">ডার্ক মোডে সম্পূর্ণ কালো পটভূমি</string>
-    <string name="translit_title">লাতিন প্রতিবর্ণীকরণ</string>
+    <string name="translit_title">প্রতিবর্ণীকরণ</string>
     <string name="translit_sub">আয়াত শিটে লাতিন উচ্চারণ দেখান</string>
     <string name="tajweed_title">তাজবীদের রং</string>
     <string name="tajweed_sub">তাজবীদের নিয়ম অনুযায়ী অক্ষর রঙিন দেখান</string>
@@ -345,4 +345,5 @@
     <string name="download_part_progress">%1$s, ফাইল %2$d/%3$d</string>
     <string name="sunnah_bedtime_title">ঘুমানোর আগের সুন্নাহ</string>
     <string name="sunnah_bedtime_note">আয়াতুল কুরসি, সূরা বাকারার শেষ দুই আয়াত, তারপর তিন কুল।</string>
+    <string name="settings_tafsir_sub">আয়াত-শিটে দেখানো আয়াতের ব্যাখ্যা</string>
 </resources>

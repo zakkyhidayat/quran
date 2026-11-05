@@ -195,5 +195,5 @@ karena baseline ikon lama (20 berkas) masih ada.
 
 - Screenshot aplikasi saat ini: daftar, pembaca, lembar ayat, pengaturan.
 - Keputusan urutan: merge PR #1 dulu, lalu prioritas 1 di PR baru.
-- Transliterasi ada di Pengaturan > Terjemahan (bukan Tampilan).
+- Transliterasi dipindah ke Pengaturan > Tampilan; Terjemahan hanya memuat bahasa tema dan daftar terjemahan. Tafsir punya halamannya sendiri di Pengaturan.
 - Carousel Jelajahi dipindah dari atas tab ke Beranda (di bawah Ayat Hari Ini, meluber ke tepi layar). Ayat Hari Ini memakai gradien primer-tersier; koleksi ayat berupa kartu grid 2 kolom. Header collapsing dihapus.
