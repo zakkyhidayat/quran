@@ -234,6 +234,15 @@ class MushafRepository(private val context: Context) {
         return DivisionMath.progress(starts, counts.sum(), DivisionMath.ordinal(counts, surah, ayah))
     }
 
+    /**
+     * Ayat awal bagian [kind] yang dimulai di halaman [page] (yang terakhir bila ada beberapa); bila tidak ada, [fallback].
+     * Penghitung mushaf memakainya agar sejalan dengan judul halaman: halaman yang memuat awal juz 7 (5:82) dihitung juz 7.
+     */
+    suspend fun divisionAnchor(kind: MarkerKind, page: Int, fallback: AyahRef): AyahRef {
+        val marker = markers(kind).lastOrNull { it.page == page } ?: return fallback
+        return AyahRef(marker.surah, marker.ayah)
+    }
+
     suspend fun firstAyahOnPage(page: Int): AyahRef = withContext(Dispatchers.IO) {
         db.rawQuery("SELECT surah, ayah FROM words WHERE page = ? ORDER BY id LIMIT 1", arrayOf(page.toString())).use {
             if (it.moveToFirst()) AyahRef(it.getInt(0), it.getInt(1)) else AyahRef(1, 1)

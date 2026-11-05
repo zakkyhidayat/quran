@@ -200,14 +200,17 @@ fun ReaderScreen(
     val pageFirstAyah by produceState<AyahRef?>(null, currentPage) { value = vm.mushaf.firstAyahOnPage(currentPage) }
     val counterAyah = listFirst?.takeIf { listMode && it.first == currentPage }?.second ?: pageFirstAyah
     val counterMode = settings.counterMode
-    val counter by produceState<CounterValue?>(null, counterAyah, counterMode, surahs) {
+    val counter by produceState<CounterValue?>(null, counterAyah, counterMode, surahs, listMode, currentPage) {
         val a = counterAyah
         if (a == null || surahs.isEmpty()) return@produceState
         val divisions = CounterMode.entries.associateWith { mode ->
             if (mode == CounterMode.Surah) {
                 DivisionProgress(a.surah + 1, a.ayah, surahs[a.surah]?.ayahCount ?: 0)
             } else {
-                vm.mushaf.divisionProgress(mode.kind(), a.surah, a.ayah)
+                // Di mushaf, bagian yang dimulai di halaman ini (mis. juz 7 di halaman 121) dihitung dari awalnya,
+                // supaya penghitung sejalan dengan judul halaman; di mode daftar tetap ayat yang terlihat.
+                val anchor = if (listMode) a else vm.mushaf.divisionAnchor(mode.kind(), currentPage, a)
+                vm.mushaf.divisionProgress(mode.kind(), anchor.surah, anchor.ayah)
             }
         }
         value = CounterValue(counterMode, a, divisions)
