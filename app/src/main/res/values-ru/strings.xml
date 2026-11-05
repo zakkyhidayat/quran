@@ -89,7 +89,7 @@
     <string name="contrast_high">Высокая</string>
     <string name="contrast_note">Контрастность действует только для исходной палитры.</string>
     <string name="amoled_sub">Чисто чёрный фон в тёмной теме</string>
-    <string name="translit_title">Латинская транслитерация</string>
+    <string name="translit_title">Транслитерация</string>
     <string name="translit_sub">Показывать латинское произношение в карточке аята</string>
     <string name="tajweed_title">Цвета таджвида</string>
     <string name="tajweed_sub">Раскрашивать буквы по правилам таджвида</string>
@@ -345,4 +345,5 @@
     <string name="download_part_progress">%1$s, файл %2$d из %3$d</string>
     <string name="sunnah_bedtime_title">Сунна перед сном</string>
     <string name="sunnah_bedtime_note">Аят аль-Курси, два последних аята аль-Бакара и три суры «Кул».</string>
+    <string name="settings_tafsir_sub">Пояснение аятов, показанное на листе аята</string>
 </resources>

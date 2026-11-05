@@ -89,7 +89,7 @@
     <string name="contrast_high">Yüksek</string>
     <string name="contrast_note">Kontrast yalnızca Orijinal palete uygulanır.</string>
     <string name="amoled_sub">Koyu modda tam siyah arka plan</string>
-    <string name="translit_title">Latin harfli okunuş</string>
+    <string name="translit_title">Transliterasyon</string>
     <string name="translit_sub">Ayet panelinde Latin harfli okunuşu göster</string>
     <string name="tajweed_title">Tecvid renkleri</string>
     <string name="tajweed_sub">Harfleri tecvid kurallarına göre renklendir</string>
@@ -345,4 +345,5 @@
     <string name="download_part_progress">%1$s, dosya %2$d / %3$d</string>
     <string name="sunnah_bedtime_title">Uyku öncesi sünnet</string>
     <string name="sunnah_bedtime_note">Ayetü’l-Kürsî, Bakara’nın son iki ayeti, ardından üç Kul.</string>
+    <string name="settings_tafsir_sub">Ayet sayfasında gösterilen ayet açıklaması</string>
 </resources>

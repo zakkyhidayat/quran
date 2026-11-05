@@ -89,7 +89,7 @@
     <string name="contrast_high">Tinggi</string>
     <string name="contrast_note">Kontras hanya untuk palet Asal.</string>
     <string name="amoled_sub">Latar hitam pekat dalam mod gelap</string>
-    <string name="translit_title">Transliterasi Rumi</string>
+    <string name="translit_title">Transliterasi</string>
     <string name="translit_sub">Tunjukkan sebutan Rumi dalam helaian ayat</string>
     <string name="tajweed_title">Warna tajwid</string>
     <string name="tajweed_sub">Warnakan huruf mengikut hukum tajwid</string>
@@ -345,4 +345,5 @@
     <string name="download_part_progress">%1$s, fail %2$d daripada %3$d</string>
     <string name="sunnah_bedtime_title">Sunnah sebelum tidur</string>
     <string name="sunnah_bedtime_note">Ayat al-Kursi, dua ayat terakhir Al-Baqarah, kemudian tiga Qul.</string>
+    <string name="settings_tafsir_sub">Penjelasan ayat yang dipaparkan pada helaian ayat</string>
 </resources>
