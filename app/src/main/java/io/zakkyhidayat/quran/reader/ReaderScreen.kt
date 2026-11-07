@@ -19,7 +19,8 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.Crossfade
 import kotlinx.coroutines.launch
 import io.zakkyhidayat.quran.settings.ReadingMode
-import io.zakkyhidayat.quran.settings.ThemeMode
+import io.zakkyhidayat.quran.settings.icon
+import io.zakkyhidayat.quran.settings.labelRes
 import io.zakkyhidayat.quran.settings.next
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.graphics.Color
@@ -257,17 +258,17 @@ fun ReaderScreen(
                 },
                 actions = {
                     IconButton(onClick = onOpenSearch) { Icon(Icons.Default.Search, contentDescription = stringResource(R.string.search)) }
-                    val systemDark = isSystemInDarkTheme()
-                    val themeNow = settings.themeMode
-                    val themeNext = themeNow.next(systemDark)
-                    IconButton(onClick = { vm.cycleThemeMode(systemDark) }) {
+                    // Mode berikutnya dihitung sekali di sini dan dipakai untuk label sekaligus untuk diterapkan,
+                    // sehingga yang diumumkan sama dengan yang berlaku.
+                    val themeNext = settings.themeMode.next(isSystemInDarkTheme())
+                    IconButton(onClick = { scope.launch { vm.settingsRepository.setThemeMode(themeNext) } }) {
                         Icon(
-                            when (themeNow) {
-                                ThemeMode.System -> AppIcons.BrightnessAuto
-                                ThemeMode.Light -> AppIcons.LightMode
-                                ThemeMode.Dark -> AppIcons.DarkMode
-                            },
-                            contentDescription = stringResource(R.string.theme_toggle_cd, themeName(themeNow), themeName(themeNext)),
+                            settings.themeMode.icon(),
+                            contentDescription = stringResource(
+                                R.string.theme_toggle_cd,
+                                stringResource(settings.themeMode.labelRes()),
+                                stringResource(themeNext.labelRes()),
+                            ),
                         )
                     }
                     IconButton(onClick = { vm.togglePageBookmark(currentPage) }) {
@@ -481,12 +482,3 @@ fun ReaderScreen(
         }
     }
 }
-
-@Composable
-private fun themeName(mode: ThemeMode): String = stringResource(
-    when (mode) {
-        ThemeMode.System -> R.string.theme_system
-        ThemeMode.Light -> R.string.theme_light
-        ThemeMode.Dark -> R.string.theme_dark
-    },
-)

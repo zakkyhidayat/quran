@@ -30,7 +30,6 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.first
 import io.zakkyhidayat.quran.data.Backup
-import io.zakkyhidayat.quran.settings.next
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -172,13 +171,6 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun clearHistory() = viewModelScope.launch { history.clear() }
-
-    /** Tombol tema di bilah atas pembaca; urutannya ada di [next]. */
-    fun cycleThemeMode(systemDark: Boolean) {
-        viewModelScope.launch {
-            settingsRepository.setThemeMode(settingsRepository.settings.first().themeMode.next(systemDark))
-        }
-    }
 
     /** Sunnah sebelum tidur membuka halaman tersendiri (ayat yang dibaca berurutan); bacaan lain langsung ke pembaca. */
     fun openSunnah(reading: SunnahReading) {

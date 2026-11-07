@@ -219,19 +219,15 @@ internal fun AppearanceControls(vm: AppViewModel, settings: AppSettings) {
 internal fun ThemeModeRow(vm: AppViewModel, settings: AppSettings) {
     val scope = rememberCoroutineScope()
     Labeled(stringResource(R.string.theme)) {
-        val options = listOf(
-            Triple(ThemeMode.System, stringResource(R.string.theme_system), AppIcons.BrightnessAuto),
-            Triple(ThemeMode.Light, stringResource(R.string.theme_light), AppIcons.LightMode),
-            Triple(ThemeMode.Dark, stringResource(R.string.theme_dark), AppIcons.DarkMode),
-        )
+        val options = ThemeMode.entries
         SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-            options.forEachIndexed { i, (mode, label, icon) ->
+            options.forEachIndexed { i, mode ->
                 SegmentedButton(
                     selected = settings.themeMode == mode,
                     onClick = { scope.launch { vm.settingsRepository.setThemeMode(mode) } },
                     shape = SegmentedButtonDefaults.itemShape(i, options.size),
-                    icon = { Icon(icon, contentDescription = null, modifier = Modifier.size(SegmentedButtonDefaults.IconSize)) },
-                ) { Text(label) }
+                    icon = { Icon(mode.icon(), contentDescription = null, modifier = Modifier.size(SegmentedButtonDefaults.IconSize)) },
+                ) { Text(stringResource(mode.labelRes())) }
             }
         }
     }
