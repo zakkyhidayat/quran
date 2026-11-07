@@ -42,6 +42,8 @@ fun QuranTheme(
     MaterialExpressiveTheme(
         colorScheme = scheme,
         motionScheme = MotionScheme.expressive(),
-        content = content,
+        content = {
+            androidx.compose.runtime.CompositionLocalProvider(LocalPageDark provides settings.pageDark, content = content)
+        },
     )
 }

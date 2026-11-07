@@ -35,7 +35,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
-import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.Layout
@@ -59,6 +58,11 @@ import io.zakkyhidayat.quran.data.LineType
 import io.zakkyhidayat.quran.data.PageLine
 import io.zakkyhidayat.quran.data.Surah
 import kotlin.math.roundToInt
+import io.zakkyhidayat.quran.ui.theme.LocalPageDark
+import io.zakkyhidayat.quran.ui.theme.mushafPageDark
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.foundation.background
 
 private const val LINES_PER_PAGE = 15
 private const val REFERENCE_PX = 100f
@@ -82,7 +86,9 @@ fun MushafPage(
     onSurahClick: (Int) -> Unit = {},
 ) {
     val context = LocalContext.current
-    val dark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val dark = mushafPageDark()
+    val pageOverride = LocalPageDark.current
+    val pageBackground = pageOverride?.let { if (it) darkColorScheme().background else lightColorScheme().background }
     val plainPalette = GlyphPalette.of(false, dark)
     val tajweedPalette = GlyphPalette.of(true, dark)
     // Warna huruf dasar palet (putih di mode gelap, hitam di mode terang). Lapisan COLR ber-colorID 0xFFFF memakai warna
@@ -107,7 +113,7 @@ fun MushafPage(
     val resolver = LocalFontFamilyResolver.current
 
     val screenReader = rememberTouchExplorationEnabled()
-    Box(modifier.size(pageSize)) {
+    Box(modifier.size(pageSize).then(if (pageBackground != null) Modifier.background(pageBackground) else Modifier)) {
         val maxHeight = pageSize.height
         val widthPx = with(density) { pageSize.width.roundToPx() }
         val lineGaps = MushafLineSpacing * (lines.size - 1).coerceAtLeast(0)
@@ -145,9 +151,10 @@ fun MushafPage(
         // Sorotan ayat digambar di lapisan terpisah di bawah semua baris. Kalau digambar per baris, sorotan baris di bawahnya
         // (buram, menutup satu sel penuh) menutupi bagian bawah glyph baris di atasnya; ekor huruf seperti ع turun di bawah
         // sel baris. Geometri di sini mengikuti Column di bawah: baris glyph dipusatkan di sel barisnya.
-        val highlightColor = MaterialTheme.colorScheme.onSurface
+        val highlightBase = if (pageOverride != null) glyphColor else MaterialTheme.colorScheme.onSurface
+        val highlightColor = highlightBase
             .copy(alpha = if (dark) 0.18f else 0.10f)
-            .compositeOver(MaterialTheme.colorScheme.background)
+            .compositeOver(pageBackground ?: MaterialTheme.colorScheme.background)
         Spacer(
             Modifier.fillMaxSize().drawBehind {
                 val current = selected ?: return@drawBehind

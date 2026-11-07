@@ -51,6 +51,7 @@ import io.zakkyhidayat.quran.ui.AppIcons
 import io.zakkyhidayat.quran.ui.scaled
 import io.zakkyhidayat.quran.ui.theme.originalColorScheme
 import kotlinx.coroutines.launch
+import io.zakkyhidayat.quran.ui.theme.mushafPageDark
 
 @Composable
 private fun PaletteCard(
@@ -163,6 +164,17 @@ internal fun AppearanceControls(vm: AppViewModel, settings: AppSettings) {
     val originalPreview = originalColorScheme(dark, settings.contrast)
     Column {
         ThemeModeRow(vm, settings)
+        Spacer(Modifier.height(16.dp))
+        val pageDark = mushafPageDark()
+        Group {
+            item(
+                title = stringResource(R.string.page_dark_title),
+                subtitle = stringResource(R.string.page_dark_sub),
+                onClick = { scope.launch { repo.setPageDark(!pageDark) } },
+                leading = { Icon(AppIcons.DarkMode, contentDescription = null) },
+                trailing = { IconSwitch(pageDark) },
+            )
+        }
 
         Labeled(stringResource(R.string.color_palette)) {
             Row(Modifier.fillMaxWidth().height(IntrinsicSize.Max), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
