@@ -188,7 +188,8 @@ class SettingsRepository(private val context: Context) {
     suspend fun setTajweed(value: Boolean) = context.dataStore.edit { it[tajweedKey] = value }
     suspend fun setKeepScreenOn(value: Boolean) = context.dataStore.edit { it[keepScreenOnKey] = value }
 
-    suspend fun setPageDark(value: Boolean) = context.dataStore.edit { it[pageDarkKey] = value }
+    /** Null menghapus pilihan, sehingga halaman kembali mengikuti tema aplikasi. */
+    suspend fun setPageDark(value: Boolean?) = context.dataStore.edit { if (value == null) it.remove(pageDarkKey) else it[pageDarkKey] = value }
 
     suspend fun setShowTransliteration(value: Boolean) = context.dataStore.edit { it[transliterationKey] = value }
 

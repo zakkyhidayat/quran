@@ -51,7 +51,6 @@ import io.zakkyhidayat.quran.ui.AppIcons
 import io.zakkyhidayat.quran.ui.scaled
 import io.zakkyhidayat.quran.ui.theme.originalColorScheme
 import kotlinx.coroutines.launch
-import io.zakkyhidayat.quran.ui.theme.mushafPageDark
 
 @Composable
 private fun PaletteCard(
@@ -154,7 +153,7 @@ private fun TextSizeSlider(label: String, percent: Int, onChange: (Int) -> Unit,
 
 /** Tema, palet warna, dan kontras. Dipakai di Pengaturan dan onboarding. */
 @Composable
-internal fun AppearanceControls(vm: AppViewModel, settings: AppSettings) {
+internal fun AppearanceControls(vm: AppViewModel, settings: AppSettings, showPageTone: Boolean = true) {
     val repo = vm.settingsRepository
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -164,16 +163,20 @@ internal fun AppearanceControls(vm: AppViewModel, settings: AppSettings) {
     val originalPreview = originalColorScheme(dark, settings.contrast)
     Column {
         ThemeModeRow(vm, settings)
-        Spacer(Modifier.height(16.dp))
-        val pageDark = mushafPageDark()
-        Group {
-            item(
-                title = stringResource(R.string.page_dark_title),
-                subtitle = stringResource(R.string.page_dark_sub),
-                onClick = { scope.launch { repo.setPageDark(!pageDark) } },
-                leading = { Icon(AppIcons.DarkMode, contentDescription = null) },
-                trailing = { IconSwitch(pageDark) },
-            )
+        if (showPageTone) {
+            // Di Pengaturan MaterialTheme masih skema aplikasi, jadi `dark` di sini adalah nada tema.
+            val pageDark = settings.pageDark ?: dark
+            Spacer(Modifier.height(16.dp))
+            Group {
+                item(
+                    title = stringResource(R.string.page_dark_title),
+                    subtitle = stringResource(R.string.page_dark_sub),
+                    onClick = { vm.togglePageDark(dark) },
+                    leading = { Icon(AppIcons.DarkMode, contentDescription = null) },
+                    trailing = { IconSwitch(pageDark) },
+                )
+            }
+            Spacer(Modifier.height(8.dp))
         }
 
         Labeled(stringResource(R.string.color_palette)) {
