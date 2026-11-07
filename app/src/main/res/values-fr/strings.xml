@@ -346,8 +346,5 @@
     <string name="sunnah_bedtime_title">Sunnah avant le sommeil</string>
     <string name="sunnah_bedtime_note">Ayat al-Kursi, les deux derniers versets d’Al-Baqara, puis les trois Qul.</string>
     <string name="settings_tafsir_sub">Explication des versets affichée sur la feuille du verset</string>
-    <string name="page_dark_title">Page sombre</string>
-    <string name="page_dark_sub">Couleur de la page du mushaf, indépendante du thème</string>
-    <string name="page_to_light_cd">Passer à la page claire</string>
-    <string name="page_to_dark_cd">Passer à la page sombre</string>
+    <string name="theme_toggle_cd">Thème : %1$s. Touchez pour passer à %2$s</string>
 </resources>

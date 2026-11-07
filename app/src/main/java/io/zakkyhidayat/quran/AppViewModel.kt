@@ -172,18 +172,6 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     fun clearHistory() = viewModelScope.launch { history.clear() }
 
-    /**
-     * Membalik nada halaman (gelap/terang). Pilihan yang sama dengan nada tema aplikasi ([appDark]) tidak disimpan, supaya
-     * halaman kembali mengikuti tema dan pilihan bisa dihapus lagi lewat sakelar yang sama.
-     */
-    fun togglePageDark(appDark: Boolean) {
-        viewModelScope.launch {
-            val current = settingsRepository.settings.first().pageDark ?: appDark
-            val target = !current
-            settingsRepository.setPageDark(if (target == appDark) null else target)
-        }
-    }
-
     /** Sunnah sebelum tidur membuka halaman tersendiri (ayat yang dibaca berurutan); bacaan lain langsung ke pembaca. */
     fun openSunnah(reading: SunnahReading) {
         if (reading == SunnahReading.Bedtime) {

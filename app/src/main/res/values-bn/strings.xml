@@ -346,8 +346,5 @@
     <string name="sunnah_bedtime_title">ঘুমানোর আগের সুন্নাহ</string>
     <string name="sunnah_bedtime_note">আয়াতুল কুরসি, সূরা বাকারার শেষ দুই আয়াত, তারপর তিন কুল।</string>
     <string name="settings_tafsir_sub">আয়াত-শিটে দেখানো আয়াতের ব্যাখ্যা</string>
-    <string name="page_dark_title">অন্ধকার পাতা</string>
-    <string name="page_dark_sub">মুসহাফের পাতার রং, অ্যাপের থিম থেকে আলাদা</string>
-    <string name="page_to_light_cd">হালকা পাতায় যান</string>
-    <string name="page_to_dark_cd">অন্ধকার পাতায় যান</string>
+    <string name="theme_toggle_cd">থিম: %1$s। %2$s-এ বদলাতে ট্যাপ করুন</string>
 </resources>

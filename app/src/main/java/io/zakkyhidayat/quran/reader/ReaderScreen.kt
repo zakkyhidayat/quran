@@ -5,7 +5,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.unit.DpSize
-import io.zakkyhidayat.quran.ui.theme.PageThemeScope
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.Dispatchers
 import androidx.compose.ui.graphics.graphicsLayer
@@ -20,6 +19,10 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.Crossfade
 import kotlinx.coroutines.launch
 import io.zakkyhidayat.quran.settings.ReadingMode
+import io.zakkyhidayat.quran.settings.icon
+import io.zakkyhidayat.quran.settings.labelRes
+import io.zakkyhidayat.quran.settings.next
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.mutableIntStateOf
@@ -171,10 +174,7 @@ fun ReaderScreen(
         if (listMode) listPagerState.scrollToPage(pagerState.currentPage) else pagerState.scrollToPage(listPagerState.currentPage)
     }
     val prefetchContext = LocalContext.current
-    // Nada tema aplikasi dan nada halaman dihitung di luar PageThemeScope (di sini MaterialTheme masih skema aplikasi).
-    val appDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
-    val pageIsDark = settings.pageDark ?: appDark
-    val prefetchPalette = GlyphPalette.of(settings.tajweed, pageIsDark)
+    val prefetchPalette = GlyphPalette.of(settings.tajweed, MaterialTheme.colorScheme.background.luminance() < 0.5f)
     LaunchedEffect(prefetchPalette) {
         snapshotFlow { pagerState.currentPage + 1 }.collectLatest { page ->
             withContext(Dispatchers.IO) { prefetchPageFonts(prefetchContext, page, prefetchPalette) }
@@ -239,7 +239,6 @@ fun ReaderScreen(
         } ?: false
     }
 
-    PageThemeScope {
     Scaffold(containerColor = MaterialTheme.colorScheme.background, contentWindowInsets = WindowInsets(0, 0, 0, 0)) { scaffoldPadding ->
         // Inset ditangani sendiri (systemBars); padding Scaffold di sini selalu nol karena contentWindowInsets kosong.
         Column(Modifier.fillMaxSize().padding(scaffoldPadding).windowInsetsPadding(WindowInsets.systemBars)) {
@@ -259,10 +258,17 @@ fun ReaderScreen(
                 },
                 actions = {
                     IconButton(onClick = onOpenSearch) { Icon(Icons.Default.Search, contentDescription = stringResource(R.string.search)) }
-                    IconButton(onClick = { vm.togglePageDark(appDark) }) {
+                    // Mode berikutnya dihitung sekali di sini dan dipakai untuk label sekaligus untuk diterapkan,
+                    // sehingga yang diumumkan sama dengan yang berlaku.
+                    val themeNext = settings.themeMode.next(isSystemInDarkTheme())
+                    IconButton(onClick = { scope.launch { vm.settingsRepository.setThemeMode(themeNext) } }) {
                         Icon(
-                            if (pageIsDark) AppIcons.LightMode else AppIcons.DarkMode,
-                            contentDescription = if (pageIsDark) stringResource(R.string.page_to_light_cd) else stringResource(R.string.page_to_dark_cd),
+                            settings.themeMode.icon(),
+                            contentDescription = stringResource(
+                                R.string.theme_toggle_cd,
+                                stringResource(settings.themeMode.labelRes()),
+                                stringResource(themeNext.labelRes()),
+                            ),
                         )
                     }
                     IconButton(onClick = { vm.togglePageBookmark(currentPage) }) {
@@ -444,7 +450,6 @@ fun ReaderScreen(
                 onSelect = { scope.launch { vm.settingsRepository.setReadingMode(it) } },
             )
         }
-    }
     }
 
     if (showJump) {

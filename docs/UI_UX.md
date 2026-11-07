@@ -186,12 +186,11 @@ anti-pola. Yang ditambahkan untuk repo ini ada di bawah dan diperiksa `tools/che
 - **Sunnah sebelum tidur:** satu bacaan, satu sakelar, satu pengingat pukul 20.30. Ketuk membuka halaman kumpulan ayat
   berurutan: Ayat al-Kursi (2:255), 2:285–286, lalu tiga Qul. As-Sajdah dan Al-Mulk tidak termasuk.
 - **Bahasa tema dan topik:** hanya Inggris dan Indonesia untuk sekarang; catatan di bawah pilihan menyebutkannya.
-- **Warna halaman:** sakelar "Halaman gelap" di Pengaturan > Tampilan tepat di bawah Tema, dan tombol matahari/bulan di
-  bilah atas pembaca. Tanpa pilihan halaman mengikuti tema. Bila dipilih berlawanan dengan tema, seluruh pembaca
-  (halaman mushaf, mode daftar, bilah atas) memakai palet aplikasi yang sama dalam nada lain lewat `PageThemeScope`
-  (`ui/theme/PageTone.kt`). Dialog dan lembar ayat tetap memakai tema aplikasi; layar indeks dan pengaturan tidak
-  terpengaruh. Mengembalikan ke nada tema menghapus pilihan, sehingga halaman kembali mengikuti tema. Sakelar tidak
-  tampil di onboarding.
+- **Tema:** satu tema untuk seluruh aplikasi, tanpa pilihan warna halaman terpisah. Pilihan Sistem, Terang, Gelap ada di
+  Pengaturan > Tampilan, dan tombol di bilah atas pembaca memutarnya. Ketukan pertama dari Sistem langsung mengubah layar (ke
+  kebalikan tema sistem), lalu ke yang sama dengan sistem, lalu Sistem; satu perpindahan tanpa perubahan layar tidak
+  bisa dihindari. Label aksesibilitas menyebut mode sekarang dan berikutnya. Pilihan `page_dark` lama dibuang tanpa
+  migrasi atas permintaan pemilik.
 - **Carousel jelajah:** tinggi 120dp dikali skala font (minimal 1x), supaya judul dua baris dan jumlah tidak terpotong.
 
 Belum diuji di perangkat dan belum dikompilasi lokal (Gradle tidak jalan di sandbox). Pemeriksaan belum dipasang di CI

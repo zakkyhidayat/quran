@@ -153,7 +153,7 @@ private fun TextSizeSlider(label: String, percent: Int, onChange: (Int) -> Unit,
 
 /** Tema, palet warna, dan kontras. Dipakai di Pengaturan dan onboarding. */
 @Composable
-internal fun AppearanceControls(vm: AppViewModel, settings: AppSettings, showPageTone: Boolean = true) {
+internal fun AppearanceControls(vm: AppViewModel, settings: AppSettings) {
     val repo = vm.settingsRepository
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -163,21 +163,6 @@ internal fun AppearanceControls(vm: AppViewModel, settings: AppSettings, showPag
     val originalPreview = originalColorScheme(dark, settings.contrast)
     Column {
         ThemeModeRow(vm, settings)
-        if (showPageTone) {
-            // Di Pengaturan MaterialTheme masih skema aplikasi, jadi `dark` di sini adalah nada tema.
-            val pageDark = settings.pageDark ?: dark
-            Spacer(Modifier.height(16.dp))
-            Group {
-                item(
-                    title = stringResource(R.string.page_dark_title),
-                    subtitle = stringResource(R.string.page_dark_sub),
-                    onClick = { vm.togglePageDark(dark) },
-                    leading = { Icon(AppIcons.DarkMode, contentDescription = null) },
-                    trailing = { IconSwitch(pageDark) },
-                )
-            }
-            Spacer(Modifier.height(8.dp))
-        }
 
         Labeled(stringResource(R.string.color_palette)) {
             Row(Modifier.fillMaxWidth().height(IntrinsicSize.Max), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -234,19 +219,15 @@ internal fun AppearanceControls(vm: AppViewModel, settings: AppSettings, showPag
 internal fun ThemeModeRow(vm: AppViewModel, settings: AppSettings) {
     val scope = rememberCoroutineScope()
     Labeled(stringResource(R.string.theme)) {
-        val options = listOf(
-            Triple(ThemeMode.System, stringResource(R.string.theme_system), AppIcons.BrightnessAuto),
-            Triple(ThemeMode.Light, stringResource(R.string.theme_light), AppIcons.LightMode),
-            Triple(ThemeMode.Dark, stringResource(R.string.theme_dark), AppIcons.DarkMode),
-        )
+        val options = ThemeMode.entries
         SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-            options.forEachIndexed { i, (mode, label, icon) ->
+            options.forEachIndexed { i, mode ->
                 SegmentedButton(
                     selected = settings.themeMode == mode,
                     onClick = { scope.launch { vm.settingsRepository.setThemeMode(mode) } },
                     shape = SegmentedButtonDefaults.itemShape(i, options.size),
-                    icon = { Icon(icon, contentDescription = null, modifier = Modifier.size(SegmentedButtonDefaults.IconSize)) },
-                ) { Text(label) }
+                    icon = { Icon(mode.icon(), contentDescription = null, modifier = Modifier.size(SegmentedButtonDefaults.IconSize)) },
+                ) { Text(stringResource(mode.labelRes())) }
             }
         }
     }
