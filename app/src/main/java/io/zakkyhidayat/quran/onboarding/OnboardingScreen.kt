@@ -207,8 +207,7 @@ private fun TranslationStep(vm: AppViewModel, settings: AppSettings) {
 @Composable
 private fun AppearanceStep(vm: AppViewModel, settings: AppSettings) {
     StepTitle(stringResource(R.string.onb_appearance_title), stringResource(R.string.onb_appearance_body))
-    // Tanpa sakelar halaman gelap: di onboarding tidak ada halaman mushaf yang terlihat untuk dinilai.
-    AppearanceControls(vm, settings, showPageTone = false)
+    AppearanceControls(vm, settings)
 }
 
 /** Tombol teks yang memudar masuk/keluar dengan slot tetap; saat tidak terlihat tidak bisa difokus, diklik, atau dibaca TalkBack. */

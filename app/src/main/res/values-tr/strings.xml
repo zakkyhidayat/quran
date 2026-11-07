@@ -346,8 +346,5 @@
     <string name="sunnah_bedtime_title">Uyku öncesi sünnet</string>
     <string name="sunnah_bedtime_note">Ayetü’l-Kürsî, Bakara’nın son iki ayeti, ardından üç Kul.</string>
     <string name="settings_tafsir_sub">Ayet sayfasında gösterilen ayet açıklaması</string>
-    <string name="page_dark_title">Koyu sayfa</string>
-    <string name="page_dark_sub">Mushaf sayfa rengi, uygulama temasından bağımsız</string>
-    <string name="page_to_light_cd">Açık sayfaya geç</string>
-    <string name="page_to_dark_cd">Koyu sayfaya geç</string>
+    <string name="theme_toggle_cd">Tema: %1$s (değiştirmek için dokunun)</string>
 </resources>

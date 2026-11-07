@@ -172,15 +172,15 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     fun clearHistory() = viewModelScope.launch { history.clear() }
 
-    /**
-     * Membalik nada halaman (gelap/terang). Pilihan yang sama dengan nada tema aplikasi ([appDark]) tidak disimpan, supaya
-     * halaman kembali mengikuti tema dan pilihan bisa dihapus lagi lewat sakelar yang sama.
-     */
-    fun togglePageDark(appDark: Boolean) {
+    /** Tombol tema di bilah atas pembaca: Sistem, lalu Terang, lalu Gelap, lalu kembali ke Sistem. */
+    fun cycleThemeMode() {
         viewModelScope.launch {
-            val current = settingsRepository.settings.first().pageDark ?: appDark
-            val target = !current
-            settingsRepository.setPageDark(if (target == appDark) null else target)
+            val next = when (settingsRepository.settings.first().themeMode) {
+                io.zakkyhidayat.quran.settings.ThemeMode.System -> io.zakkyhidayat.quran.settings.ThemeMode.Light
+                io.zakkyhidayat.quran.settings.ThemeMode.Light -> io.zakkyhidayat.quran.settings.ThemeMode.Dark
+                io.zakkyhidayat.quran.settings.ThemeMode.Dark -> io.zakkyhidayat.quran.settings.ThemeMode.System
+            }
+            settingsRepository.setThemeMode(next)
         }
     }
 
