@@ -346,4 +346,7 @@
     <string name="sunnah_bedtime_title">Uyku öncesi sünnet</string>
     <string name="sunnah_bedtime_note">Ayetü’l-Kürsî, Bakara’nın son iki ayeti, ardından üç Kul.</string>
     <string name="settings_tafsir_sub">Ayet sayfasında gösterilen ayet açıklaması</string>
+    <string name="tafsir_search_hint">Tefsir veya yazar ara</string>
+    <string name="tafsir_installed">Yüklü</string>
+    <string name="tafsir_no_match">Aramanızla eşleşen tefsir yok.</string>
 </resources>

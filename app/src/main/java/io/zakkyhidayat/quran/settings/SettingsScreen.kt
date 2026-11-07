@@ -141,15 +141,19 @@ fun SettingsScreen(
         },
     ) { padding ->
         CenteredContent(Modifier.padding(padding)) {
-            if (page == SettingsPage.Translations) {
+            if (page == SettingsPage.Translations || page == SettingsPage.Tafsir) {
                 Column(
                     Modifier.fillMaxSize()
                         .padding(horizontal = 16.dp)
                         .padding(top = 8.dp, bottom = 24.dp),
                 ) {
-                    ExtrasLanguageRow(vm, settings)
-                    Spacer(Modifier.height(16.dp))
-                    TranslationControls(vm, settings, Modifier.weight(1f), fillAvailableHeight = true)
+                    if (page == SettingsPage.Translations) {
+                        ExtrasLanguageRow(vm, settings)
+                        Spacer(Modifier.height(16.dp))
+                        TranslationControls(vm, settings, Modifier.weight(1f), fillAvailableHeight = true)
+                    } else {
+                        TafsirControls(vm, settings, Modifier.weight(1f))
+                    }
                 }
             } else {
                 LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp)) {
@@ -196,7 +200,7 @@ fun SettingsScreen(
 
                             }
                             SettingsPage.Translations -> Unit
-                            SettingsPage.Tafsir -> TafsirSection(vm, settings)
+                            SettingsPage.Tafsir -> Unit
                             SettingsPage.Backup -> BackupControls(vm, settings, snackbar)
                             SettingsPage.Reminder -> ReminderControls(vm, settings)
                             SettingsPage.QuranData -> QuranDataMaintenance(quranDataInstaller)

@@ -346,4 +346,7 @@
     <string name="sunnah_bedtime_title">سونے سے پہلے کی سنت</string>
     <string name="sunnah_bedtime_note">آیت الکرسی، سورۃ البقرۃ کی آخری دو آیات، پھر تین قل۔</string>
     <string name="settings_tafsir_sub">آیت شیٹ پر دکھائی جانے والی آیات کی تشریح</string>
+    <string name="tafsir_search_hint">تفسیر یا مصنف تلاش کریں</string>
+    <string name="tafsir_installed">انسٹال شدہ</string>
+    <string name="tafsir_no_match">آپ کی تلاش سے کوئی تفسیر نہیں ملی۔</string>
 </resources>

@@ -346,4 +346,7 @@
     <string name="sunnah_bedtime_title">Sunnah sebelum tidur</string>
     <string name="sunnah_bedtime_note">Ayat al-Kursi, dua ayat terakhir Al-Baqarah, kemudian tiga Qul.</string>
     <string name="settings_tafsir_sub">Penjelasan ayat yang dipaparkan pada helaian ayat</string>
+    <string name="tafsir_search_hint">Cari tafsir atau pengarang</string>
+    <string name="tafsir_installed">Dipasang</string>
+    <string name="tafsir_no_match">Tiada tafsir yang sepadan dengan carian anda.</string>
 </resources>
