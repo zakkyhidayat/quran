@@ -278,6 +278,8 @@ private fun VerseOfTheDay(vm: AppViewModel, onOpenReader: () -> Unit, onGestureC
     HorizontalPager(
         state = pagerState,
         modifier = Modifier.fillMaxWidth().height(pagerHeight).padding(top = 8.dp),
+        // Jarak antarkartu saat digeser: tanpa ini tepi kartu saling menempel.
+        pageSpacing = 12.dp,
         key = { it },
     ) { page ->
         VerseOfTheDayCard(
