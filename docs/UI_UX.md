@@ -187,8 +187,10 @@ anti-pola. Yang ditambahkan untuk repo ini ada di bawah dan diperiksa `tools/che
   berurutan: Ayat al-Kursi (2:255), 2:285–286, lalu tiga Qul. As-Sajdah dan Al-Mulk tidak termasuk.
 - **Bahasa tema dan topik:** hanya Inggris dan Indonesia untuk sekarang; catatan di bawah pilihan menyebutkannya.
 - **Tema:** satu tema untuk seluruh aplikasi, tanpa pilihan warna halaman terpisah. Pilihan Sistem, Terang, Gelap ada di
-  Pengaturan > Tampilan, dan tombol di bilah atas pembaca memutarnya (Sistem, Terang, Gelap, lalu Sistem; ikonnya mengikuti
-  pilihan).
+  Pengaturan > Tampilan, dan tombol di bilah atas pembaca memutarnya. Ketukan pertama dari Sistem langsung mengubah layar (ke
+  kebalikan tema sistem), lalu ke yang sama dengan sistem, lalu Sistem; satu perpindahan tanpa perubahan layar tidak
+  bisa dihindari. Label aksesibilitas menyebut mode sekarang dan berikutnya. Pilihan `page_dark` lama dibuang tanpa
+  migrasi atas permintaan pemilik.
 - **Carousel jelajah:** tinggi 120dp dikali skala font (minimal 1x), supaya judul dua baris dan jumlah tidak terpotong.
 
 Belum diuji di perangkat dan belum dikompilasi lokal (Gradle tidak jalan di sandbox). Pemeriksaan belum dipasang di CI

@@ -346,5 +346,5 @@
     <string name="sunnah_bedtime_title">ঘুমানোর আগের সুন্নাহ</string>
     <string name="sunnah_bedtime_note">আয়াতুল কুরসি, সূরা বাকারার শেষ দুই আয়াত, তারপর তিন কুল।</string>
     <string name="settings_tafsir_sub">আয়াত-শিটে দেখানো আয়াতের ব্যাখ্যা</string>
-    <string name="theme_toggle_cd">থিম: %1$s (পরিবর্তন করতে ট্যাপ করুন)</string>
+    <string name="theme_toggle_cd">থিম: %1$s। %2$s-এ বদলাতে ট্যাপ করুন</string>
 </resources>

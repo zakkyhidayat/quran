@@ -346,5 +346,5 @@
     <string name="sunnah_bedtime_title">Sunnah avant le sommeil</string>
     <string name="sunnah_bedtime_note">Ayat al-Kursi, les deux derniers versets d’Al-Baqara, puis les trois Qul.</string>
     <string name="settings_tafsir_sub">Explication des versets affichée sur la feuille du verset</string>
-    <string name="theme_toggle_cd">Thème : %1$s (touchez pour changer)</string>
+    <string name="theme_toggle_cd">Thème : %1$s. Touchez pour passer à %2$s</string>
 </resources>

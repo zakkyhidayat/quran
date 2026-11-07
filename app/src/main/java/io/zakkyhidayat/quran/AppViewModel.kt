@@ -172,15 +172,10 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     fun clearHistory() = viewModelScope.launch { history.clear() }
 
-    /** Tombol tema di bilah atas pembaca: Sistem, lalu Terang, lalu Gelap, lalu kembali ke Sistem. */
-    fun cycleThemeMode() {
+    /** Tombol tema di bilah atas pembaca; urutannya ada di [next]. */
+    fun cycleThemeMode(systemDark: Boolean) {
         viewModelScope.launch {
-            val next = when (settingsRepository.settings.first().themeMode) {
-                io.zakkyhidayat.quran.settings.ThemeMode.System -> io.zakkyhidayat.quran.settings.ThemeMode.Light
-                io.zakkyhidayat.quran.settings.ThemeMode.Light -> io.zakkyhidayat.quran.settings.ThemeMode.Dark
-                io.zakkyhidayat.quran.settings.ThemeMode.Dark -> io.zakkyhidayat.quran.settings.ThemeMode.System
-            }
-            settingsRepository.setThemeMode(next)
+            settingsRepository.setThemeMode(settingsRepository.settings.first().themeMode.next(systemDark))
         }
     }
 

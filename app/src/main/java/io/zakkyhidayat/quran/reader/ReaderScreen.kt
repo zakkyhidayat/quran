@@ -20,6 +20,8 @@ import androidx.compose.animation.Crossfade
 import kotlinx.coroutines.launch
 import io.zakkyhidayat.quran.settings.ReadingMode
 import io.zakkyhidayat.quran.settings.ThemeMode
+import io.zakkyhidayat.quran.settings.next
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.mutableIntStateOf
@@ -255,21 +257,17 @@ fun ReaderScreen(
                 },
                 actions = {
                     IconButton(onClick = onOpenSearch) { Icon(Icons.Default.Search, contentDescription = stringResource(R.string.search)) }
-                    val themeLabel = stringResource(
-                        when (settings.themeMode) {
-                            ThemeMode.System -> R.string.theme_system
-                            ThemeMode.Light -> R.string.theme_light
-                            ThemeMode.Dark -> R.string.theme_dark
-                        },
-                    )
-                    IconButton(onClick = { vm.cycleThemeMode() }) {
+                    val systemDark = isSystemInDarkTheme()
+                    val themeNow = settings.themeMode
+                    val themeNext = themeNow.next(systemDark)
+                    IconButton(onClick = { vm.cycleThemeMode(systemDark) }) {
                         Icon(
-                            when (settings.themeMode) {
+                            when (themeNow) {
                                 ThemeMode.System -> AppIcons.BrightnessAuto
                                 ThemeMode.Light -> AppIcons.LightMode
                                 ThemeMode.Dark -> AppIcons.DarkMode
                             },
-                            contentDescription = stringResource(R.string.theme_toggle_cd, themeLabel),
+                            contentDescription = stringResource(R.string.theme_toggle_cd, themeName(themeNow), themeName(themeNext)),
                         )
                     }
                     IconButton(onClick = { vm.togglePageBookmark(currentPage) }) {
@@ -483,3 +481,12 @@ fun ReaderScreen(
         }
     }
 }
+
+@Composable
+private fun themeName(mode: ThemeMode): String = stringResource(
+    when (mode) {
+        ThemeMode.System -> R.string.theme_system
+        ThemeMode.Light -> R.string.theme_light
+        ThemeMode.Dark -> R.string.theme_dark
+    },
+)

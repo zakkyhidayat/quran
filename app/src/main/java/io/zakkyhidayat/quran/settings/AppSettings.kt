@@ -15,6 +15,20 @@ import kotlinx.coroutines.flow.map
 
 enum class ThemeMode { System, Light, Dark }
 
+/**
+ * Urutan tombol tema di bilah atas pembaca. Ketukan pertama dari Sistem langsung mengubah tampilan: ke kebalikan tema
+ * sistem, lalu ke yang sama dengan sistem, lalu kembali ke Sistem. Satu perpindahan tanpa perubahan layar tidak bisa
+ * dihindari (tiga mode, dua tampilan); letaknya di akhir putaran.
+ */
+fun ThemeMode.next(systemDark: Boolean): ThemeMode {
+    val opposite = if (systemDark) ThemeMode.Light else ThemeMode.Dark
+    return when (this) {
+        ThemeMode.System -> opposite
+        opposite -> if (systemDark) ThemeMode.Dark else ThemeMode.Light
+        else -> ThemeMode.System
+    }
+}
+
 enum class ColorMode { Original, Dynamic }
 
 enum class ContrastLevel { Standard, Medium, High }

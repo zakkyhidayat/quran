@@ -346,5 +346,5 @@
     <string name="sunnah_bedtime_title">سنت پیش از خواب</string>
     <string name="sunnah_bedtime_note">آیةالکرسی، دو آیه پایانی بقره، سپس سه قل.</string>
     <string name="settings_tafsir_sub">شرح آیات نمایش‌داده‌شده در برگ آیه</string>
-    <string name="theme_toggle_cd">تم: %1$s (برای تغییر ضربه بزنید)</string>
+    <string name="theme_toggle_cd">تم: %1$s. برای تغییر به %2$s ضربه بزنید</string>
 </resources>

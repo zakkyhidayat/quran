@@ -346,5 +346,5 @@
     <string name="sunnah_bedtime_title">Sunnah sebelum tidur</string>
     <string name="sunnah_bedtime_note">Ayat Kursi, dua ayat terakhir Al-Baqarah, lalu tiga Qul.</string>
     <string name="settings_tafsir_sub">Penjelasan ayat yang tampil di lembar ayat</string>
-    <string name="theme_toggle_cd">Tema: %1$s (ketuk untuk mengubah)</string>
+    <string name="theme_toggle_cd">Tema: %1$s. Ketuk untuk beralih ke %2$s</string>
 </resources>

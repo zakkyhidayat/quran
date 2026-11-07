@@ -346,5 +346,5 @@
     <string name="sunnah_bedtime_title">سنة قبل النوم</string>
     <string name="sunnah_bedtime_note">آية الكرسي، وخاتمة البقرة (٢٨٥-٢٨٦)، ثم المعوذتين والإخلاص.</string>
     <string name="settings_tafsir_sub">شرح الآيات المعروضة في ورقة الآية</string>
-    <string name="theme_toggle_cd">السمة: %1$s (انقر للتغيير)</string>
+    <string name="theme_toggle_cd">السمة: %1$s. انقر للتبديل إلى %2$s</string>
 </resources>

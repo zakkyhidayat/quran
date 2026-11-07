@@ -346,5 +346,5 @@
     <string name="sunnah_bedtime_title">Сунна перед сном</string>
     <string name="sunnah_bedtime_note">Аят аль-Курси, два последних аята аль-Бакара и три суры «Кул».</string>
     <string name="settings_tafsir_sub">Пояснение аятов, показанное на листе аята</string>
-    <string name="theme_toggle_cd">Тема: %1$s (нажмите, чтобы изменить)</string>
+    <string name="theme_toggle_cd">Тема: %1$s. Нажмите, чтобы переключить на «%2$s»</string>
 </resources>

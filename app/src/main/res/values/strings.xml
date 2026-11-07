@@ -348,5 +348,5 @@
     <string name="sunnah_bedtime_title">Sunnah before sleep</string>
     <string name="sunnah_bedtime_note">Ayat al-Kursi, the last two ayahs of Al-Baqarah, then the three Quls.</string>
     <string name="settings_tafsir_sub">Explanation of the verses shown on the ayah sheet</string>
-    <string name="theme_toggle_cd">Theme: %1$s (tap to change)</string>
+    <string name="theme_toggle_cd">Theme: %1$s. Tap to switch to %2$s</string>
 </resources>
