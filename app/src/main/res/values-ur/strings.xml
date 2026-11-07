@@ -346,4 +346,8 @@
     <string name="sunnah_bedtime_title">سونے سے پہلے کی سنت</string>
     <string name="sunnah_bedtime_note">آیت الکرسی، سورۃ البقرۃ کی آخری دو آیات، پھر تین قل۔</string>
     <string name="settings_tafsir_sub">آیت شیٹ پر دکھائی جانے والی آیات کی تشریح</string>
+    <string name="page_dark_title">گہرا صفحہ</string>
+    <string name="page_dark_sub">مصحف کے صفحے کا رنگ، ایپ کے تھیم سے الگ</string>
+    <string name="page_to_light_cd">روشن صفحے پر جائیں</string>
+    <string name="page_to_dark_cd">گہرے صفحے پر جائیں</string>
 </resources>

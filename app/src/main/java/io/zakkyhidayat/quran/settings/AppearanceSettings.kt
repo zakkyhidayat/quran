@@ -153,7 +153,7 @@ private fun TextSizeSlider(label: String, percent: Int, onChange: (Int) -> Unit,
 
 /** Tema, palet warna, dan kontras. Dipakai di Pengaturan dan onboarding. */
 @Composable
-internal fun AppearanceControls(vm: AppViewModel, settings: AppSettings) {
+internal fun AppearanceControls(vm: AppViewModel, settings: AppSettings, showPageTone: Boolean = true) {
     val repo = vm.settingsRepository
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -163,6 +163,21 @@ internal fun AppearanceControls(vm: AppViewModel, settings: AppSettings) {
     val originalPreview = originalColorScheme(dark, settings.contrast)
     Column {
         ThemeModeRow(vm, settings)
+        if (showPageTone) {
+            // Di Pengaturan MaterialTheme masih skema aplikasi, jadi `dark` di sini adalah nada tema.
+            val pageDark = settings.pageDark ?: dark
+            Spacer(Modifier.height(16.dp))
+            Group {
+                item(
+                    title = stringResource(R.string.page_dark_title),
+                    subtitle = stringResource(R.string.page_dark_sub),
+                    onClick = { vm.togglePageDark(dark) },
+                    leading = { Icon(AppIcons.DarkMode, contentDescription = null) },
+                    trailing = { IconSwitch(pageDark) },
+                )
+            }
+            Spacer(Modifier.height(8.dp))
+        }
 
         Labeled(stringResource(R.string.color_palette)) {
             Row(Modifier.fillMaxWidth().height(IntrinsicSize.Max), horizontalArrangement = Arrangement.spacedBy(12.dp)) {

@@ -346,4 +346,8 @@
     <string name="sunnah_bedtime_title">Сунна перед сном</string>
     <string name="sunnah_bedtime_note">Аят аль-Курси, два последних аята аль-Бакара и три суры «Кул».</string>
     <string name="settings_tafsir_sub">Пояснение аятов, показанное на листе аята</string>
+    <string name="page_dark_title">Тёмная страница</string>
+    <string name="page_dark_sub">Цвет страницы мусхафа, отдельно от темы приложения</string>
+    <string name="page_to_light_cd">Перейти к светлой странице</string>
+    <string name="page_to_dark_cd">Перейти к тёмной странице</string>
 </resources>

@@ -3,8 +3,9 @@ package io.zakkyhidayat.quran.reader
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.unit.DpSize
+import io.zakkyhidayat.quran.ui.theme.PageThemeScope
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.Dispatchers
 import androidx.compose.ui.graphics.graphicsLayer
@@ -170,7 +171,10 @@ fun ReaderScreen(
         if (listMode) listPagerState.scrollToPage(pagerState.currentPage) else pagerState.scrollToPage(listPagerState.currentPage)
     }
     val prefetchContext = LocalContext.current
-    val prefetchPalette = GlyphPalette.of(settings.tajweed, MaterialTheme.colorScheme.background.luminance() < 0.5f)
+    // Nada tema aplikasi dan nada halaman dihitung di luar PageThemeScope (di sini MaterialTheme masih skema aplikasi).
+    val appDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val pageIsDark = settings.pageDark ?: appDark
+    val prefetchPalette = GlyphPalette.of(settings.tajweed, pageIsDark)
     LaunchedEffect(prefetchPalette) {
         snapshotFlow { pagerState.currentPage + 1 }.collectLatest { page ->
             withContext(Dispatchers.IO) { prefetchPageFonts(prefetchContext, page, prefetchPalette) }
@@ -235,6 +239,7 @@ fun ReaderScreen(
         } ?: false
     }
 
+    PageThemeScope {
     Scaffold(containerColor = MaterialTheme.colorScheme.background, contentWindowInsets = WindowInsets(0, 0, 0, 0)) { scaffoldPadding ->
         // Inset ditangani sendiri (systemBars); padding Scaffold di sini selalu nol karena contentWindowInsets kosong.
         Column(Modifier.fillMaxSize().padding(scaffoldPadding).windowInsetsPadding(WindowInsets.systemBars)) {
@@ -254,6 +259,12 @@ fun ReaderScreen(
                 },
                 actions = {
                     IconButton(onClick = onOpenSearch) { Icon(Icons.Default.Search, contentDescription = stringResource(R.string.search)) }
+                    IconButton(onClick = { vm.togglePageDark(appDark) }) {
+                        Icon(
+                            if (pageIsDark) AppIcons.LightMode else AppIcons.DarkMode,
+                            contentDescription = if (pageIsDark) stringResource(R.string.page_to_light_cd) else stringResource(R.string.page_to_dark_cd),
+                        )
+                    }
                     IconButton(onClick = { vm.togglePageBookmark(currentPage) }) {
                         Icon(
                             if (pageBookmarked) AppIcons.Bookmark else AppIcons.BookmarkBorder,
@@ -433,6 +444,7 @@ fun ReaderScreen(
                 onSelect = { scope.launch { vm.settingsRepository.setReadingMode(it) } },
             )
         }
+    }
     }
 
     if (showJump) {

@@ -348,4 +348,8 @@
     <string name="sunnah_bedtime_title">Sunnah before sleep</string>
     <string name="sunnah_bedtime_note">Ayat al-Kursi, the last two ayahs of Al-Baqarah, then the three Quls.</string>
     <string name="settings_tafsir_sub">Explanation of the verses shown on the ayah sheet</string>
+    <string name="page_dark_title">Dark page</string>
+    <string name="page_dark_sub">Mushaf page colour, separate from the app theme</string>
+    <string name="page_to_light_cd">Switch to light page</string>
+    <string name="page_to_dark_cd">Switch to dark page</string>
 </resources>
