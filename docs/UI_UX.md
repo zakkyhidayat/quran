@@ -200,6 +200,16 @@ anti-pola. Yang ditambahkan untuk repo ini ada di bawah dan diperiksa `tools/che
   memakai tangga `surfaceContainer*` dan wadah aksen.
 - **Cari di Beranda:** ikon cari di bilah atas daftar isi (sebelum Lompat, Acak, Pengaturan) membuka layar pencarian yang
   sama dengan tombol cari di pembaca.
+- **Pengaturan (tinjauan screenshot v0.7.7):**
+  - Qur'an data: kartu status di atas (memeriksa, terbaru, ada pembaruan, gagal) dengan ikon dan warna kontainer; penjelasan
+    di bawah dan lebih kecil. Saat data terbaru, tombol berubah jadi "Periksa lagi" yang aktif, bukan label nonaktif.
+  - Izin notifikasi memakai ikon lonceng (bukan alarm). Subjudul ayat hari ini memakai spasi tanpa putus antara nama
+    waktu dan jamnya supaya tidak patah di tengah.
+  - Cadangan: Ekspor memakai ikon berkas-unggah, Pulihkan memakai ikon pulihkan dan meminta konfirmasi (mengganti pengaturan).
+    Waktu "terakhir disimpan" memang jam bila hari ini dan tanggal bila lebih lama.
+  - Terjemahan: kolom cari membulat penuh seperti kelompok lain. Tentang: semua baris punya ikon awal.
+  - Belum dikerjakan: konfirmasi hapus terjemahan terpasang, wadah untuk daftar unduhan terjemahan, kontras baris abu-abu
+    pada latar terang (keputusan tampilan).
 - **Carousel jelajah:** tinggi 120dp dikali skala font (minimal 1x), supaya judul dua baris dan jumlah tidak terpotong.
 
 Belum diuji di perangkat dan belum dikompilasi lokal (Gradle tidak jalan di sandbox). Pemeriksaan belum dipasang di CI;

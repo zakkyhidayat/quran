@@ -113,8 +113,9 @@
     <string name="tajweed_guide_qalqalah">Qalqalah: pantulkan ringan bunyi ق ط ب ج د ketika sukun.</string>
     <string name="tajweed_guide_practice">Pelajari makhraj dan cara baca dari guru yang kompeten; warna saja tidak menjelaskan semua hukum.</string>
     <string name="quran_data_current">Data Qur’an versi %1$d sudah terbaru.</string>
+    <string name="quran_data_check_again">Periksa lagi</string>
+    <string name="backup_restore_confirm">Pulihkan</string>
     <string name="quran_data_update_available">Data GitHub versi %1$d tersedia (%2$s).</string>
-    <string name="quran_data_current_button">Data sudah terbaru</string>
     <string name="translations">Terjemahan</string>
     <string name="delete_translation_cd">Hapus terjemahan %1$s</string>
     <string name="add_translation">Tambah terjemahan</string>
@@ -266,7 +267,7 @@
     <string name="home_votd_morning">Pagi</string>
     <string name="home_votd_afternoon">Siang</string>
     <string name="home_votd_night">Malam</string>
-    <string name="reminder_votd_sub">Pagi %1$s · Siang %2$s · Malam %3$s</string>
+    <string name="reminder_votd_sub">Pagi %1$s · Siang %2$s · Malam %3$s</string>
     <string name="home_sunnah">Bacaan sunnah</string>
     <string name="home_sunnah_now">Dianjurkan sekarang</string>
     <string name="home_history">Histori bacaan</string>

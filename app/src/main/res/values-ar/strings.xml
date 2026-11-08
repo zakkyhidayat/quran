@@ -113,8 +113,9 @@
     <string name="tajweed_guide_qalqalah">القلقلة: صدى خفيف لحروف ق ط ب ج د عند السكون.</string>
     <string name="tajweed_guide_practice">تعلّم المخارج والتلاوة من معلّم مؤهل؛ فالألوان وحدها لا تشرح جميع الأحكام.</string>
     <string name="quran_data_current">بيانات القرآن بالإصدار %1$d محدّثة.</string>
+    <string name="quran_data_check_again">التحقق مرة أخرى</string>
+    <string name="backup_restore_confirm">استعادة</string>
     <string name="quran_data_update_available">تتوفر بيانات GitHub بالإصدار %1$d (%2$s).</string>
-    <string name="quran_data_current_button">البيانات محدّثة</string>
     <string name="translations">الترجمات</string>
     <string name="delete_translation_cd">إزالة الترجمة %1$s</string>
     <string name="add_translation">إضافة ترجمة</string>
@@ -266,7 +267,7 @@
     <string name="home_votd_morning">الصباح</string>
     <string name="home_votd_afternoon">بعد الظهر</string>
     <string name="home_votd_night">الليل</string>
-    <string name="reminder_votd_sub">الصباح %1$s · بعد الظهر %2$s · الليل %3$s</string>
+    <string name="reminder_votd_sub">الصباح %1$s · بعد الظهر %2$s · الليل %3$s</string>
     <string name="home_sunnah">قراءات من السنة</string>
     <string name="home_sunnah_now">يُستحب الآن</string>
     <string name="home_history">سجل القراءة</string>

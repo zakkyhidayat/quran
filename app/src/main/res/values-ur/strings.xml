@@ -113,8 +113,9 @@
     <string name="tajweed_guide_qalqalah">قلقلہ: ق ط ب ج د کے ساکن ہونے پر ہلکی گونج پیدا کریں۔</string>
     <string name="tajweed_guide_practice">مخارج اور تلاوت کسی مستند استاد سے سیکھیں؛ صرف رنگ تمام احکام نہیں سکھاتے۔</string>
     <string name="quran_data_current">قرآن کا ڈیٹا ورژن %1$d تازہ ہے۔</string>
+    <string name="quran_data_check_again">دوبارہ چیک کریں</string>
+    <string name="backup_restore_confirm">بحال کریں</string>
     <string name="quran_data_update_available">GitHub پر ورژن %1$d کا ڈیٹا دستیاب ہے (%2$s)۔</string>
-    <string name="quran_data_current_button">ڈیٹا تازہ ہے</string>
     <string name="translations">ترجمے</string>
     <string name="delete_translation_cd">ترجمہ %1$s ہٹائیں</string>
     <string name="add_translation">ترجمہ شامل کریں</string>
@@ -266,7 +267,7 @@
     <string name="home_votd_morning">صبح</string>
     <string name="home_votd_afternoon">دوپہر</string>
     <string name="home_votd_night">رات</string>
-    <string name="reminder_votd_sub">صبح %1$s · دوپہر %2$s · رات %3$s</string>
+    <string name="reminder_votd_sub">صبح %1$s · دوپہر %2$s · رات %3$s</string>
     <string name="home_sunnah">سنت قراءتیں</string>
     <string name="home_sunnah_now">ابھی مستحب ہے</string>
     <string name="home_history">تلاوت کی تاریخ</string>

@@ -43,7 +43,7 @@ internal fun NotificationSettingsRow() {
                         .putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, context.packageName),
                 )
             },
-            leading = { Icon(AppIcons.Alarm, contentDescription = null) },
+            leading = { Icon(AppIcons.Notifications, contentDescription = null) },
             trailing = { PermissionStatus(notifications) },
         )
     }

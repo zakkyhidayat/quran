@@ -113,6 +113,7 @@ internal fun TranslationCatalogList(
             onValueChange = { query = it },
             placeholder = { Text(stringResource(R.string.translations_search_hint)) },
             singleLine = true,
+            shape = MaterialTheme.shapes.extraLarge,
             modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
         )
         LazyColumn(Modifier.weight(1f)) {

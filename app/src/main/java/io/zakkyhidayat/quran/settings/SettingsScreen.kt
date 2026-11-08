@@ -196,19 +196,26 @@ fun SettingsScreen(
                             SettingsPage.QuranData -> QuranDataMaintenance(quranDataInstaller)
                             SettingsPage.About -> {
                                 Group {
-                                    item(title = stringResource(R.string.version), subtitle = version)
+                                    item(
+                                        title = stringResource(R.string.version),
+                                        subtitle = version,
+                                        leading = { Icon(AppIcons.Info, contentDescription = null) },
+                                    )
                                     item(
                                         title = stringResource(R.string.data_source),
                                         subtitle = stringResource(R.string.data_source_sub),
+                                        leading = { Icon(AppIcons.Database, contentDescription = null) },
                                     )
                                     item(
                                         title = stringResource(R.string.font),
                                         subtitle = stringResource(R.string.font_sub),
+                                        leading = { Icon(AppIcons.FontDownload, contentDescription = null) },
                                     )
                                     item(
                                         title = stringResource(R.string.credits),
                                         subtitle = stringResource(R.string.credits_sub),
                                         onClick = { openUrl(context, "https://qul.tarteel.ai/credits") },
+                                        leading = { Icon(AppIcons.Groups, contentDescription = null) },
                                         trailing = { Icon(AppIcons.OpenInNew, contentDescription = null) },
                                     )
                                     item(

@@ -73,6 +73,14 @@ ICONS: dict[str, tuple[str, bool, bool]] = {
     "PieChart": ("pie_chart", True, False),
     "CalendarViewWeek": ("calendar_view_week", True, False),
     "FormatListNumbered": ("format_list_numbered", True, False),
+    # Halaman Pengaturan (status data, izin notifikasi, cadangan, tentang).
+    "CheckCircle": ("check_circle", True, False),
+    "Notifications": ("notifications", True, False),
+    "UploadFile": ("upload_file", True, False),
+    "Restore": ("settings_backup_restore", True, False),
+    "Database": ("database", True, False),
+    "FontDownload": ("font_download", True, False),
+    "Groups": ("groups", True, False),
 }
 
 # Gambar sendiri, viewport 24.
