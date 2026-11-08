@@ -12,7 +12,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
@@ -21,7 +26,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberSearchBarState
@@ -54,6 +60,8 @@ import io.zakkyhidayat.quran.data.SearchResult
 import io.zakkyhidayat.quran.reader.arabicFontFamily
 import io.zakkyhidayat.quran.settings.AppSettings
 import io.zakkyhidayat.quran.ui.CenteredContent
+import io.zakkyhidayat.quran.ui.NumberBadge
+import io.zakkyhidayat.quran.ui.segmentedItemColors
 import kotlinx.coroutines.delay
 
 private sealed interface Hit {
@@ -132,8 +140,13 @@ fun SearchScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) {
             } else if (hits.isEmpty()) {
                 Hint(stringResource(R.string.no_results))
             } else {
-                LazyColumn(Modifier.fillMaxSize().imePadding()) {
-                    items(hits) { hit -> HitRow(hit, vm, onBack) }
+                // Satu kelompok tersegmen: baris berwadah tonal dengan sudut dalam kecil, seperti daftar di Indeks dan Beranda.
+                LazyColumn(
+                    Modifier.fillMaxSize().imePadding(),
+                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp),
+                    verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap),
+                ) {
+                    itemsIndexed(hits) { index, hit -> HitRow(hit, index, hits.size, vm, onBack) }
                 }
             }
         }
@@ -143,32 +156,58 @@ fun SearchScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) {
 @Composable
 private fun Hint(text: String) {
     Box(Modifier.fillMaxSize().padding(32.dp), contentAlignment = Alignment.Center) {
-        Text(text, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodyLarge)
+        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Surface(
+                shape = MaterialTheme.shapes.extraLarge,
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            ) {
+                Box(Modifier.size(72.dp), contentAlignment = Alignment.Center) {
+                    Icon(Icons.Default.Search, contentDescription = null, modifier = Modifier.size(32.dp))
+                }
+            }
+            Text(text, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
+        }
     }
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-private fun HitRow(hit: Hit, vm: AppViewModel, onBack: () -> Unit) {
+private fun HitRow(hit: Hit, index: Int, count: Int, vm: AppViewModel, onBack: () -> Unit) {
     val context = LocalContext.current
     val surahs by vm.surahs.collectAsStateWithLifecycle()
+    val shapes = ListItemDefaults.segmentedShapes(index, count)
+    val colors = segmentedItemColors()
     when (hit) {
         is Hit.SurahHit -> {
             val s = surahs[hit.surah] ?: return
-            ListItem(
+            SegmentedListItem(
                 onClick = { vm.clearSelection(); vm.goToPage(s.firstPage); onBack() },
+                shapes = shapes,
+                colors = colors,
+                leadingContent = { NumberBadge(s.id) },
                 supportingContent = { Text(stringResource(R.string.search_surah_sub, s.id, s.ayahCount, s.firstPage)) },
             ) { Text(stringResource(R.string.surah_title, s.nameLatin)) }
         }
-        is Hit.PageHit -> ListItem(onClick = { vm.clearSelection(); vm.goToPage(hit.page); onBack() }) { Text(stringResource(R.string.page_n, hit.page)) }
-        is Hit.AyahHit -> ListItem(
+        is Hit.PageHit -> SegmentedListItem(
+            onClick = { vm.clearSelection(); vm.goToPage(hit.page); onBack() },
+            shapes = shapes,
+            colors = colors,
+            leadingContent = { NumberBadge(hit.page) },
+        ) { Text(stringResource(R.string.page_n, hit.page)) }
+        is Hit.AyahHit -> SegmentedListItem(
             onClick = { vm.goToAyah(hit.surah, hit.ayah, openSheet = true); onBack() },
+            shapes = shapes,
+            colors = colors,
+            leadingContent = { NumberBadge(hit.surah) },
             supportingContent = { Text(stringResource(R.string.open_ayah)) },
         ) { Text("${surahs[hit.surah]?.nameLatin.orEmpty()} ${hit.surah}:${hit.ayah}") }
         is Hit.Result -> {
             val r = hit.value
-            ListItem(
+            SegmentedListItem(
                 onClick = { vm.goToAyah(r.surah, r.ayah, openSheet = true); onBack() },
+                shapes = shapes,
+                colors = colors,
                 overlineContent = { Text("${surahs[r.surah]?.nameLatin.orEmpty()} ${r.surah}:${r.ayah} • ${r.source}") },
             ) {
                     if (r.highlightStart >= 0) {
