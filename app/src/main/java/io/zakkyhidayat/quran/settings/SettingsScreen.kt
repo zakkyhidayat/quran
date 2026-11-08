@@ -15,13 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -85,7 +79,7 @@ internal fun SettingsMainSheet(
                 Text(stringResource(R.string.settings), style = androidx.compose.material3.MaterialTheme.typography.titleLarge)
                 Spacer(Modifier.weight(1f))
                 IconButton(onClick = onDismiss) {
-                    Icon(Icons.Default.Close, contentDescription = stringResource(R.string.close))
+                    Icon(AppIcons.Close, contentDescription = stringResource(R.string.close))
                 }
             }
             Column(
@@ -136,7 +130,7 @@ fun SettingsScreen(
         topBar = {
             TopAppBar(
                 title = { Text(title) },
-                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back)) } },
+                navigationIcon = { IconButton(onClick = onBack) { Icon(AppIcons.ArrowBack, contentDescription = stringResource(R.string.back)) } },
             )
         },
     ) { padding ->
@@ -265,7 +259,7 @@ private fun SettingsMain(settings: AppSettings, onOpen: (SettingsPage) -> Unit) 
         SettingsCategory(stringResource(R.string.quran_data_title), stringResource(R.string.quran_data_sub), AppIcons.Download) {
             onOpen(SettingsPage.QuranData)
         }
-        SettingsCategory(stringResource(R.string.about), stringResource(R.string.settings_about_sub), Icons.Default.Info) {
+        SettingsCategory(stringResource(R.string.about), stringResource(R.string.settings_about_sub), AppIcons.Info) {
             onOpen(SettingsPage.About)
         }
     }
@@ -279,7 +273,7 @@ private fun SettingsCategory(title: String, subtitle: String, icon: androidx.com
             subtitle = subtitle,
             onClick = onClick,
             leading = { Icon(icon, contentDescription = null) },
-            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
+            trailing = { Icon(AppIcons.KeyboardArrowRight, contentDescription = null) },
         )
     }
 }

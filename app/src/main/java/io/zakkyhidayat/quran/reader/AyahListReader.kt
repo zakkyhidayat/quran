@@ -9,8 +9,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.FilledTonalIconToggleButton
 import androidx.compose.material3.Icon
@@ -340,7 +338,7 @@ private fun AyahRow(
                     Icon(AppIcons.ContentCopy, contentDescription = stringResource(R.string.copy))
                 }
                 FilledTonalIconButton(onClick = { shareAyahText(context, plainText) }) {
-                    Icon(Icons.Default.Share, contentDescription = stringResource(R.string.share))
+                    Icon(AppIcons.Share, contentDescription = stringResource(R.string.share))
                 }
             }
         }

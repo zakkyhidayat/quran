@@ -1,6 +1,7 @@
 package io.zakkyhidayat.quran.settings
 
 import androidx.compose.material3.MaterialTheme
+import io.zakkyhidayat.quran.ui.AppIcons
 import androidx.compose.ui.Alignment
 import io.zakkyhidayat.quran.data.CatalogPack
 import kotlinx.coroutines.CancellationException
@@ -11,9 +12,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.RadioButton
@@ -147,12 +145,12 @@ internal fun TranslationControls(
                                     startDescription = stringResource(R.string.update_translation_cd, label),
                                     cancelDescription = stringResource(R.string.cancel),
                                     enabled = updating == null,
-                                    icon = Icons.Default.Refresh,
+                                    icon = AppIcons.Refresh,
                                 )
                             }
                             IconButton(
                                 onClick = { scope.launch { repo.setTranslations(ordered.filter { it in settings.translationIds && it != tr.id }) } },
-                            ) { Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete_translation_cd, translationLabel(tr))) }
+                            ) { Icon(AppIcons.Delete, contentDescription = stringResource(R.string.delete_translation_cd, translationLabel(tr))) }
                         }
                     },
                 )
@@ -227,7 +225,7 @@ internal fun TafsirSection(vm: AppViewModel, settings: AppSettings) {
                                 if (settings.selectedTafsir == tr.id) scope.launch { vm.settingsRepository.setSelectedTafsir("") }
                                 vm.deletePack(tr.id)
                             }) {
-                                Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete_downloaded_translation_cd, tr.name))
+                                Icon(AppIcons.Delete, contentDescription = stringResource(R.string.delete_downloaded_translation_cd, tr.name))
                             }
                         }
                     },

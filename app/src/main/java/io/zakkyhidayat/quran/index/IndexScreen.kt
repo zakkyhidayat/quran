@@ -16,15 +16,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -153,7 +144,7 @@ fun IndexScreen(
                                 }
                             }
                             IconButton(onClick = { vm.dismissSunnahReading() }) {
-                                Icon(Icons.Default.Close, contentDescription = stringResource(R.string.close))
+                                Icon(AppIcons.Close, contentDescription = stringResource(R.string.close))
                             }
                         }
                     }
@@ -182,10 +173,10 @@ fun IndexScreen(
             TopAppBar(
                 title = { Text(stringResource(R.string.index_title)) },
                 actions = {
-                    IconButton(onClick = onOpenSearch) { Icon(Icons.Default.Search, contentDescription = stringResource(R.string.search)) }
+                    IconButton(onClick = onOpenSearch) { Icon(AppIcons.Search, contentDescription = stringResource(R.string.search)) }
                     IconButton(onClick = { showJump = true }) { Icon(AppIcons.FormatListNumbered, contentDescription = stringResource(R.string.jump_to_ayah)) }
                     IconButton(onClick = { vm.randomAyah(); onBack() }) { Icon(AppIcons.Shuffle, contentDescription = stringResource(R.string.random_ayah)) }
-                    IconButton(onClick = onOpenSettings) { Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.settings)) }
+                    IconButton(onClick = onOpenSettings) { Icon(AppIcons.Settings, contentDescription = stringResource(R.string.settings)) }
                 },
             )
         },
@@ -275,7 +266,7 @@ private fun SurahList(vm: AppViewModel, onBack: () -> Unit, onOpenSurahInfo: (In
                 trailingContent = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         if (showGlyph) Text(s.nameGlyph.toString(), style = TextStyle(fontFamily = font, fontSize = glyphSize, color = glyphColor))
-                        IconButton(onClick = { onOpenSurahInfo(s.id) }) { Icon(Icons.Default.Info, contentDescription = stringResource(R.string.surah_info_cd, s.nameLatin)) }
+                        IconButton(onClick = { onOpenSurahInfo(s.id) }) { Icon(AppIcons.Info, contentDescription = stringResource(R.string.surah_info_cd, s.nameLatin)) }
                     }
                 },
             ) { Text(s.nameLatin) }
@@ -338,7 +329,7 @@ private fun HizbList(vm: AppViewModel, onBack: () -> Unit) {
                     trailingContent = {
                         IconButton(onClick = { expanded = if (expanded == m.id) 0 else m.id }) {
                             Icon(
-                                if (expanded == m.id) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                                if (expanded == m.id) AppIcons.KeyboardArrowUp else AppIcons.KeyboardArrowDown,
                                 contentDescription = if (expanded == m.id) stringResource(R.string.hide_rub) else stringResource(R.string.show_rub),
                             )
                         }
@@ -466,7 +457,7 @@ private fun BookmarkList(vm: AppViewModel, onBack: () -> Unit) {
                 colors = segmentedItemColors(),
                 supportingContent = { Text(subtitle) },
                 trailingContent = {
-                    IconButton(onClick = { vm.deleteBookmark(b.id) }) { Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete)) }
+                    IconButton(onClick = { vm.deleteBookmark(b.id) }) { Icon(AppIcons.Delete, contentDescription = stringResource(R.string.delete)) }
                 },
             ) { Text(title) }
         }

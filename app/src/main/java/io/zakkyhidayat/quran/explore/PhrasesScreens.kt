@@ -1,14 +1,13 @@
 package io.zakkyhidayat.quran.explore
 
 import androidx.compose.foundation.layout.WindowInsets
+import io.zakkyhidayat.quran.ui.AppIcons
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.input.rememberTextFieldState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -85,7 +84,7 @@ fun PhraseScreen(vm: AppViewModel, phraseId: Int, onBack: () -> Unit, onOpenAyah
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.phrase_title), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back)) } },
+                navigationIcon = { IconButton(onClick = onBack) { Icon(AppIcons.ArrowBack, contentDescription = stringResource(R.string.back)) } },
             )
         },
     ) { padding ->

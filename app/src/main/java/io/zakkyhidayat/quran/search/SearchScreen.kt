@@ -1,6 +1,7 @@
 package io.zakkyhidayat.quran.search
 
 import androidx.compose.ui.res.stringResource
+import io.zakkyhidayat.quran.ui.AppIcons
 import io.zakkyhidayat.quran.R
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.text.input.clearText
@@ -18,10 +19,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.size
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -124,9 +121,9 @@ fun SearchScreen(vm: AppViewModel, settings: AppSettings, onBack: () -> Unit) {
                     textFieldState = textState,
                     onSearch = {},
                     placeholder = { Text(stringResource(R.string.search_placeholder)) },
-                    leadingIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back)) } },
+                    leadingIcon = { IconButton(onClick = onBack) { Icon(AppIcons.ArrowBack, contentDescription = stringResource(R.string.back)) } },
                     trailingIcon = {
-                        if (query.isNotEmpty()) IconButton(onClick = { textState.clearText() }) { Icon(Icons.Default.Close, contentDescription = stringResource(R.string.clear)) }
+                        if (query.isNotEmpty()) IconButton(onClick = { textState.clearText() }) { Icon(AppIcons.Close, contentDescription = stringResource(R.string.clear)) }
                     },
                     modifier = Modifier.focusRequester(focus),
                 )
@@ -163,7 +160,7 @@ private fun Hint(text: String) {
                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
             ) {
                 Box(Modifier.size(72.dp), contentAlignment = Alignment.Center) {
-                    Icon(Icons.Default.Search, contentDescription = null, modifier = Modifier.size(32.dp))
+                    Icon(AppIcons.Search, contentDescription = null, modifier = Modifier.size(32.dp))
                 }
             }
             Text(text, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)

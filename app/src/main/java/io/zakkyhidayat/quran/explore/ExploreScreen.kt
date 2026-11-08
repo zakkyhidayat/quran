@@ -1,6 +1,7 @@
 package io.zakkyhidayat.quran.explore
 
 import androidx.compose.foundation.layout.Arrangement
+import io.zakkyhidayat.quran.ui.AppIcons
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,9 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.rememberTextFieldState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -85,9 +83,9 @@ fun ExploreScreen(vm: AppViewModel, onBack: () -> Unit, onOpenTopic: (Int) -> Un
                     textFieldState = textState,
                     onSearch = {},
                     placeholder = { Text(stringResource(R.string.explore_search)) },
-                    leadingIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back)) } },
+                    leadingIcon = { IconButton(onClick = onBack) { Icon(AppIcons.ArrowBack, contentDescription = stringResource(R.string.back)) } },
                     trailingIcon = {
-                        if (query.isNotEmpty()) IconButton(onClick = { textState.clearText() }) { Icon(Icons.Default.Close, contentDescription = stringResource(R.string.clear)) }
+                        if (query.isNotEmpty()) IconButton(onClick = { textState.clearText() }) { Icon(AppIcons.Close, contentDescription = stringResource(R.string.clear)) }
                     },
                 )
             }
@@ -142,7 +140,7 @@ fun TopicScreen(vm: AppViewModel, topicId: Int, onBack: () -> Unit, onOpenTopic:
         topBar = {
             TopAppBar(
                 title = { Text(topic?.localizedName(language).orEmpty(), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back)) } },
+                navigationIcon = { IconButton(onClick = onBack) { Icon(AppIcons.ArrowBack, contentDescription = stringResource(R.string.back)) } },
             )
         },
     ) { padding ->

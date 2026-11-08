@@ -1,6 +1,7 @@
 package io.zakkyhidayat.quran.settings
 
 import androidx.compose.ui.platform.LocalConfiguration
+import io.zakkyhidayat.quran.ui.AppIcons
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.ListItem
@@ -12,8 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
@@ -123,7 +122,7 @@ internal fun TranslationCatalogList(
                     trailingContent = if (tr.downloaded) {
                         {
                             IconButton(onClick = { vm.deletePack(tr.id) }) {
-                                Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete_downloaded_translation_cd, translationLabel(tr)))
+                                Icon(AppIcons.Delete, contentDescription = stringResource(R.string.delete_downloaded_translation_cd, translationLabel(tr)))
                             }
                         }
                     } else {

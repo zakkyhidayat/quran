@@ -1,14 +1,13 @@
 package io.zakkyhidayat.quran.settings
 
 import androidx.compose.foundation.layout.Arrangement
+import io.zakkyhidayat.quran.ui.AppIcons
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -33,7 +32,7 @@ internal fun IconSwitch(checked: Boolean) {
         checked = checked,
         onCheckedChange = null,
         thumbContent = if (checked) {
-            { Icon(Icons.Default.Check, contentDescription = null, modifier = Modifier.size(SwitchDefaults.IconSize)) }
+            { Icon(AppIcons.Check, contentDescription = null, modifier = Modifier.size(SwitchDefaults.IconSize)) }
         } else {
             null
         },

@@ -117,7 +117,8 @@ fun HomeTab(
         item(key = "votd") { VerseOfTheDay(vm, onOpenReader, onVotdGestureChanged) }
 
         item(key = "history_h") {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            // Rata bawah: judul punya jarak atas 20 dp, jadi pusat teksnya sejajar dengan pusat tombol 40 dp (bukan pusat baris).
+            Row(verticalAlignment = Alignment.Bottom) {
                 SectionHeader(stringResource(R.string.home_history), Modifier.weight(1f))
                 if (history.isNotEmpty()) TextButton(onClick = { vm.clearHistory() }) { Text(stringResource(R.string.home_history_clear)) }
             }

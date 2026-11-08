@@ -2,7 +2,6 @@ package io.zakkyhidayat.quran.reader
 
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.unit.DpSize
 import kotlinx.coroutines.withContext
@@ -54,10 +53,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalButton
@@ -70,8 +65,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.foundation.clickable
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -253,11 +246,11 @@ fun ReaderScreen(
                 },
                 navigationIcon = {
                     if (onBack != null) {
-                        IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back)) }
+                        IconButton(onClick = onBack) { Icon(AppIcons.ArrowBack, contentDescription = stringResource(R.string.back)) }
                     }
                 },
                 actions = {
-                    IconButton(onClick = onOpenSearch) { Icon(Icons.Default.Search, contentDescription = stringResource(R.string.search)) }
+                    IconButton(onClick = onOpenSearch) { Icon(AppIcons.Search, contentDescription = stringResource(R.string.search)) }
                     // Mode berikutnya dihitung sekali di sini dan dipakai untuk label sekaligus untuk diterapkan,
                     // sehingga yang diumumkan sama dengan yang berlaku.
                     val themeNext = settings.themeMode.next(isSystemInDarkTheme())
@@ -277,7 +270,7 @@ fun ReaderScreen(
                             contentDescription = if (pageBookmarked) stringResource(R.string.remove_page_bookmark) else stringResource(R.string.bookmark_page),
                         )
                     }
-                    IconButton(onClick = onOpenSettings) { Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.settings)) }
+                    IconButton(onClick = onOpenSettings) { Icon(AppIcons.Settings, contentDescription = stringResource(R.string.settings)) }
                 },
             )
             Row(

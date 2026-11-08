@@ -169,8 +169,12 @@ anti-pola. Yang ditambahkan untuk repo ini ada di bawah dan diperiksa `tools/che
 
 - **Warna:** `Color(0x…)` hanya di `ui/theme/`. Komponen memakai peran M3 (`colorScheme.*`). Pelanggaran baru di
   luar tema menggagalkan `--strict`.
-- **Ikon:** target Material Symbols. Impor `androidx.compose.material.icons` yang sudah ada tercatat sebagai baseline
-  (20 berkas, dihitung saat aturan dibuat); impor baru ditandai. Belum dipaksa.
+- **Ikon:** semua ikon dari `AppIcons` (`ui/Icons.kt`), Material Symbols Rounded bobot 400, dihasilkan `tools/gen_icons.py`
+  dari paket npm `@material-symbols/svg-400` (Apache-2.0; petunjuk di kepala skrip). Ikon yang dulu Filled memakai
+  varian isi, garis murni sama saja; panah dan chevron berbalik di tata letak kanan-ke-kiri (`autoMirror`). Impor
+  `androidx.compose.material.icons` dilarang dan menggagalkan `--strict`; paket `material-icons-core` dilepas dari
+  dependensi. Menambah ikon: tambahkan satu baris di `ICONS` dalam skrip lalu jalankan ulang (`--check` memastikan
+  berkas sesuai).
 - **Nama aksesibel:** ikon yang menjadi satu-satunya isi tombol wajib `contentDescription` berbahasa lokal. Ikon
   dekoratif di samping teks boleh `null`. Ditinjau: tidak ada ikon tanpa nama di dalam tombol atau area yang bisa diketuk
   (pemeriksaan 3 baris ke atas; sampel, bukan bukti lengkap).
@@ -198,8 +202,8 @@ anti-pola. Yang ditambahkan untuk repo ini ada di bawah dan diperiksa `tools/che
   sama dengan tombol cari di pembaca.
 - **Carousel jelajah:** tinggi 120dp dikali skala font (minimal 1x), supaya judul dua baris dan jumlah tidak terpotong.
 
-Belum diuji di perangkat dan belum dikompilasi lokal (Gradle tidak jalan di sandbox). Pemeriksaan belum dipasang di CI
-karena baseline ikon lama (20 berkas) masih ada.
+Belum diuji di perangkat dan belum dikompilasi lokal (Gradle tidak jalan di sandbox). Pemeriksaan belum dipasang di CI;
+kedua baseline kini kosong, jadi `--strict` bisa langsung dipasang.
 
 ## Yang dibutuhkan dari pemilik
 
