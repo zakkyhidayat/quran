@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -99,6 +100,7 @@ fun IndexScreen(
     vm: AppViewModel,
     onOpenReader: () -> Unit,
     onOpenSettings: () -> Unit,
+    onOpenSearch: () -> Unit = {},
     onOpenSurahInfo: (Int) -> Unit,
     onOpenExplore: (ExploreEntry) -> Unit = {},
     onOpenHome: (io.zakkyhidayat.quran.home.HomeTarget) -> Unit = {},
@@ -180,6 +182,7 @@ fun IndexScreen(
             TopAppBar(
                 title = { Text(stringResource(R.string.index_title)) },
                 actions = {
+                    IconButton(onClick = onOpenSearch) { Icon(Icons.Default.Search, contentDescription = stringResource(R.string.search)) }
                     IconButton(onClick = { showJump = true }) { Icon(AppIcons.FormatListNumbered, contentDescription = stringResource(R.string.jump_to_ayah)) }
                     IconButton(onClick = { vm.randomAyah(); onBack() }) { Icon(AppIcons.Shuffle, contentDescription = stringResource(R.string.random_ayah)) }
                     IconButton(onClick = onOpenSettings) { Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.settings)) }

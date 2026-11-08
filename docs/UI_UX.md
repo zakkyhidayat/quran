@@ -191,6 +191,11 @@ anti-pola. Yang ditambahkan untuk repo ini ada di bawah dan diperiksa `tools/che
   kebalikan tema sistem), lalu ke yang sama dengan sistem, lalu Sistem; satu perpindahan tanpa perubahan layar tidak
   bisa dihindari. Label aksesibilitas menyebut mode sekarang dan berikutnya. Pilihan `page_dark` lama dibuang tanpa
   migrasi atas permintaan pemilik.
+- **Pencarian:** hasil memakai daftar tersegmen berwadah tonal (sama dengan Indeks dan Beranda) dengan lencana nomor; keadaan
+  kosong memakai ikon di wadah tonal. Audit kedalaman: hanya layar ini yang masih memakai `ListItem` polos; layar lain sudah
+  memakai tangga `surfaceContainer*` dan wadah aksen.
+- **Cari di Beranda:** ikon cari di bilah atas daftar isi (sebelum Lompat, Acak, Pengaturan) membuka layar pencarian yang
+  sama dengan tombol cari di pembaca.
 - **Carousel jelajah:** tinggi 120dp dikali skala font (minimal 1x), supaya judul dua baris dan jumlah tidak terpotong.
 
 Belum diuji di perangkat dan belum dikompilasi lokal (Gradle tidak jalan di sandbox). Pemeriksaan belum dipasang di CI
