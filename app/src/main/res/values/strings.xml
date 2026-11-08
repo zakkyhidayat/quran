@@ -114,8 +114,9 @@
     <string name="tajweed_guide_qalqalah">Qalqalah: give ق ط ب ج د a light echo when they are sakin.</string>
     <string name="tajweed_guide_practice">Learn articulation and recitation from a qualified teacher; colours alone do not teach the full rules.</string>
     <string name="quran_data_current">Qur’an data v%1$d is up to date.</string>
+    <string name="quran_data_check_again">Check again</string>
+    <string name="backup_restore_confirm">Restore</string>
     <string name="quran_data_update_available">GitHub data v%1$d is available (%2$s).</string>
-    <string name="quran_data_current_button">Data is up to date</string>
     <string name="translations">Translations</string>
     <string name="delete_translation_cd">Remove translation %1$s</string>
     <string name="add_translation">Add translation</string>
@@ -267,11 +268,12 @@
     <string name="home_votd_morning">Morning</string>
     <string name="home_votd_afternoon">Afternoon</string>
     <string name="home_votd_night">Night</string>
-    <string name="reminder_votd_sub">Morning %1$s · Afternoon %2$s · Night %3$s</string>
+    <string name="reminder_votd_sub">Morning %1$s · Afternoon %2$s · Night %3$s</string>
     <string name="home_sunnah">Sunnah readings</string>
     <string name="home_sunnah_now">Recommended now</string>
     <string name="home_history">Reading history</string>
     <string name="home_history_clear">Clear</string>
+    <string name="history_just_now">Just now</string>
     <string name="home_history_empty">Surahs you read will appear here.</string>
     <string name="home_collections">Ayah collections</string>
     <string name="open_in_reader">Open in reader</string>

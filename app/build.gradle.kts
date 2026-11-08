@@ -106,7 +106,6 @@ dependencies {
     // Memasang Baseline Profile saat aplikasi dipasang dari luar Play Store (APK GitHub).
     implementation(libs.androidx.profileinstaller)
     "baselineProfile"(project(":baselineprofile"))
-    implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.androidx.compose.ui.tooling.preview)
     debugImplementation(libs.androidx.compose.ui.tooling)
     testImplementation(libs.junit)

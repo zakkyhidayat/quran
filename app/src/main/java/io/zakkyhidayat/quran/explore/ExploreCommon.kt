@@ -1,6 +1,7 @@
 package io.zakkyhidayat.quran.explore
 
 import androidx.compose.foundation.layout.Arrangement
+import io.zakkyhidayat.quran.ui.AppIcons
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,9 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -71,9 +69,9 @@ internal fun ExploreSearchTopBar(textState: TextFieldState, placeholder: String,
             textFieldState = textState,
             onSearch = {},
             placeholder = { Text(placeholder) },
-            leadingIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back)) } },
+            leadingIcon = { IconButton(onClick = onBack) { Icon(AppIcons.ArrowBack, contentDescription = stringResource(R.string.back)) } },
             trailingIcon = {
-                if (query.isNotEmpty()) IconButton(onClick = { textState.clearText() }) { Icon(Icons.Default.Close, contentDescription = stringResource(R.string.clear)) }
+                if (query.isNotEmpty()) IconButton(onClick = { textState.clearText() }) { Icon(AppIcons.Close, contentDescription = stringResource(R.string.clear)) }
             },
         )
     }

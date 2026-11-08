@@ -36,7 +36,8 @@ python tools/check_strings.py
 ```
 
 Untuk perubahan UI, jalankan juga `python tools/check_ui_rules.py` dan baca aturannya di `docs/UI_UX.md`. Belum wajib
-di CI; `--strict` menggagalkan warna literal baru di luar `ui/theme`.
+di CI; `--strict` menggagalkan warna literal di luar `ui/theme` dan impor ikon lama. Ikon ada di `ui/Icons.kt`, dihasilkan
+`tools/gen_icons.py`; jangan diedit tangan.
 
 ## Bahasa
 

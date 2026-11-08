@@ -113,8 +113,9 @@
     <string name="tajweed_guide_qalqalah">Qalqalah: pantulkan sedikit bunyi ق ط ب ج د apabila sukun.</string>
     <string name="tajweed_guide_practice">Pelajari makhraj dan bacaan daripada guru yang berkelayakan; warna sahaja tidak menerangkan semua hukum.</string>
     <string name="quran_data_current">Data al-Quran versi %1$d sudah terkini.</string>
+    <string name="quran_data_check_again">Semak semula</string>
+    <string name="backup_restore_confirm">Pulihkan</string>
     <string name="quran_data_update_available">Data GitHub versi %1$d tersedia (%2$s).</string>
-    <string name="quran_data_current_button">Data sudah terkini</string>
     <string name="translations">Terjemahan</string>
     <string name="delete_translation_cd">Buang terjemahan %1$s</string>
     <string name="add_translation">Tambah terjemahan</string>
@@ -266,11 +267,12 @@
     <string name="home_votd_morning">Pagi</string>
     <string name="home_votd_afternoon">Tengah hari</string>
     <string name="home_votd_night">Malam</string>
-    <string name="reminder_votd_sub">Pagi %1$s · Tengah hari %2$s · Malam %3$s</string>
+    <string name="reminder_votd_sub">Pagi %1$s · Tengah hari %2$s · Malam %3$s</string>
     <string name="home_sunnah">Bacaan sunnah</string>
     <string name="home_sunnah_now">Dianjurkan sekarang</string>
     <string name="home_history">Sejarah bacaan</string>
     <string name="home_history_clear">Padam</string>
+    <string name="history_just_now">Baru sahaja</string>
     <string name="home_history_empty">Surah yang anda baca akan muncul di sini.</string>
     <string name="home_collections">Himpunan ayat</string>
     <string name="open_in_reader">Buka dalam pembaca</string>

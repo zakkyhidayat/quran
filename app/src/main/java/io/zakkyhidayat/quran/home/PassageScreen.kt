@@ -1,6 +1,7 @@
 package io.zakkyhidayat.quran.home
 
 import androidx.compose.foundation.clickable
+import io.zakkyhidayat.quran.ui.AppIcons
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,8 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalButton
@@ -76,7 +75,7 @@ fun CollectionScreen(vm: AppViewModel, kind: CollectionKind, onBack: () -> Unit,
         topBar = {
             TopAppBar(
                 title = { Text(collectionTitle(kind)) },
-                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back)) } },
+                navigationIcon = { IconButton(onClick = onBack) { Icon(AppIcons.ArrowBack, contentDescription = stringResource(R.string.back)) } },
             )
         },
     ) { padding ->
@@ -121,7 +120,7 @@ fun PassageScreen(vm: AppViewModel, target: HomeTarget.Passage, onBack: () -> Un
         topBar = {
             TopAppBar(
                 title = { Text(target.title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back)) } },
+                navigationIcon = { IconButton(onClick = onBack) { Icon(AppIcons.ArrowBack, contentDescription = stringResource(R.string.back)) } },
             )
         },
     ) { padding ->

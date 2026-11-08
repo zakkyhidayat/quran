@@ -113,8 +113,9 @@
     <string name="tajweed_guide_qalqalah">قلقله: هنگام ساکن بودن ق ط ب ج د، صدای بازتابی ملایمی ادا کنید.</string>
     <string name="tajweed_guide_practice">مخارج و تلاوت را از آموزگار شایسته بیاموزید؛ رنگ‌ها به‌تنهایی همه احکام را آموزش نمی‌دهند.</string>
     <string name="quran_data_current">داده قرآن نسخه %1$d به‌روز است.</string>
+    <string name="quran_data_check_again">بررسی دوباره</string>
+    <string name="backup_restore_confirm">بازیابی</string>
     <string name="quran_data_update_available">داده نسخه %1$d در GitHub موجود است (%2$s).</string>
-    <string name="quran_data_current_button">داده به‌روز است</string>
     <string name="translations">ترجمه‌ها</string>
     <string name="delete_translation_cd">حذف ترجمهٔ %1$s</string>
     <string name="add_translation">افزودن ترجمه</string>
@@ -266,11 +267,12 @@
     <string name="home_votd_morning">صبح</string>
     <string name="home_votd_afternoon">بعدازظهر</string>
     <string name="home_votd_night">شب</string>
-    <string name="reminder_votd_sub">صبح %1$s · بعدازظهر %2$s · شب %3$s</string>
+    <string name="reminder_votd_sub">صبح %1$s · بعدازظهر %2$s · شب %3$s</string>
     <string name="home_sunnah">قرائت‌های سنت</string>
     <string name="home_sunnah_now">اکنون توصیه می‌شود</string>
     <string name="home_history">تاریخچه مطالعه</string>
     <string name="home_history_clear">پاک کردن</string>
+    <string name="history_just_now">هم‌اکنون</string>
     <string name="home_history_empty">سوره‌هایی که می‌خوانید اینجا نمایش داده می‌شوند.</string>
     <string name="home_collections">مجموعه‌های آیات</string>
     <string name="open_in_reader">باز کردن در قاری</string>

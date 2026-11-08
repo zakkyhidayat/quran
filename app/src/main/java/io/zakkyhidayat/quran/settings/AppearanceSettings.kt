@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ColorScheme
@@ -78,7 +76,7 @@ private fun PaletteCard(
                 Icon(icon, contentDescription = null, modifier = Modifier.size(20.dp))
                 Spacer(Modifier.width(8.dp))
                 Text(title, style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
-                if (selected) Icon(Icons.Default.Check, contentDescription = stringResource(R.string.selected), modifier = Modifier.size(20.dp))
+                if (selected) Icon(AppIcons.Check, contentDescription = stringResource(R.string.selected), modifier = Modifier.size(20.dp))
             }
             if (scheme != null) {
                 PaletteSwatches(scheme)

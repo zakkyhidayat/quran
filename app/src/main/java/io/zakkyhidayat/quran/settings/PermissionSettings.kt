@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -45,7 +43,7 @@ internal fun NotificationSettingsRow() {
                         .putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, context.packageName),
                 )
             },
-            leading = { Icon(AppIcons.Alarm, contentDescription = null) },
+            leading = { Icon(AppIcons.Notifications, contentDescription = null) },
             trailing = { PermissionStatus(notifications) },
         )
     }
@@ -66,7 +64,7 @@ private fun PermissionStatus(granted: Boolean) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                if (granted) Icons.Default.Check else AppIcons.Warning,
+                if (granted) AppIcons.Check else AppIcons.Warning,
                 contentDescription = null,
                 modifier = Modifier.size(16.dp),
             )

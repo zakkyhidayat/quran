@@ -113,8 +113,9 @@
     <string name="tajweed_guide_qalqalah">Kalkale: Sakin olduklarında ق ط ب ج د harflerine hafif yankı verin.</string>
     <string name="tajweed_guide_practice">Mahreçleri ve okuyuşu yetkin bir öğretmenden öğrenin; renkler tek başına bütün kuralları öğretmez.</string>
     <string name="quran_data_current">Kur’an verileri v%1$d güncel.</string>
+    <string name="quran_data_check_again">Yeniden denetle</string>
+    <string name="backup_restore_confirm">Geri yükle</string>
     <string name="quran_data_update_available">GitHub’da v%1$d verileri mevcut (%2$s).</string>
-    <string name="quran_data_current_button">Veriler güncel</string>
     <string name="translations">Mealler</string>
     <string name="delete_translation_cd">%1$s mealini kaldır</string>
     <string name="add_translation">Meal ekle</string>
@@ -266,11 +267,12 @@
     <string name="home_votd_morning">Sabah</string>
     <string name="home_votd_afternoon">Öğleden sonra</string>
     <string name="home_votd_night">Gece</string>
-    <string name="reminder_votd_sub">Sabah %1$s · Öğleden sonra %2$s · Gece %3$s</string>
+    <string name="reminder_votd_sub">Sabah %1$s · Öğleden sonra %2$s · Gece %3$s</string>
     <string name="home_sunnah">Sünnet okumalar</string>
     <string name="home_sunnah_now">Şimdi tavsiye edilir</string>
     <string name="home_history">Okuma geçmişi</string>
     <string name="home_history_clear">Temizle</string>
+    <string name="history_just_now">Az önce</string>
     <string name="home_history_empty">Okuduğunuz sureler burada görünecek.</string>
     <string name="home_collections">Ayet koleksiyonları</string>
     <string name="open_in_reader">Okuyucuda aç</string>

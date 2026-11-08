@@ -113,8 +113,9 @@
     <string name="tajweed_guide_qalqalah">Qalqalah : donnez un léger écho à ق ط ب ج د lorsqu’ils sont soukoun.</string>
     <string name="tajweed_guide_practice">Apprenez les points d’articulation et la récitation avec un enseignant qualifié ; les couleurs seules ne couvrent pas toutes les règles.</string>
     <string name="quran_data_current">Les données du Coran v%1$d sont à jour.</string>
+    <string name="quran_data_check_again">Vérifier à nouveau</string>
+    <string name="backup_restore_confirm">Restaurer</string>
     <string name="quran_data_update_available">Les données GitHub v%1$d sont disponibles (%2$s).</string>
-    <string name="quran_data_current_button">Données à jour</string>
     <string name="translations">Traductions</string>
     <string name="delete_translation_cd">Retirer la traduction %1$s</string>
     <string name="add_translation">Ajouter une traduction</string>
@@ -266,11 +267,12 @@
     <string name="home_votd_morning">Matin</string>
     <string name="home_votd_afternoon">Après-midi</string>
     <string name="home_votd_night">Nuit</string>
-    <string name="reminder_votd_sub">Matin %1$s · Après-midi %2$s · Nuit %3$s</string>
+    <string name="reminder_votd_sub">Matin %1$s · Après-midi %2$s · Nuit %3$s</string>
     <string name="home_sunnah">Lectures de la Sunna</string>
     <string name="home_sunnah_now">Recommandé maintenant</string>
     <string name="home_history">Historique de lecture</string>
     <string name="home_history_clear">Effacer</string>
+    <string name="history_just_now">À l’instant</string>
     <string name="home_history_empty">Les sourates que vous lisez apparaîtront ici.</string>
     <string name="home_collections">Recueils de versets</string>
     <string name="open_in_reader">Ouvrir dans le lecteur</string>

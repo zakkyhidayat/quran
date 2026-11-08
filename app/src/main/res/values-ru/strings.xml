@@ -113,8 +113,9 @@
     <string name="tajweed_guide_qalqalah">Калькаля: слегка отзвучивайте ق ط ب ج د, когда они огласованы сукуном.</string>
     <string name="tajweed_guide_practice">Изучайте артикуляцию и чтение с квалифицированным учителем; одних цветов недостаточно для всех правил.</string>
     <string name="quran_data_current">Данные Корана версии %1$d актуальны.</string>
+    <string name="quran_data_check_again">Проверить снова</string>
+    <string name="backup_restore_confirm">Восстановить</string>
     <string name="quran_data_update_available">Доступны данные GitHub версии %1$d (%2$s).</string>
-    <string name="quran_data_current_button">Данные актуальны</string>
     <string name="translations">Переводы</string>
     <string name="delete_translation_cd">Убрать перевод %1$s</string>
     <string name="add_translation">Добавить перевод</string>
@@ -266,11 +267,12 @@
     <string name="home_votd_morning">Утро</string>
     <string name="home_votd_afternoon">День</string>
     <string name="home_votd_night">Ночь</string>
-    <string name="reminder_votd_sub">Утро %1$s · День %2$s · Ночь %3$s</string>
+    <string name="reminder_votd_sub">Утро %1$s · День %2$s · Ночь %3$s</string>
     <string name="home_sunnah">Чтения из Сунны</string>
     <string name="home_sunnah_now">Рекомендуется сейчас</string>
     <string name="home_history">История чтения</string>
     <string name="home_history_clear">Очистить</string>
+    <string name="history_just_now">Только что</string>
     <string name="home_history_empty">Здесь появятся суры, которые вы читаете.</string>
     <string name="home_collections">Подборки аятов</string>
     <string name="open_in_reader">Открыть в читалке</string>

@@ -2,11 +2,17 @@ package io.zakkyhidayat.quran.settings
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import io.zakkyhidayat.quran.AppViewModel
@@ -69,6 +75,22 @@ internal fun BackupControls(vm: AppViewModel, settings: AppSettings, snackbar: S
             ).toString(),
         )
     }
+    // Pulihkan mengganti pengaturan, jadi minta konfirmasi sebelum memilih berkas.
+    var confirmRestore by remember { mutableStateOf(false) }
+    if (confirmRestore) {
+        AlertDialog(
+            onDismissRequest = { confirmRestore = false },
+            title = { Text(stringResource(R.string.backup_import)) },
+            text = { Text(stringResource(R.string.backup_import_sub)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    confirmRestore = false
+                    importLauncher.launch(arrayOf("application/json", "application/octet-stream", "text/plain"))
+                }) { Text(stringResource(R.string.backup_restore_confirm)) }
+            },
+            dismissButton = { TextButton(onClick = { confirmRestore = false }) { Text(stringResource(R.string.cancel)) } },
+        )
+    }
     Group {
         item(
             title = stringResource(R.string.auto_backup),
@@ -96,13 +118,13 @@ internal fun BackupControls(vm: AppViewModel, settings: AppSettings, snackbar: S
                 val date = java.text.SimpleDateFormat("yyyyMMdd", java.util.Locale.ROOT).format(java.util.Date())
                 exportLauncher.launch("quran-backup-$date.json")
             },
-            leading = { Icon(AppIcons.Upload, contentDescription = null) },
+            leading = { Icon(AppIcons.UploadFile, contentDescription = null) },
         )
         item(
             title = stringResource(R.string.backup_import),
             subtitle = stringResource(R.string.backup_import_sub),
-            onClick = { importLauncher.launch(arrayOf("application/json", "application/octet-stream", "text/plain")) },
-            leading = { Icon(AppIcons.Download, contentDescription = null) },
+            onClick = { confirmRestore = true },
+            leading = { Icon(AppIcons.Restore, contentDescription = null) },
         )
     }
 }

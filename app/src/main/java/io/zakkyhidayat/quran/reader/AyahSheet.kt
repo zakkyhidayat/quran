@@ -16,11 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilledTonalIconButton
@@ -96,8 +91,8 @@ fun AyahSheetContent(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            IconButton(onClick = onPrevious) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = stringResource(R.string.previous_ayah)) }
-            IconButton(onClick = onNext) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = stringResource(R.string.next_ayah)) }
+            IconButton(onClick = onPrevious) { Icon(AppIcons.KeyboardArrowLeft, contentDescription = stringResource(R.string.previous_ayah)) }
+            IconButton(onClick = onNext) { Icon(AppIcons.KeyboardArrowRight, contentDescription = stringResource(R.string.next_ayah)) }
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             FilledTonalIconToggleButton(checked = bookmarked, onCheckedChange = { onToggleBookmark() }) {
@@ -111,7 +106,7 @@ fun AyahSheetContent(
             }) { Icon(AppIcons.ContentCopy, contentDescription = stringResource(R.string.copy)) }
             FilledTonalIconButton(onClick = {
                 shareAyahText(context, plainText)
-            }) { Icon(Icons.Default.Share, contentDescription = stringResource(R.string.share)) }
+            }) { Icon(AppIcons.Share, contentDescription = stringResource(R.string.share)) }
         }
 
         detail.info.sajda?.let { type ->

@@ -15,13 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -57,6 +51,7 @@ enum class SettingsPage(val route: String) {
     Reminder("settings/reminder"),
     QuranData("settings/quran-data"),
     About("settings/about"),
+    Language("settings/language"),
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -85,7 +80,7 @@ internal fun SettingsMainSheet(
                 Text(stringResource(R.string.settings), style = androidx.compose.material3.MaterialTheme.typography.titleLarge)
                 Spacer(Modifier.weight(1f))
                 IconButton(onClick = onDismiss) {
-                    Icon(Icons.Default.Close, contentDescription = stringResource(R.string.close))
+                    Icon(AppIcons.Close, contentDescription = stringResource(R.string.close))
                 }
             }
             Column(
@@ -129,6 +124,7 @@ fun SettingsScreen(
             SettingsPage.Reminder -> R.string.reminder
             SettingsPage.QuranData -> R.string.quran_data_title
             SettingsPage.About -> R.string.about
+            SettingsPage.Language -> R.string.language
         },
     )
     Scaffold(
@@ -136,7 +132,7 @@ fun SettingsScreen(
         topBar = {
             TopAppBar(
                 title = { Text(title) },
-                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back)) } },
+                navigationIcon = { IconButton(onClick = onBack) { Icon(AppIcons.ArrowBack, contentDescription = stringResource(R.string.back)) } },
             )
         },
     ) { padding ->
@@ -197,24 +193,32 @@ fun SettingsScreen(
                             }
                             SettingsPage.Translations -> Unit
                             SettingsPage.Tafsir -> TafsirSection(vm, settings)
+                            SettingsPage.Language -> LanguageControls()
                             SettingsPage.Backup -> BackupControls(vm, settings, snackbar)
                             SettingsPage.Reminder -> ReminderControls(vm, settings)
                             SettingsPage.QuranData -> QuranDataMaintenance(quranDataInstaller)
                             SettingsPage.About -> {
                                 Group {
-                                    item(title = stringResource(R.string.version), subtitle = version)
+                                    item(
+                                        title = stringResource(R.string.version),
+                                        subtitle = version,
+                                        leading = { Icon(AppIcons.Info, contentDescription = null) },
+                                    )
                                     item(
                                         title = stringResource(R.string.data_source),
                                         subtitle = stringResource(R.string.data_source_sub),
+                                        leading = { Icon(AppIcons.Database, contentDescription = null) },
                                     )
                                     item(
                                         title = stringResource(R.string.font),
                                         subtitle = stringResource(R.string.font_sub),
+                                        leading = { Icon(AppIcons.FontDownload, contentDescription = null) },
                                     )
                                     item(
                                         title = stringResource(R.string.credits),
                                         subtitle = stringResource(R.string.credits_sub),
                                         onClick = { openUrl(context, "https://qul.tarteel.ai/credits") },
+                                        leading = { Icon(AppIcons.Groups, contentDescription = null) },
                                         trailing = { Icon(AppIcons.OpenInNew, contentDescription = null) },
                                     )
                                     item(
@@ -236,11 +240,9 @@ fun SettingsScreen(
     }
 }
 
-/** Halaman utama: bahasa, lalu kategori dengan ringkasan isinya. */
+/** Halaman utama: kategori dengan ringkasan isinya; bahasa adalah halaman sendiri seperti yang lain. */
 @Composable
 private fun SettingsMain(settings: AppSettings, onOpen: (SettingsPage) -> Unit) {
-    LanguageSection(showTitle = false)
-    Spacer(Modifier.height(16.dp))
     val theme = stringResource(
         when (settings.themeMode) {
             ThemeMode.System -> R.string.theme_system
@@ -249,6 +251,7 @@ private fun SettingsMain(settings: AppSettings, onOpen: (SettingsPage) -> Unit) 
         },
     )
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        SettingsCategory(stringResource(R.string.language), currentLanguageLabel(), AppIcons.Language) { onOpen(SettingsPage.Language) }
         SettingsCategory(stringResource(R.string.appearance), stringResource(R.string.settings_appearance_sub, theme), AppIcons.Palette) { onOpen(SettingsPage.Appearance) }
         SettingsCategory(stringResource(R.string.translations), stringResource(R.string.settings_translations_sub, settings.translationIds.size), AppIcons.Translate) { onOpen(SettingsPage.Translations) }
         SettingsCategory(stringResource(R.string.tafsir_title), stringResource(R.string.settings_tafsir_sub), AppIcons.MenuBook) { onOpen(SettingsPage.Tafsir) }
@@ -265,7 +268,7 @@ private fun SettingsMain(settings: AppSettings, onOpen: (SettingsPage) -> Unit) 
         SettingsCategory(stringResource(R.string.quran_data_title), stringResource(R.string.quran_data_sub), AppIcons.Download) {
             onOpen(SettingsPage.QuranData)
         }
-        SettingsCategory(stringResource(R.string.about), stringResource(R.string.settings_about_sub), Icons.Default.Info) {
+        SettingsCategory(stringResource(R.string.about), stringResource(R.string.settings_about_sub), AppIcons.Info) {
             onOpen(SettingsPage.About)
         }
     }
@@ -279,7 +282,7 @@ private fun SettingsCategory(title: String, subtitle: String, icon: androidx.com
             subtitle = subtitle,
             onClick = onClick,
             leading = { Icon(icon, contentDescription = null) },
-            trailing = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
+            trailing = { Icon(AppIcons.KeyboardArrowRight, contentDescription = null) },
         )
     }
 }
