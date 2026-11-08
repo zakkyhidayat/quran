@@ -151,8 +151,11 @@ fun HomeTab(
                     }
                 },
                 supportingContent = {
+                    val now = System.currentTimeMillis()
                     Text(
-                        android.text.format.DateUtils.getRelativeTimeSpanString(h.readAt, System.currentTimeMillis(), android.text.format.DateUtils.MINUTE_IN_MILLIS).toString(),
+                        // Di bawah semenit DateUtils menulis "0 menit yang lalu"; tampilkan "Baru saja".
+                        if (now - h.readAt < 60_000L) stringResource(R.string.history_just_now)
+                        else android.text.format.DateUtils.getRelativeTimeSpanString(h.readAt, now, android.text.format.DateUtils.MINUTE_IN_MILLIS).toString(),
                     )
                 },
             ) { Text("${surah?.nameLatin.orEmpty()} ${h.surah}:${h.ayah}") }

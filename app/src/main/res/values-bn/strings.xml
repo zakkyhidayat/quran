@@ -272,6 +272,7 @@
     <string name="home_sunnah_now">এখন মুস্তাহাব</string>
     <string name="home_history">পাঠের ইতিহাস</string>
     <string name="home_history_clear">মুছুন</string>
+    <string name="history_just_now">এইমাত্র</string>
     <string name="home_history_empty">আপনার পড়া সূরাগুলো এখানে দেখা যাবে।</string>
     <string name="home_collections">আয়াতের সংকলন</string>
     <string name="open_in_reader">রিডারে খুলুন</string>

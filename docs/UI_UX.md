@@ -208,6 +208,8 @@ anti-pola. Yang ditambahkan untuk repo ini ada di bawah dan diperiksa `tools/che
   - Cadangan: Ekspor memakai ikon berkas-unggah, Pulihkan memakai ikon pulihkan dan meminta konfirmasi (mengganti pengaturan).
     Waktu "terakhir disimpan" memang jam bila hari ini dan tanggal bila lebih lama.
   - Terjemahan: kolom cari membulat penuh seperti kelompok lain. Tentang: semua baris punya ikon awal.
+  - Bahasa aplikasi terbuka di tempat (daftar pilihan di bawah barisnya), bukan dialog melayang di atas Pengaturan.
+  - Histori bacaan menulis "Baru saja" untuk bacaan di bawah semenit (DateUtils menulis "0 menit yang lalu").
   - Belum dikerjakan: konfirmasi hapus terjemahan terpasang, wadah untuk daftar unduhan terjemahan, kontras baris abu-abu
     pada latar terang (keputusan tampilan).
 - **Carousel jelajah:** tinggi 120dp dikali skala font (minimal 1x), supaya judul dua baris dan jumlah tidak terpotong.

@@ -272,6 +272,7 @@
     <string name="home_sunnah_now">Рекомендуется сейчас</string>
     <string name="home_history">История чтения</string>
     <string name="home_history_clear">Очистить</string>
+    <string name="history_just_now">Только что</string>
     <string name="home_history_empty">Здесь появятся суры, которые вы читаете.</string>
     <string name="home_collections">Подборки аятов</string>
     <string name="open_in_reader">Открыть в читалке</string>

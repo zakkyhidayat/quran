@@ -272,6 +272,7 @@
     <string name="home_sunnah_now">Dianjurkan sekarang</string>
     <string name="home_history">Histori bacaan</string>
     <string name="home_history_clear">Hapus</string>
+    <string name="history_just_now">Baru saja</string>
     <string name="home_history_empty">Surah yang Anda baca akan muncul di sini.</string>
     <string name="home_collections">Kumpulan ayat</string>
     <string name="open_in_reader">Buka di pembaca</string>
