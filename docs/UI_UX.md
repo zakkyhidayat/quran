@@ -208,7 +208,9 @@ anti-pola. Yang ditambahkan untuk repo ini ada di bawah dan diperiksa `tools/che
   - Cadangan: Ekspor memakai ikon berkas-unggah, Pulihkan memakai ikon pulihkan dan meminta konfirmasi (mengganti pengaturan).
     Waktu "terakhir disimpan" memang jam bila hari ini dan tanggal bila lebih lama.
   - Terjemahan: kolom cari membulat penuh seperti kelompok lain. Tentang: semua baris punya ikon awal.
-  - Bahasa aplikasi terbuka di tempat (daftar pilihan di bawah barisnya), bukan dialog melayang di atas Pengaturan.
+  - Bahasa aplikasi adalah halaman sendiri (`settings/language`, daftar radio penuh) yang dibuka dari kategori Bahasa di
+    Pengaturan utama, bukan dialog melayang. Onboarding, yang belum punya halaman Pengaturan, memakai baris yang membuka
+    pilihan di tempat.
   - Histori bacaan menulis "Baru saja" untuk bacaan di bawah semenit (DateUtils menulis "0 menit yang lalu").
   - Belum dikerjakan: konfirmasi hapus terjemahan terpasang, wadah untuk daftar unduhan terjemahan, kontras baris abu-abu
     pada latar terang (keputusan tampilan).

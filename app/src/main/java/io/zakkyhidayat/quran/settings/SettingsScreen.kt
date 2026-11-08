@@ -51,6 +51,7 @@ enum class SettingsPage(val route: String) {
     Reminder("settings/reminder"),
     QuranData("settings/quran-data"),
     About("settings/about"),
+    Language("settings/language"),
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -123,6 +124,7 @@ fun SettingsScreen(
             SettingsPage.Reminder -> R.string.reminder
             SettingsPage.QuranData -> R.string.quran_data_title
             SettingsPage.About -> R.string.about
+            SettingsPage.Language -> R.string.language
         },
     )
     Scaffold(
@@ -191,6 +193,7 @@ fun SettingsScreen(
                             }
                             SettingsPage.Translations -> Unit
                             SettingsPage.Tafsir -> TafsirSection(vm, settings)
+                            SettingsPage.Language -> LanguageControls()
                             SettingsPage.Backup -> BackupControls(vm, settings, snackbar)
                             SettingsPage.Reminder -> ReminderControls(vm, settings)
                             SettingsPage.QuranData -> QuranDataMaintenance(quranDataInstaller)
@@ -237,11 +240,9 @@ fun SettingsScreen(
     }
 }
 
-/** Halaman utama: bahasa, lalu kategori dengan ringkasan isinya. */
+/** Halaman utama: kategori dengan ringkasan isinya; bahasa adalah halaman sendiri seperti yang lain. */
 @Composable
 private fun SettingsMain(settings: AppSettings, onOpen: (SettingsPage) -> Unit) {
-    LanguageSection(showTitle = false)
-    Spacer(Modifier.height(16.dp))
     val theme = stringResource(
         when (settings.themeMode) {
             ThemeMode.System -> R.string.theme_system
@@ -250,6 +251,7 @@ private fun SettingsMain(settings: AppSettings, onOpen: (SettingsPage) -> Unit) 
         },
     )
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        SettingsCategory(stringResource(R.string.language), currentLanguageLabel(), AppIcons.Language) { onOpen(SettingsPage.Language) }
         SettingsCategory(stringResource(R.string.appearance), stringResource(R.string.settings_appearance_sub, theme), AppIcons.Palette) { onOpen(SettingsPage.Appearance) }
         SettingsCategory(stringResource(R.string.translations), stringResource(R.string.settings_translations_sub, settings.translationIds.size), AppIcons.Translate) { onOpen(SettingsPage.Translations) }
         SettingsCategory(stringResource(R.string.tafsir_title), stringResource(R.string.settings_tafsir_sub), AppIcons.MenuBook) { onOpen(SettingsPage.Tafsir) }

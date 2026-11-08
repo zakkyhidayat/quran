@@ -81,6 +81,7 @@ ICONS: dict[str, tuple[str, bool, bool]] = {
     "Database": ("database", True, False),
     "FontDownload": ("font_download", True, False),
     "Groups": ("groups", True, False),
+    "Language": ("language", True, False),
 }
 
 # Gambar sendiri, viewport 24.
