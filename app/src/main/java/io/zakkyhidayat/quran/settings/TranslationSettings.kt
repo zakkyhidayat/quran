@@ -194,6 +194,7 @@ internal fun TafsirSection(vm: AppViewModel, settings: AppSettings) {
     var downloading by remember { mutableStateOf<String?>(null) }
     var progress by remember { mutableFloatStateOf(0f) }
     var downloadJob by remember { mutableStateOf<Job?>(null) }
+    var pendingDelete by remember { mutableStateOf<Pair<String, String>?>(null) }
 
     LaunchedEffect(Unit) {
         try {
@@ -221,14 +222,22 @@ internal fun TafsirSection(vm: AppViewModel, settings: AppSettings) {
                     trailing = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             RadioButton(selected = settings.selectedTafsir == tr.id, onClick = null)
-                            IconButton(onClick = {
-                                if (settings.selectedTafsir == tr.id) scope.launch { vm.settingsRepository.setSelectedTafsir("") }
-                                vm.deletePack(tr.id)
-                            }) {
+                            IconButton(onClick = { pendingDelete = tr.id to tr.name }) {
                                 Icon(AppIcons.Delete, contentDescription = stringResource(R.string.delete_downloaded_translation_cd, tr.name))
                             }
                         }
                     },
+                )
+            }
+            pendingDelete?.let { (id, name) ->
+                ConfirmDeletePack(
+                    name = name,
+                    onConfirm = {
+                        pendingDelete = null
+                        if (settings.selectedTafsir == id) scope.launch { vm.settingsRepository.setSelectedTafsir("") }
+                        vm.deletePack(id)
+                    },
+                    onDismiss = { pendingDelete = null },
                 )
             }
             catalog.filter { it.id !in installedIds }.forEach { pack ->

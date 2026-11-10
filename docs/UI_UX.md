@@ -212,7 +212,9 @@ anti-pola. Yang ditambahkan untuk repo ini ada di bawah dan diperiksa `tools/che
     Pengaturan utama. Onboarding, yang belum punya halaman Pengaturan, memakai baris yang membuka
     pilihan di tempat.
   - Histori bacaan menulis "Baru saja" untuk bacaan di bawah semenit (DateUtils menulis "0 menit yang lalu").
-  - Belum dikerjakan: konfirmasi hapus terjemahan terpasang, wadah untuk daftar unduhan terjemahan, kontras baris abu-abu
+  - Hapus paket terunduh (terjemahan atau tafsir) meminta konfirmasi, karena berkasnya harus diunduh ulang. Melepas
+    terjemahan dari daftar aktif tidak perlu konfirmasi.
+  - Belum dikerjakan: wadah untuk daftar unduhan terjemahan, kontras baris abu-abu
     pada latar terang (keputusan tampilan).
 - **Carousel jelajah:** tinggi 120dp dikali skala font (minimal 1x), supaya judul dua baris dan jumlah tidak terpotong.
 

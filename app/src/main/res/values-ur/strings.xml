@@ -115,6 +115,8 @@
     <string name="quran_data_current">قرآن کا ڈیٹا ورژن %1$d تازہ ہے۔</string>
     <string name="quran_data_check_again">دوبارہ چیک کریں</string>
     <string name="backup_restore_confirm">بحال کریں</string>
+    <string name="delete_pack_title">%1$s حذف کریں؟</string>
+    <string name="delete_pack_body">ڈاؤن لوڈ کی گئی فائل اس آلے سے حذف ہو جائے گی۔ بعد میں دوبارہ ڈاؤن لوڈ کر سکتے ہیں۔</string>
     <string name="quran_data_update_available">GitHub پر ورژن %1$d کا ڈیٹا دستیاب ہے (%2$s)۔</string>
     <string name="translations">ترجمے</string>
     <string name="delete_translation_cd">ترجمہ %1$s ہٹائیں</string>

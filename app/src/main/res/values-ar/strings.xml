@@ -115,6 +115,8 @@
     <string name="quran_data_current">بيانات القرآن بالإصدار %1$d محدّثة.</string>
     <string name="quran_data_check_again">التحقق مرة أخرى</string>
     <string name="backup_restore_confirm">استعادة</string>
+    <string name="delete_pack_title">حذف %1$s؟</string>
+    <string name="delete_pack_body">سيُحذف الملف المُنزَّل من الجهاز. يمكنك تنزيله مرة أخرى لاحقاً.</string>
     <string name="quran_data_update_available">تتوفر بيانات GitHub بالإصدار %1$d (%2$s).</string>
     <string name="translations">الترجمات</string>
     <string name="delete_translation_cd">إزالة الترجمة %1$s</string>

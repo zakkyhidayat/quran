@@ -3,6 +3,10 @@
 Format: [Keep a Changelog](https://keepachangelog.com). Versions follow semantic versioning (`vX.Y.Z` git tags).
 
 ## [Unreleased]
+### Changed
+- Settings main page is a full screen instead of a floating dialog.
+- Deleting a downloaded translation or tafsir asks for confirmation first.
+- Language page: the choice of language is a page of its own.
 
 ## [0.7.9] - 2026-11-10
 ### Fixed

@@ -115,6 +115,8 @@
     <string name="quran_data_current">Data Qur’an versi %1$d sudah terbaru.</string>
     <string name="quran_data_check_again">Periksa lagi</string>
     <string name="backup_restore_confirm">Pulihkan</string>
+    <string name="delete_pack_title">Hapus %1$s?</string>
+    <string name="delete_pack_body">Berkas unduhan dihapus dari perangkat. Anda bisa mengunduhnya lagi nanti.</string>
     <string name="quran_data_update_available">Data GitHub versi %1$d tersedia (%2$s).</string>
     <string name="translations">Terjemahan</string>
     <string name="delete_translation_cd">Hapus terjemahan %1$s</string>

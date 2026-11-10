@@ -115,6 +115,8 @@
     <string name="quran_data_current">Данные Корана версии %1$d актуальны.</string>
     <string name="quran_data_check_again">Проверить снова</string>
     <string name="backup_restore_confirm">Восстановить</string>
+    <string name="delete_pack_title">Удалить %1$s?</string>
+    <string name="delete_pack_body">Загруженный файл будет удалён с устройства. Его можно будет скачать снова позже.</string>
     <string name="quran_data_update_available">Доступны данные GitHub версии %1$d (%2$s).</string>
     <string name="translations">Переводы</string>
     <string name="delete_translation_cd">Убрать перевод %1$s</string>

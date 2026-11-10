@@ -116,6 +116,8 @@
     <string name="quran_data_current">Qur’an data v%1$d is up to date.</string>
     <string name="quran_data_check_again">Check again</string>
     <string name="backup_restore_confirm">Restore</string>
+    <string name="delete_pack_title">Delete %1$s?</string>
+    <string name="delete_pack_body">The downloaded file is removed from this device. You can download it again later.</string>
     <string name="quran_data_update_available">GitHub data v%1$d is available (%2$s).</string>
     <string name="translations">Translations</string>
     <string name="delete_translation_cd">Remove translation %1$s</string>
