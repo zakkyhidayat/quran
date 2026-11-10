@@ -20,19 +20,25 @@ import io.zakkyhidayat.quran.ui.AppIcons
 
 /** Pilihan bahasa: kode kosong berarti mengikuti sistem; nama tiap bahasa ditulis dalam bahasanya sendiri agar mudah ditemukan. */
 @Composable
-private fun languageOptions(): List<Pair<String, String>> =
-    listOf("" to stringResource(R.string.language_system)) + AppLanguage.supported.map { it to AppLanguage.endonyms.getValue(it) }
+private fun languageOptions(): List<Pair<String, String>> {
+    val system = stringResource(R.string.language_system)
+    return remember(system) { listOf("" to system) + AppLanguage.supported.map { it to AppLanguage.endonyms.getValue(it) } }
+}
+
+/**
+ * Nama untuk kode bahasa [code]. Kode di luar daftar (misalnya bahasa per-aplikasi yang diatur lewat sistem ke bahasa yang
+ * belum didukung) tampil apa adanya, bukan membuat layar Pengaturan gagal.
+ */
+internal fun languageLabel(options: List<Pair<String, String>>, code: String): String =
+    options.firstOrNull { it.first == code }?.second ?: code
 
 /** Nama bahasa aplikasi yang sedang dipakai, untuk subjudul baris Bahasa di Pengaturan. */
 @Composable
-internal fun currentLanguageLabel(): String {
-    val code = AppLanguage.saved(LocalContext.current)
-    return languageOptions().first { it.first == code }.second
-}
+internal fun currentLanguageLabel(): String = languageLabel(languageOptions(), AppLanguage.saved(LocalContext.current))
 
-/** Halaman Pengaturan > Bahasa: daftar radio satu halaman penuh, bukan dialog melayang. */
+/** Daftar radio bahasa; satu-satunya tempat logika memilih bahasa, dipakai halaman Pengaturan dan onboarding. */
 @Composable
-internal fun LanguageControls() {
+private fun LanguageRadioGroup(onSelected: () -> Unit = {}) {
     val context = LocalContext.current
     var code by remember { mutableStateOf(AppLanguage.saved(context)) }
     val options = languageOptions()
@@ -45,6 +51,7 @@ internal fun LanguageControls() {
                         code = value
                         AppLanguage.apply(context, value)
                     }
+                    onSelected()
                 },
                 trailing = { RadioButton(selected = code == value, onClick = null) },
             )
@@ -52,21 +59,22 @@ internal fun LanguageControls() {
     }
 }
 
+/** Halaman Pengaturan > Bahasa: daftar radio satu halaman penuh, bukan dialog melayang. */
+@Composable
+internal fun LanguageControls() = LanguageRadioGroup()
+
 /**
  * Bahasa di onboarding, yang belum punya halaman Pengaturan: satu baris yang membuka pilihan di tempat (bukan dialog).
  * Di Pengaturan bahasa adalah halaman sendiri ([LanguageControls]).
  */
 @Composable
 internal fun LanguageSection(showTitle: Boolean = true) {
-    val context = LocalContext.current
-    var code by remember { mutableStateOf(AppLanguage.saved(context)) }
     var expanded by rememberSaveable { mutableStateOf(false) }
-    val options = languageOptions()
     if (showTitle) SectionTitle(AppIcons.Language, stringResource(R.string.language))
     Group {
         item(
             title = stringResource(R.string.language),
-            subtitle = options.first { it.first == code }.second,
+            subtitle = currentLanguageLabel(),
             onClick = { expanded = !expanded },
             leading = { Icon(AppIcons.Language, contentDescription = null) },
             trailing = { Icon(if (expanded) AppIcons.ExpandLess else AppIcons.ExpandMore, contentDescription = null) },
@@ -74,20 +82,6 @@ internal fun LanguageSection(showTitle: Boolean = true) {
     }
     if (expanded) {
         Spacer(Modifier.height(8.dp))
-        Group {
-            options.forEach { (value, label) ->
-                item(
-                    title = label,
-                    onClick = {
-                        expanded = false
-                        if (code != value) {
-                            code = value
-                            AppLanguage.apply(context, value)
-                        }
-                    },
-                    trailing = { RadioButton(selected = code == value, onClick = null) },
-                )
-            }
-        }
+        LanguageRadioGroup(onSelected = { expanded = false })
     }
 }
