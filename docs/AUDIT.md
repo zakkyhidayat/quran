@@ -1,6 +1,6 @@
 # Audit aplikasi (checklist Android Quran)
 
-Diisi 2026-10-08 berdasarkan kode dan dokumen di repo. Perbarui setiap rilis. `[x]` = terpenuhi, `[~]` = sebagian,
+Diisi 2026-10-08 berdasarkan kode dan dokumen di repo; ditinjau ulang 2026-11-10 (v0.7.8). Perbarui setiap rilis. `[x]` = terpenuhi, `[~]` = sebagian,
 `[ ]` = belum.
 
 ## 0. Profil
@@ -55,8 +55,8 @@ Diisi 2026-10-08 berdasarkan kode dan dokumen di repo. Perbarui setiap rilis. `[
 
 ## 5. Tes
 
-- [x] Unit test (15): pembanding versi, rujukan ayat pencarian, tautan ayat, normalisasi teks Arab; bookmark,
-      cadangan JSON, pemetaan halaman (Robolectric)
+- [x] Unit test (66 metode di 20 berkas): pembanding versi, rujukan ayat pencarian, tautan ayat, normalisasi teks Arab;
+      bookmark, cadangan JSON, pemetaan halaman, tafsir, pengingat, bahasa (Robolectric)
 - [x] Tes integritas konten di CI
 - [ ] Tes UI dasar (buka, pilih surah, geser, cari, bookmark)
 - [x] Diuji di `minSdk` 26 (emulator, layar kecil 480x800) dan Android 16
@@ -67,8 +67,8 @@ Diisi 2026-10-08 berdasarkan kode dan dokumen di repo. Perbarui setiap rilis. `[
 ## 6. Privasi dan izin
 
 - [x] Izin diaudit: INTERNET untuk data mushaf, perbaikan manual, dan paket terjemahan. Pembaru dalam aplikasi dan
-      REQUEST_INSTALL_PACKAGES dihapus. Izin
-      pengingat dilepas selama fiturnya disembunyikan.
+      REQUEST_INSTALL_PACKAGES dihapus. Izin pengingat (POST_NOTIFICATIONS, RECEIVE_BOOT_COMPLETED) tetap dideklarasikan
+      karena pengingat sunnah, Al-Kahf, dan ayat hari ini memakainya; yang disembunyikan hanya pengingat harian.
 - n/a Lokasi
 - [x] Tidak ada SDK pelacak/iklan; tidak ada Google Play Services. (Belum dipindai Exodus.)
 - [x] Kebijakan privasi: PRIVACY.md
@@ -103,7 +103,8 @@ Diisi 2026-10-08 berdasarkan kode dan dokumen di repo. Perbarui setiap rilis. `[
 ## 10. Rilis
 
 - [x] `versionCode` dari tag, `versionName` SemVer
-- [x] CHANGELOG.md
+- [~] CHANGELOG.md: hanya bagian `[Unreleased]` tanpa entri per versi; rilis 0.6.x dan 0.7.x belum tercatat **— perlu
+      diputuskan pemilik: diisi ulang dari riwayat PR, atau mulai sejak 0.7.9**
 - [x] Rilis diberi tag (workflow rilis)
 - [ ] F-Droid: build harus bisa diulang dari repo (font halaman tidak di repo)
 
@@ -133,8 +134,8 @@ docs/CONTENT_ERRORS.md.
 | 4 | 4 | Keystore rilis belum ada | Tinggi | Tugas pemilik |
 | 5 | 1 | Sidik jari isi belum dicek otomatis | Tinggi | Selesai (CI) |
 | 6 | 1 | Perbandingan ayat dengan sumber belum ada | Tinggi | Selesai (seluruh ayat, lokal) |
-| 7 | 5 | Tidak ada tes | Tinggi | Selesai (15 unit test, CI); tes UI belum |
-| 8 | 6 | Izin pengingat dideklarasikan padahal fitur disembunyikan | Sedang | Selesai |
+| 7 | 5 | Tidak ada tes | Tinggi | Selesai (66 metode unit test, CI); tes UI belum |
+| 8 | 6 | Izin pengingat dideklarasikan padahal fitur disembunyikan | Sedang | Sebagian: pengingat harian disembunyikan, izin tetap dipakai pengingat lain (§6) |
 | 9 | 6 | Kebijakan privasi belum ada | Sedang | Selesai |
 | 10 | 11 | ARCHITECTURE, CHANGELOG, THIRD_PARTY_NOTICES, prosedur salah teks belum ada | Sedang | Selesai |
 | 11 | 9 | Ukuran font Arab/terjemahan belum bisa diatur | Sedang | Selesai |
@@ -146,3 +147,4 @@ docs/CONTENT_ERRORS.md.
 | 17 | 8 | Lint: teks dari LocalContext di komposisi, Locale.getDefault di komponen | Sedang | Selesai |
 | 18 | 5 | Layar kecil: judul surah terpotong di tengah kata di daftar | Sedang | Selesai (kaligrafi disembunyikan < 360dp) |
 | 19 | 5 | Lanskap ponsel: halaman mushaf terlalu kecil/kosong | Sedang | Selesai (selebar layar, digulir) |
+| 20 | 5 | Pengaturan dan onboarding gagal (crash) bila kode bahasa per-aplikasi di luar 10 bahasa didukung | Tinggi | Selesai di PR #61 (belum dirilis) |
