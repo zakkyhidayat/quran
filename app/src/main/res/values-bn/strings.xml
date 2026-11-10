@@ -115,6 +115,8 @@
     <string name="quran_data_current">কুরআনের ডেটা সংস্করণ %1$d হালনাগাদ আছে।</string>
     <string name="quran_data_check_again">আবার পরীক্ষা করুন</string>
     <string name="backup_restore_confirm">পুনরুদ্ধার করুন</string>
+    <string name="delete_pack_title">%1$s মুছবেন?</string>
+    <string name="delete_pack_body">ডাউনলোড করা ফাইলটি এই ডিভাইস থেকে মুছে যাবে। পরে আবার ডাউনলোড করতে পারবেন।</string>
     <string name="quran_data_update_available">GitHub-এ সংস্করণ %1$d-এর ডেটা আছে (%2$s)।</string>
     <string name="translations">অনুবাদ</string>
     <string name="delete_translation_cd">অনুবাদ %1$s সরান</string>

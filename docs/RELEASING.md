@@ -4,6 +4,11 @@ Rilis dibangun oleh GitHub Actions ([`.github/workflows/release.yml`](../.github
 `vX.Y.Z` di-push. Workflow menerbitkan APK bertanda tangan ke GitHub Releases (varian `github`), serta
 menyimpan AAB bertanda tangan dari varian `play` sebagai artefak workflow untuk Play Console.
 
+## Sebelum tag
+
+Isi `CHANGELOG.md` di PR rilis: pindahkan entri `[Unreleased]` ke `## [X.Y.Z] - tanggal`, lalu tag. Catatan
+rilis di GitHub hanya memuat judul PR, jadi `CHANGELOG.md` adalah sumber utama riwayat perubahan.
+
 ## Varian build
 
 Tidak ada varian yang memperbarui dirinya sendiri; pengguna mengunduh versi baru dari GitHub Releases atau Google Play.

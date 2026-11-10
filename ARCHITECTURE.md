@@ -39,7 +39,7 @@ Reading is blocked until both are installed and is offline afterward; the APK do
 | `settings/` | `AppSettings` (DataStore), `SettingsScreen`, `AddTranslationDialog` |
 | `onboarding/` | First-run steps |
 | `reminder/` | Daily reading reminder (AlarmManager + notification) |
-| `ui/` | Theme, shared components, icons, HTML renderer for surah info, update dialog |
+| `ui/` | Theme, shared components, Material Symbols icons (`Icons.kt`, generated), HTML renderer for surah info |
 | `AppLanguage.kt` | Interface language (system per-app locales on Android 13+) |
 
 ## Distribution

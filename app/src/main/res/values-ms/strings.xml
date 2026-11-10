@@ -115,6 +115,8 @@
     <string name="quran_data_current">Data al-Quran versi %1$d sudah terkini.</string>
     <string name="quran_data_check_again">Semak semula</string>
     <string name="backup_restore_confirm">Pulihkan</string>
+    <string name="delete_pack_title">Padam %1$s?</string>
+    <string name="delete_pack_body">Fail muat turun akan dipadam daripada peranti ini. Anda boleh memuat turunnya semula kemudian.</string>
     <string name="quran_data_update_available">Data GitHub versi %1$d tersedia (%2$s).</string>
     <string name="translations">Terjemahan</string>
     <string name="delete_translation_cd">Buang terjemahan %1$s</string>

@@ -15,6 +15,7 @@ yang sudah ada; baca hanya yang relevan dengan tugas:
 - Satu tugas = satu sesi = satu branch = satu PR. Tugas datang dari GitHub Issues; pekerjaan di luar cakupan dicatat
   sebagai issue baru berlabel `area:*`, bukan dikerjakan sekalian dan bukan ditulis di file catatan.
 - Bila tugas mengubah konvensi, arsitektur, atau alur data, perbarui dokumen terkait (dan file ini) di PR yang sama.
+- Setiap rilis: isi `CHANGELOG.md` di PR yang sama (pindahkan isi `[Unreleased]` ke versi baru dengan tanggal).
 
 ## Aturan keras
 

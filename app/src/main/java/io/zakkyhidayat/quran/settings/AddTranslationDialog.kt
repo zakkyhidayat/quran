@@ -88,6 +88,7 @@ internal fun TranslationCatalogList(
     val loadingCd = stringResource(R.string.translations_loading_cd)
     val locale = LocalConfiguration.current.locales[0]
     var query by remember { mutableStateOf("") }
+    var pendingDelete by remember { mutableStateOf<Pair<String, String>?>(null) }
     val downloadable = (state as? CatalogState.Loaded)?.packs.orEmpty().filter { it.id !in installedIds && it.kind == "translation" }
     // Kelompok per bahasa (nama bahasa mengikuti bahasa aplikasi), urut abjad; pencarian cocok ke bahasa, kode, nama, atau penerjemah.
     val groups = remember(downloadable, query, locale) {
@@ -116,14 +117,19 @@ internal fun TranslationCatalogList(
             shape = MaterialTheme.shapes.extraLarge,
             modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
         )
+        pendingDelete?.let { (id, name) ->
+            ConfirmDeletePack(name = name, onConfirm = { pendingDelete = null; vm.deletePack(id) }, onDismiss = { pendingDelete = null })
+        }
         LazyColumn(Modifier.weight(1f)) {
             items(inactiveShown, key = { "inactive-${it.id}" }) { tr ->
+                // Dihitung di sini (konteks komposisi), bukan di dalam onClick yang bukan komposisi.
+                val label = translationLabel(tr)
                 ListItem(
-                    headlineContent = { Text(translationLabel(tr)) },
+                    headlineContent = { Text(label) },
                     trailingContent = if (tr.downloaded) {
                         {
-                            IconButton(onClick = { vm.deletePack(tr.id) }) {
-                                Icon(AppIcons.Delete, contentDescription = stringResource(R.string.delete_downloaded_translation_cd, translationLabel(tr)))
+                            IconButton(onClick = { pendingDelete = tr.id to label }) {
+                                Icon(AppIcons.Delete, contentDescription = stringResource(R.string.delete_downloaded_translation_cd, label))
                             }
                         }
                     } else {

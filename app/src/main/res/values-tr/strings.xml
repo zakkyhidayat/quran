@@ -115,6 +115,8 @@
     <string name="quran_data_current">Kur’an verileri v%1$d güncel.</string>
     <string name="quran_data_check_again">Yeniden denetle</string>
     <string name="backup_restore_confirm">Geri yükle</string>
+    <string name="delete_pack_title">%1$s silinsin mi?</string>
+    <string name="delete_pack_body">İndirilen dosya bu cihazdan silinir. Daha sonra yeniden indirebilirsiniz.</string>
     <string name="quran_data_update_available">GitHub’da v%1$d verileri mevcut (%2$s).</string>
     <string name="translations">Mealler</string>
     <string name="delete_translation_cd">%1$s mealini kaldır</string>

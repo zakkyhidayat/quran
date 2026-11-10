@@ -103,8 +103,8 @@ Diisi 2026-10-08 berdasarkan kode dan dokumen di repo; ditinjau ulang 2026-11-10
 ## 10. Rilis
 
 - [x] `versionCode` dari tag, `versionName` SemVer
-- [~] CHANGELOG.md: hanya bagian `[Unreleased]` tanpa entri per versi; rilis 0.6.x dan 0.7.x belum tercatat **— perlu
-      diputuskan pemilik: diisi ulang dari riwayat PR, atau mulai sejak 0.7.9**
+- [x] CHANGELOG.md: entri per versi dari 0.5.0 sampai 0.7.9, disusun dari judul PR tiap rilis. Setiap rilis wajib
+      menambah entri di PR yang sama (RELEASING.md)
 - [x] Rilis diberi tag (workflow rilis)
 - [ ] F-Droid: build harus bisa diulang dari repo (font halaman tidak di repo)
 

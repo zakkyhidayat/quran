@@ -18,6 +18,8 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import io.zakkyhidayat.quran.R
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -109,4 +111,19 @@ internal fun Labeled(label: String, content: @Composable () -> Unit) {
         Text(label, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(start = 4.dp, bottom = 6.dp))
         content()
     }
+}
+
+/**
+ * Konfirmasi sebelum menghapus paket terunduh. Berkasnya hilang dari perangkat dan harus diunduh ulang; penghapusan
+ * dari daftar terjemahan aktif (sekadar dilepas) tidak butuh konfirmasi.
+ */
+@Composable
+internal fun ConfirmDeletePack(name: String, onConfirm: () -> Unit, onDismiss: () -> Unit) {
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { androidx.compose.material3.Text(stringResource(R.string.delete_pack_title, name)) },
+        text = { androidx.compose.material3.Text(stringResource(R.string.delete_pack_body)) },
+        confirmButton = { androidx.compose.material3.TextButton(onClick = onConfirm) { androidx.compose.material3.Text(stringResource(R.string.delete)) } },
+        dismissButton = { androidx.compose.material3.TextButton(onClick = onDismiss) { androidx.compose.material3.Text(stringResource(R.string.cancel)) } },
+    )
 }
