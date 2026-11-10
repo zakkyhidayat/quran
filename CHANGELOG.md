@@ -4,7 +4,121 @@ Format: [Keep a Changelog](https://keepachangelog.com). Versions follow semantic
 
 ## [Unreleased]
 
-First public release candidate.
+## [0.7.9] - 2026-11-10
+### Fixed
+- Settings and onboarding no longer fail when the system holds an app language outside the 10 supported ones.
+
+### Changed
+- Language choice is one radio list, shared by Settings and onboarding.
+
+## [0.7.8] - 2026-11-09
+### Changed
+- Icons migrated to Material Symbols Rounded (generated; `ui/Icons.kt`).
+- Settings: Qur'an data status card and "Check again" button, bell icon for notifications, restore asks for
+  confirmation, Language opens its own page.
+- Home: reading history shows "Just now" under a minute; the Delete button lines up with its title.
+
+## [0.7.7] - 2026-11-08
+### Added
+- Search button in the Index top bar (Home and other tabs).
+### Changed
+- Search results use segmented rows with number badges, and an empty state with an icon.
+
+## [0.7.6] - 2026-11-08
+### Changed
+- Removed the separate page-colour option; the reader's theme button cycles System, Light, Dark.
+
+## [0.7.5] - 2026-11-07
+### Added
+- Tafsir page in Settings with the same layout as Translations; page colour toggle (later removed in 0.7.6).
+### Fixed
+- Juz, hizb, rub', manzil, and ruku counters follow the page heading when a division starts mid-page.
+- Gap between cards on the Ayah of the day pager.
+
+## [0.7.4] - 2026-11-06
+### Changed
+- Tafsir has its own Settings page; transliteration moved to Appearance.
+
+## [0.7.3] - 2026-11-05
+### Added
+- Bedtime Sunnah reading as a single page with one switch and one reminder at 20:30.
+- Tajweed control and per-file font download progress in onboarding.
+### Changed
+- Smooth transition from list to mushaf page.
+
+## [0.7.2] - 2026-11-04
+### Changed
+- Qur'an data: fonts download only when they change; per-file progress; versions use the date (yyyymmdd).
+
+## [0.7.1] - 2026-11-04
+### Fixed
+- Topic and theme translations table version bump (data version 11).
+
+## [0.7.0] - 2026-11-03
+### Added
+- Tafsir in the ayah sheet (Ar-Tahrir pack), downloadable from the catalog.
+- Theme and topic language: English or Indonesian.
+
+## [0.6.4] - 2026-11-03
+### Changed
+- Theme and topic language: four choices; ayah-of-the-day notification expanded; UX/UI audit fixes.
+
+## [0.6.3] - 2026-11-03
+### Added
+- Theme and topic language chosen separately from the app language.
+
+## [0.6.2] - 2026-10-30
+### Fixed
+- Jump to ayah in list mode scrolls to and highlights the ayah.
+
+## [0.6.1] - 2026-10-29
+### Added
+- Translation footnotes in the ayah list and the duas collection screen.
+
+## [0.6.0] - 2026-10-28
+### Added
+- Reminder switch per night reading and ayah-of-the-day notification that opens an ayah with translation.
+
+## [0.5.9] - 2026-10-22
+### Changed
+- Four collection tiles on Home; daily reading reminder hidden.
+
+## [0.5.8] - 2026-10-22
+### Changed
+- Ayah of the day opens step by step; three notifications a day.
+
+## [0.5.7] - 2026-10-20
+### Changed
+- Sunnah guidance from As-Sajdah to Al-Mulk, surah header margins, night reminder and Al-Kahf.
+
+## [0.5.6] - 2026-10-16
+### Added
+- Tajweed in the duas collection; Back choice from the reader; draft option in the release workflow.
+
+## [0.5.5] - 2026-10-16
+### Changed
+- Tajweed fade removed; colour changes instantly.
+
+## [0.5.4] - 2026-10-16
+### Fixed
+- Faster mushaf page rendering; tajweed layer sized to its own width.
+
+## [0.5.3] - 2026-10-16
+### Fixed
+- Cut-off letter tails in highlighted mushaf lines; reminder and mushaf layout.
+### Added
+- Ayah of the day settings and localisation of Explore.
+
+## [0.5.2] - 2026-10-13
+### Changed
+- Notification permission flow and continue-reading button.
+
+## [0.5.1] - 2026-10-13
+### Added
+- Sunnah reading and night reminder; translation catalogue shown directly.
+
+## [0.5.0] - 2026-10-13
+Summary of the app at this release (first public release).
 
 ### Removed
 - In-app updates (added in 0.2.0). New versions are downloaded from GitHub Releases or Google Play.

@@ -60,7 +60,6 @@ import io.zakkyhidayat.quran.index.IndexScreen
 import io.zakkyhidayat.quran.reader.ReaderScreen
 import io.zakkyhidayat.quran.search.SearchScreen
 import io.zakkyhidayat.quran.settings.AppSettings
-import io.zakkyhidayat.quran.settings.SettingsMainSheet
 import io.zakkyhidayat.quran.settings.SettingsScreen
 
 // Lebar jendela "expanded" M3: daftar surah tampil permanen di samping pembaca.
@@ -70,12 +69,12 @@ private const val EXPANDED_WIDTH_DP = 840
 @Composable
 fun AppNav(vm: AppViewModel, settings: AppSettings) {
     val nav = rememberNavController()
-    var settingsSheetVisible by rememberSaveable { mutableStateOf(false) }
     val slidePx = with(LocalDensity.current) { StepSlide.roundToPx() }
     val shiftPx = with(LocalDensity.current) { PredictiveShift.roundToPx() }
     val expanded = LocalConfiguration.current.screenWidthDp >= EXPANDED_WIDTH_DP
     val forward = if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1 else 1
-    val openSettings: () -> Unit = { settingsSheetVisible = true }
+    // Pengaturan utama adalah layar penuh seperti halaman lainnya, bukan dialog melayang.
+    val openSettings: () -> Unit = { nav.navigate(SettingsPage.Main.route) { launchSingleTop = true } }
 
     // Di ponsel, layar awal adalah daftar bertab; layar baca dibuka dari sana. Di layar lebar daftar tampil permanen di
     // samping, jadi layar baca menjadi layar awal.
@@ -243,21 +242,11 @@ fun AppNav(vm: AppViewModel, settings: AppSettings) {
                     if (target != null) PassageScreen(vm, target, onBack = { nav.popBackStack() }, onOpenReader = openReaderFromPassage)
                 }
             screen("search") { SearchScreen(vm, settings, onBack = { nav.popBackStack() }) }
-            SettingsPage.entries.filter { it != SettingsPage.Main }.forEach { page ->
+            SettingsPage.entries.forEach { page ->
                 screen(page.route) {
                     SettingsScreen(vm, settings, page = page, onBack = { nav.popBackStack() }, onOpen = { nav.navigate(it.route) })
                 }
             }
-        }
-        if (settingsSheetVisible) {
-            SettingsMainSheet(
-                settings = settings,
-                onDismiss = { settingsSheetVisible = false },
-                onOpen = { page ->
-                    settingsSheetVisible = false
-                    nav.navigate(page.route) { launchSingleTop = true }
-                },
-            )
         }
         }
     }

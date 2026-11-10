@@ -2,19 +2,13 @@ package io.zakkyhidayat.quran.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -29,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -52,49 +45,6 @@ enum class SettingsPage(val route: String) {
     QuranData("settings/quran-data"),
     About("settings/about"),
     Language("settings/language"),
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-internal fun SettingsMainSheet(
-    settings: AppSettings,
-    onDismiss: () -> Unit,
-    onOpen: (SettingsPage) -> Unit,
-) {
-    // Dialog melayang di tengah dengan margin 16dp, bukan sheet dari bawah.
-    androidx.compose.ui.window.Dialog(
-        onDismissRequest = onDismiss,
-        properties = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false),
-    ) {
-        androidx.compose.material3.Surface(
-            shape = RoundedCornerShape(28.dp),
-            color = androidx.compose.material3.MaterialTheme.colorScheme.surfaceContainerHigh,
-            tonalElevation = 6.dp,
-            modifier = Modifier.padding(16.dp).widthIn(max = 560.dp).fillMaxWidth(),
-        ) {
-        Column(Modifier.fillMaxWidth().heightIn(max = 560.dp).padding(top = 12.dp)) {
-            Row(
-                Modifier.fillMaxWidth().padding(start = 24.dp, end = 16.dp, top = 4.dp, bottom = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(stringResource(R.string.settings), style = androidx.compose.material3.MaterialTheme.typography.titleLarge)
-                Spacer(Modifier.weight(1f))
-                IconButton(onClick = onDismiss) {
-                    Icon(AppIcons.Close, contentDescription = stringResource(R.string.close))
-                }
-            }
-            Column(
-                Modifier
-                    .weight(1f, fill = false)
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 16.dp)
-                    .padding(bottom = 24.dp),
-            ) {
-                SettingsMain(settings, onOpen)
-            }
-        }
-        }
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)

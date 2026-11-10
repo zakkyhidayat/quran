@@ -58,7 +58,7 @@ Dari screenshot [QuranApp](https://github.com/AlfaazPlus/QuranApp) (GPL-3.0, sam
 
 - Layar daftar memakai tab yang dapat dipilih atau digeser; keduanya menggerakkan pager yang sama.
 - Perpindahan antar-rute memakai shared-axis X dan dukungan back prediktif melalui `AppNav`.
-- Menu utama Pengaturan tampil sebagai dialog melayang di tengah (margin 16dp, lebar maks 560dp, sudut 28dp), bukan bottom sheet. Evaluasi Material 3: bottom sheet cocok untuk aksi kontekstual singkat; daftar pengaturan bertingkat dengan navigasi ke halaman lain lebih sesuai dialog/layar penuh, dan dialog yang diperkecil menjaga konteks pembaca tetap terlihat.
+- Pengaturan utama adalah layar penuh (rute `settings`), sama dengan halaman lainnya, dengan judul dan tombol kembali. Sebelumnya dialog melayang di tengah (margin 16dp); diganti atas permintaan pemilik karena pengaturan bertingkat dengan navigasi ke halaman lain lebih sesuai layar penuh.
   Memilih kategori membuka layar penuh; tombol kembali menutup submenu dan kembali ke layar asal.
 
 Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pull/1)):
@@ -209,7 +209,7 @@ anti-pola. Yang ditambahkan untuk repo ini ada di bawah dan diperiksa `tools/che
     Waktu "terakhir disimpan" memang jam bila hari ini dan tanggal bila lebih lama.
   - Terjemahan: kolom cari membulat penuh seperti kelompok lain. Tentang: semua baris punya ikon awal.
   - Bahasa aplikasi adalah halaman sendiri (`settings/language`, daftar radio penuh) yang dibuka dari kategori Bahasa di
-    Pengaturan utama, bukan dialog melayang. Onboarding, yang belum punya halaman Pengaturan, memakai baris yang membuka
+    Pengaturan utama. Onboarding, yang belum punya halaman Pengaturan, memakai baris yang membuka
     pilihan di tempat.
   - Histori bacaan menulis "Baru saja" untuk bacaan di bawah semenit (DateUtils menulis "0 menit yang lalu").
   - Belum dikerjakan: konfirmasi hapus terjemahan terpasang, wadah untuk daftar unduhan terjemahan, kontras baris abu-abu
