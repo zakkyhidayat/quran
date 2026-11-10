@@ -122,12 +122,14 @@ internal fun TranslationCatalogList(
         }
         LazyColumn(Modifier.weight(1f)) {
             items(inactiveShown, key = { "inactive-${it.id}" }) { tr ->
+                // Dihitung di sini (konteks komposisi), bukan di dalam onClick yang bukan komposisi.
+                val label = translationLabel(tr)
                 ListItem(
-                    headlineContent = { Text(translationLabel(tr)) },
+                    headlineContent = { Text(label) },
                     trailingContent = if (tr.downloaded) {
                         {
-                            IconButton(onClick = { pendingDelete = tr.id to translationLabel(tr) }) {
-                                Icon(AppIcons.Delete, contentDescription = stringResource(R.string.delete_downloaded_translation_cd, translationLabel(tr)))
+                            IconButton(onClick = { pendingDelete = tr.id to label }) {
+                                Icon(AppIcons.Delete, contentDescription = stringResource(R.string.delete_downloaded_translation_cd, label))
                             }
                         }
                     } else {
