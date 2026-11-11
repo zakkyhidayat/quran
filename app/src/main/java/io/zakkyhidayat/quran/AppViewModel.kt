@@ -18,6 +18,9 @@ import io.zakkyhidayat.quran.data.SunnahReading
 import io.zakkyhidayat.quran.data.AyahRange
 import io.zakkyhidayat.quran.data.TranslationInfo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,6 +36,9 @@ import io.zakkyhidayat.quran.data.Backup
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+
+/** Jeda Batalkan setelah menghapus paket terunduh (terjemahan atau tafsir), dalam milidetik. */
+internal const val DELETE_UNDO_MS = 5_000L
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AppViewModel(application: Application) : AndroidViewModel(application) {
@@ -290,6 +296,40 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             mushaf.deletePack(id)
             translations.value = mushaf.translations(); tafsirs.value = mushaf.tafsirs()
+        }
+    }
+
+    /** Paket yang sedang menunggu penghapusan (jeda Batalkan); daftar menyembunyikannya sampai berkasnya benar-benar dihapus. */
+    val pendingDeletes = MutableStateFlow<Set<String>>(emptySet())
+    private val deleteJobs = mutableMapOf<String, Job>()
+
+    /**
+     * Hapus paket dengan jeda [DELETE_UNDO_MS]: baris langsung tersembunyi, berkasnya dihapus setelah jeda kecuali
+     * [undoDeletePack] dipanggil. Hanya satu penghapusan tertunda: yang sebelumnya dilakukan saat ini juga.
+     */
+    fun scheduleDeletePack(id: String) {
+        deleteJobs.keys.toList().forEach { commitDeletePack(it) }
+        pendingDeletes.update { it + id }
+        deleteJobs[id] = viewModelScope.launch {
+            delay(DELETE_UNDO_MS)
+            commitDeletePack(id)
+        }
+    }
+
+    fun undoDeletePack(id: String) {
+        deleteJobs.remove(id)?.cancel()
+        pendingDeletes.update { it - id }
+    }
+
+    private fun commitDeletePack(id: String) {
+        deleteJobs.remove(id)?.cancel()
+        viewModelScope.launch {
+            val current = settingsRepository.settings.first()
+            if (current.selectedTafsir == id) settingsRepository.setSelectedTafsir("")
+            if (id in current.translationIds) settingsRepository.setTranslations(current.translationIds.filter { it != id })
+            mushaf.deletePack(id)
+            translations.value = mushaf.translations(); tafsirs.value = mushaf.tafsirs()
+            pendingDeletes.update { it - id }
         }
     }
 

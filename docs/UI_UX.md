@@ -212,8 +212,14 @@ anti-pola. Yang ditambahkan untuk repo ini ada di bawah dan diperiksa `tools/che
     Pengaturan utama. Onboarding, yang belum punya halaman Pengaturan, memakai baris yang membuka
     pilihan di tempat.
   - Histori bacaan menulis "Baru saja" untuk bacaan di bawah semenit (DateUtils menulis "0 menit yang lalu").
-  - Hapus paket terunduh (terjemahan atau tafsir) meminta konfirmasi, karena berkasnya harus diunduh ulang. Melepas
-    terjemahan dari daftar aktif tidak perlu konfirmasi.
+  - Halaman Terjemahan dan Tafsir hanya memuat yang terunduh; unduhan baru ada di halaman Tambah sendiri
+    (`settings/translations/add`, `settings/tafsir/add`) dengan kolom cari dan katalog. Terjemahan punya sakelar
+    aktif/nonaktif, tafsir tetap radio karena hanya satu yang dipakai.
+  - Hapus paket terunduh lewat geser baris (ke arah akhir). Baris langsung tersembunyi dan snackbar menawarkan Batalkan
+    selama 5 detik (`DELETE_UNDO_MS`); berkasnya baru dihapus setelah jeda (`AppViewModel.scheduleDeletePack`). Hanya satu
+    penghapusan tertunda: yang baru melakukan yang sebelumnya saat itu juga. Pembaca layar mendapat aksi "Hapus".
+    Onboarding tetap memakai daftar lama (`TranslationControls`) dengan konfirmasi hapus.
+  - "Language for themes and topics" pindah dari Terjemahan ke halaman Bahasa.
   - Belum dikerjakan: wadah untuk daftar unduhan terjemahan, kontras baris abu-abu
     pada latar terang (keputusan tampilan).
 - **Carousel jelajah:** tinggi 120dp dikali skala font (minimal 1x), supaya judul dua baris dan jumlah tidak terpotong.

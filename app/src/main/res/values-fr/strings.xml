@@ -342,6 +342,9 @@
     <string name="tafsir_title">Tafsir</string>
     <string name="tafsir_none">Aucun tafsir</string>
     <string name="add_tafsir">Ajouter un tafsir</string>
+    <string name="undo">Annuler</string>
+    <string name="pack_deleted">%1$s supprimé</string>
+    <string name="swipe_delete_hint">Faites glisser une ligne pour supprimer le téléchargement. Vous pouvez annuler pendant 5 secondes.</string>
     <string name="update_tafsir_cd">Mettre à jour le tafsir %1$s</string>
     <string name="tafsir_search_hint">Rechercher un tafsir ou un auteur</string>
     <string name="tafsir_no_match">Aucun tafsir ne correspond à votre recherche.</string>

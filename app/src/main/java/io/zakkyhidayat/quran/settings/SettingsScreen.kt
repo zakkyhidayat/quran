@@ -45,6 +45,8 @@ enum class SettingsPage(val route: String) {
     QuranData("settings/quran-data"),
     About("settings/about"),
     Language("settings/language"),
+    TranslationsAdd("settings/translations/add"),
+    TafsirAdd("settings/tafsir/add"),
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
@@ -75,6 +77,8 @@ fun SettingsScreen(
             SettingsPage.QuranData -> R.string.quran_data_title
             SettingsPage.About -> R.string.about
             SettingsPage.Language -> R.string.language
+            SettingsPage.TranslationsAdd -> R.string.add_translation
+            SettingsPage.TafsirAdd -> R.string.add_tafsir
         },
     )
     Scaffold(
@@ -87,19 +91,14 @@ fun SettingsScreen(
         },
     ) { padding ->
         CenteredContent(Modifier.padding(padding)) {
-            if (page == SettingsPage.Translations) {
-                Column(
-                    Modifier.fillMaxSize()
-                        .padding(horizontal = 16.dp)
-                        .padding(top = 8.dp, bottom = 24.dp),
-                ) {
-                    ExtrasLanguageRow(vm, settings)
-                    Spacer(Modifier.height(16.dp))
-                    TranslationControls(vm, settings, Modifier.weight(1f), fillAvailableHeight = true)
-                }
-            } else if (page == SettingsPage.Tafsir) {
+            // Halaman Tambah memakai sisa tinggi layar untuk daftar katalog yang panjang; halaman lain berupa satu daftar gulir.
+            if (page == SettingsPage.TranslationsAdd) {
                 Column(Modifier.fillMaxSize().padding(horizontal = 16.dp).padding(top = 8.dp, bottom = 24.dp)) {
-                    TafsirControls(vm, settings, Modifier.weight(1f))
+                    TranslationAdd(vm, settings, Modifier.weight(1f))
+                }
+            } else if (page == SettingsPage.TafsirAdd) {
+                Column(Modifier.fillMaxSize().padding(horizontal = 16.dp).padding(top = 8.dp, bottom = 24.dp)) {
+                    TafsirAdd(vm, Modifier.weight(1f))
                 }
             } else {
                 LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp)) {
@@ -145,9 +144,15 @@ fun SettingsScreen(
                                 }
 
                             }
-                            SettingsPage.Translations -> Unit
-                            SettingsPage.Tafsir -> Unit
-                            SettingsPage.Language -> LanguageControls()
+                            SettingsPage.Translations -> TranslationDownloads(vm, settings, snackbar) { onOpen(SettingsPage.TranslationsAdd) }
+                            SettingsPage.Tafsir -> TafsirDownloads(vm, settings, snackbar) { onOpen(SettingsPage.TafsirAdd) }
+                            SettingsPage.TranslationsAdd, SettingsPage.TafsirAdd -> Unit
+                            SettingsPage.Language -> {
+                                LanguageControls()
+                                // Bahasa tema dan topik ayat dulu ada di halaman Terjemahan; ini pengaturan bahasa, bukan terjemahan.
+                                Spacer(Modifier.height(16.dp))
+                                ExtrasLanguageRow(vm, settings)
+                            }
                             SettingsPage.Backup -> BackupControls(vm, settings, snackbar)
                             SettingsPage.Reminder -> ReminderControls(vm, settings)
                             SettingsPage.QuranData -> QuranDataMaintenance(quranDataInstaller)

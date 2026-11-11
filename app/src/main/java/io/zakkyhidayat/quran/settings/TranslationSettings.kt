@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -184,3 +185,77 @@ internal fun TranslationControls(
     }
 }
 
+
+/**
+ * Halaman Pengaturan > Terjemahan: hanya yang sudah terunduh. Sakelar mengaktifkan atau menonaktifkan (urutan mengikuti
+ * daftar), geser baris menghapus berkasnya dengan jeda Batalkan. Mengunduh terjemahan baru ada di [TranslationAdd].
+ * Onboarding tetap memakai [TranslationControls], karena belum punya halaman Pengaturan.
+ */
+@Composable
+internal fun TranslationDownloads(vm: AppViewModel, settings: AppSettings, snackbar: SnackbarHostState, onAdd: () -> Unit) {
+    val repo = vm.settingsRepository
+    val scope = rememberCoroutineScope()
+    val translations by vm.translations.collectAsStateWithLifecycle()
+    val pending by vm.pendingDeletes.collectAsStateWithLifecycle()
+    val updates by vm.packUpdates.collectAsStateWithLifecycle()
+    val updater = rememberPackUpdater(vm, "TranslationPacks")
+    LaunchedEffect(translations.map { it.id to it.version }) { vm.checkPackUpdates() }
+    val shown = translations.filter { it.id !in pending }
+    val ordered = translations.map { it.id }
+    val undo = stringResource(R.string.undo)
+    Column {
+        Column(verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(androidx.compose.material3.ListItemDefaults.SegmentedGap)) {
+            shown.forEachIndexed { index, tr ->
+                androidx.compose.runtime.key(tr.id) {
+                    val label = translationLabel(tr)
+                    val active = tr.id in settings.translationIds
+                    val deleted = stringResource(R.string.pack_deleted, label)
+                    val updateDescription = stringResource(R.string.update_translation_cd, label)
+                    DownloadedPackRow(
+                        title = label,
+                        index = index,
+                        count = shown.size,
+                        deletable = tr.downloaded,
+                        packId = tr.id,
+                        updatePack = updates[tr.id],
+                        updater = updater,
+                        updateDescription = updateDescription,
+                        onClick = {
+                            scope.launch {
+                                val next = if (active) {
+                                    ordered.filter { it in settings.translationIds && it != tr.id }
+                                } else {
+                                    ordered.filter { it in settings.translationIds || it == tr.id }
+                                }
+                                repo.setTranslations(next)
+                            }
+                        },
+                        onDelete = {
+                            vm.scheduleDeletePack(tr.id)
+                            showUndoDelete(scope, snackbar, vm, tr.id, deleted, undo)
+                        },
+                        control = { IconSwitch(active) },
+                    )
+                }
+            }
+        }
+        PackListFooter(
+            showSwipeHint = shown.any { it.downloaded },
+            updateFailed = updater.failed,
+            addTitle = stringResource(R.string.add_translation),
+            onAdd = onAdd,
+        )
+    }
+}
+
+/** Halaman Pengaturan > Terjemahan > Tambah: kolom cari dan katalog; yang diunduh langsung aktif. */
+@Composable
+internal fun TranslationAdd(vm: AppViewModel, settings: AppSettings, modifier: Modifier = Modifier) {
+    val scope = rememberCoroutineScope()
+    val onActivate: (String) -> Unit = { id ->
+        // Urutan mengikuti daftar terjemahan terbaru (paket yang baru diunduh sudah masuk).
+        val all = vm.translations.value.map { it.id }
+        scope.launch { vm.settingsRepository.setTranslations(all.filter { it in settings.translationIds || it == id }) }
+    }
+    TranslationCatalogList(vm, emptyList(), onActivate, modifier.imePadding())
+}

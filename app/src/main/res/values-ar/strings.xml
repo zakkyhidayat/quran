@@ -342,6 +342,9 @@
     <string name="tafsir_title">التفسير</string>
     <string name="tafsir_none">بدون تفسير</string>
     <string name="add_tafsir">إضافة تفسير</string>
+    <string name="undo">تراجع</string>
+    <string name="pack_deleted">تم حذف %1$s</string>
+    <string name="swipe_delete_hint">اسحب الصف لحذف الملف المُنزَّل. يمكنك التراجع خلال 5 ثوانٍ.</string>
     <string name="update_tafsir_cd">تحديث التفسير %1$s</string>
     <string name="tafsir_search_hint">ابحث عن تفسير أو مؤلف</string>
     <string name="tafsir_no_match">لا يوجد تفسير يطابق بحثك.</string>

@@ -344,6 +344,9 @@
     <string name="tafsir_title">Tafsir</string>
     <string name="tafsir_none">No tafsir</string>
     <string name="add_tafsir">Add tafsir</string>
+    <string name="undo">Undo</string>
+    <string name="pack_deleted">%1$s deleted</string>
+    <string name="swipe_delete_hint">Swipe a row to delete the download. You can undo for 5 seconds.</string>
     <string name="update_tafsir_cd">Update tafsir %1$s</string>
     <string name="tafsir_search_hint">Search tafsir or author</string>
     <string name="tafsir_no_match">No tafsir matches your search.</string>

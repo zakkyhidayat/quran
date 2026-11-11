@@ -342,6 +342,9 @@
     <string name="tafsir_title">Тафсир</string>
     <string name="tafsir_none">Без тафсира</string>
     <string name="add_tafsir">Добавить тафсир</string>
+    <string name="undo">Отменить</string>
+    <string name="pack_deleted">%1$s удалён</string>
+    <string name="swipe_delete_hint">Смахните строку, чтобы удалить загрузку. Отменить можно в течение 5 секунд.</string>
     <string name="update_tafsir_cd">Обновить тафсир %1$s</string>
     <string name="tafsir_search_hint">Поиск тафсира или автора</string>
     <string name="tafsir_no_match">Ни один тафсир не соответствует запросу.</string>

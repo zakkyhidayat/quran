@@ -342,6 +342,9 @@
     <string name="tafsir_title">Tafsir</string>
     <string name="tafsir_none">Tanpa tafsir</string>
     <string name="add_tafsir">Tambah tafsir</string>
+    <string name="undo">Urungkan</string>
+    <string name="pack_deleted">%1$s dihapus</string>
+    <string name="swipe_delete_hint">Geser baris untuk menghapus unduhan. Bisa dibatalkan selama 5 detik.</string>
     <string name="update_tafsir_cd">Perbarui tafsir %1$s</string>
     <string name="tafsir_search_hint">Cari tafsir atau penulis</string>
     <string name="tafsir_no_match">Tidak ada tafsir yang cocok dengan pencarian.</string>
