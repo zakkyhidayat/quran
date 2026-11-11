@@ -190,6 +190,7 @@ internal fun TafsirControls(vm: AppViewModel, settings: AppSettings, modifier: M
             onValueChange = { query = it },
             placeholder = { Text(stringResource(R.string.tafsir_search_hint)) },
             singleLine = true,
+            shape = MaterialTheme.shapes.extraLarge,
             modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
         )
         LazyColumn(Modifier.weight(1f)) {
