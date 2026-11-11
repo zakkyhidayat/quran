@@ -341,6 +341,9 @@
     <string name="doa_back_main">На главную</string>
     <string name="tafsir_title">Тафсир</string>
     <string name="tafsir_none">Без тафсира</string>
+    <string name="tafsir_search_hint">Поиск тафсира или автора</string>
+    <string name="tafsir_installed">Установленные</string>
+    <string name="tafsir_no_match">Ни один тафсир не соответствует запросу.</string>
     <string name="tafsir_download_cd">Скачать тафсир %1$s</string>
     <string name="tafsir_catalog_error">Не удалось загрузить каталог тафсиров. Проверьте подключение и попробуйте снова.</string>
     <string name="extras_language_note">Пока доступно на английском и индонезийском языках.</string>

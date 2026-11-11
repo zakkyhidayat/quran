@@ -10,6 +10,7 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.File
 import java.io.IOException
+import kotlinx.coroutines.CancellationException
 import java.security.MessageDigest
 
 /** True bila katalog menawarkan versi paket yang lebih baru daripada yang terpasang. */
@@ -37,7 +38,11 @@ data class CatalogPack(
  * Paket terjemahan yang diunduh dari katalog (GitHub Releases) dan disimpan di filesDir/translations/<id>.db.
  * Setiap paket berupa SQLite: info(key,value), translation_texts(surah,ayah,text), footnotes(surah,ayah,idx,label,text).
  */
+/** Salinan katalog yang ikut di APK (app/src/main/assets); diperbarui bersama rilis `translations`. */
+private const val BUNDLED_CATALOG = "translation_catalog.json"
+
 class TranslationPacks(context: Context) {
+    private val appContext = context.applicationContext
     private val dir = File(context.applicationContext.filesDir, "translations")
     private val handles = HashMap<String, SQLiteDatabase>()
 
@@ -72,15 +77,31 @@ class TranslationPacks(context: Context) {
     }
 
     /** Ambil catalog.json. Melempar IOException bila tidak ada jaringan, status bukan 200, atau isinya tidak valid. */
+    /**
+     * Katalog dari rilis `translations`. Bila jaringan gagal, pakai salinan yang ikut di APK (assets), supaya daftar
+     * Tersedia tetap tampil luring; unduhan paketnya sendiri tetap butuh jaringan.
+     */
     suspend fun catalog(): List<CatalogPack> = withContext(Dispatchers.IO) {
-        val body = openHttpsDownload(BuildConfig.TRANSLATION_CATALOG_URL).let { conn ->
-            try { conn.inputStream.bufferedReader().use { it.readText() } } finally { conn.disconnect() }
+        try {
+            val body = openHttpsDownload(BuildConfig.TRANSLATION_CATALOG_URL).let { conn ->
+                try { conn.inputStream.bufferedReader().use { it.readText() } } finally { conn.disconnect() }
+            }
+            parseCatalog(body)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            android.util.Log.w("TranslationPacks", "Katalog jaringan gagal, memakai salinan di APK", e)
+            val body = appContext.assets.open(BUNDLED_CATALOG).bufferedReader().use { it.readText() }
+            parseCatalog(body)
         }
+    }
+
+    private fun parseCatalog(body: String): List<CatalogPack> {
         try {
             val json = JSONObject(body)
             require(json.getInt("version") == 1) { "versi katalog tidak didukung" }
             val packs = json.getJSONArray("packs")
-            List(packs.length()) { i ->
+            return List(packs.length()) { i ->
                 val p = packs.getJSONObject(i)
                 CatalogPack(
                     id = p.getString("id"), lang = p.getString("lang"), name = p.getString("name"),

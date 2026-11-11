@@ -341,6 +341,9 @@
     <string name="doa_back_main">الصفحة الرئيسية</string>
     <string name="tafsir_title">التفسير</string>
     <string name="tafsir_none">بدون تفسير</string>
+    <string name="tafsir_search_hint">ابحث عن تفسير أو مؤلف</string>
+    <string name="tafsir_installed">المثبتة</string>
+    <string name="tafsir_no_match">لا يوجد تفسير يطابق بحثك.</string>
     <string name="tafsir_download_cd">تنزيل التفسير %1$s</string>
     <string name="tafsir_catalog_error">تعذر تحميل كتالوج التفاسير. تحقق من الاتصال ثم حاول مرة أخرى.</string>
     <string name="extras_language_note">متاح بالإنجليزية والإندونيسية حاليًا.</string>

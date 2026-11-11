@@ -97,6 +97,10 @@ fun SettingsScreen(
                     Spacer(Modifier.height(16.dp))
                     TranslationControls(vm, settings, Modifier.weight(1f), fillAvailableHeight = true)
                 }
+            } else if (page == SettingsPage.Tafsir) {
+                Column(Modifier.fillMaxSize().padding(horizontal = 16.dp).padding(top = 8.dp, bottom = 24.dp)) {
+                    TafsirControls(vm, settings, Modifier.weight(1f))
+                }
             } else {
                 LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp)) {
                     item(key = page.route) {
@@ -142,7 +146,7 @@ fun SettingsScreen(
 
                             }
                             SettingsPage.Translations -> Unit
-                            SettingsPage.Tafsir -> TafsirSection(vm, settings)
+                            SettingsPage.Tafsir -> Unit
                             SettingsPage.Language -> LanguageControls()
                             SettingsPage.Backup -> BackupControls(vm, settings, snackbar)
                             SettingsPage.Reminder -> ReminderControls(vm, settings)

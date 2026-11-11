@@ -3,6 +3,9 @@
 Format: [Keep a Changelog](https://keepachangelog.com). Versions follow semantic versioning (`vX.Y.Z` git tags).
 
 ## [Unreleased]
+### Fixed
+- Translation and tafsir download lists show offline: the catalog is bundled in the APK and used when the network fails.
+- Tafsir page: search box, installed and downloadable sections, matching the Translations page. The earlier layout was lost in a merge.
 
 ## [0.8.0] - 2026-11-10
 ### Changed

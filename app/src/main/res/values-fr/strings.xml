@@ -341,6 +341,9 @@
     <string name="doa_back_main">Page principale</string>
     <string name="tafsir_title">Tafsir</string>
     <string name="tafsir_none">Aucun tafsir</string>
+    <string name="tafsir_search_hint">Rechercher un tafsir ou un auteur</string>
+    <string name="tafsir_installed">Installés</string>
+    <string name="tafsir_no_match">Aucun tafsir ne correspond à votre recherche.</string>
     <string name="tafsir_download_cd">Télécharger le tafsir %1$s</string>
     <string name="tafsir_catalog_error">Le catalogue des tafsirs n\'a pas pu être chargé. Vérifiez la connexion et réessayez.</string>
     <string name="extras_language_note">Disponible en anglais et en indonésien pour le moment.</string>
