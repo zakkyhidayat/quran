@@ -44,6 +44,7 @@ import io.zakkyhidayat.quran.data.CatalogPack
 import io.zakkyhidayat.quran.ui.AppIcons
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 private sealed interface TafsirCatalogState {
@@ -187,7 +188,11 @@ internal fun TafsirControls(vm: AppViewModel, settings: AppSettings, modifier: M
                                         failedLabel = null
                                         try {
                                             vm.installPack(pack) { done, total -> progress = if (total > 0) done.toFloat() / total else 0f }
-                                            vm.settingsRepository.setSelectedTafsir(pack.id)
+                                            // Tafsir hanya satu: unduhan baru dipilih otomatis bila belum ada tafsir yang dipilih,
+                                            // supaya tafsir yang sudah dipakai tidak diganti diam-diam.
+                                            if (vm.settingsRepository.settings.first().selectedTafsir.isEmpty()) {
+                                                vm.settingsRepository.setSelectedTafsir(pack.id)
+                                            }
                                         } catch (e: CancellationException) {
                                             throw e
                                         } catch (e: Exception) {
