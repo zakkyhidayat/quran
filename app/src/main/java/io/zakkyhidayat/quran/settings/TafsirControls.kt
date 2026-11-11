@@ -88,7 +88,6 @@ internal fun TafsirControls(vm: AppViewModel, settings: AppSettings, modifier: M
     val installedIds = installed.map { it.id }.toSet()
     val downloadable = (state as? TafsirCatalogState.Loaded)?.packs.orEmpty().filter { it.id !in installedIds }
     val q = query.trim().lowercase(locale)
-    val shownInstalled = installed.filter { q.isEmpty() || it.name.lowercase(locale).contains(q) }
     val groups = remember(downloadable, query, locale) {
         val collator = java.text.Collator.getInstance(locale)
         downloadable
@@ -100,13 +99,6 @@ internal fun TafsirControls(vm: AppViewModel, settings: AppSettings, modifier: M
     }
 
     Column(modifier) {
-        OutlinedTextField(
-            value = query,
-            onValueChange = { query = it },
-            placeholder = { Text(stringResource(R.string.tafsir_search_hint)) },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
-        )
         pendingDelete?.let { (id, name) ->
             ConfirmDeletePack(
                 name = name,
@@ -118,33 +110,42 @@ internal fun TafsirControls(vm: AppViewModel, settings: AppSettings, modifier: M
                 onDismiss = { pendingDelete = null },
             )
         }
-        LazyColumn(Modifier.weight(1f)) {
-            item(key = "none") {
-                ListItem(
-                    headlineContent = { Text(stringResource(R.string.tafsir_none)) },
-                    trailingContent = { RadioButton(selected = settings.selectedTafsir.isEmpty(), onClick = null) },
-                    colors = tafsirItemColors(),
-                    modifier = Modifier.clickable { scope.launch { vm.settingsRepository.setSelectedTafsir("") } },
+        // Seperti Terjemahan: pilihan terpasang dalam satu kelompok bersegmen, lalu bagian "Tambah" dengan kolom cari
+        // dan daftar yang bisa diunduh.
+        Group {
+            item(
+                title = stringResource(R.string.tafsir_none),
+                onClick = { scope.launch { vm.settingsRepository.setSelectedTafsir("") } },
+                trailing = { RadioButton(selected = settings.selectedTafsir.isEmpty(), onClick = null) },
+            )
+            installed.forEach { tr ->
+                item(
+                    title = tr.name,
+                    onClick = { scope.launch { vm.settingsRepository.setSelectedTafsir(tr.id) } },
+                    trailing = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            RadioButton(selected = settings.selectedTafsir == tr.id, onClick = null)
+                            IconButton(onClick = { pendingDelete = tr.id to tr.name }) {
+                                Icon(AppIcons.Delete, contentDescription = stringResource(R.string.delete_downloaded_translation_cd, tr.name))
+                            }
+                        }
+                    },
                 )
             }
-            if (shownInstalled.isNotEmpty()) {
-                item(key = "installed-heading") { TafsirHeading(stringResource(R.string.tafsir_installed)) }
-                items(shownInstalled, key = { "inst-${it.id}" }) { tr ->
-                    ListItem(
-                        headlineContent = { Text(tr.name) },
-                        trailingContent = {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                RadioButton(selected = settings.selectedTafsir == tr.id, onClick = null)
-                                IconButton(onClick = { pendingDelete = tr.id to tr.name }) {
-                                    Icon(AppIcons.Delete, contentDescription = stringResource(R.string.delete_downloaded_translation_cd, tr.name))
-                                }
-                            }
-                        },
-                        colors = tafsirItemColors(),
-                        modifier = Modifier.clickable { scope.launch { vm.settingsRepository.setSelectedTafsir(tr.id) } },
-                    )
-                }
-            }
+        }
+        Text(
+            stringResource(R.string.add_tafsir),
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(top = 16.dp, bottom = 4.dp),
+        )
+        OutlinedTextField(
+            value = query,
+            onValueChange = { query = it },
+            placeholder = { Text(stringResource(R.string.tafsir_search_hint)) },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+        )
+        LazyColumn(Modifier.weight(1f)) {
             when (state) {
                 TafsirCatalogState.Loading -> item(key = "loading") {
                     Box(Modifier.fillMaxWidth().padding(vertical = 16.dp), contentAlignment = Alignment.Center) {

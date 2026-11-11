@@ -343,8 +343,8 @@
     <string name="doa_back_main">Main page</string>
     <string name="tafsir_title">Tafsir</string>
     <string name="tafsir_none">No tafsir</string>
+    <string name="add_tafsir">Add tafsir</string>
     <string name="tafsir_search_hint">Search tafsir or author</string>
-    <string name="tafsir_installed">Installed</string>
     <string name="tafsir_no_match">No tafsir matches your search.</string>
     <string name="tafsir_download_cd">Download tafsir %1$s</string>
     <string name="tafsir_catalog_error">The tafsir catalog could not be loaded. Check your connection and try again.</string>
