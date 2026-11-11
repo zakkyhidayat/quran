@@ -342,6 +342,9 @@
     <string name="tafsir_title">তাফসির</string>
     <string name="tafsir_none">কোনো তাফসির নেই</string>
     <string name="add_tafsir">তাফসির যোগ করুন</string>
+    <string name="undo">পূর্বাবস্থায়</string>
+    <string name="pack_deleted">%1$s মুছে ফেলা হয়েছে</string>
+    <string name="swipe_delete_hint">ডাউনলোড মুছতে সারিটি সোয়াইপ করুন। ৫ সেকেন্ডের মধ্যে পূর্বাবস্থায় ফেরাতে পারবেন।</string>
     <string name="update_tafsir_cd">তাফসির %1$s আপডেট করুন</string>
     <string name="tafsir_search_hint">তাফসির বা লেখক খুঁজুন</string>
     <string name="tafsir_no_match">আপনার অনুসন্ধানের সঙ্গে কোনো তাফসির মেলেনি।</string>

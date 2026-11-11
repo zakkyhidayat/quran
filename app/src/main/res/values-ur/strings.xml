@@ -342,6 +342,9 @@
     <string name="tafsir_title">تفسیر</string>
     <string name="tafsir_none">کوئی تفسیر نہیں</string>
     <string name="add_tafsir">تفسیر شامل کریں</string>
+    <string name="undo">واپس کریں</string>
+    <string name="pack_deleted">%1$s حذف ہو گیا</string>
+    <string name="swipe_delete_hint">ڈاؤن لوڈ حذف کرنے کے لیے قطار کو سوائپ کریں۔ 5 سیکنڈ تک واپس کر سکتے ہیں۔</string>
     <string name="update_tafsir_cd">تفسیر %1$s اپ ڈیٹ کریں</string>
     <string name="tafsir_search_hint">تفسیر یا مصنف تلاش کریں</string>
     <string name="tafsir_no_match">آپ کی تلاش سے کوئی تفسیر نہیں ملی۔</string>

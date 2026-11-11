@@ -342,6 +342,9 @@
     <string name="tafsir_title">Tefsir</string>
     <string name="tafsir_none">Tefsir yok</string>
     <string name="add_tafsir">Tefsir ekle</string>
+    <string name="undo">Geri al</string>
+    <string name="pack_deleted">%1$s silindi</string>
+    <string name="swipe_delete_hint">İndirmeyi silmek için satırı kaydırın. 5 saniye içinde geri alabilirsiniz.</string>
     <string name="update_tafsir_cd">%1$s tefsirini güncelle</string>
     <string name="tafsir_search_hint">Tefsir veya yazar ara</string>
     <string name="tafsir_no_match">Aramanızla eşleşen tefsir yok.</string>

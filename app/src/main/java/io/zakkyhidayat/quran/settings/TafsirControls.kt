@@ -20,10 +20,13 @@ import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.SegmentedListItem
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -43,6 +46,7 @@ import io.zakkyhidayat.quran.AppViewModel
 import io.zakkyhidayat.quran.R
 import io.zakkyhidayat.quran.data.CatalogPack
 import io.zakkyhidayat.quran.ui.AppIcons
+import io.zakkyhidayat.quran.ui.segmentedItemColors
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
@@ -55,30 +59,22 @@ private sealed interface TafsirCatalogState {
 }
 
 /**
- * Halaman tafsir di Pengaturan, tampilannya sama dengan halaman terjemahan: kolom cari, tafsir terpasang (dipilih dengan
- * radio dan bisa dihapus), lalu katalog tafsir yang bisa diunduh per bahasa. "Tanpa tafsir" selalu di atas.
+ * Halaman Tambah tafsir (Pengaturan > Tafsir > Tambah): kolom cari dan katalog tafsir yang bisa diunduh per bahasa.
+ * Unduhan dipilih otomatis hanya bila belum ada tafsir yang dipilih. Daftar terpasang ada di [TafsirDownloads].
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-internal fun TafsirControls(vm: AppViewModel, settings: AppSettings, modifier: Modifier = Modifier) {
+internal fun TafsirAdd(vm: AppViewModel, modifier: Modifier = Modifier) {
     val scope = rememberCoroutineScope()
     val locale = LocalConfiguration.current.locales[0]
     val installed by vm.tafsirs.collectAsStateWithLifecycle()
     var state by remember { mutableStateOf<TafsirCatalogState>(TafsirCatalogState.Loading) }
     var attempt by remember { mutableIntStateOf(0) }
     var query by remember { mutableStateOf("") }
-    var pendingDelete by remember { mutableStateOf<Pair<String, String>?>(null) }
     var downloading by remember { mutableStateOf<String?>(null) }
     var progress by remember { mutableFloatStateOf(0f) }
     var downloadJob by remember { mutableStateOf<Job?>(null) }
     var failedLabel by remember { mutableStateOf<String?>(null) }
-    // Pembaruan paket terpasang, seperti Terjemahan: tombol perbarui di baris yang punya versi baru.
-    val updates by vm.packUpdates.collectAsStateWithLifecycle()
-    var updating by remember { mutableStateOf<String?>(null) }
-    var updateProgress by remember { mutableFloatStateOf(0f) }
-    var updateJob by remember { mutableStateOf<Job?>(null) }
-    var updateFailed by remember { mutableStateOf<String?>(null) }
-
     LaunchedEffect(attempt) {
         state = TafsirCatalogState.Loading
         state = try {
@@ -91,8 +87,6 @@ internal fun TafsirControls(vm: AppViewModel, settings: AppSettings, modifier: M
         }
     }
 
-    // Cek versi katalog sekali saat daftar tampil (dan lagi bila daftar terpasang berubah), seperti Terjemahan.
-    LaunchedEffect(installed.map { it.id to it.version }) { vm.checkPackUpdates() }
     val loadingCd = stringResource(R.string.translations_loading_cd)
     val installedIds = installed.map { it.id }.toSet()
     val downloadable = (state as? TafsirCatalogState.Loaded)?.packs.orEmpty().filter { it.id !in installedIds }
@@ -108,83 +102,6 @@ internal fun TafsirControls(vm: AppViewModel, settings: AppSettings, modifier: M
     }
 
     Column(modifier.imePadding()) {
-        pendingDelete?.let { (id, name) ->
-            ConfirmDeletePack(
-                name = name,
-                onConfirm = {
-                    pendingDelete = null
-                    if (settings.selectedTafsir == id) scope.launch { vm.settingsRepository.setSelectedTafsir("") }
-                    vm.deletePack(id)
-                },
-                onDismiss = { pendingDelete = null },
-            )
-        }
-        // Seperti Terjemahan: pilihan terpasang dalam satu kelompok bersegmen, lalu bagian "Tambah" dengan kolom cari
-        // dan daftar yang bisa diunduh.
-        // Tanpa onClick, baris ini memakai ListItem biasa seperti Terjemahan, sehingga tombol di kanannya sejajar
-        // dengan tombol unduh di daftar bawah. Pemilihan lewat radionya.
-        Group {
-            item(
-                title = stringResource(R.string.tafsir_none),
-                trailing = {
-                    RadioButton(
-                        selected = settings.selectedTafsir.isEmpty(),
-                        onClick = { scope.launch { vm.settingsRepository.setSelectedTafsir("") } },
-                    )
-                },
-            )
-            installed.forEach { tr ->
-                item(
-                    title = tr.name,
-                    subtitle = if (tr.id in updates) stringResource(R.string.translation_update_available) else null,
-                    trailing = {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            updates[tr.id]?.let { pack ->
-                                val busy = updating == tr.id
-                                DownloadButton(
-                                    downloading = busy,
-                                    progress = updateProgress,
-                                    onStart = {
-                                        updateJob = scope.launch {
-                                            updating = tr.id
-                                            updateProgress = 0f
-                                            updateFailed = null
-                                            try {
-                                                vm.updatePack(pack) { done, total -> updateProgress = if (total > 0) done.toFloat() / total else 0f }
-                                            } catch (e: CancellationException) {
-                                                throw e
-                                            } catch (e: Exception) {
-                                                android.util.Log.w("TafsirPacks", "Gagal memperbarui ${pack.id}", e)
-                                                updateFailed = tr.name
-                                            } finally {
-                                                updating = null
-                                            }
-                                        }
-                                    },
-                                    onCancel = { updateJob?.cancel() },
-                                    startDescription = stringResource(R.string.update_tafsir_cd, tr.name),
-                                    cancelDescription = stringResource(R.string.cancel),
-                                    enabled = updating == null,
-                                    icon = AppIcons.Refresh,
-                                )
-                            }
-                            RadioButton(
-                                selected = settings.selectedTafsir == tr.id,
-                                onClick = { scope.launch { vm.settingsRepository.setSelectedTafsir(tr.id) } },
-                            )
-                            IconButton(onClick = { pendingDelete = tr.id to tr.name }) {
-                                Icon(AppIcons.Delete, contentDescription = stringResource(R.string.delete_downloaded_translation_cd, tr.name))
-                            }
-                        }
-                    },
-                )
-            }
-        }
-        Text(
-            stringResource(R.string.add_tafsir),
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(top = 16.dp, bottom = 4.dp),
-        )
         OutlinedTextField(
             value = query,
             onValueChange = { query = it },
@@ -308,3 +225,60 @@ private fun TafsirHeading(text: String) {
 
 @Composable
 private fun tafsirItemColors() = ListItemDefaults.colors(containerColor = Color.Transparent)
+
+/**
+ * Halaman Pengaturan > Tafsir: "Tanpa tafsir" dan tafsir terunduh, satu dipilih dengan radio. Geser baris menghapus
+ * berkasnya dengan jeda Batalkan. Mengunduh tafsir baru ada di [TafsirAdd].
+ */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+internal fun TafsirDownloads(vm: AppViewModel, settings: AppSettings, snackbar: SnackbarHostState, onAdd: () -> Unit) {
+    val scope = rememberCoroutineScope()
+    val installed by vm.tafsirs.collectAsStateWithLifecycle()
+    val pending by vm.pendingDeletes.collectAsStateWithLifecycle()
+    val updates by vm.packUpdates.collectAsStateWithLifecycle()
+    val updater = rememberPackUpdater(vm, "TafsirPacks")
+    LaunchedEffect(installed.map { it.id to it.version }) { vm.checkPackUpdates() }
+    val shown = installed.filter { it.id !in pending }
+    val count = 1 + shown.size
+    val undo = stringResource(R.string.undo)
+    val select: (String) -> Unit = { id -> scope.launch { vm.settingsRepository.setSelectedTafsir(id) } }
+    Column {
+        Column(verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
+            SegmentedListItem(
+                onClick = { select("") },
+                shapes = ListItemDefaults.segmentedShapes(0, count),
+                colors = segmentedItemColors(),
+                trailingContent = { RadioButton(selected = settings.selectedTafsir.isEmpty(), onClick = null) },
+            ) { Text(stringResource(R.string.tafsir_none)) }
+            shown.forEachIndexed { index, tr ->
+                key(tr.id) {
+                    val deleted = stringResource(R.string.pack_deleted, tr.name)
+                    val updateDescription = stringResource(R.string.update_tafsir_cd, tr.name)
+                    DownloadedPackRow(
+                        title = tr.name,
+                        index = index + 1,
+                        count = count,
+                        deletable = true,
+                        packId = tr.id,
+                        updatePack = updates[tr.id],
+                        updater = updater,
+                        updateDescription = updateDescription,
+                        onClick = { select(tr.id) },
+                        onDelete = {
+                            vm.scheduleDeletePack(tr.id)
+                            showUndoDelete(scope, snackbar, vm, tr.id, deleted, undo)
+                        },
+                        control = { RadioButton(selected = settings.selectedTafsir == tr.id, onClick = null) },
+                    )
+                }
+            }
+        }
+        PackListFooter(
+            showSwipeHint = shown.isNotEmpty(),
+            updateFailed = updater.failed,
+            addTitle = stringResource(R.string.add_tafsir),
+            onAdd = onAdd,
+        )
+    }
+}
