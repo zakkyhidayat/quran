@@ -1,5 +1,10 @@
 package io.zakkyhidayat.quran.settings
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -20,7 +25,9 @@ import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
+import io.zakkyhidayat.quran.ui.reducedMotion
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -58,6 +65,7 @@ import kotlinx.coroutines.withTimeoutOrNull
 internal fun SwipeToDeleteRow(
     deleteLabel: String,
     shape: Shape,
+    visible: Boolean,
     onDelete: () -> Unit,
     content: @Composable () -> Unit,
 ) {
@@ -71,6 +79,8 @@ internal fun SwipeToDeleteRow(
             }
         },
     )
+    // Baris yang kembali (Batalkan) harus mulai dalam keadaan belum tergeser, bukan tetap terhapus.
+    LaunchedEffect(visible) { if (visible) state.snapTo(SwipeToDismissBoxValue.Settled) }
     SwipeToDismissBox(
         state = state,
         enableDismissFromStartToEnd = false,
@@ -164,6 +174,7 @@ internal fun DownloadedPackRow(
     index: Int,
     count: Int,
     deletable: Boolean,
+    visible: Boolean,
     packId: String,
     updatePack: CatalogPack?,
     updater: PackUpdater,
@@ -173,6 +184,7 @@ internal fun DownloadedPackRow(
     control: @Composable () -> Unit,
 ) {
     val shapes = ListItemDefaults.segmentedShapes(index, count)
+    val motion = MaterialTheme.motionScheme
     val row: @Composable () -> Unit = {
         SegmentedListItem(
             onClick = onClick,
@@ -202,10 +214,25 @@ internal fun DownloadedPackRow(
             },
         ) { Text(title) }
     }
-    if (deletable) {
-        SwipeToDeleteRow(deleteLabel = stringResource(R.string.delete), shape = shapes.shape, onDelete = onDelete, content = row)
-    } else {
-        row()
+    // Hapus: baris menyusut dan memudar dengan spesifikasi M3 (cepat, ikut pengurangan gerak). Batalkan: kebalikannya.
+    AnimatedVisibility(
+        visible = visible,
+        enter = expandVertically(reducedMotion(motion.fastSpatialSpec())) +
+            fadeIn(reducedMotion(motion.fastEffectsSpec())),
+        exit = shrinkVertically(reducedMotion(motion.fastSpatialSpec())) +
+            fadeOut(reducedMotion(motion.fastEffectsSpec())),
+    ) {
+        if (deletable) {
+            SwipeToDeleteRow(
+                deleteLabel = stringResource(R.string.delete),
+                shape = shapes.shape,
+                visible = visible,
+                onDelete = onDelete,
+                content = row,
+            )
+        } else {
+            row()
+        }
     }
 }
 

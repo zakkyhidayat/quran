@@ -239,7 +239,7 @@ internal fun TafsirDownloads(vm: AppViewModel, settings: AppSettings, snackbar: 
     val updates by vm.packUpdates.collectAsStateWithLifecycle()
     val updater = rememberPackUpdater(vm, "TafsirPacks")
     LaunchedEffect(installed.map { it.id to it.version }) { vm.checkPackUpdates() }
-    val shown = installed.filter { it.id !in pending }
+    val shown = installed
     val count = 1 + shown.size
     val undo = stringResource(R.string.undo)
     val select: (String) -> Unit = { id -> scope.launch { vm.settingsRepository.setSelectedTafsir(id) } }
@@ -260,6 +260,7 @@ internal fun TafsirDownloads(vm: AppViewModel, settings: AppSettings, snackbar: 
                         index = index + 1,
                         count = count,
                         deletable = true,
+                        visible = tr.id !in pending,
                         packId = tr.id,
                         updatePack = updates[tr.id],
                         updater = updater,

@@ -4,6 +4,10 @@ Format: [Keep a Changelog](https://keepachangelog.com). Versions follow semantic
 
 ## [Unreleased]
 
+## [0.8.5] - 2026-11-11
+### Fixed
+- Deleting a downloaded row animates out (shrink and fade) instead of jumping; undo animates it back in. Uses the Material 3 motion scheme.
+
 ## [0.8.4] - 2026-11-11
 ### Changed
 - Translations and Tafsir settings now list only what is downloaded. A new "Add" page holds search and the download catalog.
