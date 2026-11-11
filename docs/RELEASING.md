@@ -9,6 +9,18 @@ menyimpan AAB bertanda tangan dari varian `play` sebagai artefak workflow untuk 
 Isi `CHANGELOG.md` di PR rilis: pindahkan entri `[Unreleased]` ke `## [X.Y.Z] - tanggal`, lalu tag. Catatan
 rilis di GitHub hanya memuat judul PR, jadi `CHANGELOG.md` adalah sumber utama riwayat perubahan.
 
+## Katalog di APK
+
+`app/src/main/assets/translation_catalog.json` adalah salinan `catalog.json` dari rilis `translations`, dipakai saat
+jaringan gagal supaya daftar Tersedia tetap tampil luring. Setiap kali `catalog.json` di rilis berubah, salin ulang ke
+assets:
+
+```bash
+curl -sSL -o app/src/main/assets/translation_catalog.json https://github.com/zakkyhidayat/quran/releases/download/translations/catalog.json
+```
+
+Katalog dari jaringan tetap diutamakan bila tersedia. Paket (berkas terjemahan dan tafsir) tidak ikut APK.
+
 ## Varian build
 
 Tidak ada varian yang memperbarui dirinya sendiri; pengguna mengunduh versi baru dari GitHub Releases atau Google Play.
