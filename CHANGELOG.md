@@ -3,9 +3,19 @@
 Format: [Keep a Changelog](https://keepachangelog.com). Versions follow semantic versioning (`vX.Y.Z` git tags).
 
 ## [Unreleased]
+
+## [0.8.2] - 2026-11-11
+### Changed
+- Tafsir page laid out like the Translations page: installed entries in one grouped list, an "Add tafsir" heading, and a search field for downloadable tafsir.
+- Installed tafsir shows an update button when the catalog has a newer version.
+- Keyboard no longer covers the tafsir download list.
 ### Fixed
-- Translation and tafsir download lists show offline: the catalog is bundled in the APK and used when the network fails.
-- Tafsir page: search box, installed and downloadable sections, matching the Translations page. The earlier layout was lost in a merge.
+- Downloaded tafsir and translation lists are available offline: the catalog is bundled in the APK and used when the network fails.
+
+## [0.8.1] - 2026-11-11
+### Fixed
+- Tafsir page: search box and downloadable list, matching the Translations page. The earlier layout had been lost in a merge.
+- Choosing a tafsir after download only when none is selected, so a second download does not replace the current one.
 
 ## [0.8.0] - 2026-11-10
 ### Changed
