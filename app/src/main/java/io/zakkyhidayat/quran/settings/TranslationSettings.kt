@@ -200,7 +200,8 @@ internal fun TranslationDownloads(vm: AppViewModel, settings: AppSettings, snack
     val updates by vm.packUpdates.collectAsStateWithLifecycle()
     val updater = rememberPackUpdater(vm, "TranslationPacks")
     LaunchedEffect(translations.map { it.id to it.version }) { vm.checkPackUpdates() }
-    val shown = translations.filter { it.id !in pending }
+    // Baris yang sedang menunggu penghapusan tetap ada sampai animasi keluarnya selesai (lihat DownloadedPackRow).
+    val shown = translations
     val ordered = translations.map { it.id }
     val undo = stringResource(R.string.undo)
     Column {
@@ -216,6 +217,7 @@ internal fun TranslationDownloads(vm: AppViewModel, settings: AppSettings, snack
                         index = index,
                         count = shown.size,
                         deletable = tr.downloaded,
+                        visible = tr.id !in pending,
                         packId = tr.id,
                         updatePack = updates[tr.id],
                         updater = updater,
