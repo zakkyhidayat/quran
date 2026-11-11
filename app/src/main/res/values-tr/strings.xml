@@ -341,8 +341,9 @@
     <string name="doa_back_main">Ana sayfa</string>
     <string name="tafsir_title">Tefsir</string>
     <string name="tafsir_none">Tefsir yok</string>
+    <string name="add_tafsir">Tefsir ekle</string>
+    <string name="update_tafsir_cd">%1$s tefsirini güncelle</string>
     <string name="tafsir_search_hint">Tefsir veya yazar ara</string>
-    <string name="tafsir_installed">Yüklü</string>
     <string name="tafsir_no_match">Aramanızla eşleşen tefsir yok.</string>
     <string name="tafsir_download_cd">Tefsir %1$s indir</string>
     <string name="tafsir_catalog_error">Tefsir kataloğu yüklenemedi. Bağlantıyı kontrol edip yeniden deneyin.</string>

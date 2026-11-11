@@ -341,8 +341,9 @@
     <string name="doa_back_main">Halaman utama</string>
     <string name="tafsir_title">Tafsir</string>
     <string name="tafsir_none">Tanpa tafsir</string>
+    <string name="add_tafsir">Tambah tafsir</string>
+    <string name="update_tafsir_cd">Perbarui tafsir %1$s</string>
     <string name="tafsir_search_hint">Cari tafsir atau penulis</string>
-    <string name="tafsir_installed">Terpasang</string>
     <string name="tafsir_no_match">Tidak ada tafsir yang cocok dengan pencarian.</string>
     <string name="tafsir_download_cd">Unduh tafsir %1$s</string>
     <string name="tafsir_catalog_error">Katalog tafsir belum bisa dimuat. Periksa koneksi lalu coba lagi.</string>
