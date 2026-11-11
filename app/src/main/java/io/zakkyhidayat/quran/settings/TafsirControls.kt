@@ -121,17 +121,22 @@ internal fun TafsirControls(vm: AppViewModel, settings: AppSettings, modifier: M
         }
         // Seperti Terjemahan: pilihan terpasang dalam satu kelompok bersegmen, lalu bagian "Tambah" dengan kolom cari
         // dan daftar yang bisa diunduh.
+        // Tanpa onClick, baris ini memakai ListItem biasa seperti Terjemahan, sehingga tombol di kanannya sejajar
+        // dengan tombol unduh di daftar bawah. Pemilihan lewat radionya.
         Group {
             item(
                 title = stringResource(R.string.tafsir_none),
-                onClick = { scope.launch { vm.settingsRepository.setSelectedTafsir("") } },
-                trailing = { RadioButton(selected = settings.selectedTafsir.isEmpty(), onClick = null) },
+                trailing = {
+                    RadioButton(
+                        selected = settings.selectedTafsir.isEmpty(),
+                        onClick = { scope.launch { vm.settingsRepository.setSelectedTafsir("") } },
+                    )
+                },
             )
             installed.forEach { tr ->
                 item(
                     title = tr.name,
                     subtitle = if (tr.id in updates) stringResource(R.string.translation_update_available) else null,
-                    onClick = { scope.launch { vm.settingsRepository.setSelectedTafsir(tr.id) } },
                     trailing = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             updates[tr.id]?.let { pack ->
@@ -163,7 +168,10 @@ internal fun TafsirControls(vm: AppViewModel, settings: AppSettings, modifier: M
                                     icon = AppIcons.Refresh,
                                 )
                             }
-                            RadioButton(selected = settings.selectedTafsir == tr.id, onClick = null)
+                            RadioButton(
+                                selected = settings.selectedTafsir == tr.id,
+                                onClick = { scope.launch { vm.settingsRepository.setSelectedTafsir(tr.id) } },
+                            )
                             IconButton(onClick = { pendingDelete = tr.id to tr.name }) {
                                 Icon(AppIcons.Delete, contentDescription = stringResource(R.string.delete_downloaded_translation_cd, tr.name))
                             }
@@ -171,14 +179,6 @@ internal fun TafsirControls(vm: AppViewModel, settings: AppSettings, modifier: M
                     },
                 )
             }
-        }
-        updateFailed?.let {
-            Text(
-                stringResource(R.string.translation_update_failed, it),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.error,
-                modifier = Modifier.padding(top = 8.dp),
-            )
         }
         Text(
             stringResource(R.string.add_tafsir),
@@ -190,6 +190,7 @@ internal fun TafsirControls(vm: AppViewModel, settings: AppSettings, modifier: M
             onValueChange = { query = it },
             placeholder = { Text(stringResource(R.string.tafsir_search_hint)) },
             singleLine = true,
+            shape = MaterialTheme.shapes.extraLarge,
             modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
         )
         LazyColumn(Modifier.weight(1f)) {
