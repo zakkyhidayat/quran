@@ -342,6 +342,7 @@
     <string name="tafsir_title">تفسیر</string>
     <string name="tafsir_none">بدون تفسیر</string>
     <string name="add_tafsir">افزودن تفسیر</string>
+    <string name="update_tafsir_cd">به‌روزرسانی تفسیر %1$s</string>
     <string name="tafsir_search_hint">جستجوی تفسیر یا مؤلف</string>
     <string name="tafsir_no_match">هیچ تفسیری با جستجوی شما مطابقت ندارد.</string>
     <string name="tafsir_download_cd">دانلود تفسیر %1$s</string>

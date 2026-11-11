@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -71,6 +72,12 @@ internal fun TafsirControls(vm: AppViewModel, settings: AppSettings, modifier: M
     var progress by remember { mutableFloatStateOf(0f) }
     var downloadJob by remember { mutableStateOf<Job?>(null) }
     var failedLabel by remember { mutableStateOf<String?>(null) }
+    // Pembaruan paket terpasang, seperti Terjemahan: tombol perbarui di baris yang punya versi baru.
+    val updates by vm.packUpdates.collectAsStateWithLifecycle()
+    var updating by remember { mutableStateOf<String?>(null) }
+    var updateProgress by remember { mutableFloatStateOf(0f) }
+    var updateJob by remember { mutableStateOf<Job?>(null) }
+    var updateFailed by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(attempt) {
         state = TafsirCatalogState.Loading
@@ -84,6 +91,8 @@ internal fun TafsirControls(vm: AppViewModel, settings: AppSettings, modifier: M
         }
     }
 
+    // Cek versi katalog sekali saat daftar tampil (dan lagi bila daftar terpasang berubah), seperti Terjemahan.
+    LaunchedEffect(installed.map { it.id to it.version }) { vm.checkPackUpdates() }
     val loadingCd = stringResource(R.string.translations_loading_cd)
     val installedIds = installed.map { it.id }.toSet()
     val downloadable = (state as? TafsirCatalogState.Loaded)?.packs.orEmpty().filter { it.id !in installedIds }
@@ -98,7 +107,7 @@ internal fun TafsirControls(vm: AppViewModel, settings: AppSettings, modifier: M
             .map { (language, packs) -> language to packs.sortedWith { x, y -> collator.compare(x.name, y.name) } }
     }
 
-    Column(modifier) {
+    Column(modifier.imePadding()) {
         pendingDelete?.let { (id, name) ->
             ConfirmDeletePack(
                 name = name,
@@ -121,9 +130,39 @@ internal fun TafsirControls(vm: AppViewModel, settings: AppSettings, modifier: M
             installed.forEach { tr ->
                 item(
                     title = tr.name,
+                    subtitle = if (tr.id in updates) stringResource(R.string.translation_update_available) else null,
                     onClick = { scope.launch { vm.settingsRepository.setSelectedTafsir(tr.id) } },
                     trailing = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
+                            updates[tr.id]?.let { pack ->
+                                val busy = updating == tr.id
+                                DownloadButton(
+                                    downloading = busy,
+                                    progress = updateProgress,
+                                    onStart = {
+                                        updateJob = scope.launch {
+                                            updating = tr.id
+                                            updateProgress = 0f
+                                            updateFailed = null
+                                            try {
+                                                vm.updatePack(pack) { done, total -> updateProgress = if (total > 0) done.toFloat() / total else 0f }
+                                            } catch (e: CancellationException) {
+                                                throw e
+                                            } catch (e: Exception) {
+                                                android.util.Log.w("TafsirPacks", "Gagal memperbarui ${pack.id}", e)
+                                                updateFailed = tr.name
+                                            } finally {
+                                                updating = null
+                                            }
+                                        }
+                                    },
+                                    onCancel = { updateJob?.cancel() },
+                                    startDescription = stringResource(R.string.update_tafsir_cd, tr.name),
+                                    cancelDescription = stringResource(R.string.cancel),
+                                    enabled = updating == null,
+                                    icon = AppIcons.Refresh,
+                                )
+                            }
                             RadioButton(selected = settings.selectedTafsir == tr.id, onClick = null)
                             IconButton(onClick = { pendingDelete = tr.id to tr.name }) {
                                 Icon(AppIcons.Delete, contentDescription = stringResource(R.string.delete_downloaded_translation_cd, tr.name))
@@ -132,6 +171,14 @@ internal fun TafsirControls(vm: AppViewModel, settings: AppSettings, modifier: M
                     },
                 )
             }
+        }
+        updateFailed?.let {
+            Text(
+                stringResource(R.string.translation_update_failed, it),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(top = 8.dp),
+            )
         }
         Text(
             stringResource(R.string.add_tafsir),

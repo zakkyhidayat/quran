@@ -342,6 +342,7 @@
     <string name="tafsir_title">Tafsir</string>
     <string name="tafsir_none">Tiada tafsir</string>
     <string name="add_tafsir">Tambah tafsir</string>
+    <string name="update_tafsir_cd">Kemas kini tafsir %1$s</string>
     <string name="tafsir_search_hint">Cari tafsir atau pengarang</string>
     <string name="tafsir_no_match">Tiada tafsir yang sepadan dengan carian anda.</string>
     <string name="tafsir_download_cd">Muat turun tafsir %1$s</string>

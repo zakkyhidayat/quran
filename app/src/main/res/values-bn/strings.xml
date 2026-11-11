@@ -342,6 +342,7 @@
     <string name="tafsir_title">তাফসির</string>
     <string name="tafsir_none">কোনো তাফসির নেই</string>
     <string name="add_tafsir">তাফসির যোগ করুন</string>
+    <string name="update_tafsir_cd">তাফসির %1$s আপডেট করুন</string>
     <string name="tafsir_search_hint">তাফসির বা লেখক খুঁজুন</string>
     <string name="tafsir_no_match">আপনার অনুসন্ধানের সঙ্গে কোনো তাফসির মেলেনি।</string>
     <string name="tafsir_download_cd">তাফসির %1$s ডাউনলোড করুন</string>
