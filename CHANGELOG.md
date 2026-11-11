@@ -3,6 +3,8 @@
 Format: [Keep a Changelog](https://keepachangelog.com). Versions follow semantic versioning (`vX.Y.Z` git tags).
 
 ## [Unreleased]
+
+## [0.8.5] - 2026-11-11
 ### Fixed
 - Deleting a downloaded row animates out (shrink and fade) instead of jumping; undo animates it back in. Uses the Material 3 motion scheme.
 
