@@ -341,6 +341,9 @@
     <string name="doa_back_main">صفحه اصلی</string>
     <string name="tafsir_title">تفسیر</string>
     <string name="tafsir_none">بدون تفسیر</string>
+    <string name="tafsir_search_hint">جستجوی تفسیر یا مؤلف</string>
+    <string name="tafsir_installed">نصب‌شده</string>
+    <string name="tafsir_no_match">هیچ تفسیری با جستجوی شما مطابقت ندارد.</string>
     <string name="tafsir_download_cd">دانلود تفسیر %1$s</string>
     <string name="tafsir_catalog_error">فهرست تفسیرها بارگذاری نشد. اتصال را بررسی و دوباره تلاش کنید.</string>
     <string name="extras_language_note">فعلاً به انگلیسی و اندونزیایی موجود است.</string>
