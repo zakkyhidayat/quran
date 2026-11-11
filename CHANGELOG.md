@@ -3,6 +3,8 @@
 Format: [Keep a Changelog](https://keepachangelog.com). Versions follow semantic versioning (`vX.Y.Z` git tags).
 
 ## [Unreleased]
+
+## [0.8.4] - 2026-11-11
 ### Changed
 - Translations and Tafsir settings now list only what is downloaded. A new "Add" page holds search and the download catalog.
 - Downloaded translations have an on/off switch. Tafsir keeps its radio buttons, since only one can be used.

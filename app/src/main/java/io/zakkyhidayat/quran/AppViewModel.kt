@@ -308,6 +308,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
      * [undoDeletePack] dipanggil. Hanya satu penghapusan tertunda: yang sebelumnya dilakukan saat ini juga.
      */
     fun scheduleDeletePack(id: String) {
+        // Dipanggil dua kali untuk paket yang sama (mis. gestur geser ditegaskan ulang): jangan memicu penghapusan
+        // paket yang sama sebelum jeda Batalkan habis.
+        if (id in deleteJobs) return
         deleteJobs.keys.toList().forEach { commitDeletePack(it) }
         pendingDeletes.update { it + id }
         deleteJobs[id] = viewModelScope.launch {
@@ -316,20 +319,32 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    /** Batalkan hanya berlaku selama jeda; bila penghapusan sudah dimulai, tidak ada yang dipulihkan. */
     fun undoDeletePack(id: String) {
-        deleteJobs.remove(id)?.cancel()
+        val job = deleteJobs.remove(id) ?: return
+        job.cancel()
         pendingDeletes.update { it - id }
     }
 
     private fun commitDeletePack(id: String) {
         deleteJobs.remove(id)?.cancel()
         viewModelScope.launch {
-            val current = settingsRepository.settings.first()
-            if (current.selectedTafsir == id) settingsRepository.setSelectedTafsir("")
-            if (id in current.translationIds) settingsRepository.setTranslations(current.translationIds.filter { it != id })
-            mushaf.deletePack(id)
-            translations.value = mushaf.translations(); tafsirs.value = mushaf.tafsirs()
-            pendingDeletes.update { it - id }
+            try {
+                val current = settingsRepository.settings.first()
+                if (current.selectedTafsir == id) settingsRepository.setSelectedTafsir("")
+                if (id in current.translationIds) settingsRepository.setTranslations(current.translationIds.filter { it != id })
+                mushaf.deletePack(id)
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                // Gagal menghapus berkas: baris muncul lagi (finally), bukan menutup aplikasi atau tersembunyi selamanya.
+                android.util.Log.w("TranslationPacks", "Gagal menghapus paket $id", e)
+            } finally {
+                withContext(NonCancellable) {
+                    translations.value = mushaf.translations(); tafsirs.value = mushaf.tafsirs()
+                    pendingDeletes.update { it - id }
+                }
+            }
         }
     }
 
