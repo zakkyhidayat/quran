@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com). Versions follow semantic
 
 ## [Unreleased]
 
+## [0.8.3] - 2026-11-11
+### Changed
+- Tafsir search field uses the same rounded shape as Translations.
+- Installed tafsir rows are laid out like Translations, so the delete and update buttons line up with the download buttons below. Choose a tafsir with its radio button.
+
 ## [0.8.2] - 2026-11-11
 ### Changed
 - Tafsir page laid out like the Translations page: installed entries in one grouped list, an "Add tafsir" heading, and a search field for downloadable tafsir.
