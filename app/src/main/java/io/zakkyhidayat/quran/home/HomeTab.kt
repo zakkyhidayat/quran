@@ -32,9 +32,11 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.ui.graphics.graphicsLayer
+import io.zakkyhidayat.quran.ui.reducedMotion
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.runtime.LaunchedEffect
@@ -271,7 +273,7 @@ private fun VerseOfTheDay(vm: AppViewModel, onOpenReader: () -> Unit, onGestureC
         seenUnlocked = unlocked
     }
     // Kartu terbuka menampilkan teks penuh: tinggi pager ikut tinggi isi yang diukur (tidak kurang dari kartu biasa).
-    var expanded by rememberSaveable { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(false) }
     var measuredPx by remember { mutableIntStateOf(0) }
     LaunchedEffect(pagerState.currentPage) { expanded = false }
     val density = LocalDensity.current
@@ -313,6 +315,7 @@ private val DAILY_SLOT_LABELS = listOf(
 )
 
 @Composable
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 private fun VerseOfTheDayCard(
     vm: AppViewModel,
     range: AyahRange?,
@@ -412,13 +415,22 @@ private fun VerseOfTheDayCard(
                         )
                     }
                 }
-                if (expanded) Spacer(Modifier.height(48.dp))
+                val reserve by animateDpAsState(if (expanded) 48.dp else 0.dp, label = "votdReserve")
+                Spacer(Modifier.height(reserve))
             }
-            if (expanded && r != null) {
+            // Memudar dengan alpha (bukan AnimatedVisibility): di dalam Card ada ColumnScope yang ikut terpilih.
+            val buttonAlpha by animateFloatAsState(
+                if (expanded && r != null) 1f else 0f,
+                animationSpec = reducedMotion(MaterialTheme.motionScheme.fastEffectsSpec()),
+                label = "votdButton",
+            )
+            if (buttonAlpha > 0f) {
                 FilledTonalButton(
-                    onClick = { vm.goToAyah(r.surah, r.from); onOpenReader() },
-                    modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp),
-                ) { Text(stringResource(R.string.open_in_reader)) }
+                    onClick = { r?.let { vm.goToAyah(it.surah, it.from) }; onOpenReader() },
+                    modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp).graphicsLayer { alpha = buttonAlpha },
+                ) {
+                    Text(stringResource(R.string.open_in_reader))
+                }
             }
         }
     }

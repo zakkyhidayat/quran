@@ -4,6 +4,10 @@ Format: [Keep a Changelog](https://keepachangelog.com). Versions follow semantic
 
 ## [Unreleased]
 
+## [0.8.6] - 2026-11-12
+### Fixed
+- Ayah of the day card starts collapsed; the Open in reader button fades with the card height instead of leaving an empty band.
+
 ## [0.8.5] - 2026-11-11
 ### Fixed
 - Deleting a downloaded row animates out (shrink and fade) instead of jumping; undo animates it back in. Uses the Material 3 motion scheme.
