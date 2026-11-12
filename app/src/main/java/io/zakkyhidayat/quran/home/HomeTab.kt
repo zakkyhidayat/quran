@@ -31,10 +31,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.runtime.LaunchedEffect
@@ -271,7 +273,7 @@ private fun VerseOfTheDay(vm: AppViewModel, onOpenReader: () -> Unit, onGestureC
         seenUnlocked = unlocked
     }
     // Kartu terbuka menampilkan teks penuh: tinggi pager ikut tinggi isi yang diukur (tidak kurang dari kartu biasa).
-    var expanded by rememberSaveable { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(false) }
     var measuredPx by remember { mutableIntStateOf(0) }
     LaunchedEffect(pagerState.currentPage) { expanded = false }
     val density = LocalDensity.current
@@ -412,13 +414,18 @@ private fun VerseOfTheDayCard(
                         )
                     }
                 }
-                if (expanded) Spacer(Modifier.height(48.dp))
+                val reserve by animateDpAsState(if (expanded) 48.dp else 0.dp, label = "votdReserve")
+                Spacer(Modifier.height(reserve))
             }
-            if (expanded && r != null) {
-                FilledTonalButton(
-                    onClick = { vm.goToAyah(r.surah, r.from); onOpenReader() },
-                    modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp),
-                ) { Text(stringResource(R.string.open_in_reader)) }
+            AnimatedVisibility(
+                visible = expanded && r != null,
+                modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp),
+                enter = fadeIn(),
+                exit = fadeOut(),
+            ) {
+                FilledTonalButton(onClick = { r?.let { vm.goToAyah(it.surah, it.from) }; onOpenReader() }) {
+                    Text(stringResource(R.string.open_in_reader))
+                }
             }
         }
     }
