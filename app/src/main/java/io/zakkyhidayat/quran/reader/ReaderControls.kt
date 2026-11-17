@@ -276,7 +276,19 @@ internal data class CounterValue(
     val mode: CounterMode,
     val ayah: AyahRef,
     val divisions: Map<CounterMode, DivisionProgress>,
+    /** Rentang ayat unit yang sedang dibaca, per jenis counter (mis. "Al-An'am 6:111 – 7:87"); tidak ada untuk mode surah. */
+    val ranges: Map<CounterMode, String> = emptyMap(),
 )
+
+/** Teks rentang ayat untuk menu counter, memakai nama surah latin. Rentang lintas surah menampilkan nama di kedua ujung. */
+internal fun divisionRangeLabel(surahs: Map<Int, Surah>, start: AyahRef, end: AyahRef): String {
+    val from = "${surahs[start.surah]?.nameLatin.orEmpty()} ${start.surah}:${start.ayah}"
+    return when {
+        start == end -> from
+        end.surah == start.surah -> "$from – ${end.ayah}"
+        else -> "$from – ${surahs[end.surah]?.nameLatin.orEmpty()} ${end.surah}:${end.ayah}"
+    }
+}
 
 internal fun CounterMode.kind(): MarkerKind = when (this) {
     CounterMode.Juz -> MarkerKind.Juz
@@ -328,6 +340,8 @@ internal fun ReaderCounter(
     val progressTrackColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.22f)
     val progressColor = MaterialTheme.colorScheme.onSecondaryContainer
     val counterButtonWidth = titleWidth + progressWidth + 58.dp
+    // Rentang ayat butuh lebar lebih dari judul terpanjang; menu dilebarkan supaya rentang tidak terpotong.
+    val menuWidth = maxOf(counterButtonWidth, 268.dp)
     var expanded by remember { mutableStateOf(false) }
     val counterTransition = remember { MutableTransitionState(false) }
     LaunchedEffect(expanded) { counterTransition.targetState = expanded }
@@ -392,7 +406,7 @@ internal fun ReaderCounter(
                 ) {
                     Column(
                         Modifier
-                            .width(counterButtonWidth)
+                            .width(menuWidth)
                             .heightIn(max = LocalConfiguration.current.screenHeightDp.dp - 160.dp)
                             .verticalScroll(rememberScrollState()),
                         verticalArrangement = Arrangement.spacedBy(3.dp),
@@ -427,7 +441,7 @@ internal fun ReaderCounter(
                                 contentColor = if (selected) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSurface,
                                 tonalElevation = if (selected) 2.dp else 1.dp,
                                 shadowElevation = 1.dp,
-                                modifier = Modifier.fillMaxWidth().height(40.dp),
+                                modifier = Modifier.fillMaxWidth().height(52.dp),
                             ) {
                                 Row(
                                     Modifier.fillMaxWidth().padding(horizontal = 8.dp),
@@ -454,12 +468,24 @@ internal fun ReaderCounter(
                                             maxLines = 1,
                                         )
                                     }
-                                    Text(
-                                        title,
-                                        style = MaterialTheme.typography.labelLarge,
-                                        maxLines = 1,
-                                        modifier = Modifier.weight(1f),
-                                    )
+                                    Column(Modifier.weight(1f)) {
+                                        Text(
+                                            title,
+                                            style = MaterialTheme.typography.labelLarge,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis,
+                                        )
+                                        value.ranges[mode]?.let { range ->
+                                            Text(
+                                                range,
+                                                style = MaterialTheme.typography.labelSmall,
+                                                color = if (selected) MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.78f)
+                                                else MaterialTheme.colorScheme.onSurfaceVariant,
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis,
+                                            )
+                                        }
+                                    }
                                     Text(
                                         "${itemProgress.n}/${itemProgress.total}",
                                         style = MaterialTheme.typography.bodySmall,
