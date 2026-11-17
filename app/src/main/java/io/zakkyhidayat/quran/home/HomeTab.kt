@@ -33,9 +33,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.graphicsLayer
 import io.zakkyhidayat.quran.ui.reducedMotion
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
@@ -366,13 +366,10 @@ private fun VerseOfTheDayCard(
                 }
             },
     ) {
-        // Terbuka: isi tidak dipotong dan diukur tingginya (wrapContentHeight unbounded) supaya pager bisa mengikutinya.
-        val contentModifier = if (expanded) {
-            Modifier.fillMaxWidth().heightIn(min = VOTD_CARD_HEIGHT).wrapContentHeight(unbounded = true).onSizeChanged { onMeasured(it.height) }
-        } else {
-            Modifier.fillMaxSize()
-        }
-        Box(Modifier.fillMaxSize()) {
+        // Satu tata letak untuk kedua keadaan: isi selalu di posisi yang sama (rata atas), tinggi minimal kartu, dan
+        // tinggi isinya diukur. Kartu tertutup hanya memotong tampilan (clipToBounds), jadi teks tidak pindah saat dibuka.
+        val contentModifier = Modifier.fillMaxWidth().heightIn(min = VOTD_CARD_HEIGHT).onSizeChanged { onMeasured(it.height) }
+        Box(Modifier.fillMaxSize().clipToBounds()) {
             Column(
                 contentModifier.background(gradient, shape).padding(20.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -400,7 +397,6 @@ private fun VerseOfTheDayCard(
                             style = MaterialTheme.typography.bodyLarge.copy(fontFamily = arabicFont, lineHeight = MaterialTheme.typography.bodyLarge.fontSize * 1.8f),
                             textAlign = TextAlign.Start,
                             modifier = Modifier.fillMaxWidth(),
-                            maxLines = if (expanded) Int.MAX_VALUE else 4,
                             overflow = TextOverflow.Ellipsis,
                         )
                     }
@@ -410,13 +406,11 @@ private fun VerseOfTheDayCard(
                             translation.joinToString(" "),
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            maxLines = if (expanded) Int.MAX_VALUE else 4,
                             overflow = TextOverflow.Ellipsis,
                         )
                     }
                 }
-                val reserve by animateDpAsState(if (expanded) 48.dp else 0.dp, label = "votdReserve")
-                Spacer(Modifier.height(reserve))
+                Spacer(Modifier.height(48.dp))
             }
             // Memudar dengan alpha (bukan AnimatedVisibility): di dalam Card ada ColumnScope yang ikut terpilih.
             val buttonAlpha by animateFloatAsState(
