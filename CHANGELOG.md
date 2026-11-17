@@ -3,8 +3,6 @@
 Format: [Keep a Changelog](https://keepachangelog.com). Versions follow semantic versioning (`vX.Y.Z` git tags).
 
 ## [Unreleased]
-### Added
-- Counter juz, hizb, rub', manzil, dan ruku di pembaca menampilkan rentang ayat unit yang sedang dibaca (mis. "Al-An'am 6:111 – 7:87").
 
 ## [0.8.6] - 2026-11-12
 ### Fixed

@@ -36,8 +36,6 @@ Dari screenshot [QuranApp](https://github.com/AlfaazPlus/QuranApp) (GPL-3.0, sam
   Kedua menu memakai permukaan tonal membulat dan animasi spring; dropdown counter menampilkan enam pill tanpa wadah
   latar tambahan, lebar menu dipersempit, dan tombolnya berlebar tetap mengikuti label terpanjang dengan indikator
   progres melingkar. Setiap item counter menampilkan progres dalam lingkaran, nama mode, serta hitungan saat ini/total.
-  Baris juz, hizb, rub', manzil, dan ruku juga memuat rentang ayat unit yang sedang dibaca di bawah nama mode (mis.
-  "Al-An'am 6:111 – 7:87"), dan menu minimal 268 dp agar rentang tidak terpotong.
   Panel legenda Tajwid dan sakelar warna muncul di bawah tombol. Trio mode baca selalu tampil sebagai bilah bawah agar
   mode mushaf dan daftar ayat dapat dipilih kapan saja. Baris mushaf diberi sela vertikal 1,5 dp
   (sekitar 4–5% tinggi sel per baris) tanpa mengecilkan glyph; tinggi halaman bertambah secukupnya, dan lebar
@@ -108,7 +106,7 @@ Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pu
 - Empat kotak koleksi di beranda berada dalam satu item daftar dengan jarak 8 dp ke segala arah (dulu jarak antarbaris hanya
   2 dp), berwarna `surfaceContainer` seperti daftar lain, bentuk `large`, tinggi minimal 112 dp, ikon di atas dan judul di
   bawah.
-- Popup mengambang di pembaca dibuat ringkas: baris pilihan counter setinggi 52 dp (dua baris: nama mode dan rentang ayat) dengan jarak 3 dp, dan panel panduan tajwid
+- Popup mengambang di pembaca dibuat ringkas: baris pilihan counter setinggi 40 dp dengan jarak 3 dp, dan panel panduan tajwid
   berjarak 4 dp antarbaris dengan padding vertikal 8 dp.
 - Catatan kaki terjemahan tampil di bawah teksnya di lembar ayat, mode ayat dan terjemahan (juga terjemahan saja), dan
   layar kumpulan doa lewat `FootnoteList`; sebelumnya hanya lembar ayat yang menampilkannya.

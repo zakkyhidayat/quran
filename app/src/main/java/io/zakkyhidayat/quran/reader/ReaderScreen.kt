@@ -93,7 +93,6 @@ import io.zakkyhidayat.quran.data.AyahRef
 import io.zakkyhidayat.quran.data.AyahRange
 import io.zakkyhidayat.quran.data.AyahText
 import io.zakkyhidayat.quran.data.BookmarkKind
-import io.zakkyhidayat.quran.data.DivisionMath
 import io.zakkyhidayat.quran.data.DivisionProgress
 import io.zakkyhidayat.quran.data.PageLine
 import io.zakkyhidayat.quran.data.SunnahReading
@@ -211,17 +210,7 @@ fun ReaderScreen(
                 vm.mushaf.divisionProgress(mode.kind(), anchor.surah, anchor.ayah)
             }
         }
-        // Rentang unit yang sedang dibaca untuk setiap jenis counter; markers di-cache oleh repository.
-        val ayahCounts = surahs.toSortedMap().values.map { it.ayahCount }
-        val ranges = CounterMode.entries.filter { it != CounterMode.Surah }.mapNotNull { mode ->
-            val spans = DivisionMath.spans(
-                vm.mushaf.markers(mode.kind()).map { AyahRef(it.surah, it.ayah) },
-                ayahCounts,
-            )
-            val index = divisions.getValue(mode).index
-            spans.getOrNull(index - 1)?.let { (start, end) -> mode to divisionRangeLabel(surahs, start, end) }
-        }.toMap()
-        value = CounterValue(counterMode, a, divisions, ranges)
+        value = CounterValue(counterMode, a, divisions)
     }
     val pageBookmarked = bookmarks.any { it.kind == BookmarkKind.Page && it.page == currentPage }
     // Progres lama dari bacaan yang tidak lagi melacak progres diabaikan: tidak ada petunjuk mengambang untuknya.
