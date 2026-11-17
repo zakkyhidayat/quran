@@ -38,9 +38,9 @@ object DivisionMath {
     fun spans(starts: List<AyahRef>, ayahCounts: List<Int>): List<Pair<AyahRef, AyahRef>> {
         val last = AyahRef(ayahCounts.size, ayahCounts.lastOrNull() ?: 0)
         return starts.mapIndexed { i, start ->
-            // Awal berikutnya di 1:1 tidak punya ayat sebelumnya: bagian itu tidak bisa berakhir sebelum awalnya sendiri.
-            val end = if (i + 1 < starts.size) previousAyah(ayahCounts, starts[i + 1]) else last
-            start to if (end == null || end.surah < start.surah || (end.surah == start.surah && end.ayah < start.ayah)) start else end
+            val end = starts.getOrNull(i + 1)?.let { previousAyah(ayahCounts, it) } ?: last
+            val before = end == null || end.surah < start.surah || (end.surah == start.surah && end.ayah < start.ayah)
+            start to if (before) start else end!!
         }
     }
 }
