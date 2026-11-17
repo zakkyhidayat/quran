@@ -37,15 +37,22 @@ class DivisionMathTest {
 
     @Test
     fun spansEndBeforeNextStartAndLastEndsAtQuranEnd() {
-        val starts = listOf(AyahRef(1, 1), AyahRef(2, 2), AyahRef(3, 1))
+        val starts = listOf(AyahRef(1, 1), AyahRef(2, 1), AyahRef(3, 1))
         assertEquals(
             listOf(
                 AyahRef(1, 1) to AyahRef(1, 7),
-                AyahRef(2, 2) to AyahRef(2, 286),
+                AyahRef(2, 1) to AyahRef(2, 286),
                 AyahRef(3, 1) to AyahRef(3, 200),
             ),
             DivisionMath.spans(starts, counts),
         )
+    }
+
+    @Test
+    fun unitBeforeStartAtFirstAyahOfQuranStaysSingleAyah() {
+        // Awal berikutnya di 1:1 tidak punya ayat sebelumnya; bagian ini tidak boleh melompat ke akhir Qur'an.
+        val starts = listOf(AyahRef(1, 1), AyahRef(1, 1), AyahRef(2, 1))
+        assertEquals(AyahRef(1, 1) to AyahRef(1, 1), DivisionMath.spans(starts, counts)[0])
     }
 
     @Test
