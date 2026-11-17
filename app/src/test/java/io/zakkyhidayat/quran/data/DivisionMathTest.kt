@@ -26,4 +26,31 @@ class DivisionMathTest {
     fun emptyStartsFallBackToWholeRange() {
         assertEquals(DivisionProgress(1, 5, 10), DivisionMath.progress(emptyList(), 10, 5))
     }
+
+    @Test
+    fun previousAyahCrossesSurahBoundary() {
+        assertEquals(AyahRef(1, 7), DivisionMath.previousAyah(counts, AyahRef(2, 1)))
+        assertEquals(AyahRef(2, 286), DivisionMath.previousAyah(counts, AyahRef(3, 1)))
+        assertEquals(AyahRef(2, 5), DivisionMath.previousAyah(counts, AyahRef(2, 6)))
+        assertEquals(null, DivisionMath.previousAyah(counts, AyahRef(1, 1)))
+    }
+
+    @Test
+    fun spansEndBeforeNextStartAndLastEndsAtQuranEnd() {
+        val starts = listOf(AyahRef(1, 1), AyahRef(2, 2), AyahRef(3, 1))
+        assertEquals(
+            listOf(
+                AyahRef(1, 1) to AyahRef(1, 7),
+                AyahRef(2, 2) to AyahRef(2, 286),
+                AyahRef(3, 1) to AyahRef(3, 200),
+            ),
+            DivisionMath.spans(starts, counts),
+        )
+    }
+
+    @Test
+    fun duplicateStartCollapsesToSingleAyah() {
+        val starts = listOf(AyahRef(2, 5), AyahRef(2, 5), AyahRef(2, 9))
+        assertEquals(AyahRef(2, 5) to AyahRef(2, 5), DivisionMath.spans(starts, counts)[0])
+    }
 }
