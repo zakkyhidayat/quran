@@ -32,9 +32,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.ui.graphics.graphicsLayer
-import io.zakkyhidayat.quran.ui.reducedMotion
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.ui.layout.onSizeChanged
@@ -43,6 +40,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -272,13 +270,15 @@ private fun VerseOfTheDay(vm: AppViewModel, onOpenReader: () -> Unit, onGestureC
         if (unlocked > seenUnlocked) pagerState.animateScrollToPage(unlocked - 1)
         seenUnlocked = unlocked
     }
-    // Kartu terbuka menampilkan teks penuh: tinggi pager ikut tinggi isi yang diukur (tidak kurang dari kartu biasa).
+    // Tinggi pager = isi kartu halaman aktif yang diukur, dengan minimum VOTD_CARD_HEIGHT. Ukurannya sama di kedua keadaan
+    // (terbuka atau tidak), sehingga ketuk tidak pernah membuat kartu menyusut; terbuka hanya menambah tinggi bila teksnya lebih panjang.
     var expanded by remember { mutableStateOf(false) }
-    var measuredPx by remember { mutableIntStateOf(0) }
+    // Tinggi tiap kartu dicatat per halaman, supaya pager selalu memakai tinggi kartu yang sedang tampil (bukan sisa halaman lain).
+    val measuredPx = remember { mutableStateMapOf<Int, Int>() }
     LaunchedEffect(pagerState.currentPage) { expanded = false }
     val density = LocalDensity.current
     val pagerHeight by animateDpAsState(
-        if (expanded && measuredPx > 0) maxOf(VOTD_CARD_HEIGHT, with(density) { measuredPx.toDp() }) else VOTD_CARD_HEIGHT,
+        maxOf(VOTD_CARD_HEIGHT, with(density) { (measuredPx[pagerState.currentPage] ?: 0).toDp() }),
         label = "votdHeight",
     )
     HorizontalPager(
@@ -299,7 +299,7 @@ private fun VerseOfTheDay(vm: AppViewModel, onOpenReader: () -> Unit, onGestureC
             total = unlocked,
             expanded = expanded && page == pagerState.currentPage,
             onToggle = { expanded = !expanded },
-            onMeasured = { measuredPx = it },
+            onMeasured = { measuredPx[page] = it },
             onOpenReader = onOpenReader,
             onGestureChanged = onGestureChanged,
         )
@@ -366,15 +366,12 @@ private fun VerseOfTheDayCard(
                 }
             },
     ) {
-        // Terbuka: isi tidak dipotong dan diukur tingginya (wrapContentHeight unbounded) supaya pager bisa mengikutinya.
-        val contentModifier = if (expanded) {
-            Modifier.fillMaxWidth().heightIn(min = VOTD_CARD_HEIGHT).wrapContentHeight(unbounded = true).onSizeChanged { onMeasured(it.height) }
-        } else {
-            Modifier.fillMaxSize()
-        }
+        // Isi selalu diukur tingginya (tanpa dipotong) supaya pager bisa mengikutinya, di keadaan tertutup maupun terbuka.
         Box(Modifier.fillMaxSize()) {
             Column(
-                contentModifier.background(gradient, shape).padding(20.dp),
+                Modifier.fillMaxWidth().heightIn(min = VOTD_CARD_HEIGHT).wrapContentHeight(unbounded = true)
+                    .onSizeChanged { onMeasured(it.height) }
+                    .background(gradient, shape).padding(20.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -415,19 +412,13 @@ private fun VerseOfTheDayCard(
                         )
                     }
                 }
-                val reserve by animateDpAsState(if (expanded) 48.dp else 0.dp, label = "votdReserve")
-                Spacer(Modifier.height(reserve))
+                // Ruang tombol selalu disediakan, jadi teks tidak tertutup tombol di keadaan apa pun.
+                Spacer(Modifier.height(48.dp))
             }
-            // Memudar dengan alpha (bukan AnimatedVisibility): di dalam Card ada ColumnScope yang ikut terpilih.
-            val buttonAlpha by animateFloatAsState(
-                if (expanded && r != null) 1f else 0f,
-                animationSpec = reducedMotion(MaterialTheme.motionScheme.fastEffectsSpec()),
-                label = "votdButton",
-            )
-            if (buttonAlpha > 0f) {
+            if (r != null) {
                 FilledTonalButton(
-                    onClick = { r?.let { vm.goToAyah(it.surah, it.from) }; onOpenReader() },
-                    modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp).graphicsLayer { alpha = buttonAlpha },
+                    onClick = { vm.goToAyah(r.surah, r.from); onOpenReader() },
+                    modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp),
                 ) {
                     Text(stringResource(R.string.open_in_reader))
                 }

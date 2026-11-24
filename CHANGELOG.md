@@ -3,6 +3,8 @@
 Format: [Keep a Changelog](https://keepachangelog.com). Versions follow semantic versioning (`vX.Y.Z` git tags).
 
 ## [Unreleased]
+### Fixed
+- Ayah of the day card keeps its height when tapped, and the Open in reader button is always visible instead of fading in.
 
 ## [0.8.7] - 2026-11-18
 ### Added
