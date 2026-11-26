@@ -4,7 +4,7 @@ Format: [Keep a Changelog](https://keepachangelog.com). Versions follow semantic
 
 ## [Unreleased]
 ### Fixed
-- Ayah of the day card keeps its height when tapped, and the Open in reader button is always visible instead of fading in.
+- Ayah of the day card keeps its height when tapped; the text scrolls inside the card so the title stays in place. The Open in reader button is always visible instead of fading in.
 
 ## [0.8.7] - 2026-11-18
 ### Added
