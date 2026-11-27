@@ -3,6 +3,8 @@
 Format: [Keep a Changelog](https://keepachangelog.com). Versions follow semantic versioning (`vX.Y.Z` git tags).
 
 ## [Unreleased]
+
+## [0.8.9] - 2026-11-27
 ### Fixed
 - Ayah of the day card fades the bottom edge of the scrolling text when open, so a cut line reads as more text below.
 
