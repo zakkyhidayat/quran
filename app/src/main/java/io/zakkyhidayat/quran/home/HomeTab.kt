@@ -47,6 +47,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.HorizontalPager
@@ -55,8 +56,11 @@ import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -384,7 +388,7 @@ private fun VerseOfTheDayCard(
                         .weight(1f)
                         .fillMaxWidth()
                         .clipToBounds()
-                        .then(if (expanded) Modifier.verticalScroll(scroll) else Modifier),
+                        .then(if (expanded) Modifier.verticalScroll(scroll).fadingBottomEdge() else Modifier),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     if (ayahs.isNotEmpty()) {
@@ -424,6 +428,19 @@ private fun VerseOfTheDayCard(
         }
     }
 }
+
+/**
+ * Memudar di tepi bawah area yang bisa digulir, supaya baris yang terpotong terlihat sebagai "masih ada lanjutannya",
+ * bukan teks yang rusak.
+ */
+private fun Modifier.fadingBottomEdge(): Modifier = graphicsLayer { compositingStrategy = CompositingStrategy.Offscreen }
+    .drawWithContent {
+        drawContent()
+        drawRect(
+            brush = Brush.verticalGradient(0.82f to Color.Black, 1f to Color.Transparent),
+            blendMode = BlendMode.DstIn,
+        )
+    }
 
 /** Buang penanda catatan kaki (<sup>…</sup>) dan tag lain dari teks terjemahan. */
 internal fun plainTranslation(raw: String): String =
