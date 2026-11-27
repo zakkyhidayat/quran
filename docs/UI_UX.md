@@ -118,9 +118,10 @@ Tab **Beranda** ([zakkyhidayat/quran#1](https://github.com/zakkyhidayat/quran/pu
 - Tema dan topik ayat memakai pilihan di Pengaturan > Terjemahan: bahasa aplikasi (bawaan), bahasa sistem, atau English /
   Indonesia. Pilihan "app" dan "system" menampilkan bahasa yang dipakai di bawah judulnya. Bahasa tanpa terjemahan di
   `quran.db` jatuh ke teks Inggris QUL. Dibaca lewat `AppLanguage.extrasLanguage` oleh `MushafRepository`.
-- Ketuk kartu "Ayat hari ini" di beranda membuka teks penuhnya: tinggi kartu bertambah bila teks tidak muat (pager
-  mengikuti tinggi yang diukur), dan tombol "Buka di pembaca" muncul di tengah bawah kartu. Ketuk lagi untuk menciutkan;
-  geser ke kartu lain juga menciutkannya. Tombol itu yang membuka halaman, bukan ketukan kartu.
+- Ketuk kartu "Ayat hari ini" di beranda membuka teks penuhnya tanpa mengubah tinggi kartu (300 dp). Judul dan baris
+  surah tetap di tempatnya; hanya teks ayat yang bisa digulir di dalam kartu. Tombol "Buka di pembaca" selalu tampil di
+  tengah bawah kartu, dan ruang untuknya selalu disediakan. Ketuk lagi untuk menciutkan; geser ke kartu lain juga menciutkannya.
+  Tombol itu yang membuka halaman, bukan ketukan kartu.
 - Ketuk ayat yang sudah terpilih di mushaf membatalkan pilihannya (sorotan dan lembar ayat tertutup); ketuk ayat lain
   memilihnya. Ketuk latar halaman juga membatalkan, seperti sebelumnya.
 - Tautan Notifications ada di Pengaturan > Pengingat dan membuka setelan notifikasi Android; status izin tampil ringkas

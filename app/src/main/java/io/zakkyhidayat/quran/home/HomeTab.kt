@@ -29,16 +29,12 @@ import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.ui.graphics.graphicsLayer
-import io.zakkyhidayat.quran.ui.reducedMotion
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -50,6 +46,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.foundation.background
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.HorizontalPager
@@ -272,18 +269,12 @@ private fun VerseOfTheDay(vm: AppViewModel, onOpenReader: () -> Unit, onGestureC
         if (unlocked > seenUnlocked) pagerState.animateScrollToPage(unlocked - 1)
         seenUnlocked = unlocked
     }
-    // Kartu terbuka menampilkan teks penuh: tinggi pager ikut tinggi isi yang diukur (tidak kurang dari kartu biasa).
+    // Tinggi kartu tetap. Terbuka hanya menggulir teks di bawah judul, jadi bagian atas kartu tetap di tempatnya.
     var expanded by remember { mutableStateOf(false) }
-    var measuredPx by remember { mutableIntStateOf(0) }
     LaunchedEffect(pagerState.currentPage) { expanded = false }
-    val density = LocalDensity.current
-    val pagerHeight by animateDpAsState(
-        if (expanded && measuredPx > 0) maxOf(VOTD_CARD_HEIGHT, with(density) { measuredPx.toDp() }) else VOTD_CARD_HEIGHT,
-        label = "votdHeight",
-    )
     HorizontalPager(
         state = pagerState,
-        modifier = Modifier.fillMaxWidth().height(pagerHeight).padding(top = 8.dp),
+        modifier = Modifier.fillMaxWidth().height(VOTD_CARD_HEIGHT).padding(top = 8.dp),
         // Jarak antarkartu saat digeser: tanpa ini tepi kartu saling menempel.
         pageSpacing = 12.dp,
         key = { it },
@@ -299,7 +290,6 @@ private fun VerseOfTheDay(vm: AppViewModel, onOpenReader: () -> Unit, onGestureC
             total = unlocked,
             expanded = expanded && page == pagerState.currentPage,
             onToggle = { expanded = !expanded },
-            onMeasured = { measuredPx = it },
             onOpenReader = onOpenReader,
             onGestureChanged = onGestureChanged,
         )
@@ -327,7 +317,6 @@ private fun VerseOfTheDayCard(
     total: Int,
     expanded: Boolean,
     onToggle: () -> Unit,
-    onMeasured: (Int) -> Unit,
     onOpenReader: () -> Unit,
     onGestureChanged: (Boolean) -> Unit,
 ) {
@@ -366,15 +355,12 @@ private fun VerseOfTheDayCard(
                 }
             },
     ) {
-        // Terbuka: isi tidak dipotong dan diukur tingginya (wrapContentHeight unbounded) supaya pager bisa mengikutinya.
-        val contentModifier = if (expanded) {
-            Modifier.fillMaxWidth().heightIn(min = VOTD_CARD_HEIGHT).wrapContentHeight(unbounded = true).onSizeChanged { onMeasured(it.height) }
-        } else {
-            Modifier.fillMaxSize()
-        }
+        // Judul tetap di atas; teks ayat di kolom ini bisa digulir saat terbuka. Di keadaan tertutup teksnya dipotong.
+        val scroll = rememberScrollState()
+        LaunchedEffect(expanded) { scroll.scrollTo(0) }
         Box(Modifier.fillMaxSize()) {
             Column(
-                contentModifier.background(gradient, shape).padding(20.dp),
+                Modifier.fillMaxSize().background(gradient, shape).padding(20.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -393,41 +379,44 @@ private fun VerseOfTheDayCard(
                         Text("${page + 1}/$total", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
                     }
                 }
-                if (ayahs.isNotEmpty()) {
-                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                        Text(
-                            ayahs.joinToString(" ") { it.arabic },
-                            style = MaterialTheme.typography.bodyLarge.copy(fontFamily = arabicFont, lineHeight = MaterialTheme.typography.bodyLarge.fontSize * 1.8f),
-                            textAlign = TextAlign.Start,
-                            modifier = Modifier.fillMaxWidth(),
-                            maxLines = if (expanded) Int.MAX_VALUE else 4,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    }
-                    val translation = ayahs.mapNotNull { a -> a.translations.firstOrNull()?.text?.let(::plainTranslation)?.takeIf { it.isNotBlank() } }
-                    if (translation.isNotEmpty()) {
-                        Text(
-                            translation.joinToString(" "),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            maxLines = if (expanded) Int.MAX_VALUE else 4,
-                            overflow = TextOverflow.Ellipsis,
-                        )
+                Column(
+                    Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .clipToBounds()
+                        .then(if (expanded) Modifier.verticalScroll(scroll) else Modifier),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    if (ayahs.isNotEmpty()) {
+                        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                            Text(
+                                ayahs.joinToString(" ") { it.arabic },
+                                style = MaterialTheme.typography.bodyLarge.copy(fontFamily = arabicFont, lineHeight = MaterialTheme.typography.bodyLarge.fontSize * 1.8f),
+                                textAlign = TextAlign.Start,
+                                modifier = Modifier.fillMaxWidth(),
+                                maxLines = if (expanded) Int.MAX_VALUE else 4,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        }
+                        val translation = ayahs.mapNotNull { a -> a.translations.firstOrNull()?.text?.let(::plainTranslation)?.takeIf { it.isNotBlank() } }
+                        if (translation.isNotEmpty()) {
+                            Text(
+                                translation.joinToString(" "),
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                maxLines = if (expanded) Int.MAX_VALUE else 4,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        }
                     }
                 }
-                val reserve by animateDpAsState(if (expanded) 48.dp else 0.dp, label = "votdReserve")
-                Spacer(Modifier.height(reserve))
+                // Ruang tombol selalu disediakan di bawah teks, jadi teks tidak tertutup tombol.
+                Spacer(Modifier.height(48.dp))
             }
-            // Memudar dengan alpha (bukan AnimatedVisibility): di dalam Card ada ColumnScope yang ikut terpilih.
-            val buttonAlpha by animateFloatAsState(
-                if (expanded && r != null) 1f else 0f,
-                animationSpec = reducedMotion(MaterialTheme.motionScheme.fastEffectsSpec()),
-                label = "votdButton",
-            )
-            if (buttonAlpha > 0f) {
+            if (r != null) {
                 FilledTonalButton(
-                    onClick = { r?.let { vm.goToAyah(it.surah, it.from) }; onOpenReader() },
-                    modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp).graphicsLayer { alpha = buttonAlpha },
+                    onClick = { vm.goToAyah(r.surah, r.from); onOpenReader() },
+                    modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp),
                 ) {
                     Text(stringResource(R.string.open_in_reader))
                 }
